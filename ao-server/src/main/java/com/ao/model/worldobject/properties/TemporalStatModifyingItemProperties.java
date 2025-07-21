@@ -1,0 +1,52 @@
+package com.ao.model.worldobject.properties;
+
+import java.util.List;
+
+import com.ao.model.character.Race;
+import com.ao.model.character.archetype.UserArchetype;
+import com.ao.model.worldobject.WorldObjectType;
+
+/**
+ * Defines an Item that modifies a user's stats's properties for a given period of time. Allows a lightweight pattern implementation.
+ */
+public class TemporalStatModifyingItemProperties extends
+		StatModifyingItemProperties {
+	
+	protected int effectTime;
+
+	/**
+	 * Creates a new StatModifyingItemProperties instance.
+	 * @param type The type of the item.
+	 * @param id The id of the item.
+	 * @param name The name of the item.
+	 * @param graphic The graphic for the item.
+	 * @param tradeable True if it's tradeable, false otherwise.
+	 * @param value The item's value.
+	 * @param forbiddenArchetypes List of UserArchetypes not allowed to use this item.
+	 * @param forbiddenRaces List of Races not allowed to use this item.
+	 * @param newbie Whether the item is newbie or not.
+	 * @param noLog Whether this item should be logged or not.
+	 * @param falls Whether this item falls or not.
+	 * @param respawnable Whether this item respawns or not when in a merchant NPC's inventory.
+	 * @param minModifier The minimum amount by which the stats is to be modified.
+	 * @param maxModifier The maximum amount by which the stats is to be modified.
+	 * @param effectTime The time for which the effect is valid.
+	 */
+	public TemporalStatModifyingItemProperties(WorldObjectType type, int id,
+			String name, int graphic, int value, List<UserArchetype> forbiddenArchetypes,
+			List<Race> forbiddenRaces, boolean newbie,
+			boolean noLog, boolean falls, boolean respawnable, 
+			int minModifier, int maxModifier, int effectTime) {
+		super(type, id, name, graphic, value, forbiddenArchetypes, forbiddenRaces,
+				newbie, noLog, falls, respawnable, minModifier, maxModifier);
+		
+		this.effectTime = effectTime;
+	}
+
+	/**
+	 * @return the effectTime
+	 */
+	public int getEffectDuration() {
+		return effectTime;
+	}
+}
