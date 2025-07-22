@@ -250,4 +250,27 @@ public class DataBuffer {
     public ByteBuf getBuffer() {
         return buffer;
     }
+
+    /**
+     * Retrieves the number of readable bytes in the buffer.
+     *
+     * @return The number of readable bytes in the buffer.
+     */
+    public int getReadableBytes() {
+        return buffer.readableBytes();
+    }
+
+    /**
+     * Reads an ASCII string with fixed length from the buffer.
+     *
+     * @param length The length of the string to be read.
+     * @return The String at the buffer's current position.
+     * @throws UnsupportedEncodingException
+     */
+    public String getASCIIStringFixed(int length) throws UnsupportedEncodingException {
+        byte[] str = new byte[length];
+        buffer.readBytes(str);
+        return new String(str, ASCII_FORMAT);
+    }
+
 }

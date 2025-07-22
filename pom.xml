@@ -23,16 +23,19 @@
         <maven.compiler.target>17</maven.compiler.target>
         <java.version>17</java.version>
         <!-- Dependencies versions -->
-        <logback.version>1.4.14</logback.version>
+        <logback.version>1.5.13</logback.version>
         <slf4j.version>2.0.9</slf4j.version>
         <junit.version>5.10.1</junit.version>
+        <junit4.version>4.13.2</junit4.version>
         <ini4j.version>0.5.4</ini4j.version>
         <guice.version>7.0.0</guice.version>
+        <guava.version>32.0.1-jre</guava.version>
         <netty.version>4.1.119.Final</netty.version>
         <mockito.version>5.8.0</mockito.version>
         <commons.validator.version>1.8.0</commons.validator.version>
         <javax.inject.version>1</javax.inject.version>
         <hamcrest.version>2.2</hamcrest.version>
+        <oro.version>2.0.8</oro.version>
         <!-- Plugin versions -->
         <maven.compiler.plugin.version>3.11.0</maven.compiler.plugin.version>
         <maven.surefire.plugin.version>3.2.3</maven.surefire.plugin.version>
@@ -59,6 +62,12 @@
                 <artifactId>guice</artifactId>
                 <version>${guice.version}</version>
             </dependency>
+            <!-- Forzar version segura de Guava (soluciona CVE-2023-2976) -->
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.version}</version>
+            </dependency>
             <!-- Logging -->
             <dependency>
                 <groupId>ch.qos.logback</groupId>
@@ -75,19 +84,28 @@
                 <artifactId>slf4j-api</artifactId>
                 <version>${slf4j.version}</version>
             </dependency>
-            <!-- Testing -->
+            <!-- Testing - JUnit 5 -->
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
                 <artifactId>junit-jupiter</artifactId>
                 <version>${junit.version}</version>
                 <scope>test</scope>
             </dependency>
+            <!-- Testing - JUnit 4 (para compatibilidad) -->
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit4.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <!-- Testing - Hamcrest (dependencia principal moderna) -->
             <dependency>
                 <groupId>org.hamcrest</groupId>
                 <artifactId>hamcrest</artifactId>
                 <version>${hamcrest.version}</version>
                 <scope>test</scope>
             </dependency>
+            <!-- Mockito -->
             <dependency>
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-core</artifactId>
@@ -116,6 +134,12 @@
                 <groupId>commons-validator</groupId>
                 <artifactId>commons-validator</artifactId>
                 <version>${commons.validator.version}</version>
+            </dependency>
+            <!-- Apache Oro (expresiones regulares) -->
+            <dependency>
+                <groupId>oro</groupId>
+                <artifactId>oro</artifactId>
+                <version>${oro.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

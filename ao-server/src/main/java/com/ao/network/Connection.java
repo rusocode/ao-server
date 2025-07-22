@@ -1,58 +1,62 @@
-
-
 package com.ao.network;
-
-import org.jboss.netty.channel.Channel;
 
 import com.ao.model.user.ConnectedUser;
 import com.ao.model.user.User;
 import com.ao.network.packet.OutgoingPacket;
+import io.netty.channel.Channel;
 
 /**
  * Connection class. A simple DTO to wrap the user and connection together.
  */
+
 public class Connection {
-	private Channel socket;
-	private User user;
 
-	/**
-	 * Creates a new Connection.
-	 * @param socket The channel over which to communicate with the client.
-	 */
-	public Connection(final Channel socket) {
-		this.socket = socket;
+    private final Channel socket;
+    private User user;
 
-		user = new ConnectedUser(this);
-	}
+    /**
+     * Creates a new Connection.
+     *
+     * @param socket The channel over which to communicate with the client.
+     */
+    public Connection(final Channel socket) {
+        this.socket = socket;
 
-	/**
-	 * Retrieves the user.
-	 * @return The user.
-	 */
-	public User getUser() {
-		return user;
-	}
+        user = new ConnectedUser(this);
+    }
 
-	/**
-	 * Closes the connection.
-	 */
-	public void disconnect() {
-		socket.close();
-	}
+    /**
+     * Retrieves the user.
+     *
+     * @return The user.
+     */
+    public User getUser() {
+        return user;
+    }
 
-	/**
-	 * Sends the given packet to the client.
-	 * @param packet The packet being sent.
-	 */
-	public void send(final OutgoingPacket packet) {
-		socket.write(packet);
-	}
+    /**
+     * Closes the connection.
+     */
+    public void disconnect() {
+        socket.close();
+    }
 
-	/**
-	 * Changes the current connection's user model.
-	 * @param user The new user model to be used.
-	 */
-	public void changeUser(final User user) {
-		this.user = user;
-	}
+    /**
+     * Sends the given packet to the client.
+     *
+     * @param packet The packet being sent.
+     */
+    public void send(final OutgoingPacket packet) {
+        socket.write(packet);
+    }
+
+    /**
+     * Changes the current connection's user model.
+     *
+     * @param user The new user model to be used.
+     */
+    public void changeUser(final User user) {
+        this.user = user;
+    }
+
 }
