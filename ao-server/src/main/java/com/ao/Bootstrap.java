@@ -23,7 +23,7 @@ public class Bootstrap {
 
     public static void main(String[] args) {
 
-        final com.ao.AOServer server;
+        final AOServer server;
 
         try {
             server = Bootstrap.bootstrap();
@@ -44,9 +44,9 @@ public class Bootstrap {
      * @throws IOException
      * @throws DAOException
      */
-    private static com.ao.AOServer bootstrap() throws IOException, DAOException {
+    private static AOServer bootstrap() throws IOException, DAOException {
 
-        com.ao.AOServer server = new com.ao.AOServer();
+        AOServer server = new AOServer();
 
         long timeMillis = System.currentTimeMillis();
 
@@ -66,7 +66,7 @@ public class Bootstrap {
      * @param server The server on which to configure networking.
      * @throws IOException
      */
-    private static void configureNetworking(com.ao.AOServer server) throws IOException {
+    private static void configureNetworking(AOServer server) throws IOException {
         byte[] addr = {0, 0, 0, 0};
 
         LOGGER.info("Initializing server socket configuration...");
@@ -81,7 +81,7 @@ public class Bootstrap {
      *
      * @param server The server on which to start the timers.
      */
-    private static void startTimers(com.ao.AOServer server) {
+    private static void startTimers(AOServer server) {
 
         LOGGER.info("Starting up game timers...");
 
@@ -95,7 +95,7 @@ public class Bootstrap {
      *
      * @param server The server on which to load the application context.
      */
-    private static void loadApplicationContext(com.ao.AOServer server) throws DAOException {
+    private static void loadApplicationContext(AOServer server) throws DAOException {
 
         LOGGER.info("Loading application context...");
 
