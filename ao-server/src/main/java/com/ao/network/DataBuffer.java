@@ -17,8 +17,8 @@ public class DataBuffer {
     /**
      * Retrieves a byte array from the buffer and removes it.
      *
-     * @param length The array length.
-     * @return The requested byte array.
+     * @param length length
+     * @return the requested byte array
      */
     public byte[] getBlock(int length) {
         byte[] ret = new byte[length];
@@ -163,10 +163,10 @@ public class DataBuffer {
     /**
      * Reads an ASCII string from the buffer.
      *
-     * @return The ASCII String.
+     * @return the ASCII String
      */
     public String getASCIIString() {
-        String str = null;
+        String str;
         short length = buffer.readShort();
         byte[] strBytes = new byte[length];
 
@@ -183,9 +183,9 @@ public class DataBuffer {
     }
 
     /**
-     * Reads a unicode string from the buffer.
+     * Reads a Unicode string from the buffer.
      *
-     * @return The Unicode String.
+     * @return the Unicode String
      */
     public String getUnicodeString() {
         String str = null;
@@ -207,8 +207,8 @@ public class DataBuffer {
     /**
      * Writes an ASCII string to the buffer.
      *
-     * @param str The ASCII string to be written.
-     * @return This DataBuffer instance for chaining.
+     * @param str ASCII string to be written
+     * @return this DataBuffer instance for chaining
      */
     public DataBuffer putASCIIString(String str) {
         try {
@@ -219,15 +219,14 @@ public class DataBuffer {
             // ASCII should always be supported
             throw new RuntimeException("ASCII encoding not supported", e);
         }
-
         return this;
     }
 
     /**
-     * Writes a unicode string to the buffer.
+     * Writes a Unicode string to the buffer.
      *
      * @param str The Unicode string to be written.
-     * @return This DataBuffer instance for chaining.
+     * @return this DataBuffer instance for chaining
      */
     public DataBuffer putUnicodeString(String str) {
         try {
@@ -245,7 +244,7 @@ public class DataBuffer {
     /**
      * Returns the underlying ByteBuf for direct access if needed.
      *
-     * @return The underlying ByteBuf.
+     * @return the underlying ByteBuf
      */
     public ByteBuf getBuffer() {
         return buffer;
@@ -254,18 +253,17 @@ public class DataBuffer {
     /**
      * Retrieves the number of readable bytes in the buffer.
      *
-     * @return The number of readable bytes in the buffer.
+     * @return the number of readable bytes in the buffer
      */
     public int getReadableBytes() {
         return buffer.readableBytes();
     }
 
     /**
-     * Reads an ASCII string with fixed length from the buffer.
+     * Reads an ASCII string with a fixed length from the buffer.
      *
-     * @param length The length of the string to be read.
-     * @return The String at the buffer's current position.
-     * @throws UnsupportedEncodingException
+     * @param length length of the string to be read
+     * @return String at the buffer's current position
      */
     public String getASCIIStringFixed(int length) throws UnsupportedEncodingException {
         byte[] str = new byte[length];

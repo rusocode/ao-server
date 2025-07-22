@@ -1,34 +1,35 @@
 package com.ao.ioc.module;
 
-import java.util.Properties;
-
 import com.ao.config.ArchetypeConfiguration;
 import com.ao.config.ini.ArchetypeConfigurationIni;
-
 import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;
+
+import java.util.Properties;
 
 /**
  * Module for game specific configuration.
  */
+
 public class ConfigurationModule extends AbstractModule {
 
-	protected Properties properties;
-	
-	/**
-	 * Creates a new ConfigurationModule.
-	 * @param properties The general project properties.
-	 */
-	public ConfigurationModule(Properties properties) {
-		this.properties = properties;
-	}
-	
-	@Override
-	protected void configure() {
-		
-		// Bind game specific configuration
-		bind(ArchetypeConfiguration.class).to(ArchetypeConfigurationIni.class);
-		bind(String.class).annotatedWith(Names.named("ArchetypeConfigIni")).toInstance(properties.getProperty("config.path.archetype"));
-	}
+    protected Properties properties;
+
+    /**
+     * Creates a new ConfigurationModule.
+     *
+     * @param properties general project properties
+     */
+    public ConfigurationModule(Properties properties) {
+        this.properties = properties;
+    }
+
+    @Override
+    protected void configure() {
+
+        // Bind game specific configuration
+        bind(ArchetypeConfiguration.class).to(ArchetypeConfigurationIni.class);
+        bind(String.class).annotatedWith(Names.named("ArchetypeConfigIni")).toInstance(properties.getProperty("config.path.archetype"));
+    }
 
 }

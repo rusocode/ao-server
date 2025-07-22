@@ -6,239 +6,243 @@ import com.ao.model.worldobject.WorldObject;
 
 /**
  * Defines a spell's model.
- * @author Juan Martín Sotuyo Dodero
  */
+
 public class Spell {
 
-	/**
-	 * The id of the spell.
-	 */
-	protected int id;
+    /**
+     * The required staff power to use the spell.
+     */
+    private final int requiredStaffPower;
 
-	/**
-	 * The effects stack.
-	 */
-	protected Effect[] effects;
+    /**
+     * The required skill to use the spell.
+     */
+    private final int requiredSkill;
 
-	/**
-	 * The required staff power to use the spell.
-	 */
-	private int requiredStaffPower;
+    /**
+     * The required mana to use the spell.
+     */
+    private final int requiredMana;
 
-	/**
-	 * The required skill to use the spell.
-	 */
-	private int requiredSkill;
+    /**
+     * The spell's name.
+     */
+    private final String name;
 
-	/**
-	 * The required mana to use the spell.
-	 */
-	private int requiredMana;
+    /**
+     * The spell's description.
+     */
+    private final String description;
 
-	/**
-	 * The spell's name.
-	 */
-	private String name;
+    /**
+     * Determines whether the effects applied to target are harmful, or not.
+     */
+    private final boolean negative;
 
-	/**
-	 * The spell's description.
-	 */
-	private String description;
+    /**
+     * The spell's fx.
+     */
+    private final int fx;
 
-	/**
-	 * Determines whether the effects applied to target are harmful, or not.
-	 */
-	private boolean negative;
+    /**
+     * The spell's sound.
+     */
+    private final int sound;
 
-	/**
-	 * The spell's fx.
-	 */
-	private int fx;
+    /**
+     * The pronounced words when the spell is thrown.
+     */
+    private final String magicWords;
 
-	/**
-	 * The spell's sound.
-	 */
-	private int sound;
+    /**
+     * The id of the spell.
+     */
+    protected int id;
 
-	/**
-	 * The pronounced words when the spell is thrown.
-	 */
-	private String magicWords;
+    /**
+     * The effects stack.
+     */
+    protected Effect[] effects;
 
-	/**
-	 * Instantes the spell.
-	 *
-	 * @param id					The spell's id.
-	 * @param effects 				The spell's effect.
-	 * @param requiredStaffPower	The spell's required staff power.
-	 * @param requiredSkill			The spell's required skill.
-	 * @param requiredMana			The spell's required mana.
-	 * @param name					The spell's name.
-	 * @param description			The spell's description.
-	 * @param negative				Whether the spell is negative or not for the target.
-	 * @param fx					The fx to use when displaying the spell.
-	 * @param sound					The sound to play when casting the spell.
-	 * @param magicWords			The magic words to be said by the caster when casting the spell.
-	 */
-	public Spell(int id, Effect[] effects, int requiredStaffPower, int requiredSkill,
-			int requiredMana, String name, String description, boolean negative,
-			int fx, int sound, String magicWords) {
-		this.id = id;
-		this.effects = effects;
-		this.requiredStaffPower = requiredStaffPower;
-		this.requiredSkill = requiredSkill;
-		this.requiredMana = requiredMana;
-		this.name = name;
-		this.description = description;
-		this.negative = negative;
-		this.fx = fx;
-		this.sound = sound;
-		this.magicWords = magicWords;
-	}
+    /**
+     * Instantes the spell.
+     *
+     * @param id                 spell's id
+     * @param effects            spell's effect
+     * @param requiredStaffPower spell's required staff power
+     * @param requiredSkill      spell's required skill
+     * @param requiredMana       spell's required mana
+     * @param name               spell's name
+     * @param description        spell's description
+     * @param negative           whether the spell is negative or not for the target
+     * @param fx                 fx to use when displaying the spell
+     * @param sound              sound to play when casting the spell
+     * @param magicWords         magic words to be said by the caster when casting the spell
+     */
+    public Spell(int id, Effect[] effects, int requiredStaffPower, int requiredSkill,
+                 int requiredMana, String name, String description, boolean negative,
+                 int fx, int sound, String magicWords) {
+        this.id = id;
+        this.effects = effects;
+        this.requiredStaffPower = requiredStaffPower;
+        this.requiredSkill = requiredSkill;
+        this.requiredMana = requiredMana;
+        this.name = name;
+        this.description = description;
+        this.negative = negative;
+        this.fx = fx;
+        this.sound = sound;
+        this.magicWords = magicWords;
+    }
 
-	/**
-	 * Checks whether the spells requires a staff to be used, or not.
-	 * @return True if the spells requires a staff, false otherwise.
-	 */
-	public boolean requiresStaff() {
-		return requiredStaffPower > 0;
-	}
+    /**
+     * Checks whether the spells require a staff to be used or not.
+     *
+     * @return true if the spells require a staff, false otherwise
+     */
+    public boolean requiresStaff() {
+        return requiredStaffPower > 0;
+    }
 
-	/**
-	 * Retrieves the required staff power.
-	 * @return The staff power required to use the spell.
-	 */
-	public int getRequiredStaffPower() {
-		return requiredStaffPower;
-	}
+    /**
+     * Retrieves the required staff power.
+     *
+     * @return the staff power required to use the spell
+     */
+    public int getRequiredStaffPower() {
+        return requiredStaffPower;
+    }
 
-	/**
-	 * Retrieves the spell's required mana points.
-	 * @return The spell's required mana.
-	 */
-	public int getRequiredMana() {
-		return requiredMana;
-	}
+    /**
+     * Retrieves the spell's required mana points.
+     *
+     * @return the spell's required mana
+     */
+    public int getRequiredMana() {
+        return requiredMana;
+    }
 
-	/**
-	 * Retrieves the spell's required skills.
-	 * @return The spell's required skills.
-	 */
-	public int getRequiredSkill() {
-		return requiredSkill;
-	}
+    /**
+     * Retrieves the spell's required skills.
+     *
+     * @return the spell's required skills
+     */
+    public int getRequiredSkill() {
+        return requiredSkill;
+    }
 
-	/**
-	 * Checks whether the spell can be applied to the given target when is casted by the given caster.
-	 * @param caster The spell's caster.
-	 * @param target The spell's target.
-	 * @return True if the spell applies to the target and caster, false otherwise.
-	 */
-	public boolean appliesTo(Character caster, Character target) {
-		for (Effect effect : effects) {
-			if (!effect.appliesTo(caster, target)) {
-				return false;
-			}
-		}
+    /**
+     * Checks whether the spell can be applied to the given target when is cast by the given caster.
+     *
+     * @param caster spell's caster.
+     * @param target spell's target.
+     * @return true if the spell applies to the target and caster, false otherwise
+     */
+    public boolean appliesTo(Character caster, Character target) {
+        for (Effect effect : effects)
+            if (!effect.appliesTo(caster, target))
+                return false;
+        return true;
+    }
 
-		return true;
-	}
+    /**
+     * Checks whether the spell can be applied to the given target when is casted by the given caster.
+     *
+     * @param caster spell's caster
+     * @param target spell's target
+     * @return true if the spell applies to the target and caster, false otherwise
+     */
+    public boolean appliesTo(Character caster, WorldObject target) {
+        for (int i = 0; i < effects.length; i++)
+            if (!effects[i].appliesTo(caster, target))
+                return false;
+        return true;
+    }
 
-	/**
-	 * Checks whether the spell can be applied to the given target when is casted by the given caster.
-	 * @param caster The spell's caster.
-	 * @param target The spell's target.
-	 * @return True if the spell applies to the target and caster, false otherwise.
-	 */
-	public boolean appliesTo(Character caster, WorldObject target) {
-		for (int i = 0; i < effects.length; i++) {
-			if (!effects[i].appliesTo(caster, target)) {
-				return false;
-			}
-		}
+    /**
+     * Applies the spell to the given target.
+     *
+     * @param caster spell's caster
+     * @param target target to apply the spell
+     */
+    public void apply(Character caster, Character target) {
+        for (int i = 0; i < effects.length; i++)
+            effects[i].apply(caster, target);
+        caster.addToMana(-requiredMana);
+    }
 
-		return true;
-	}
+    /**
+     * Applies the spell to the given target.
+     *
+     * @param caster spell's caster
+     * @param target target to apply the spell
+     */
+    public void apply(Character caster, WorldObject target) {
+        for (int i = 0; i < effects.length; i++)
+            effects[i].apply(caster, target);
+        caster.addToMana(-requiredMana);
+    }
 
-	/**
-	 * Applies the spell to the given target.
-	 * @param caster The spell's caster.
-	 * @param target The target to apply the spell.
-	 */
-	public void apply(Character caster, Character target) {
-		for (int i = 0; i < effects.length; i++) {
-			effects[i].apply(caster, target);
-		}
+    /**
+     * Retrieves the spell's name.
+     *
+     * @return Spell's name
+     */
+    public String getName() {
+        return name;
+    }
 
-		caster.addToMana(-requiredMana);
-	}
+    /**
+     * Retrieves the spell's description.
+     *
+     * @return Spell's description
+     */
+    public String getDescription() {
+        return description;
+    }
 
-	/**
-	 * Applies the spell to the given target.
-	 * @param caster The spell's caster.
-	 * @param target The target to apply the spell.
-	 */
-	public void apply(Character caster, WorldObject target) {
-		for (int i = 0; i < effects.length; i++) {
-			effects[i].apply(caster, target);
-		}
+    /**
+     * Checks whether the spell is negative to target or not.
+     */
+    public boolean isNegative() {
+        return negative;
+    }
 
-		caster.addToMana(-requiredMana);
-	}
+    /**
+     * Retrieves the spell's fx.
+     *
+     * @return Spell's fx
+     */
+    public int getFX() {
+        return fx;
+    }
 
-	/**
-	 * Retrieves the spell's name.
-	 * @return Spell's name.
-	 */
-	public String getName() {
-		return name;
-	}
+    /**
+     * Retrieves the spell's sound.
+     *
+     * @return Spell's sound
+     */
+    public int getSound() {
+        return sound;
+    }
 
-	/**
-	 * Retrieves the spell's description.
-	 * @return Spell's description.
-	 */
-	public String getDescription() {
-		return description;
-	}
+    /**
+     * Retrieves the spell's magic words.
+     *
+     * @return spell's magic words
+     */
+    public String getMagicWords() {
+        return magicWords;
+    }
 
-	/**
-	 * Checks whether the spell is negative to target, or not.
-	 * @return
-	 */
-	public boolean isNegative() {
-		return negative;
-	}
+    /**
+     * Retrieves the spell's id.
+     *
+     * @return spells id
+     */
+    public int getId() {
+        return id;
+    }
 
-	/**
-	 * Retrieves the spell's fx.
-	 * @return Spell's fx.
-	 */
-	public int getFX() {
-		return fx;
-	}
-
-	/**
-	 * Retrieves the spell's sound.
-	 * @return Spell's sound.
-	 */
-	public int getSound() {
-		return sound;
-	}
-
-	/**
-	 * Retrieves the spell's magic words.
-	 * @return The spell's magic words.
-	 */
-	public String getMagicWords() {
-		return magicWords;
-	}
-
-	/**
-	 * Retrieves the spell's id.
-	 * @return The spells id.
-	 */
-	public int getId() {
-		return id;
-	}
 }

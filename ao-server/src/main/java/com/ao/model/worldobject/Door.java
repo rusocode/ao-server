@@ -5,28 +5,20 @@ import com.ao.model.worldobject.properties.WorldObjectProperties;
 
 public class Door extends AbstractWorldObject {
 
-	public Door(WorldObjectProperties properties) {
-		super(properties);
-	}
+    public Door(WorldObjectProperties properties) {
+        super(properties);
+    }
 
-	/**
-	 * @return the open.
-	 */
-	public boolean getOpen() {
-		return ((DoorProperties) properties).getOpen();
-	}
+    public boolean getOpen() {
+        return ((DoorProperties) properties).getOpen();
+    }
 
-	/**
-	 * @return the locked.
-	 */
-	public boolean getLocked() {
-		return ((DoorProperties) properties).getLocked();
-	}
+    public boolean getLocked() {
+        return ((DoorProperties) properties).getLocked();
+    }
 
-	/**
-	 * @return the code.
-	 */
-	public int getCode() {
-		return ((DoorProperties) properties).getCode();
-	}
+    public int getCode() {
+        return ((DoorProperties) properties).getCode();
+    }
+
 }

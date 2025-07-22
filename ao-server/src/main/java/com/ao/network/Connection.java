@@ -17,18 +17,17 @@ public class Connection {
     /**
      * Creates a new Connection.
      *
-     * @param socket The channel over which to communicate with the client.
+     * @param socket channel over which to communicate with the client
      */
     public Connection(final Channel socket) {
         this.socket = socket;
-
         user = new ConnectedUser(this);
     }
 
     /**
      * Retrieves the user.
      *
-     * @return The user.
+     * @return the user
      */
     public User getUser() {
         return user;
@@ -44,7 +43,7 @@ public class Connection {
     /**
      * Sends the given packet to the client.
      *
-     * @param packet The packet being sent.
+     * @param packet packet being sent
      */
     public void send(final OutgoingPacket packet) {
         socket.write(packet);
@@ -53,7 +52,7 @@ public class Connection {
     /**
      * Changes the current connection's user model.
      *
-     * @param user The new user model to be used.
+     * @param user new user model to be used
      */
     public void changeUser(final User user) {
         this.user = user;

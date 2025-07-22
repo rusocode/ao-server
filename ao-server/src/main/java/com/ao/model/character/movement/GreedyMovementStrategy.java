@@ -1,57 +1,45 @@
 package com.ao.model.character.movement;
 
-import java.util.Random;
-
 import com.ao.model.character.Character;
 import com.ao.model.map.Heading;
 import com.ao.model.map.Position;
 
+import java.util.Random;
+
 public class GreedyMovementStrategy implements MovementStrategy {
 
-	private Position targetPosition;
-	private Character targetCharacter;
-	
-	private Random randomGenerator = new Random();
-	
-	@Override
-	public Heading move(Position pos) {
-		if (targetCharacter != null) {
-			targetPosition = targetCharacter.getPosition();
-		}
-		
-		int x = (int) pos.getX() - targetPosition.getX();
-		int y = (int) pos.getY() - targetPosition.getY();
-		
-		if (x < 0 && y < 0) { // Northeast
-			return randomGenerator.nextInt(2) == 0 ? Heading.NORTH : Heading.EAST;
-		} else if (x > 0 && y < 0) { // Northwest
-			return randomGenerator.nextInt(2) == 0 ? Heading.NORTH : Heading.WEST;
-		} else if (x > 0 && y > 0) { // Southwest
-			return randomGenerator.nextInt(2) == 0 ? Heading.SOUTH : Heading.WEST;
-		} else if (x < 0 && y > 0) { // Southeast
-			return randomGenerator.nextInt(2) == 0 ? Heading.SOUTH : Heading.EAST;
-		} else if (x == 0 && y < 0) { // North
-			return Heading.NORTH;
-		} else if (x == 0 && y > 0) { // South
-			return Heading.SOUTH;
-		} else if (x > 0 && y == 0) { // West
-			return Heading.WEST;
-		} else if (x < 0 && y == 0) { // East
-			return Heading.EAST;
-		}
+    private final Random randomGenerator = new Random();
+    private Position targetPosition;
+    private Character targetCharacter;
 
-		// position and targetPos are the same position
-		return null;
-	}
+    @Override
+    public Heading move(Position pos) {
+        if (targetCharacter != null) targetPosition = targetCharacter.getPosition();
 
-	@Override
-	public void setTarget(Character target) {
-		targetCharacter = target;
-	}
+        int x = (int) pos.getX() - targetPosition.getX();
+        int y = (int) pos.getY() - targetPosition.getY();
 
-	@Override
-	public void setTarget(Position pos) {
-		targetPosition = pos;
-	}
+        if (x < 0 && y < 0) return randomGenerator.nextInt(2) == 0 ? Heading.NORTH : Heading.EAST; // Northeast
+        else if (x > 0 && y < 0) return randomGenerator.nextInt(2) == 0 ? Heading.NORTH : Heading.WEST; // Northwest
+        else if (x > 0 && y > 0) return randomGenerator.nextInt(2) == 0 ? Heading.SOUTH : Heading.WEST; // Southwest
+        else if (x < 0 && y > 0) return randomGenerator.nextInt(2) == 0 ? Heading.SOUTH : Heading.EAST; // Southeast
+        else if (x == 0 && y < 0) return Heading.NORTH; // North
+        else if (x == 0 && y > 0) return Heading.SOUTH; // South
+        else if (x > 0 && y == 0) return Heading.WEST; // West
+        else if (x < 0 && y == 0) return Heading.EAST; // East
+
+        // Position and targetPos are the same position
+        return null;
+    }
+
+    @Override
+    public void setTarget(Character target) {
+        targetCharacter = target;
+    }
+
+    @Override
+    public void setTarget(Position pos) {
+        targetPosition = pos;
+    }
 
 }

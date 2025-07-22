@@ -3,7 +3,9 @@ package com.ao.model.message;
 /**
  * Defines available server messages.
  */
+
 public enum Message {
+
     DONT_SEE_ANYTHING,
     NPC_SWING,
     NPC_KILL_USER,
@@ -28,4 +30,5 @@ public enum Message {
     HOME,
     CANCEL_HOME,
     FINISH_HOME;
+
 }

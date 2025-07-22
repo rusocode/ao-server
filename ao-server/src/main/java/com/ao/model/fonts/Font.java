@@ -3,7 +3,9 @@ package com.ao.model.fonts;
 /**
  * Defines available skills.
  */
+
 public enum Font {
+
     TALK,
     FIGHT,
     WARNING,
@@ -25,10 +27,9 @@ public enum Font {
     CITIZEN,
     CONSE,
     GOD;
-	
-	/**
-	 * The amount of existing fonts.
-	 */
-	public static final int AMOUNT = Font.values().length;
-	public static final Font[] VALUES = Font.values();
+
+    /** The amount of existing fonts. */
+    public static final int AMOUNT = Font.values().length;
+    public static final Font[] VALUES = Font.values();
+
 }

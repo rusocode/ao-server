@@ -150,12 +150,12 @@ public class UserDAOIni implements AccountDAO, UserCharacterDAO {
 
 	protected static final String SPELLS_HEADER 	= "HECHIZOS";
 	protected static final String SPELL_KEY_FORMAT 	= "H%d";
-	// TODO: This shouldn't be here
+	// TODO This shouldn't be here
 	protected static final byte MAX_SPELLS_AMOUNT 	= 35;
 
 	protected static final String PETS_HEADER 		= "MASCOTAS";
 	protected static final String PET_KEY_FORMAT	= "MAS%d";
-	// TODO: This shouldn't be here
+	// TODO This shouldn't be here
 	protected static final byte MAX_PETS_AMOUNT 	= 3;
 
 	protected static final String RESEARCH_HEADER 	= "RESEARCH";
@@ -172,7 +172,7 @@ public class UserDAOIni implements AccountDAO, UserCharacterDAO {
 	protected static final byte NO_SHIELD = 2;
 	protected static final byte NO_WEAPON = 2;
 	protected static final byte NO_HELMET = 2;
-	// TODO: This shouldn't be here.
+	// TODO This shouldn't be here.
 	protected static final String NO_ENLISTMENT_KEY_MESSAGE = "No ingresó a ninguna facción";
 	protected static final int INITIAL_NOBLE_POINTS = 1000;
 
@@ -271,7 +271,7 @@ public class UserDAOIni implements AccountDAO, UserCharacterDAO {
 
 		final String positionKey = homeland.getMap() + "-" + homeland.getX() + "-" + homeland.getY();
 		chara.put(INIT_HEADER, POSITION_KEY, positionKey);
-		// TODO: Save last ip?
+		// TODO Save last ip?
 
 		chara.put(FLAGS_HEADER, BANNED_KEY, 0);
 		chara.put(FLAGS_HEADER, DEAD_KEY, 0);
@@ -318,15 +318,15 @@ public class UserDAOIni implements AccountDAO, UserCharacterDAO {
 		chara.put(STATS_HEADER, DEPOSITED_GOLD_KEY, 0);
 		chara.put(STATS_HEADER, LEVEL_KEY, 1);
 		chara.put(STATS_HEADER, EXPERIENCE_KEY, 0);
-		// TODO: Assign HP, mana, stamina, and free skill points.
-		// TODO: Assign experience to level up.
+		// TODO Assign HP, mana, stamina, and free skill points.
+		// TODO Assign experience to level up.
 
 		chara.put(KILLS_HEADER, KILLED_USERS_KEY, 0);
 		chara.put(KILLS_HEADER, KILLED_NPCS_KEY, 0);
 
 		chara.put(BANK_INVENTORY_HEADER, ITEMS_AMOUNT_KEY, 0);
 
-		// TODO: Put initial items.
+		// TODO Put initial items.
 		chara.put(INVENTORY_HEADER, EQUIPPED_WEAPON_SLOT_KEY, 0);
 		chara.put(INVENTORY_HEADER, EQUIPPED_ARMOUR_SLOT_KEY, 0);
 		chara.put(INVENTORY_HEADER, EQUIPPED_HELMET_SLOT_KEY, 0);
@@ -339,7 +339,7 @@ public class UserDAOIni implements AccountDAO, UserCharacterDAO {
 		chara.put(REPUTATION_HEADER, BOURGEOIS_POINTS_KEY, 0);
 		chara.put(REPUTATION_HEADER, THIEF_POINTS_KEY, 0);
 		chara.put(REPUTATION_HEADER, NOBLE_POINTS_KEY, INITIAL_NOBLE_POINTS);
-		// TODO: Assign initial spells.
+		// TODO Assign initial spells.
 
 		for (byte i = 1; i < MAX_PETS_AMOUNT + 1; i++) {
 			chara.put(PETS_HEADER, String.format(PET_KEY_FORMAT, i), 0);
@@ -365,7 +365,7 @@ public class UserDAOIni implements AccountDAO, UserCharacterDAO {
 			throw new DAOException(e);
 		}
 
-		// TODO: Update this when hp, mana and hit points get updated!
+		// TODO Update this when hp, mana and hit points get updated!
 		return new LoggedUser(user, rep, race, gender, archetype.getArchetype(),
 				false, false, false, false, false, false, false, 0, 0, 0, 0,
 				Character.MAX_THIRSTINESS, 0, Character.MAX_HUNGER, 0, (byte) 1, name, "");
@@ -413,7 +413,7 @@ public class UserDAOIni implements AccountDAO, UserCharacterDAO {
 
 		boolean paralyzed = chara.get(FLAGS_HEADER, PARALYZED_KEY).equals("1");
 
-		// TODO : check what to do, immobilized state isn't saved in charfile
+		// TODO check what to do, immobilized state isn't saved in charfile
 		boolean immobilized = false;
 
 		boolean invisible = false;
@@ -434,10 +434,10 @@ public class UserDAOIni implements AccountDAO, UserCharacterDAO {
 		int hunger = Integer.parseInt(chara.get(STATS_HEADER, MIN_HUNGER_KEY));
 		byte lvl = Byte.parseByte(chara.get(STATS_HEADER, LEVEL_KEY));
 
-		// TODO : Complete description
+		// TODO Complete description
 		String description = "";
 
-		// TODO : Validate character
+		// TODO Validate character
 		final UserCharacter userCharacter = new LoggedUser(user, reputation, race, gender, archetype, poisoned, paralyzed, immobilized, invisible, mimetized, dumbed, hidden, maxMana, mana, maxHitPoints, hitpoints, maxThirstiness, thirstiness, maxHunger, hunger, lvl, username, description);
 
 		return userCharacter;

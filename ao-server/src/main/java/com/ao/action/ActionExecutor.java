@@ -5,25 +5,23 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public abstract class ActionExecutor<S> {
-	private ExecutorService processor = Executors.newSingleThreadExecutor();
-	private AtomicInteger pendingJobs = new AtomicInteger(0);
 
-	public final void dispatch(final Action<S> action) {
-		pendingJobs.incrementAndGet();
+    private final ExecutorService processor = Executors.newSingleThreadExecutor();
+    private final AtomicInteger pendingJobs = new AtomicInteger(0);
 
-		processor.execute(new Runnable() {
-			@Override
-			public void run() {
-				action.performAction(getService());
+    public final void dispatch(final Action<S> action) {
+        pendingJobs.incrementAndGet();
 
-				pendingJobs.decrementAndGet();
-			}
-		});
-	}
+        processor.execute(() -> {
+            action.performAction(getService());
+            pendingJobs.decrementAndGet();
+        });
+    }
 
-	protected abstract S getService();
+    public int getPendingActionCount() {
+        return pendingJobs.intValue();
+    }
 
-	public int getPendingActionCount() {
-		return pendingJobs.intValue();
-	}
+    protected abstract S getService();
+
 }

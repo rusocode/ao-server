@@ -41,7 +41,7 @@ public class AOServer implements Runnable {
      */
     @Override
     public void run() {
-        // Configure the server.
+        // Configure the server
         bossGroup = new NioEventLoopGroup(); // Accept connections
         workerGroup = new NioEventLoopGroup(); // Handle I/O operations
 
@@ -60,10 +60,10 @@ public class AOServer implements Runnable {
                              * for incoming and outgoing data. Decoders are applied to incoming data,
                              * encoders to outgoing.
                              *
-                             * The order of elements is important, since it impacts on order of execution.
-                             * This scheme allows for better separation of concerns, and to add / remove
-                             * steps easily and free of side-effects. For instance, we may want to add an
-                             * inflate/deflate step using zlib, and that is independent from encryption
+                             * The order of elements is important since it impacts on the order of execution.
+                             * This scheme allows for better separation of concerns and to add/remove
+                             * steps easily and free of side effects. For instance, we may want to add an
+                             * inflate/deflate step using zlib, and that is independent of encryption
                              * and the AO protocol itself.
                              */
 
@@ -71,7 +71,7 @@ public class AOServer implements Runnable {
                             pipeline.addLast("encrypter", new MessageToMessageEncoder<ByteBuf>() {
                                 @Override
                                 protected void encode(ChannelHandlerContext ctx, ByteBuf msg, List<Object> out) throws Exception {
-                                    ByteBuf buffer = msg.copy(); // Create a copy to avoid modifying original
+                                    ByteBuf buffer = msg.copy(); // Create a copy to avoid modifying the original
                                     security.encrypt(buffer, ctx.channel());
                                     out.add(buffer);
                                 }
@@ -81,14 +81,14 @@ public class AOServer implements Runnable {
                                 @Override
                                 protected void decode(ChannelHandlerContext ctx, ByteBuf msg, List<Object> out) throws Exception {
                                     security.decrypt(msg, ctx.channel());
-                                    out.add(msg.retain()); // Retain reference since we're passing it along
+                                    out.add(msg.retain()); // Retain the reference since we're passing it along
                                 }
                             });
 
                             /*
                              * Decoder for streamed data.
-                             * Notice handling is performed as decoding happens,
-                             * since we are processing a stream
+                             *
+                             * Notice handling is performed as decoding happens, since we are processing a stream.
                              */
                             pipeline.addLast("decoder", new ByteToMessageDecoder() {
                                 @Override
@@ -107,7 +107,7 @@ public class AOServer implements Runnable {
                                         Connection connection = ctx.channel().attr(CONNECTION_KEY).get();
                                         processed = ClientPacketsManager.handle(new DataBuffer(in), connection);
                                     } catch (IndexOutOfBoundsException e) {
-                                        // Not enough data, just ignore it
+                                        // Not enough data, ignore it
                                     }
 
                                     if (!processed) {
@@ -151,23 +151,19 @@ public class AOServer implements Runnable {
      * Gracefully shutdown the server
      */
     public void shutdown() {
-        if (bossGroup != null) {
-            bossGroup.shutdownGracefully();
-        }
-        if (workerGroup != null) {
-            workerGroup.shutdownGracefully();
-        }
+        if (bossGroup != null) bossGroup.shutdownGracefully();
+        if (workerGroup != null) workerGroup.shutdownGracefully();
     }
 
     /**
-     * @param listeningAddr the listeningAddr to set
+     * @param listeningAddr listeningAddr to set
      */
     public void setListeningAddr(InetSocketAddress listeningAddr) {
         this.listeningAddr = listeningAddr;
     }
 
     /**
-     * @param backlog the backlog to set
+     * @param backlog backlog to set
      */
     public void setBacklog(int backlog) {
         this.backlog = backlog;

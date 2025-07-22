@@ -6,36 +6,37 @@ import com.ao.model.user.Account;
 
 public interface AccountDAO {
 
-	/**
-	 * Retrieves the account with the given name.
-	 * @param username 	The account's name.
-	 * @return 			The account.
-	 * @throws DAOException
-	 */
-	Account retrieve(String username) throws DAOException;
-	
-	/**
-	 * Creates a new account.
-	 * 
-	 * @param name 		The account's name.
-	 * @param password 	The account's password.
-	 * @param mail 		The account's mail.
-	 * @return			The new created account.
-	 * @throws DAOException
-	 */
-	Account create(String name, String password, String mail) throws DAOException, NameAlreadyTakenException;
-	
-	/**
-	 * Deletes the account with the given name.
-	 * 
-	 * @param name The account to be deleted.
-	 */
-	void delete(String name);
-	
-	/**
-	 * Checks if the account with the given name exists.
-	 * @param name The account name.
-	 * @return True if the account exists, false otherwise.
-	 */
-	boolean exists(String name);
+    /**
+     * Retrieves the account with the given name.
+     *
+     * @param username account's name
+     * @return the account
+     */
+    Account retrieve(String username) throws DAOException;
+
+    /**
+     * Creates a new account.
+     *
+     * @param name     account's name
+     * @param password account's password
+     * @param mail     account's mail
+     * @return the newly created account
+     */
+    Account create(String name, String password, String mail) throws DAOException, NameAlreadyTakenException;
+
+    /**
+     * Deletes the account with the given name.
+     *
+     * @param name the account to be deleted
+     */
+    void delete(String name);
+
+    /**
+     * Checks if the account with the given name exists.
+     *
+     * @param name account name
+     * @return true if the account exists, false otherwise
+     */
+    boolean exists(String name);
+
 }

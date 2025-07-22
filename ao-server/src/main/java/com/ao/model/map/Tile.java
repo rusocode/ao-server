@@ -6,131 +6,145 @@ import com.ao.model.worldobject.WorldObject;
 /**
  * A map tile.
  */
+
 public class Tile {
-	private Character character;
-	private WorldObject worldObject;
-	private Trigger trigger;
-	private boolean blocked;
-	private boolean isWater;
-	private boolean isLava;
-	private Position tileExit;
 
-	/**
-	 * Creates a new tile.
-	 * @param blocked Whether the tile is blocked or not.
-	 * @param isWater Whether the tile is water or not.
-	 * @param isLava Whether the tile is lava or not.
-	 * @param trigger The trigger ruling over this tile.
-	 * @param tileExit Position to which this tile leads, if any.
-	 * @param character The character currently standing on this position, if any.
-	 * @param worldObject The object laying in this position, if any.
-	 */
-	public Tile(final boolean blocked, final boolean isWater, final boolean isLava,
-			final Trigger trigger, final Position tileExit, final Character character,
-			final WorldObject worldObject) {
-		this.blocked = blocked;
-		this.isWater = isWater;
-		this.isLava = isLava;
-		this.trigger = trigger;
-		this.tileExit = tileExit;
-		this.worldObject = worldObject;
-		this.character = character;
-	}
+    private final Trigger trigger;
+    private final boolean blocked;
+    private final boolean isWater;
+    private final boolean isLava;
+    private final Position tileExit;
+    private Character character;
+    private WorldObject worldObject;
 
-	/**
-	 * Retrieves the position to which this tile leads.
-	 * @return The tile exit.
-	 */
-	public Position getTileExit() {
-		return tileExit;
-	}
+    /**
+     * Creates a new tile.
+     *
+     * @param blocked     whether the tile is blocked or not
+     * @param isWater     whether the tile is water or not
+     * @param isLava      whether the tile is lava or not
+     * @param trigger     trigger ruling over this tile
+     * @param tileExit    Position to which this tile leads, if any
+     * @param character   character currently standing in this position, if any
+     * @param worldObject object laying in this position, if any
+     */
+    public Tile(final boolean blocked, final boolean isWater, final boolean isLava,
+                final Trigger trigger, final Position tileExit, final Character character,
+                final WorldObject worldObject) {
+        this.blocked = blocked;
+        this.isWater = isWater;
+        this.isLava = isLava;
+        this.trigger = trigger;
+        this.tileExit = tileExit;
+        this.worldObject = worldObject;
+        this.character = character;
+    }
 
-	/**
-	 * Retrieves the block status.
-	 * @return True if the tile is blocked, false otherwise.
-	 */
-	public boolean isBlocked() {
-		return blocked;
-	}
+    /**
+     * Retrieves the position to which this tile leads.
+     *
+     * @return the tile exit
+     */
+    public Position getTileExit() {
+        return tileExit;
+    }
 
-	/**
-	 * Retrieves the character at the tile.
-	 * @return The character at the tile.
-	 */
-	public Character getCharacter() {
-		return character;
-	}
+    /**
+     * Retrieves the block status.
+     *
+     * @return true if the tile is blocked, false otherwise
+     */
+    public boolean isBlocked() {
+        return blocked;
+    }
 
-	/**
-	 * Sets the character at the tile.
-	 * @param character The character to be set at the tile.
-	 */
-	/*package*/ void setCharacter(final Character character) {
-		this.character = character;
-	}
+    /**
+     * Retrieves the character at the tile.
+     *
+     * @return the character at the tile
+     */
+    public Character getCharacter() {
+        return character;
+    }
 
-	/**
-	 * Retrieves the world object at the tile.
-	 * @return The world object at the tile.
-	 */
-	public WorldObject getWorldObject() {
-		return worldObject;
-	}
+    /**
+     * Sets the character at the tile.
+     *
+     * @param character character to be set at the tile
+     */
+    void setCharacter(final Character character) {
+        this.character = character;
+    }
 
-	/**
-	 * Sets the world object at the tile.
-	 * @param worldObject The worldObject to set at the tile.
-	 */
-	/*package*/ void setWorldObject(final WorldObject worldObject) {
-		this.worldObject = worldObject;
-	}
+    /**
+     * Retrieves the world object at the tile.
+     *
+     * @return the world object at the tile
+     */
+    public WorldObject getWorldObject() {
+        return worldObject;
+    }
 
-	/**
-	 * Retrieves the trigger at the tile.
-	 * @return The trigger at the tile.
-	 */
-	public Trigger getTrigger() {
-		return trigger;
-	}
+    /**
+     * Sets the world object at the tile.
+     *
+     * @param worldObject worldObject to set at the tile
+     */
+    void setWorldObject(final WorldObject worldObject) {
+        this.worldObject = worldObject;
+    }
 
-	/**
-	 * Checks if the tile is water.
-	 * @return True if this tile is water, false otherwise.
-	 */
-	public boolean isWater() {
-		return isWater;
-	}
+    /**
+     * Retrieves the trigger at the tile.
+     *
+     * @return the trigger at the tile
+     */
+    public Trigger getTrigger() {
+        return trigger;
+    }
 
-	/**
-	 * Checks if the tile is lava.
-	 * @return True if this tile is lava, false otherwise.
-	 */
-	public boolean isLava() {
-		return isLava;
-	}
+    /**
+     * Checks if the tile is water.
+     *
+     * @return true if this tile is water, false otherwise
+     */
+    public boolean isWater() {
+        return isWater;
+    }
 
-	/**
-	 * Checks if the tile is under roof.
-	 * @return True if this tile is under roof, false otherwise.
-	 */
-	public boolean isUnderRoof() {
-		return trigger == Trigger.UNDER_ROOF;
-	}
+    /**
+     * Checks if the tile is lava.
+     *
+     * @return true if this tile is lava, false otherwise
+     */
+    public boolean isLava() {
+        return isLava;
+    }
 
-	/**
-	 * Checks if the tile is a safe zone.
-	 * @return True if this tile is safe zone, false otherwise.
-	 */
-	public boolean isSafeZone() {
-		return trigger == Trigger.SAFE_ZONE;
-	}
+    /**
+     * Checks if the tile is under a roof.
+     *
+     * @return true if this tile is under a roof, false otherwise
+     */
+    public boolean isUnderRoof() {
+        return trigger == Trigger.UNDER_ROOF;
+    }
 
-	@Override
-	public String toString() {
-		return "Tile [character=" + character + ", worldObject=" + worldObject
-				+ ", trigger=" + trigger + ", blocked=" + blocked
-				+ ", isWater=" + isWater + ", isLava=" + isLava + ", tileExit="
-				+ tileExit + "]";
-	}
+    /**
+     * Checks if the tile is a safe zone.
+     *
+     * @return true if this tile is a safe zone, false otherwise
+     */
+    public boolean isSafeZone() {
+        return trigger == Trigger.SAFE_ZONE;
+    }
+
+    @Override
+    public String toString() {
+        return "Tile [character=" + character + ", worldObject=" + worldObject
+                + ", trigger=" + trigger + ", blocked=" + blocked
+                + ", isWater=" + isWater + ", isLava=" + isLava + ", tileExit="
+                + tileExit + "]";
+    }
 
 }

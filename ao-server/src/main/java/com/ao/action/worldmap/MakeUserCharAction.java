@@ -6,17 +6,17 @@ import com.ao.service.MapService;
 
 public class MakeUserCharAction extends WorldMapAction {
 
-	private final UserCharacter character;
-	private final Position pos;
+    private final UserCharacter character;
+    private final Position pos;
 
-	public MakeUserCharAction(final UserCharacter character, final Position pos) {
-		this.character = character;
-		this.pos = pos;
-	}
+    public MakeUserCharAction(final UserCharacter character, final Position pos) {
+        this.character = character;
+        this.pos = pos;
+    }
 
-	@Override
-	protected void performAction(final MapService service) {
-		service.putCharacterAtPos(character, pos);
-	}
+    @Override
+    protected void performAction(final MapService service) {
+        service.putCharacterAtPos(character, pos);
+    }
 
 }

@@ -7,11 +7,10 @@ import com.ao.model.user.LoggedUser;
 
 public interface AreaService {
 
-	void checkIfUserNeedsUpdate(WorldMap map, Character character,
-			Heading heading);
+    void checkIfUserNeedsUpdate(WorldMap map, Character character, Heading heading);
 
-	void addCharToMap(WorldMap map, Character character);
+    void addCharToMap(WorldMap map, Character character);
 
-	void removeUserFromMap(WorldMap map, LoggedUser user);
+    void removeUserFromMap(WorldMap map, LoggedUser user);
 
 }

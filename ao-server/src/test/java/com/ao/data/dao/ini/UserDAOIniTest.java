@@ -1,18 +1,4 @@
-
-
 package com.ao.data.dao.ini;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-
-import java.io.File;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
 
 import com.ao.data.dao.exception.DAOException;
 import com.ao.model.character.Gender;
@@ -23,102 +9,105 @@ import com.ao.model.character.archetype.UserArchetype;
 import com.ao.model.map.City;
 import com.ao.model.user.Account;
 import com.ao.model.user.ConnectedUser;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.io.File;
+
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
 
 public class UserDAOIniTest {
 
-	private UserDAOIni dao;
+    private static final String CHARACTER_NICK = "test";
+    private static final String NEW_CHARACTER_NICK = "newchartest";
+    private static final String CHARACTER_MAIL = "test@test.com";
+    private static final String CHARACTER_PASSWORD = "testpass";
+    private static final String CHARFILES_PATH = "src/test/resources/charfiles/";
+    private UserDAOIni dao;
 
-	private static final String CHARACTER_NICK = "test";
-	private static final String NEW_CHARACTER_NICK = "newchartest";
-	private static final String CHARACTER_MAIL = "test@test.com";
-	private static final String CHARACTER_PASSWORD = "testpass";
-	private static final String CHARFILES_PATH = "src/test/resources/charfiles/";
+    @Before
+    public void setUp() throws Exception {
+        // Disable escaping for Ini4j
+        System.setProperty("org.ini4j.config.escape", "false");
+        dao = new UserDAOIni(CHARFILES_PATH);
+    }
 
-	@Before
-	public void setUp() throws Exception {
-		// Disable escaping for Ini4j
-		System.setProperty("org.ini4j.config.escape", "false");
+    @After
+    public void tearDown() throws Exception {
+        // Be really sure the file is not there before the next test
+        final File file = new File(dao.getCharFilePath(NEW_CHARACTER_NICK));
+        file.delete();
+    }
 
-		dao = new UserDAOIni(CHARFILES_PATH);
-	}
+    @Test
+    public void testRetrieve() throws DAOException {
+        final Account acc = dao.retrieve(CHARACTER_NICK);
+        assertNotNull(acc);
+        // Ensure we get the requested character and not another one
+        assertEquals(CHARACTER_NICK, acc.getName());
+    }
 
-	@After
-	public void tearDown() throws Exception {
-		// Be really sure the file is not there before the next test
-		final File file = new File(dao.getCharFilePath(NEW_CHARACTER_NICK));
-		file.delete();
-	}
+    @Test
+    public void testCreateAccount() throws DAOException {
+        final Account acc = dao.create(NEW_CHARACTER_NICK, CHARACTER_PASSWORD, CHARACTER_MAIL);
 
-	@Test
-	public void testRetrieve() throws DAOException {
-		final Account acc = dao.retrieve(CHARACTER_NICK);
+        assertEquals(NEW_CHARACTER_NICK, acc.getName());
+        assertEquals(CHARACTER_MAIL, acc.getMail());
 
-		assertNotNull(acc);
+        assertTrue(acc.authenticate(CHARACTER_PASSWORD));
 
-		// Ensure we get the requested character and not another one.
-		assertEquals(CHARACTER_NICK, acc.getName());
-	}
+        final File file = new File(dao.getCharFilePath(NEW_CHARACTER_NICK));
 
-	@Test
-	public void testCreateAccount() throws DAOException {
-		final Account acc = dao.create(NEW_CHARACTER_NICK, CHARACTER_PASSWORD, CHARACTER_MAIL);
+        assertTrue(file.exists());
 
-		assertEquals(NEW_CHARACTER_NICK, acc.getName());
-		assertEquals(CHARACTER_MAIL, acc.getMail());
+        // Don't leave the file there!
+        file.delete();
+    }
 
-		assertTrue(acc.authenticate(CHARACTER_PASSWORD));
+    @Test
+    public void testDelete() throws DAOException {
+        dao.create(NEW_CHARACTER_NICK, CHARACTER_PASSWORD, CHARACTER_MAIL);
+        final File file = new File(dao.getCharFilePath(NEW_CHARACTER_NICK));
 
-		final File file = new File(dao.getCharFilePath(NEW_CHARACTER_NICK));
+        assertTrue(file.exists());
 
-		assertTrue(file.exists());
+        dao.delete(NEW_CHARACTER_NICK);
 
-		// Don't leave the file there!
-		file.delete();
-	}
+        assertFalse(file.exists());
+    }
 
-	@Test
-	public void testDelete() throws DAOException {
-		dao.create(NEW_CHARACTER_NICK, CHARACTER_PASSWORD, CHARACTER_MAIL);
-		final File file = new File(dao.getCharFilePath(NEW_CHARACTER_NICK));
+    @Test
+    public void testCreateCharacter() throws DAOException {
+        final byte[] skills = new byte[Skill.AMOUNT];
 
-		assertTrue(file.exists());
+        for (int i = 0; i < Skill.AMOUNT; i++) {
+            if (i == 1) skills[i] = 10;
+            else skills[i] = 0;
+        }
 
-		dao.delete(NEW_CHARACTER_NICK);
+        final City city = mock(City.class);
 
-		assertFalse(file.exists());
-	}
+        // TODO Use constants!!
+        final UserCharacter chara = dao.create(mock(ConnectedUser.class), NEW_CHARACTER_NICK, Race.HUMAN, Gender.FEMALE,
+                UserArchetype.ASSASIN, 75, city, (byte) 18, (byte) 18,
+                (byte) 18, (byte) 18, (byte) 18, 10, 1);
 
-	@Test
-	public void testCreateCharacter() throws DAOException {
-		final byte[] skills = new byte[Skill.AMOUNT];
+        final File file = new File(dao.getCharFilePath(NEW_CHARACTER_NICK));
 
-		for (int i = 0; i < Skill.AMOUNT; i++) {
-			if (i == 1) {
-				skills[i] = 10;
-			} else {
-				skills[i] = 0;
-			}
-		}
+        assertTrue(file.exists());
 
-		final City city = mock(City.class);
+        assertEquals(NEW_CHARACTER_NICK, chara.getName());
+        assertEquals(UserArchetype.ASSASIN.getArchetype(), chara.getArchetype());
+        assertEquals(Gender.FEMALE, chara.getGender());
+        assertEquals(Race.HUMAN, chara.getRace());
+        assertEquals((byte) 1, chara.getLevel());
 
-		// TODO: Use constants!!
-		final UserCharacter chara = dao.create(mock(ConnectedUser.class), NEW_CHARACTER_NICK, Race.HUMAN, Gender.FEMALE,
-				UserArchetype.ASSASIN, 75, city, (byte) 18, (byte) 18,
-				(byte) 18, (byte) 18, (byte) 18, 10, 1);
+        // TODO To be continued... :P
 
-		final File file = new File(dao.getCharFilePath(NEW_CHARACTER_NICK));
+        file.delete();
 
-		assertTrue(file.exists());
+    }
 
-		assertEquals(NEW_CHARACTER_NICK, chara.getName());
-		assertEquals(UserArchetype.ASSASIN.getArchetype(), chara.getArchetype());
-		assertEquals(Gender.FEMALE, chara.getGender());
-		assertEquals(Race.HUMAN, chara.getRace());
-		assertEquals((byte) 1, chara.getLevel());
-
-		// TODO: To be continued... :P
-
-		file.delete();
-	}
 }

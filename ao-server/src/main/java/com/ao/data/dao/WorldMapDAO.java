@@ -4,9 +4,11 @@ import com.ao.model.map.WorldMap;
 
 public interface WorldMapDAO {
 
-	/**
-	 * Loads and retrieves all maps.
-	 * @return The loaded maps.
-	 */
-	WorldMap[] retrieveAll();
+    /**
+     * Loads and retrieves all maps.
+     *
+     * @return the loaded maps
+     */
+    WorldMap[] retrieveAll();
+
 }

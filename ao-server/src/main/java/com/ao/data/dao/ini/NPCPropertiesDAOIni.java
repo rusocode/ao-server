@@ -696,7 +696,7 @@ public class NPCPropertiesDAOIni implements NPCCharacterPropertiesDAO {
 		for (byte i = 1; i <= amount; i++) {
 			spell = section.get(SPELL_PREFIX + i);
 			if (spell != null) {
-				// TODO : Implementar Spells!
+				// TODO Implementar Spells!
 			}
 		}
 
@@ -842,7 +842,7 @@ public class NPCPropertiesDAOIni implements NPCCharacterPropertiesDAO {
 		return null;
 	}
 
-	// TODO : Use this!
+	// TODO Use this!
 	/**
 	 * Retrieves all sounds an item may reproduce.
 	 * @param section The section from which to retrieve values.
@@ -1006,7 +1006,7 @@ public class NPCPropertiesDAOIni implements NPCCharacterPropertiesDAO {
 			return null;
 		}
 
-		// TODO : Implementar Cities :d
+		// TODO Implementar Cities :d
 		return null;
 	}
 
@@ -1149,7 +1149,7 @@ public class NPCPropertiesDAOIni implements NPCCharacterPropertiesDAO {
 	 * @author jsotuyod
 	 */
 	private enum LegacyAIType {
-		// TODO : Complete this as we code the behaviors!
+		// TODO Complete this as we code the behaviors!
 		STATIC(1, NullBehavior.class, null, QuietMovementStrategy.class),
 	    RANDOM(2, null, null, null),
 	    BAD_ATTACKS_GOOD(3, null, null, null),

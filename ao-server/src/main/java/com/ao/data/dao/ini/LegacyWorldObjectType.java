@@ -25,7 +25,7 @@ public enum LegacyWorldObjectType {
 	BOOK(12, new HashSet<WorldObjectType>(Arrays.asList(new WorldObjectType[] { WorldObjectType.PROP, WorldObjectType.GRABABLE_PROP }))),
 	DRINK(13, WorldObjectType.DRINK),
 	WOOD(14, WorldObjectType.WOOD),
-	// FIXME : Bonfire do have special behavior for resting, should be mapped to something else than props
+	// FIXME Bonfire do have special behavior for resting, should be mapped to something else than props
 	BONFIRE(15, new HashSet<WorldObjectType>(Arrays.asList(new WorldObjectType[] { WorldObjectType.PROP, WorldObjectType.GRABABLE_PROP }))),
 	SHIELD(16, WorldObjectType.SHIELD),
 	HELMET(17, WorldObjectType.HELMET),

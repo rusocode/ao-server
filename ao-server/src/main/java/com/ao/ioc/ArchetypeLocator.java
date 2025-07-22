@@ -9,14 +9,16 @@ import com.google.inject.Injector;
 
 public class ArchetypeLocator {
 
-	private static Injector injector = Guice.createInjector(new ArchetypeModule(ApplicationContext.getInstance(ArchetypeConfiguration.class)));
+    private static final Injector injector = Guice.createInjector(new ArchetypeModule(ApplicationContext.getInstance(ArchetypeConfiguration.class)));
 
-	/**
-	 * Locates archetype instances.
-	 * @param archetype Class of the archetype to be located.
-	 * @return The archetype instance.
-	 */
-	public static Archetype getArchetype(Class<?extends Archetype> archetype) {
-		return injector.getInstance(archetype);
-	}
+    /**
+     * Locates archetype instances.
+     *
+     * @param archetype Class of the archetype to be located
+     * @return the archetype instance
+     */
+    public static Archetype getArchetype(Class<? extends Archetype> archetype) {
+        return injector.getInstance(archetype);
+    }
+
 }

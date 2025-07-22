@@ -2,24 +2,24 @@ package com.ao.model.character;
 
 public class Fx {
 
-	private int id;
-	
-	private int loops;
+    private int id;
 
-	public int getId() {
-		return id;
-	}
+    private int loops;
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    public int getId() {
+        return id;
+    }
 
-	public int getLoops() {
-		return loops;
-	}
+    public void setId(int id) {
+        this.id = id;
+    }
 
-	public void setLoops(int loops) {
-		this.loops = loops;
-	}
-	
+    public int getLoops() {
+        return loops;
+    }
+
+    public void setLoops(int loops) {
+        this.loops = loops;
+    }
+
 }

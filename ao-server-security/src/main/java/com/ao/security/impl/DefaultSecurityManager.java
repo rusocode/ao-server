@@ -13,7 +13,7 @@ public class DefaultSecurityManager implements SecurityManager {
 
     @Override
     public int getClientHashLength() {
-        // No client hash for default.
+        // No client hash for default
         return 0;
     }
 
@@ -29,12 +29,12 @@ public class DefaultSecurityManager implements SecurityManager {
 
     @Override
     public void decrypt(ByteBuf buffer, Channel sc) {
-        // Do nothing, no encryption for default.
+        // Do nothing, no encryption for default
     }
 
     @Override
     public void encrypt(ByteBuf buffer, Channel sc) {
-        // Do nothing, no encryption for default.
+        // Do nothing, no encryption for default
     }
 
 }

@@ -40,9 +40,7 @@ public class Bootstrap {
     /**
      * Bootstraps the application.
      *
-     * @return The application.
-     * @throws IOException
-     * @throws DAOException
+     * @return the application
      */
     private static AOServer bootstrap() throws IOException, DAOException {
 
@@ -63,8 +61,7 @@ public class Bootstrap {
     /**
      * Configures networking on the given server.
      *
-     * @param server The server on which to configure networking.
-     * @throws IOException
+     * @param server server on which to configure networking
      */
     private static void configureNetworking(AOServer server) throws IOException {
         byte[] addr = {0, 0, 0, 0};
@@ -79,7 +76,7 @@ public class Bootstrap {
     /**
      * Starts the game timers on the given server.
      *
-     * @param server The server on which to start the timers.
+     * @param server server on which to start the timers
      */
     private static void startTimers(AOServer server) {
 
@@ -87,7 +84,7 @@ public class Bootstrap {
 
         Timer timer = new Timer(true);
 
-        // TODO : get task for each timer class (use the app context) and the interval for execution
+        // TODO get task for each timer class (use the app context) and the interval for execution
     }
 
     /**
@@ -114,7 +111,7 @@ public class Bootstrap {
         NPCService npcService = ApplicationContext.getInstance(NPCService.class);
         npcService.loadNPCs();
 
-        // TODO : Load other services and classes from application context
+        // TODO Load other services and classes from application context
     }
 
 }
