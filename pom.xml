@@ -199,8 +199,8 @@
 
     <!-- Modulos del proyecto -->
     <modules>
-        <module>ao-server</module>
-        <module>ao-server-security</module>
+        <module>server</module>
+        <module>server-security</module>
     </modules>
 
 </project>
