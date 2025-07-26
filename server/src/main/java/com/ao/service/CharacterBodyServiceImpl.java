@@ -3,8 +3,8 @@ package com.ao.service;
 import com.ao.model.character.Gender;
 import com.ao.model.character.Race;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import java.util.List;
 
 public class CharacterBodyServiceImpl implements CharacterBodyService {

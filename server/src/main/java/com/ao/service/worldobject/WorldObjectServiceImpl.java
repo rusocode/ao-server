@@ -7,7 +7,7 @@ import com.ao.model.worldobject.factory.WorldObjectFactory;
 import com.ao.model.worldobject.factory.WorldObjectFactoryException;
 import com.ao.service.WorldObjectService;
 
-import javax.inject.Inject;
+import com.google.inject.Inject;
 
 /**
  * Default implementation of WorldObjectService.

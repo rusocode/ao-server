@@ -9,8 +9,8 @@ import com.ao.utils.RangeParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.RandomAccessFile;

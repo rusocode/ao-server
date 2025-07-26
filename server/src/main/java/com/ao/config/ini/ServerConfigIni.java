@@ -3,8 +3,8 @@ package com.ao.config.ini;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 
 import org.ini4j.Ini;
 

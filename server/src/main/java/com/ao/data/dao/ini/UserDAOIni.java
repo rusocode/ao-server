@@ -12,8 +12,8 @@ import java.io.Writer;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 
 import org.ini4j.Ini;
 import org.slf4j.Logger;

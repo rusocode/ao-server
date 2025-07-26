@@ -14,8 +14,8 @@ import com.ao.model.worldobject.WorldObject;
 import com.ao.network.Connection;
 import com.ao.network.packet.outgoing.*;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;

@@ -4,8 +4,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.Reader;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 
 import org.ini4j.Ini;
 import org.ini4j.Profile.Section;

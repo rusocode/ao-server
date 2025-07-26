@@ -33,7 +33,6 @@
         <netty.version>4.1.119.Final</netty.version>
         <mockito.version>5.8.0</mockito.version>
         <commons.validator.version>1.8.0</commons.validator.version>
-        <javax.inject.version>1</javax.inject.version>
         <hamcrest.version>2.2</hamcrest.version>
         <oro.version>2.0.8</oro.version>
         <!-- Plugin versions -->
@@ -51,12 +50,6 @@
     <!-- Dependencias gestionadas para todos los modulos -->
     <dependencyManagement>
         <dependencies>
-            <!-- DI Framework -->
-            <dependency>
-                <groupId>javax.inject</groupId>
-                <artifactId>javax.inject</artifactId>
-                <version>${javax.inject.version}</version>
-            </dependency>
             <dependency>
                 <groupId>com.google.inject</groupId>
                 <artifactId>guice</artifactId>

@@ -24,8 +24,8 @@ import com.ao.service.LoginService;
 import com.ao.service.MapService;
 import com.ao.service.UserService;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 
 /**
  * Default implementation of the login service. An account is the exact same as a character.

@@ -10,7 +10,7 @@ import com.ao.model.map.Position;
 import com.ao.model.map.WorldMap;
 import com.ao.service.MapService;
 
-import javax.inject.Inject;
+import com.google.inject.Inject;
 
 /**
  * Concrete implementation of MapService.

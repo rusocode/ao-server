@@ -3,8 +3,7 @@ package com.ao.service;
 import com.ao.data.dao.NPCCharacterPropertiesDAO;
 import com.ao.data.dao.exception.DAOException;
 import com.ao.model.character.npc.properties.NPCProperties;
-
-import javax.inject.Inject;
+import com.google.inject.Inject;
 
 /**
  * Default NPC Service implementation.
