@@ -14,6 +14,8 @@
 # Web principal de Actions: https://github.com/features/actions
 # Documentacion de GitHub Actions: https://docs.github.com/es/actions
 
+# TODO Incluir automatizacion de verificacion en el formateo de sintaxis del codigo
+
 # Define el nombre de la GitHub Action (workflow)
 name: Java CI with Maven
 
@@ -38,9 +40,9 @@ jobs:
     # Pasos a ejecutar
     steps:
 
-      # Step 1: Obtiene el codigo del repositorio a la maquina virtual usando (uses:) la action "checkout" del propio
-      # GitHub que permite clonar el codigo fuente en el entorno de ejecucion de los workflows. Las actions ya creadas
-      # nos permiten usar "aplicaciones" predefinidas en lugar de programar todo desde cero. Repo de la action: https://github.com/actions/checkout
+      # Step 1: Obtiene el codigo de nuestro repositorio usando (uses:) la action "checkout" creada por GitHub Actions
+      # que permite clonar el codigo fuente en el entorno de ejecucion de los workflows. Las actions ya creadas nos
+      # permiten usar "aplicaciones" predefinidas en lugar de programar todo desde cero. Repo de la action: https://github.com/actions/checkout
       - name: Checkout sources
         uses: actions/checkout@v4
 
@@ -51,7 +53,12 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
-          cache: maven # Habilita cache para dependencias Maven (acelera ejecuciones futuras)
+          cache: maven # Habilita cache para dependencias Maven, lo cual es excelente para acelerar builds futuras
+          # Util para monorepos ya que permite un cache mas granular basado en archivos especificos
+          cache-dependency-path: |
+            pom.xml
+            ao-server/pom.xml
+            ao-server-security/pom.xml
 
       # Step 3: Compila con Maven PROGRAMANDO la action desde cero (run:) ya que no esta (o no la encontre) en el Marketplace de GitHub
       - name: Build with Maven
