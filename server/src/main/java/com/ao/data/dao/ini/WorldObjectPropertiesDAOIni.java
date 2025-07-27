@@ -10,16 +10,16 @@ import com.ao.model.worldobject.WorldObjectType;
 import com.ao.model.worldobject.properties.*;
 import com.ao.model.worldobject.properties.manufacture.Manufacturable;
 import com.ao.model.worldobject.properties.manufacture.ManufactureType;
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import org.ini4j.Ini;
 import org.ini4j.Profile.Section;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
 import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.Reader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -95,11 +95,10 @@ public class WorldObjectPropertiesDAOIni implements WorldObjectPropertiesDAO {
     private static final String INGOT_SILVER_AMOUNT_KEY = "LingP";
     private static final String INGOT_IRON_AMOUNT_KEY = "LingH";
 
-    // Horrible, but its completely hardwired in old VB version, and can't be induced from the dat
+    // Horrible, but it's completely hardwired in an old VB version, and can't be induced from the dat
     private static final int WOOD_INDEX = 58;
     private static final int ELVEN_WOOD_INDEX = 1006;
     private static final int[] INGOTES = {386, 387, 388};
-
 
     private static final Map<String, UserArchetype> archetypesByName;
 
@@ -176,16 +175,16 @@ public class WorldObjectPropertiesDAOIni implements WorldObjectPropertiesDAO {
         LOGGER.info("Loading all world object properties from ini file.");
 
         // Reset manufacturables
-        manufacturables = new HashMap<Integer, Manufacturable>();
+        manufacturables = new HashMap<>();
 
-        try {
-            // Make sure the reader is closed, since Ini4J gives no guarantees.
-            Reader reader = new BufferedReader(new FileReader(objectsFilePath));
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream(objectsFilePath);
+        if (inputStream == null)
+            throw new IllegalArgumentException("The file " + objectsFilePath + " was not found in the classpath");
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
             iniFile = new Ini(reader);
-            reader.close();
         } catch (Exception e) {
             LOGGER.error("World Object loading failed!", e);
-            throw new DAOException(e);
+            throw new RuntimeException(e);
         }
 
         int totalObjects = Integer.parseInt(iniFile.get(INIT_HEADER, NUM_OBJECTS_KEY));

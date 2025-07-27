@@ -11,7 +11,9 @@ import com.google.inject.name.Named;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.HashSet;
@@ -68,17 +70,24 @@ public class WorldMapDAOImpl implements WorldMapDAO {
         final byte[] bufMap;
 
         // TODO Load .dat file too
-        try (
-                // Completely read both files
-                final RandomAccessFile dataInf = new RandomAccessFile(mapsPath + String.format(INF_FILE_NAME_FORMAT, id), "r");
-                final RandomAccessFile dataMap = new RandomAccessFile(mapsPath + String.format(MAP_FILE_NAME_FORMAT, id), "r");
-        ) {
+        final String infFileName = mapsPath + String.format(INF_FILE_NAME_FORMAT, id);
+        final String mapFileName = mapsPath + String.format(MAP_FILE_NAME_FORMAT, id);
 
-            bufInf = new byte[(int) dataInf.length()];
-            bufMap = new byte[(int) dataMap.length()];
+        try {
+            // Load .inf file from the classpath
+            try (InputStream infStream = getClass().getClassLoader().getResourceAsStream(infFileName)) {
+                if (infStream == null)
+                    throw new FileNotFoundException("The file " + infFileName + " was not found in the classpath");
+                bufInf = infStream.readAllBytes();
+            }
 
-            dataInf.readFully(bufInf);
-            dataMap.readFully(bufMap);
+            // Load .map file from the classpath
+            try (InputStream mapStream = getClass().getClassLoader().getResourceAsStream(mapFileName)) {
+                if (mapStream == null)
+                    throw new FileNotFoundException("The file " + mapFileName + " was not found in the classpath");
+                bufMap = mapStream.readAllBytes();
+            }
+
         } catch (final IOException e) {
             LOGGER.error("Map " + id + " loading failed!", e);
             throw new RuntimeException(e);
