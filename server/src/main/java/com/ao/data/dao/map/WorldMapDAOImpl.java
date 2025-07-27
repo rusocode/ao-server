@@ -6,14 +6,12 @@ import com.ao.model.map.Tile;
 import com.ao.model.map.Trigger;
 import com.ao.model.map.WorldMap;
 import com.ao.utils.RangeParser;
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.RandomAccessFile;
+import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.HashSet;
@@ -39,8 +37,8 @@ public class WorldMapDAOImpl implements WorldMapDAO {
 
     private final int mapsAmount;
     private final String mapsPath;
-    private final Set<Short> waterGrhs = new HashSet<Short>();
-    private final Set<Short> lavaGrhs = new HashSet<Short>();
+    private final Set<Short> waterGrhs = new HashSet<>();
+    private final Set<Short> lavaGrhs = new HashSet<>();
 
     @Inject
     public WorldMapDAOImpl(@Named("mapsPath") final String mapsPath,
@@ -48,7 +46,6 @@ public class WorldMapDAOImpl implements WorldMapDAO {
                            @Named("mapsConfigFile") final String mapsConfigFile) {
         this.mapsPath = mapsPath;
         this.mapsAmount = mapsAmount;
-
         loadMapsConfig(mapsConfigFile);
     }
 
@@ -221,7 +218,11 @@ public class WorldMapDAOImpl implements WorldMapDAO {
     private void loadMapsConfig(final String configFile) {
         final Properties props = new Properties();
         try {
-            props.load(new FileReader(configFile));
+            InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(configFile);
+            if (inputStream == null)
+                throw new FileNotFoundException("The file " + configFile + " was not found in the classpath");
+            props.load(inputStream);
+            inputStream.close();
         } catch (final IOException e) {
             LOGGER.error("Error loading maps properties file({})", configFile);
             throw new RuntimeException(e);
