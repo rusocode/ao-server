@@ -3,4 +3,4 @@ AO-Server is a server written in Java for the game Argentum Online, an MMORPG de
 
 The server's goal is to leverage multithreading and the features offered by Java (APIs, libraries, and frameworks) to improve game performance.
 
-AO-Server is currently based on AOXP-Server in <a target="_blank" href="https://github.com/aoxp/AOXP-Server/commit/daa8d10b83b762a0072dd022e99fdfab1c57bb6b">this commit</a>.
+AO-Server is currently based on AOXP-Server in <a target="_blank" href="https://github.com/aoxp/AOXP-Server/commit/daa8d10b83b762a0072dd022e99fdfab1c57bb6b">this commit</a>. (Because original implementation is static now.)
