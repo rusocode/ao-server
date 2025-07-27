@@ -6,6 +6,3 @@ target
 
 # Ignore all the files and folders that begin with a point (hidden files)
 .*
-
-# Ignore the content of Maps/ folders within any resources
-*/resources/Maps/*
