@@ -35,7 +35,7 @@ public class NPCPropertiesDAOIniTest {
     private static final int BANKER_NPC_INDEX = 23;
     private static final int NOBLE_NPC_INDEX = 71;
 
-    private static final String TEST_NPCS_DAT = "src/test/resources/NPCs.dat";
+    private static final String TEST_NPCS_DAT = "NPCs.dat";
 
     private NPCPropertiesDAOIni dao;
 

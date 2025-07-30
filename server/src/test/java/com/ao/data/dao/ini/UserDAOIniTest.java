@@ -24,7 +24,7 @@ public class UserDAOIniTest {
     private static final String NEW_CHARACTER_NICK = "newchartest";
     private static final String CHARACTER_MAIL = "test@test.com";
     private static final String CHARACTER_PASSWORD = "testpass";
-    private static final String CHARFILES_PATH = "src/test/resources/charfiles/";
+    private static final String CHARFILES_PATH = "charfiles/";
     private UserDAOIni dao;
 
     @Before

@@ -11,8 +11,8 @@ import static org.junit.Assert.*;
 
 public class WorldMapDAOImplTest {
 
-    private static final String MAPS_PATH = "src/test/resources/maps/";
-    private static final String MAPS_CONFIG_FILE = "resources/maps.properties";
+    private static final String MAPS_PATH = "maps/";
+    private static final String MAPS_CONFIG_FILE = "maps.properties";
     private WorldMapDAO dao;
 
     @Before

@@ -14,7 +14,7 @@ import static org.junit.Assert.fail;
 
 public class CityDAOIniTest {
 
-    private static final String CITIES_DAT_PATH = "src/test/resources/Ciudades.dat";
+    private static final String CITIES_DAT_PATH = "Ciudades.dat";
     private static final String INIT_HEADER = "INIT";
     private static final String NUM_CITIES_KEY = "NumCities";
     private CityDAOIni dao;
