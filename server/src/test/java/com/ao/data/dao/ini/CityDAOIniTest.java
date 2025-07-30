@@ -6,8 +6,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.Reader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -32,13 +32,13 @@ public class CityDAOIniTest {
 
         Ini iniFile = null;
 
-        try {
-            // Make sure the reader is closed, since Ini4J gives no guarantees
-            final Reader reader = new BufferedReader(new FileReader(CITIES_DAT_PATH));
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream(CITIES_DAT_PATH);
+        if (inputStream == null)
+            throw new IllegalArgumentException("The file " + CITIES_DAT_PATH + " was not found in the classpath");
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
             iniFile = new Ini(reader);
-            reader.close();
-        } catch (final Exception e) {
-            fail("Loading of cities failed with message " + e.getMessage());
+        } catch (Exception e) {
+            fail("Cities loading failed! " + e.getMessage());
         }
 
         final int totalCities = Integer.parseInt(iniFile.get(INIT_HEADER, NUM_CITIES_KEY));
