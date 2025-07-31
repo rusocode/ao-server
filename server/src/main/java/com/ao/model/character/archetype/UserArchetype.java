@@ -7,32 +7,36 @@ import com.ao.ioc.ArchetypeLocator;
  */
 
 public enum UserArchetype {
-    MAGE(MageArchetype.class),
-    CLERIC(ClericArchetype.class),
-    WARRIOR(WarriorArchetype.class),
-    ASSASIN(AssasinArchetype.class),
-    THIEF(ThiefArchetype.class),
-    BARD(BardArchetype.class),
-    DRUID(DruidArchetype.class),
-    BANDIT(BanditArchetype.class),
-    PALADIN(PaladinArchetype.class),
-    HUNTER(HunterArchetype.class),
-    PIRATE(PirateArchetype.class),
-    WORKER(WorkerArchetype.class);
-    // These ones are not used in 0.13.x and later, but left in in case someone want's them ^_^
+    ASSASIN(ArchetypeLocator.getArchetype(AssasinArchetype.class)),
+    BANDIT(ArchetypeLocator.getArchetype(BanditArchetype.class)),
+    BARD(ArchetypeLocator.getArchetype(BardArchetype.class)),
+    CLERIC(ArchetypeLocator.getArchetype(ClericArchetype.class)),
+    DRUID(ArchetypeLocator.getArchetype(DruidArchetype.class)),
+    HUNTER(ArchetypeLocator.getArchetype(HunterArchetype.class)),
+    MAGE(ArchetypeLocator.getArchetype(MageArchetype.class)),
+    PALADIN(ArchetypeLocator.getArchetype(PaladinArchetype.class)),
+    PIRATE(ArchetypeLocator.getArchetype(PirateArchetype.class)),
+    THIEF(ArchetypeLocator.getArchetype(ThiefArchetype.class)),
+    WARRIOR(ArchetypeLocator.getArchetype(WarriorArchetype.class)),
+    WORKER(ArchetypeLocator.getArchetype(WorkerArchetype.class));
+    // These are not used in 0.13.x and later, but left in case someone wants them ^_^
 //	FISHER(ArchetypeLocator.getArchetype(FisherArchetype.class)),
 //	BLACKSMITH(ArchetypeLocator.getArchetype(BlacksmithArchetype.class)),
 //	LUMBERJACK(ArchetypeLocator.getArchetype(LumberjackArchetype.class)),
 //	MINER(ArchetypeLocator.getArchetype(MinerArchetype.class)),
 //	CARPENTER(ArchetypeLocator.getArchetype(CarpenterArchetype.class)),
 
-
     private static final UserArchetype[] values = UserArchetype.values();
-    private final Class<? extends Archetype> archetypeClass;
-    private Archetype archetype; // Lazy init
 
-    UserArchetype(Class<? extends Archetype> archetypeClass) {
-        this.archetypeClass = archetypeClass;
+    private final Archetype archetype;
+
+    /**
+     * Create a new UserArchetype
+     *
+     * @param archetype The Archetype class corresponding to this UserArchetype.
+     */
+    UserArchetype(Archetype archetype) {
+        this.archetype = archetype;
     }
 
     /**
@@ -49,23 +53,21 @@ public enum UserArchetype {
      * Allows retrieving the enum back from the Archetype.
      *
      * @param archetype archetype to look up in the enum
-     * @return The UserArchetype matching the given Archetype, null if none matches
+     * @return the UserArchetype matching the given Archetype, null if none matches
      */
     public static UserArchetype valueOf(Archetype archetype) {
         String archetypeClassName = archetype.getClass().getSimpleName();
         for (UserArchetype arch : values)
-            if (arch.getArchetype().getClass().getSimpleName().equals(archetypeClassName))
-                return arch;
+            if (arch.getArchetype().getClass().getSimpleName().equals(archetypeClassName)) return arch;
         return null;
     }
 
     /**
-     * He gets the associated archetype, initializing it only when used.
+     * Retrieves the Archetype related to this UserArchetype.
      *
-     * @return The Archetype related to this UserArchetype
+     * @return the Archetype related to this UserArchetype
      */
     public Archetype getArchetype() {
-        if (archetype == null) archetype = ArchetypeLocator.getArchetype(archetypeClass);
         return archetype;
     }
 
