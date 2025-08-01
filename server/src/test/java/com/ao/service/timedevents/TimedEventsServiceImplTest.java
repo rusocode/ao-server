@@ -2,8 +2,8 @@ package com.ao.service.timedevents;
 
 import com.ao.mock.MockFactory;
 import com.ao.model.character.Character;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.mockito.Mockito.*;
 
@@ -12,7 +12,7 @@ public class TimedEventsServiceImplTest {
     private TimedEvent event;
     private TimedEventsServiceImpl service;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         service = new TimedEventsServiceImpl();
     }

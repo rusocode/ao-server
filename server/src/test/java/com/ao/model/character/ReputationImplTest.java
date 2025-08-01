@@ -1,9 +1,9 @@
 package com.ao.model.character;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class ReputationImplTest {
 
@@ -16,7 +16,7 @@ public class ReputationImplTest {
 
     private Reputation rep;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         rep = new ReputationImpl(ASSASIN_POINTS, BANDIT_POINTS, BURGEOIS_POINTS, THIEFF_POINTS, NOBLE_POINTS, BELONGS_TO_FACTION);
     }
@@ -24,74 +24,74 @@ public class ReputationImplTest {
     @Test
     public void testAddToAssassin() {
         rep.addToAssassin(10);
-        assertEquals(ASSASIN_POINTS + 10, rep.getAssassin());
+        assertThat(rep.getAssassin()).isEqualTo(ASSASIN_POINTS + 10);
     }
 
     @Test
     public void testAddToBandit() {
         rep.addToBandit(10);
-        assertEquals(BANDIT_POINTS + 10, rep.getBandit());
+        assertThat(rep.getBandit()).isEqualTo(BANDIT_POINTS + 10);
     }
 
     @Test
     public void testAddToBourgeois() {
         rep.addToBourgeois(10);
-        assertEquals(BURGEOIS_POINTS + 10, rep.getBourgeois());
+        assertThat(rep.getBourgeois()).isEqualTo(BURGEOIS_POINTS + 10);
     }
 
     @Test
     public void testAddToNoblePoints() {
         rep.addToNoble(10);
-        assertEquals(NOBLE_POINTS + 10, rep.getNoble());
+        assertThat(rep.getNoble()).isEqualTo(NOBLE_POINTS + 10);
     }
 
     @Test
     public void testAddToThief() {
         rep.addToThief(10);
-        assertEquals(THIEFF_POINTS + 10, rep.getThief());
+        assertThat(rep.getThief()).isEqualTo(THIEFF_POINTS + 10);
     }
 
     @Test
     public void testGetAlignment() {
-        assertSame(Alignment.CRIMINAL, rep.getAlignment());
+        assertThat(rep.getAlignment()).isSameAs(Alignment.CRIMINAL);
         rep.addToNoble(600);
-        assertSame(Alignment.CITIZEN, rep.getAlignment());
+        assertThat(rep.getAlignment()).isSameAs(Alignment.CITIZEN);
     }
 
     @Test
     public void testGetAssassin() {
-        assertEquals(ASSASIN_POINTS, rep.getAssassin());
+        assertThat(rep.getAssassin()).isEqualTo(ASSASIN_POINTS);
     }
 
     @Test
     public void testGetBandit() {
-        assertEquals(BANDIT_POINTS, rep.getBandit());
+        assertThat(rep.getBandit()).isEqualTo(BANDIT_POINTS);
     }
 
     @Test
     public void testGetBourgeois() {
-        assertEquals(BURGEOIS_POINTS, rep.getBourgeois());
+        assertThat(rep.getBourgeois()).isEqualTo(BURGEOIS_POINTS);
     }
 
     @Test
     public void testGetThief() {
-        assertEquals(THIEFF_POINTS, rep.getThief());
+        assertThat(rep.getThief()).isEqualTo(THIEFF_POINTS);
     }
 
     @Test
     public void testGetNoble() {
-        assertEquals(NOBLE_POINTS, rep.getNoble());
+        assertThat(rep.getNoble()).isEqualTo(NOBLE_POINTS);
     }
 
     @Test
     public void testBelongsToFaction() {
-        assertFalse(rep.belongsToFaction());
+        assertThat(rep.belongsToFaction()).isFalse();
     }
 
     @Test
     public void testSetBelongsToFaction() {
         rep.setBelongsToFaction(!BELONGS_TO_FACTION);
-        assertEquals(!BELONGS_TO_FACTION, rep.belongsToFaction());
+        assertThat(rep.belongsToFaction()).isEqualTo(!BELONGS_TO_FACTION);
     }
 
 }

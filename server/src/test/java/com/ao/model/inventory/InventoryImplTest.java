@@ -2,18 +2,17 @@ package com.ao.model.inventory;
 
 import com.ao.mock.MockFactory;
 import com.ao.model.worldobject.Item;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 public class InventoryImplTest {
 
     private Inventory inventory;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         inventory = new InventoryImpl();
     }
@@ -25,33 +24,33 @@ public class InventoryImplTest {
         for (int i = 0; i < inventory.getCapacity(); i++) {
             // Basic item mock
             item[i] = MockFactory.mockItem(i + 1, 1);
-            assertEquals(0, inventory.addItem(item[i]));
+            assertThat(inventory.addItem(item[i])).isEqualTo(0);
         }
 
         // TODO Split this test into 3/4
 
-        // Try to add an item when inventory is full and item not repeated.
+        // Try to add an item when inventory is full and item not repeated
         final Item newItem = mock(Item.class);
         when(newItem.getAmount()).thenReturn(1);
-        assertEquals(1, inventory.addItem(newItem));
+        assertThat(inventory.addItem(newItem)).isEqualTo(1);
 
         // Try to add an item that is repeated when inv. Is full
         when(newItem.getId()).thenReturn(2);
-        assertEquals(0, inventory.addItem(newItem));
-        assertEquals(2, inventory.getItemAmount(newItem));
+        assertThat(inventory.addItem(newItem)).isEqualTo(0);
+        assertThat(inventory.getItemAmount(newItem)).isEqualTo(2);
 
-        // Try to add an item repeated when inventory isn't full but item not exceed the limit
+        // Try to add an item repeated when inventory isn't full but item not exceeds the limit
         inventory.removeItem(0);
 
-        assertEquals(0, inventory.addItem(newItem));
-        assertEquals(3, inventory.getItemAmount(newItem));
+        assertThat(inventory.addItem(newItem)).isEqualTo(0);
+        assertThat(inventory.getItemAmount(newItem)).isEqualTo(3);
 
-        // Try to add an item that is repeated when inventory isn't full and item amount exceeds the limit.
+        // Try to add an item that is repeated when inventory isn't full and the item amount exceeds the limit.
         inventory.removeItem(0);
         inventory.addItem(item[0]);
 
         when(newItem.getAmount()).thenReturn(9998);
-        assertThat(inventory.addItem(newItem), greaterThan(0));
+        assertThat(inventory.addItem(newItem)).isGreaterThan(0);
         verify(newItem).addAmount(-9997);
     }
 
@@ -61,7 +60,7 @@ public class InventoryImplTest {
 
         inventory.addItem(item);
         int slot = inventory.hasItem(item);
-        assertNotNull(inventory.getItem(slot));
+        assertThat(inventory.getItem(slot)).isNotNull();
 
         // Test bounds
         inventory.getItem(-1);
@@ -73,20 +72,20 @@ public class InventoryImplTest {
         final Item[] item = new Item[inventory.getCapacity()];
         for (int i = 0; i < inventory.getCapacity(); i++) {
             item[i] = MockFactory.mockItem(i + 1, 1);
-            assertTrue(inventory.hasFreeSlots());
+            assertThat(inventory.hasFreeSlots()).isTrue();
             inventory.addItem(item[i]);
         }
-        assertFalse(inventory.hasFreeSlots());
+        assertThat(inventory.hasFreeSlots()).isFalse();
         inventory.removeItem(0);
-        assertTrue(inventory.hasFreeSlots());
+        assertThat(inventory.hasFreeSlots()).isTrue();
     }
 
     @Test
     public void testHasItem() {
         final Item item = mock(Item.class);
-        assertEquals(-1, inventory.hasItem(item));
+        assertThat(inventory.hasItem(item)).isEqualTo(-1);
         inventory.addItem(item);
-        assertTrue(inventory.hasItem(item) != -1);
+        assertThat(inventory.hasItem(item) != -1).isTrue();
     }
 
     @Test
@@ -94,11 +93,11 @@ public class InventoryImplTest {
         final Item item = mock(Item.class);
         inventory.addItem(item);
         int slot = inventory.hasItem(item);
-        assertNotNull(inventory.removeItem(slot));
-        assertEquals(-1, inventory.hasItem(item));
+        assertThat(inventory.removeItem(slot)).isNotNull();
+        assertThat(inventory.hasItem(item)).isEqualTo(-1);
         // Test bounds
-        assertNull(inventory.removeItem(-1));
-        assertNull(inventory.removeItem(inventory.getCapacity()));
+        assertThat(inventory.removeItem(-1)).isNull();
+        assertThat(inventory.removeItem(inventory.getCapacity())).isNull();
     }
 
     @Test
@@ -114,15 +113,15 @@ public class InventoryImplTest {
         // Completely remove an item from inventory
         inventory.addItem(item);
         inventory.removeItem(item);
-        assertEquals(-1, inventory.hasItem(item));
+        assertThat(inventory.hasItem(item)).isEqualTo(-1);
 
         // Remove an item, by more than can be removed
         inventory.addItem(item2);
         inventory.removeItem(itemRemoved);
-        assertThat(inventory.hasItem(item2), not(equalTo(-1)));
+        assertThat(inventory.hasItem(item2)).isNotEqualTo(-1);
 
         // Try to remove an item not in inventory
-        assertNull(inventory.removeItem(item));
+        assertThat(inventory.hasItem(item2)).isNull();
     }
 
     @Test
@@ -133,16 +132,16 @@ public class InventoryImplTest {
         final int slot = inventory.hasItem(item);
 
         final Item removedItem = inventory.removeItem(slot, 1);
-        assertNotNull(removedItem);
-        assertThat(inventory.hasItem(item), not(equalTo(-1)));
+        assertThat(removedItem).isNotNull();
+        assertThat(inventory.hasItem(item)).isNotEqualTo(-1);
 
         final Item removedItem2 = inventory.removeItem(slot, 1);
-        assertNotNull(removedItem2);
-        assertEquals(-1, inventory.hasItem(item));
+        assertThat(removedItem2).isNotNull();
+        assertThat(inventory.hasItem(item)).isEqualTo(-1);
 
         // Test bounds
-        assertNull(inventory.removeItem(-1, 1));
-        assertNull(inventory.removeItem(inventory.getCapacity(), 1));
+        assertThat(inventory.removeItem(-1, 1)).isNull();
+        assertThat(inventory.removeItem(inventory.getCapacity(), 1)).isNull();
     }
 
     @Test
@@ -151,11 +150,11 @@ public class InventoryImplTest {
         final Item item2 = MockFactory.mockItem(1, 1000);
 
         inventory.addItem(item);
-        assertEquals(1, inventory.getItemAmount(item));
+        assertThat(inventory.getItemAmount(item)).isEqualTo(1);
 
-        // When adding the second item, amount should stack up
+        // When adding the second item, the amount should stack up
         inventory.addItem(item2);
-        assertEquals(1001, inventory.getItemAmount(item));
+        assertThat(inventory.getItemAmount(item)).isEqualTo(1001);
     }
 
     @Test
@@ -165,8 +164,8 @@ public class InventoryImplTest {
         inventory.addItem(item);
         inventory.setCapacity(1);
 
-        assertEquals(1, inventory.getCapacity());
-        assertEquals(item, inventory.getItem(0));
+        assertThat(inventory.getCapacity()).isEqualTo(1);
+        assertThat(inventory.getItem(0)).isEqualTo(item);
 
         // TODO Test when capacity is trimmed and items are droped
     }
@@ -181,8 +180,8 @@ public class InventoryImplTest {
 
         inventory.cleanup();
 
-        assertEquals(-1, inventory.hasItem(item));
-        assertThat(inventory.hasItem(item2), not(equalTo(-1)));
+        assertThat(inventory.hasItem(item)).isEqualTo(-1);
+        assertThat(inventory.hasItem(item2)).isNotEqualTo(-1);
     }
 
 }

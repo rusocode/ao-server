@@ -1,10 +1,9 @@
 package com.ao.model.worldobject;
 
 import com.ao.model.worldobject.properties.ItemProperties;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public abstract class AbstractItemTest extends AbstractWorldObjectTest {
 
@@ -18,59 +17,59 @@ public abstract class AbstractItemTest extends AbstractWorldObjectTest {
         // Check adding and removing
         if (ammount < AbstractItem.MAX_STACKED_ITEMS) {
             item.addAmount(1);
-            assertEquals(ammount + 1, item.getAmount());
+            assertThat(item.getAmount()).isEqualTo(ammount + 1);
             item.addAmount(-1);
-            assertEquals(ammount, item.getAmount());
+            assertThat(item.getAmount()).isEqualTo(ammount);
         } else {
             item.addAmount(-1);
-            assertEquals(ammount - 1, item.getAmount());
+            assertThat(item.getAmount()).isEqualTo(ammount - 1);
             item.addAmount(1);
-            assertEquals(ammount, item.getAmount());
+            assertThat(item.getAmount()).isEqualTo(ammount);
         }
 
         // Check limits
         item.addAmount(AbstractItem.MAX_STACKED_ITEMS + 1);
-        assertEquals(AbstractItem.MAX_STACKED_ITEMS, item.getAmount());
+        assertThat(item.getAmount()).isEqualTo(AbstractItem.MAX_STACKED_ITEMS);
     }
 
     @Test
     public void testGetValue() {
         final AbstractItem item = (AbstractItem) object;
         final ItemProperties itemProps = (ItemProperties) objectProps;
-        assertEquals(itemProps.getValue(), item.getValue());
+        assertThat(item.getValue()).isEqualTo(itemProps.getValue());
     }
 
     @Test
     public void testIsNewbie() {
         final AbstractItem item = (AbstractItem) object;
         final ItemProperties itemProps = (ItemProperties) objectProps;
-        assertEquals(itemProps.isNewbie(), item.isNewbie());
+        assertThat(item.isNewbie()).isEqualTo(itemProps.isNewbie());
     }
 
     @Test
     public void testCanBeStolen() {
         final AbstractItem item = (AbstractItem) object;
-        assertTrue(item.canBeStolen());
+        assertThat(item.canBeStolen()).isTrue();
     }
 
     @Test
     public void testIsNoLog() {
         final AbstractItem item = (AbstractItem) object;
         final ItemProperties itemProps = (ItemProperties) objectProps;
-        assertEquals(itemProps.isNoLog(), item.isNoLog());
+        assertThat(item.isNoLog()).isEqualTo(itemProps.isNoLog());
     }
 
     public void testIsFalls() {
         final AbstractItem item = (AbstractItem) object;
         final ItemProperties itemProps = (ItemProperties) objectProps;
-        assertEquals(itemProps.isFalls(), item.isFalls());
+        assertThat(item.isFalls()).isEqualTo(itemProps.isFalls());
     }
 
     @Test
     public void testIsRespawneable() {
         final AbstractItem item = (AbstractItem) object;
         final ItemProperties itemProps = (ItemProperties) objectProps;
-        assertEquals(itemProps.isRespawnable(), item.isRespawnable());
+        assertThat(item.isRespawnable()).isEqualTo(itemProps.isRespawnable());
     }
 
 }

@@ -3,12 +3,11 @@ package com.ao.model.worldobject;
 import com.ao.model.character.Character;
 import com.ao.model.inventory.Inventory;
 import com.ao.model.worldobject.properties.RefillableStatModifyingItemProperties;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
-import static org.hamcrest.Matchers.instanceOf;
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 public class FilledBottleTest extends AbstractItemTest {
@@ -19,7 +18,7 @@ public class FilledBottleTest extends AbstractItemTest {
     private FilledBottle bottle2;
 
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         final RefillableStatModifyingItemProperties emptyProps = new RefillableStatModifyingItemProperties(WorldObjectType.EMPTY_BOTTLE, 1, "Water Bottle", 1, 1, null, null, false, false, false, false, 0, 0, false, null);
         final RefillableStatModifyingItemProperties props = new RefillableStatModifyingItemProperties(WorldObjectType.FILLED_BOTTLE, 1, "Water Bottle", 1, 1, null, null, false, false, false, false, THIRST, THIRST, true, emptyProps);
@@ -43,14 +42,14 @@ public class FilledBottleTest extends AbstractItemTest {
 
         bottle2.use(character);
 
-        // Consumption of bottle2 requires these 2 calls.
+        // Consumption of bottle2 requires these 2 calls
         verify(inventory).cleanup();
         verify(character).addToThirstiness(THIRST);
 
-        assertThat(addedItem.getValue(), instanceOf(EmptyBottle.class));
+        assertThat(addedItem.getValue()).isInstanceOf(EmptyBottle.class);
         final EmptyBottle emptyBottle = (EmptyBottle) addedItem.getValue();
-        assertEquals(((RefillableStatModifyingItemProperties) bottle2.properties).getOtherStateProperties(), emptyBottle.properties);
-        assertEquals(1, emptyBottle.amount);
+        assertThat(emptyBottle.properties).isEqualTo(((RefillableStatModifyingItemProperties) bottle2.properties).getOtherStateProperties());
+        assertThat(emptyBottle.amount).isEqualTo(1);
     }
 
     @Test
@@ -63,13 +62,13 @@ public class FilledBottleTest extends AbstractItemTest {
 
         bottle1.use(character);
 
-        // Consumption of bottle1 requires just a call to addToThirstiness.
+        // Consumption of bottle1 requires just a call to addToThirstiness
         verify(character).addToThirstiness(THIRST);
 
-        assertThat(addedItem.getValue(), instanceOf(EmptyBottle.class));
+        assertThat(addedItem.getValue()).isInstanceOf(EmptyBottle.class);
         final EmptyBottle emptyBottle = (EmptyBottle) addedItem.getValue();
-        assertEquals(((RefillableStatModifyingItemProperties) bottle1.properties).getOtherStateProperties(), emptyBottle.properties);
-        assertEquals(1, emptyBottle.amount);
+        assertThat(emptyBottle.properties).isEqualTo(((RefillableStatModifyingItemProperties) bottle1.properties).getOtherStateProperties());
+        assertThat(emptyBottle.amount).isEqualTo(1);
     }
 
     @Test
@@ -77,27 +76,26 @@ public class FilledBottleTest extends AbstractItemTest {
         final FilledBottle clone = (FilledBottle) bottle1.clone();
 
         // Make sure all fields match
-        assertEquals(bottle1.amount, clone.amount);
-        assertEquals(bottle1.properties, clone.properties);
+        assertThat(clone.amount).isEqualTo(bottle1.amount);
+        assertThat(clone.properties).isEqualTo(bottle1.properties);
 
         // Make sure the object itself is different
-        assertNotSame(bottle1, clone);
-
+        assertThat(clone).isNotSameAs(bottle1);
 
         final FilledBottle clone2 = (FilledBottle) bottle2.clone();
 
         // Make sure all fields match
-        assertEquals(bottle2.amount, clone2.amount);
-        assertEquals(bottle2.properties, clone2.properties);
+        assertThat(clone2.amount).isEqualTo(bottle2.amount);
+        assertThat(clone2.properties).isEqualTo(bottle2.properties);
 
         // Make sure the object itself is different
-        assertNotSame(bottle2, clone2);
+        assertThat(clone2).isNotSameAs(bottle2);
     }
 
     @Test
     public void testGetThirst() {
-        assertEquals(THIRST, bottle1.getThirst());
-        assertEquals(THIRST, bottle2.getThirst());
+        assertThat(bottle1.getThirst()).isEqualTo(THIRST);
+        assertThat(bottle2.getThirst()).isEqualTo(THIRST);
     }
 
 }

@@ -3,11 +3,10 @@ package com.ao.model.worldobject;
 import com.ao.model.character.Character;
 import com.ao.model.inventory.Inventory;
 import com.ao.model.worldobject.properties.ItemProperties;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotSame;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 public class MineralTest extends AbstractItemTest {
@@ -15,7 +14,7 @@ public class MineralTest extends AbstractItemTest {
     private Mineral mineral1;
     private Mineral mineral2;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         final ItemProperties props1 = new ItemProperties(WorldObjectType.MINERAL, 1, "Gold", 1, 1, null, null, false, false, false, false);
         mineral1 = new Mineral(props1, 1);
@@ -46,21 +45,20 @@ public class MineralTest extends AbstractItemTest {
         final Mineral clone = (Mineral) mineral1.clone();
 
         // Make sure all fields match
-        assertEquals(mineral1.amount, clone.amount);
-        assertEquals(mineral1.properties, clone.properties);
+        assertThat(clone.amount).isEqualTo(mineral1.amount);
+        assertThat(clone.properties).isEqualTo(mineral1.properties);
 
         // Make sure the object itself is different
-        assertNotSame(mineral1, clone);
-
+        assertThat(clone).isNotSameAs(mineral1);
 
         final Mineral clone2 = (Mineral) mineral2.clone();
 
         // Make sure all fields match
-        assertEquals(mineral2.amount, clone2.amount);
-        assertEquals(mineral2.properties, clone2.properties);
+        assertThat(clone2.amount).isEqualTo(mineral2.amount);
+        assertThat(clone2.properties).isEqualTo(mineral2.properties);
 
         // Make sure the object itself is different
-        assertNotSame(mineral2, clone2);
+        assertThat(clone2).isNotSameAs(mineral2);
     }
 
 }

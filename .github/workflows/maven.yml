@@ -1,5 +1,5 @@
 # Este workflow de GitHub Actions automatiza el proceso de integracion continua (CI) para un proyecto Maven de Java. Se 
-# ejecuta automaticamente cada vez que se hace push o pull request a la rama main, realizando una secuencia  de pasos 
+# ejecuta automaticamente cada vez que se hace push o pull request a la rama main, realizando una secuencia de pasos
 # esenciales: primero configura el entorno con Java 17, luego compila y empaqueta el proyecto en un JAR usando Maven, 
 # despues ejecuta todas las pruebas unitarias y genera reportes de cobertura de codigo con JaCoCo que se envian a 
 # Coveralls para su visualizacion, y finalmente actualiza el grafo de dependencias en GitHub para habilitar las alertas

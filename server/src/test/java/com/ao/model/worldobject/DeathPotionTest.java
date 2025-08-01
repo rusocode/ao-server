@@ -3,11 +3,10 @@ package com.ao.model.worldobject;
 import com.ao.model.character.Character;
 import com.ao.model.inventory.Inventory;
 import com.ao.model.worldobject.properties.ItemProperties;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotSame;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 public class DeathPotionTest extends AbstractItemTest {
@@ -17,7 +16,7 @@ public class DeathPotionTest extends AbstractItemTest {
     private DeathPotion potion1;
     private DeathPotion potion2;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         final ItemProperties props1 = new ItemProperties(WorldObjectType.DEATH_POTION, 1, "Black Potion", 1, 1, null, null, false, false, false, true);
         potion1 = new DeathPotion(props1, 5);
@@ -62,21 +61,21 @@ public class DeathPotionTest extends AbstractItemTest {
         final DeathPotion clone = (DeathPotion) potion1.clone();
 
         // Make sure all fields match
-        assertEquals(potion1.amount, clone.amount);
-        assertEquals(potion1.properties, clone.properties);
+        assertThat(clone.amount).isEqualTo(potion1.amount);
+        assertThat(clone.properties).isEqualTo(potion1.properties);
 
         // Make sure the object itself is different
-        assertNotSame(potion1, clone);
+        assertThat(clone).isNotSameAs(potion1);
 
 
         final DeathPotion clone2 = (DeathPotion) potion2.clone();
 
         // Make sure all fields match
-        assertEquals(potion2.amount, clone2.amount);
-        assertEquals(potion2.properties, clone2.properties);
+        assertThat(clone2.amount).isEqualTo(potion2.amount);
+        assertThat(clone2.properties).isEqualTo(potion2.properties);
 
         // Make sure the object itself is different
-        assertNotSame(potion2, clone2);
+        assertThat(clone2).isNotSameAs(potion2);
     }
 
 }

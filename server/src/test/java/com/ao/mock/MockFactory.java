@@ -26,12 +26,7 @@ public class MockFactory {
         when(item.getId()).thenReturn(id);
         when(item.getAmount()).thenCallRealMethod();
         when(item.addAmount(anyInt())).thenCallRealMethod();
-        when(item.clone()).thenAnswer(new Answer<Item>() {
-            @Override
-            public Item answer(final InvocationOnMock invocation) throws Throwable {
-                return mockItem(item.getId(), item.getAmount());
-            }
-        });
+        when(item.clone()).thenAnswer((Answer<Item>) invocation -> mockItem(item.getId(), item.getAmount()));
 
         // initialize amount
         item.addAmount(initialAmount);
@@ -116,8 +111,9 @@ public class MockFactory {
 
     /**
      * Creates a new TimedEvent mock with a default mocked Character.
-     *
+     * <p>
      * // @param executions The amount of the executions the event would have
+     *
      * @return the created mock
      */
     public static TimedEvent mockTimedEvent() {

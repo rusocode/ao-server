@@ -3,13 +3,11 @@ package com.ao.model.worldobject;
 import com.ao.model.character.Character;
 import com.ao.model.inventory.Inventory;
 import com.ao.model.worldobject.properties.StatModifyingItemProperties;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
-import static org.hamcrest.Matchers.greaterThanOrEqualTo;
-import static org.hamcrest.Matchers.lessThanOrEqualTo;
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 public class DrinkTest extends AbstractItemTest {
@@ -20,7 +18,7 @@ public class DrinkTest extends AbstractItemTest {
     private Drink drink1;
     private Drink drink2;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         final StatModifyingItemProperties props1 = new StatModifyingItemProperties(WorldObjectType.FOOD, 1, "Apple Juice", 1, 1, null, null, false, false, false, false, MIN_THIRST, MAX_THIRST);
         drink1 = new Drink(props1, 5);
@@ -57,20 +55,19 @@ public class DrinkTest extends AbstractItemTest {
 
         /// Make sure the value is in the correct range
         verify(character).addToThirstiness(capture.capture());
-        assertThat(capture.getValue(), greaterThanOrEqualTo(MIN_THIRST));
-        assertThat(capture.getValue(), lessThanOrEqualTo(MAX_THIRST));
+        assertThat(capture.getValue()).isBetween(MIN_THIRST, MAX_THIRST);
     }
 
     @Test
     public void testGetMinThirst() {
-        assertEquals(MIN_THIRST, drink1.getMinThirst());
-        assertEquals(MAX_THIRST, drink2.getMinThirst());
+        assertThat(drink1.getMinThirst()).isEqualTo(MIN_THIRST);
+        assertThat(drink2.getMinThirst()).isEqualTo(MAX_THIRST);
     }
 
     @Test
     public void testGetMaxThirst() {
-        assertEquals(MAX_THIRST, drink1.getMaxThirst());
-        assertEquals(MAX_THIRST, drink2.getMaxThirst());
+        assertThat(drink1.getMaxThirst()).isEqualTo(MAX_THIRST);
+        assertThat(drink2.getMaxThirst()).isEqualTo(MAX_THIRST);
     }
 
     @Test
@@ -78,20 +75,20 @@ public class DrinkTest extends AbstractItemTest {
         final Drink clone = (Drink) drink1.clone();
 
         // Make sure all fields match
-        assertEquals(drink1.amount, clone.amount);
-        assertEquals(drink1.properties, clone.properties);
+        assertThat(clone.amount).isEqualTo(drink1.amount);
+        assertThat(clone.properties).isEqualTo(drink1.properties);
 
         // Make sure the object itself is different
-        assertNotSame(drink1, clone);
+        assertThat(clone).isNotSameAs(drink1);
 
         final Drink clone2 = (Drink) drink2.clone();
 
         // Make sure all fields match
-        assertEquals(drink2.amount, clone2.amount);
-        assertEquals(drink2.properties, clone2.properties);
+        assertThat(clone2.amount).isEqualTo(drink2.amount);
+        assertThat(clone2.properties).isEqualTo(drink2.properties);
 
         // Make sure the object itself is different
-        assertNotSame(drink2, clone2);
+        assertThat(clone2).isNotSameAs(drink2);
     }
 
 }

@@ -3,11 +3,10 @@ package com.ao.model.worldobject;
 import com.ao.model.character.Character;
 import com.ao.model.inventory.Inventory;
 import com.ao.model.worldobject.properties.RefillableStatModifyingItemProperties;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotSame;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 public class EmptyBottleTest extends AbstractItemTest {
@@ -15,7 +14,7 @@ public class EmptyBottleTest extends AbstractItemTest {
     private EmptyBottle bottle1;
     private EmptyBottle bottle2;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         final RefillableStatModifyingItemProperties props1 = new RefillableStatModifyingItemProperties(WorldObjectType.EMPTY_BOTTLE, 1, "Empty Bottle", 1, 1, null, null, false, false, false, false, 0, 0, false, null);
         bottle1 = new EmptyBottle(props1, 1);
@@ -46,21 +45,21 @@ public class EmptyBottleTest extends AbstractItemTest {
         final EmptyBottle clone = (EmptyBottle) bottle1.clone();
 
         // Make sure all fields match
-        assertEquals(bottle1.amount, clone.amount);
-        assertEquals(bottle1.properties, clone.properties);
+        assertThat(clone.amount).isEqualTo(bottle1.amount);
+        assertThat(clone.properties).isEqualTo(bottle1.properties);
 
         // Make sure the object itself is different
-        assertNotSame(bottle1, clone);
+        assertThat(clone).isNotSameAs(bottle1);
 
 
         final EmptyBottle clone2 = (EmptyBottle) bottle2.clone();
 
         // Make sure all fields match
-        assertEquals(bottle2.amount, clone2.amount);
-        assertEquals(bottle2.properties, clone2.properties);
+        assertThat(clone2.amount).isEqualTo(bottle2.amount);
+        assertThat(clone2.properties).isEqualTo(bottle2.properties);
 
         // Make sure the object itself is different
-        assertNotSame(bottle2, clone2);
+        assertThat(clone2).isNotSameAs(bottle2);
     }
 
 }

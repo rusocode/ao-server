@@ -2,15 +2,15 @@ package com.ao.data.dao.ini;
 
 import com.ao.model.map.City;
 import org.ini4j.Ini;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 
 public class CityDAOIniTest {
 
@@ -19,7 +19,7 @@ public class CityDAOIniTest {
     private static final String NUM_CITIES_KEY = "NumCities";
     private CityDAOIni dao;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         dao = new CityDAOIni(CITIES_DAT_PATH);
     }
@@ -45,7 +45,7 @@ public class CityDAOIniTest {
 
         final City[] cities = dao.retrieveAll();
 
-        assertEquals(totalCities, cities.length);
+        assertThat(cities.length).isEqualTo(totalCities);
 
     }
 

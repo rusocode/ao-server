@@ -1,10 +1,10 @@
 package com.ao.model.worldobject;
 
 import com.ao.model.worldobject.properties.TeleportProperties;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class TeleportTest extends AbstractWorldObjectTest {
 
@@ -12,7 +12,7 @@ public class TeleportTest extends AbstractWorldObjectTest {
 
     private Teleport teleport1;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         final TeleportProperties props1 = new TeleportProperties(WorldObjectType.TELEPORT, 1, "Teleport", 1, RADIUS);
         teleport1 = new Teleport(props1);
@@ -23,7 +23,7 @@ public class TeleportTest extends AbstractWorldObjectTest {
 
     @Test
     public void testGetRadius() {
-        assertEquals(RADIUS, teleport1.getRadius());
+        assertThat(teleport1.getRadius()).isEqualTo(RADIUS);
     }
 
 }

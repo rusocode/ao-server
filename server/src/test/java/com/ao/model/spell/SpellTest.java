@@ -5,11 +5,12 @@ import com.ao.mock.MockFactory;
 import com.ao.model.character.Character;
 import com.ao.model.spell.effect.Effect;
 import com.ao.model.worldobject.WorldObject;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -29,7 +30,7 @@ public class SpellTest {
     private Spell spellWithStaff;
     private Spell spellNoStaffObject;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         final Effect[] effects = new Effect[2];
         effects[0] = MockFactory.mockEffect(true, false);
@@ -52,30 +53,30 @@ public class SpellTest {
 
     @Test
     public void testRequiresStaff() {
-        assertFalse(spellNoStaff.requiresStaff());
-        assertTrue(spellWithStaff.requiresStaff());
-        assertFalse(spellNoStaffObject.requiresStaff());
+        assertThat(spellNoStaff.requiresStaff()).isFalse();
+        assertThat(spellWithStaff.requiresStaff()).isTrue();
+        assertThat(spellNoStaffObject.requiresStaff()).isFalse();
     }
 
     @Test
     public void testGetRequiredStaffPower() {
-        assertEquals(0, spellNoStaff.getRequiredStaffPower());
-        assertEquals(REQUIRED_STAFF_POWER, spellWithStaff.getRequiredStaffPower());
-        assertEquals(0, spellNoStaffObject.getRequiredStaffPower());
+        assertThat(spellNoStaff.getRequiredStaffPower()).isEqualTo(0);
+        assertThat(spellWithStaff.getRequiredStaffPower()).isEqualTo(REQUIRED_STAFF_POWER);
+        assertThat(spellNoStaffObject.getRequiredStaffPower()).isEqualTo(0);
     }
 
     @Test
     public void testGetRequiredMana() {
-        assertEquals(REQUIRED_MANA, spellNoStaff.getRequiredMana());
-        assertEquals(REQUIRED_MANA, spellWithStaff.getRequiredMana());
-        assertEquals(REQUIRED_MANA, spellNoStaffObject.getRequiredMana());
+        assertThat(spellNoStaff.getRequiredMana()).isEqualTo(REQUIRED_MANA);
+        assertThat(spellWithStaff.getRequiredMana()).isEqualTo(REQUIRED_MANA);
+        assertThat(spellNoStaffObject.getRequiredMana()).isEqualTo(REQUIRED_MANA);
     }
 
     @Test
     public void testGetRequiredSkill() {
-        assertEquals(REQUIRED_SKILL, spellNoStaff.getRequiredSkill());
-        assertEquals(REQUIRED_SKILL, spellWithStaff.getRequiredSkill());
-        assertEquals(REQUIRED_SKILL, spellNoStaffObject.getRequiredSkill());
+        assertThat(spellNoStaff.getRequiredSkill()).isEqualTo(REQUIRED_SKILL);
+        assertThat(spellWithStaff.getRequiredSkill()).isEqualTo(REQUIRED_SKILL);
+        assertThat(spellNoStaffObject.getRequiredSkill()).isEqualTo(REQUIRED_SKILL);
     }
 
     @Test
@@ -83,9 +84,9 @@ public class SpellTest {
         final Character caster = MockFactory.mockCharacter();
         final Character target = MockFactory.mockCharacter();
 
-        assertTrue(spellNoStaff.appliesTo(caster, target));
-        assertTrue(spellWithStaff.appliesTo(caster, target));
-        assertFalse(spellNoStaffObject.appliesTo(caster, target));
+        assertThat(spellNoStaff.appliesTo(caster, target)).isTrue();
+        assertThat(spellWithStaff.appliesTo(caster, target)).isTrue();
+        assertThat(spellNoStaffObject.appliesTo(caster, target)).isFalse();
     }
 
     @Test
@@ -93,9 +94,9 @@ public class SpellTest {
         final Character caster = MockFactory.mockCharacter();
         final WorldObject target = MockFactory.mockWorldObject();
 
-        assertFalse(spellNoStaff.appliesTo(caster, target));
-        assertFalse(spellWithStaff.appliesTo(caster, target));
-        assertTrue(spellNoStaffObject.appliesTo(caster, target));
+        assertThat(spellNoStaff.appliesTo(caster, target)).isFalse();
+        assertThat(spellWithStaff.appliesTo(caster, target)).isFalse();
+        assertThat(spellNoStaffObject.appliesTo(caster, target)).isTrue();
     }
 
     @Test
@@ -147,44 +148,44 @@ public class SpellTest {
 
     @Test
     public void testGetName() {
-        assertEquals(SPELL_NAME, spellNoStaff.getName());
-        assertEquals(SPELL_NAME, spellWithStaff.getName());
-        assertEquals(SPELL_NAME, spellNoStaffObject.getName());
+        assertThat(spellNoStaff.getName()).isEqualTo(SPELL_NAME);
+        assertThat(spellWithStaff.getName()).isEqualTo(SPELL_NAME);
+        assertThat(spellNoStaffObject.getName()).isEqualTo(SPELL_NAME);
     }
 
     @Test
     public void testGetDescription() {
-        assertEquals(SPELL_DESCRIPTION, spellNoStaff.getDescription());
-        assertEquals(SPELL_DESCRIPTION, spellWithStaff.getDescription());
-        assertEquals(SPELL_DESCRIPTION, spellNoStaffObject.getDescription());
+        assertThat(spellNoStaff.getDescription()).isEqualTo(SPELL_DESCRIPTION);
+        assertThat(spellWithStaff.getDescription()).isEqualTo(SPELL_DESCRIPTION);
+        assertThat(spellNoStaffObject.getDescription()).isEqualTo(SPELL_DESCRIPTION);
     }
 
     @Test
     public void testIsNegative() {
-        assertEquals(IS_NEGATIVE, spellNoStaff.isNegative());
-        assertEquals(IS_NEGATIVE, spellWithStaff.isNegative());
-        assertEquals(IS_NEGATIVE, spellNoStaffObject.isNegative());
+        assertThat(spellNoStaff.isNegative()).isEqualTo(IS_NEGATIVE);
+        assertThat(spellWithStaff.isNegative()).isEqualTo(IS_NEGATIVE);
+        assertThat(spellNoStaffObject.isNegative()).isEqualTo(IS_NEGATIVE);
     }
 
     @Test
     public void testGetFX() {
-        assertEquals(SPELL_FX, spellNoStaff.getFX());
-        assertEquals(SPELL_FX, spellWithStaff.getFX());
-        assertEquals(SPELL_FX, spellNoStaffObject.getFX());
+        assertThat(spellNoStaff.getFX()).isEqualTo(SPELL_FX);
+        assertThat(spellWithStaff.getFX()).isEqualTo(SPELL_FX);
+        assertThat(spellNoStaffObject.getFX()).isEqualTo(SPELL_FX);
     }
 
     @Test
     public void testGetSound() {
-        assertEquals(SPELL_SOUND, spellNoStaff.getSound());
-        assertEquals(SPELL_SOUND, spellWithStaff.getSound());
-        assertEquals(SPELL_SOUND, spellNoStaffObject.getSound());
+        assertThat(spellNoStaff.getSound()).isEqualTo(SPELL_SOUND);
+        assertThat(spellWithStaff.getSound()).isEqualTo(SPELL_SOUND);
+        assertThat(spellNoStaffObject.getSound()).isEqualTo(SPELL_SOUND);
     }
 
     @Test
     public void testGetMagicWords() {
-        assertEquals(SPELL_MAGIC_WORDS, spellNoStaff.getMagicWords());
-        assertEquals(SPELL_MAGIC_WORDS, spellWithStaff.getMagicWords());
-        assertEquals(SPELL_MAGIC_WORDS, spellNoStaffObject.getMagicWords());
+        assertThat(spellNoStaff.getMagicWords()).isEqualTo(SPELL_MAGIC_WORDS);
+        assertThat(spellWithStaff.getMagicWords()).isEqualTo(SPELL_MAGIC_WORDS);
+        assertThat(spellNoStaffObject.getMagicWords()).isEqualTo(SPELL_MAGIC_WORDS);
     }
 
 }

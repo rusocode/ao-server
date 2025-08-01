@@ -1,9 +1,9 @@
 package com.ao.model.worldobject;
 
 import com.ao.model.worldobject.properties.WorldObjectProperties;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public abstract class AbstractWorldObjectTest {
 
@@ -12,17 +12,17 @@ public abstract class AbstractWorldObjectTest {
 
     @Test
     public void testGetId() {
-        assertEquals(objectProps.getId(), object.getId());
+        assertThat(object.getId()).isEqualTo(objectProps.getId());
     }
 
     @Test
     public void testGetGraphic() {
-        assertEquals(objectProps.getGraphic(), object.getGraphic());
+        assertThat(object.getGraphic()).isEqualTo(objectProps.getGraphic());
     }
 
     @Test
     public void testGetName() {
-        assertEquals(objectProps.getName(), object.getName());
+        assertThat(object.getName()).isEqualTo(objectProps.getName());
     }
 
 }
