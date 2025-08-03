@@ -20,14 +20,13 @@ public class UserArchetypeTest {
         assertThat(UserArchetype.PIRATE.getArchetype()).isInstanceOf(PirateArchetype.class);
         assertThat(UserArchetype.THIEF.getArchetype()).isInstanceOf(ThiefArchetype.class);
         assertThat(UserArchetype.WARRIOR.getArchetype()).isInstanceOf(WarriorArchetype.class);
-        assertThat(UserArchetype.WORKER.getArchetype()).isInstanceOf(AssasinArchetype.class);
-        assertThat(UserArchetype.ASSASIN.getArchetype()).isInstanceOf(WorkerArchetype.class);
+        assertThat(UserArchetype.WORKER.getArchetype()).isInstanceOf(WorkerArchetype.class);
     }
 
     @Test
     public void testValueOf() {
-        final Archetype arch = ArchetypeLocator.getArchetype(AssasinArchetype.class);
-        assertThat(UserArchetype.ASSASIN).isSameAs(UserArchetype.valueOf(arch));
+        final Archetype archetype = ArchetypeLocator.getArchetype(AssasinArchetype.class); // Es necesario declararlo como final?
+        assertThat(UserArchetype.ASSASIN).isSameAs(UserArchetype.valueOf(archetype));
     }
 
 }

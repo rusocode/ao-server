@@ -173,12 +173,10 @@ public class UserDAOIni implements AccountDAO, UserCharacterDAO {
     public Account retrieve(String username) throws DAOException {
         Ini chara = readCharFile(username);
 
-        if (null == chara) {
-            return null;
-        }
+        if (null == chara) return null;
 
-        // Add the single character's name.
-        Set<String> characters = new HashSet<String>();
+        // Add the single character's name
+        Set<String> characters = new HashSet<>();
         characters.add(username);
 
         return new AccountImpl(
@@ -191,12 +189,10 @@ public class UserDAOIni implements AccountDAO, UserCharacterDAO {
     }
 
     @Override
-    public Account create(String name, String password, String mail)
-            throws DAOException, NameAlreadyTakenException {
+    public Account create(String name, String password, String mail) throws DAOException, NameAlreadyTakenException {
 
-        if (exists(name)) {
-            throw new NameAlreadyTakenException();
-        }
+        // If it is not created, then create it
+        if (exists(name)) throw new NameAlreadyTakenException();
 
         Ini acc = new Ini();
 
@@ -207,30 +203,26 @@ public class UserDAOIni implements AccountDAO, UserCharacterDAO {
         try {
             Writer writer = new BufferedWriter(new FileWriter(getCharFilePath(name)));
             acc.store(writer);
-
-            // Make sure the writer is closed, since Ini4j gives no guarantees.
+            // Make sure the writer is closed, since Ini4j gives no guarantees
             writer.close();
         } catch (IOException e) {
             LOGGER.error("Charfile (account data) creation failed!", e);
             throw new DAOException(e);
         }
 
-        return new AccountImpl(name, password, mail, new HashSet<String>(), false);
+        return new AccountImpl(name, password, mail, new HashSet<>(), false);
     }
 
     @Override
     public void delete(String name) {
         File charfile = new File(getCharFilePath(name));
 
-        if (!charfile.exists()) {
-            return;
-        }
+        if (!charfile.exists()) return;
 
         boolean success = charfile.delete();
 
-        if (!success) {
-            LOGGER.error(String.format("Character (%s) deletion failed", name));
-        }
+        if (!success) LOGGER.error(String.format("Character (%s) deletion failed", name));
+
     }
 
     @Override
@@ -292,9 +284,8 @@ public class UserDAOIni implements AccountDAO, UserCharacterDAO {
         chara.put(ATTRIBUTES_HEADER, String.format(ATTRIBUTE_FORMAT_KEY, Attribute.CONSTITUTION.ordinal() + 1), constitution);
         chara.put(ATTRIBUTES_HEADER, String.format(ATTRIBUTE_FORMAT_KEY, Attribute.INTELLIGENCE.ordinal() + 1), intelligence);
 
-        for (byte i = 1; i < Skill.AMOUNT; i++) {
+        for (byte i = 1; i < Skill.AMOUNT; i++)
             chara.put(SKILLS_HEADER, String.format(SKILL_KEY_FORMAT, i + 1), 0);
-        }
 
         chara.put(STATS_HEADER, FREE_SKILL_POINTS_KEY, initialAvailableSkills);
 
@@ -325,9 +316,8 @@ public class UserDAOIni implements AccountDAO, UserCharacterDAO {
         chara.put(REPUTATION_HEADER, NOBLE_POINTS_KEY, INITIAL_NOBLE_POINTS);
         // TODO Assign initial spells.
 
-        for (byte i = 1; i < MAX_PETS_AMOUNT + 1; i++) {
+        for (byte i = 1; i < MAX_PETS_AMOUNT + 1; i++)
             chara.put(PETS_HEADER, String.format(PET_KEY_FORMAT, i), 0);
-        }
 
         chara.put(RESEARCH_HEADER, TRAINING_TIME_KEY, 0);
 
@@ -364,9 +354,7 @@ public class UserDAOIni implements AccountDAO, UserCharacterDAO {
     public UserCharacter load(final ConnectedUser user, final String username) throws DAOException {
         Ini chara = readCharFile(username);
 
-        if (null == chara) {
-            return null;
-        }
+        if (null == chara) return null;
 
         int assassinPoints = Integer.parseInt(chara.get(REPUTATION_HEADER, ASSASSIN_POINTS_KEY));
         int banditPoints = Integer.parseInt(chara.get(REPUTATION_HEADER, BANDIT_POINTS_KEY));
@@ -375,8 +363,7 @@ public class UserDAOIni implements AccountDAO, UserCharacterDAO {
         int noblePoints = Integer.parseInt(chara.get(REPUTATION_HEADER, NOBLE_POINTS_KEY));
         boolean belongsToFaction = "1".equals(chara.get(REPUTATION_HEADER, BELONGS_TO_CHAOS_KEY)) || "1".equals(chara.get(REPUTATION_HEADER, BELONGS_TO_ARMY_KEY));
 
-        Reputation reputation = new ReputationImpl(assassinPoints, banditPoints, bourgeoisPoints, thiefPoints, noblePoints,
-                belongsToFaction);
+        Reputation reputation = new ReputationImpl(assassinPoints, banditPoints, bourgeoisPoints, thiefPoints, noblePoints, belongsToFaction);
 
         Race race = Race.get(Byte.parseByte(chara.get(INIT_HEADER, RACE_KEY)));
 
@@ -390,11 +377,8 @@ public class UserDAOIni implements AccountDAO, UserCharacterDAO {
 
         // TODO check what to do, immobilized state isn't saved in charfile
         boolean immobilized = false;
-
         boolean invisible = false;
-
         boolean mimetized = false;
-
         boolean dumbed = false;
 
         boolean hidden = chara.get(FLAGS_HEADER, HIDDEN_KEY).equals("1");
