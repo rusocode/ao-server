@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project>
 
+    <modelVersion>4.0.0</modelVersion>
+
     <parent>
-        <artifactId>aoserver</artifactId>
         <groupId>com.ao</groupId>
+        <artifactId>aoserver</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <modelVersion>4.0.0</modelVersion>
     <artifactId>server-security</artifactId>
 
-    <description>Security module for AO Server</description>
+    <name>Server Security</name>
+    <description>Security server module for Argentum Online</description>
 
     <dependencies>
         <dependency>

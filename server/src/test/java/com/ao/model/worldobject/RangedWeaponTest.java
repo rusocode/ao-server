@@ -2,12 +2,10 @@ package com.ao.model.worldobject;
 
 import com.ao.model.character.Character;
 import com.ao.model.worldobject.properties.RangedWeaponProperties;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.Matchers.greaterThanOrEqualTo;
-import static org.hamcrest.Matchers.lessThanOrEqualTo;
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verifyNoInteractions;
 
@@ -20,7 +18,7 @@ public class RangedWeaponTest extends AbstractEquipableItemTest {
     protected RangedWeapon weapon1;
     protected RangedWeapon weapon2;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         final RangedWeaponProperties props1 = new RangedWeaponProperties(WorldObjectType.WEAPON, 1, "Throw Knifes", 1, 1, 0, null, null, false, false, false, false, 1, true, PIERCING_DAMAGE, MIN_HIT, MAX_HIT, false);
         weapon1 = new RangedWeapon(props1, 5);
@@ -39,21 +37,20 @@ public class RangedWeaponTest extends AbstractEquipableItemTest {
         final RangedWeapon clone = (RangedWeapon) weapon1.clone();
 
         // Make sure all fields match
-        assertEquals(weapon1.amount, clone.amount);
-        assertEquals(weapon1.properties, clone.properties);
+        assertThat(clone.amount).isEqualTo(weapon1.amount);
+        assertThat(clone.properties).isEqualTo(weapon1.properties);
 
         // Make sure the object itself is different
-        assertNotSame(weapon1, clone);
-
+        assertThat(clone).isNotSameAs(weapon1);
 
         final RangedWeapon clone2 = (RangedWeapon) weapon2.clone();
 
         // Make sure all fields match
-        assertEquals(weapon2.amount, clone2.amount);
-        assertEquals(weapon2.properties, clone2.properties);
+        assertThat(clone2.amount).isEqualTo(weapon2.amount);
+        assertThat(clone2.properties).isEqualTo(weapon2.properties);
 
         // Make sure the object itself is different
-        assertNotSame(weapon2, clone2);
+        assertThat(clone2).isNotSameAs(weapon2);
     }
 
     @Test
@@ -69,41 +66,40 @@ public class RangedWeaponTest extends AbstractEquipableItemTest {
 
     @Test
     public void testGetMinHit() {
-        assertEquals(MIN_HIT, weapon1.getMinHit());
-        assertEquals(MAX_HIT, weapon2.getMinHit());
+        assertThat(weapon1.getMinHit()).isEqualTo(MIN_HIT);
+        assertThat(weapon2.getMinHit()).isEqualTo(MAX_HIT);
     }
 
     @Test
     public void testGetMaxHit() {
-        assertEquals(MAX_HIT, weapon1.getMaxHit());
-        assertEquals(MAX_HIT, weapon2.getMaxHit());
+        assertThat(weapon1.getMaxHit()).isEqualTo(MAX_HIT);
+        assertThat(weapon2.getMaxHit()).isEqualTo(MAX_HIT);
     }
 
     @Test
     public void testGetPiercingDamage() {
-        assertEquals(PIERCING_DAMAGE, weapon1.getPiercingDamage());
-        assertEquals(PIERCING_DAMAGE, weapon2.getPiercingDamage());
+        assertThat(weapon1.getPiercingDamage()).isEqualTo(PIERCING_DAMAGE);
+        assertThat(weapon2.getPiercingDamage()).isEqualTo(PIERCING_DAMAGE);
     }
 
     @Test
     public void testGetStabs() {
-        assertTrue(weapon1.getStabs());
-        assertFalse(weapon2.getStabs());
+        assertThat(weapon1.getStabs()).isTrue();
+        assertThat(weapon2.getStabs()).isFalse();
     }
 
     @Test
     public void testGetDamage() {
         final int damage = weapon1.getDamage();
 
-        assertThat(damage, greaterThanOrEqualTo(MIN_HIT));
-        assertThat(damage, lessThanOrEqualTo(MAX_HIT));
-        assertEquals(MAX_HIT, weapon2.getDamage());
+        assertThat(damage).isBetween(MIN_HIT, MAX_HIT);
+        assertThat(weapon2.getDamage()).isEqualTo(MAX_HIT);
     }
 
     @Test
     public void testGetNeedsAmmunition() {
-        assertFalse(weapon1.getNeedsAmmunition());
-        assertTrue(weapon2.getNeedsAmmunition());
+        assertThat(weapon1.getNeedsAmmunition()).isFalse();
+        assertThat(weapon2.getNeedsAmmunition()).isTrue();
     }
 
 }

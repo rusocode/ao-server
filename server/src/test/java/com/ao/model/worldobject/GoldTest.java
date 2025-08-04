@@ -3,11 +3,10 @@ package com.ao.model.worldobject;
 import com.ao.model.character.Character;
 import com.ao.model.inventory.Inventory;
 import com.ao.model.worldobject.properties.ItemProperties;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotSame;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 public class GoldTest extends AbstractItemTest {
@@ -15,7 +14,7 @@ public class GoldTest extends AbstractItemTest {
     private Gold gold1;
     private Gold gold2;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         final ItemProperties props = new ItemProperties(WorldObjectType.MONEY, 13, "Monedas de oro", 1, 1, null, null, false, true, true, true);
         gold1 = new Gold(props, 1000);
@@ -42,13 +41,13 @@ public class GoldTest extends AbstractItemTest {
     public void testClone() {
         final Gold clone = (Gold) gold1.clone();
 
-        assertEquals(gold1.getAmount(), clone.getAmount());
-        assertNotSame(clone, gold1);
+        assertThat(clone.getAmount()).isEqualTo(gold1.getAmount());
+        assertThat(clone).isNotSameAs(gold1);
 
         final Gold clone2 = (Gold) gold2.clone();
 
-        assertEquals(gold2.getAmount(), clone2.getAmount());
-        assertNotSame(clone2, gold2);
+        assertThat(clone2.getAmount()).isEqualTo(gold2.getAmount());
+        assertThat(clone2).isNotSameAs(gold2);
     }
 
 }

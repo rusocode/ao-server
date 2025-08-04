@@ -3,17 +3,18 @@ package com.ao.model.spell.effect;
 import com.ao.exception.InvalidTargetException;
 import com.ao.model.character.Character;
 import com.ao.model.worldobject.WorldObject;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 import static org.mockito.Mockito.*;
 
 public class PoisonEffectTest {
 
     private Effect poisonEffect;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         poisonEffect = new PoisonEffect();
     }
@@ -34,11 +35,11 @@ public class PoisonEffectTest {
         final Character aliveTarget = mock(Character.class);
         when(deadTarget.isDead()).thenReturn(Boolean.TRUE);
 
-        // Paralyzing a dead char is invalid.
-        assertFalse(poisonEffect.appliesTo(caster, deadTarget));
+        // Paralyzing a dead char is invalid
+        assertThat(poisonEffect.appliesTo(caster, deadTarget)).isFalse();
 
-        /// Paralyzing an live char is valid.
-        assertTrue(poisonEffect.appliesTo(caster, aliveTarget));
+        // Paralyzing a live char is valid
+        assertThat(poisonEffect.appliesTo(caster, aliveTarget)).isTrue();
     }
 
     @Test
@@ -47,7 +48,7 @@ public class PoisonEffectTest {
         final Character caster = mock(Character.class);
 
         // Should always false, no matter what
-        assertFalse(poisonEffect.appliesTo(caster, obj));
+        assertThat(poisonEffect.appliesTo(caster, obj)).isFalse();
     }
 
     @Test
@@ -60,7 +61,7 @@ public class PoisonEffectTest {
             poisonEffect.apply(caster, obj);
             fail("Applying an effect for characters to a world object didn't fail.");
         } catch (final InvalidTargetException e) {
-            // this is ok
+            // This is ok
         }
     }
 

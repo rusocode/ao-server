@@ -1,21 +1,19 @@
 package com.ao.model.map;
 
 import com.ao.model.character.Character;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
 public class WorldMapTest {
 
     private WorldMap map;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         map = new WorldMap("foo", 1, (short) 1, new Tile[]{});
     }
@@ -28,9 +26,9 @@ public class WorldMapTest {
 
         map = new WorldMap("foo", 1, (short) 1, new Tile[]{t, t2, t3});
 
-        assertEquals(map.getTile(0, 0), t);
-        assertEquals(map.getTile(1, 0), t2);
-        assertEquals(map.getTile(2, 0), t3);
+        assertThat(t).isEqualTo(map.getTile(0, 0));
+        assertThat(t2).isEqualTo(map.getTile(1, 0));
+        assertThat(t3).isEqualTo(map.getTile(2, 0));
     }
 
     @Test
@@ -41,24 +39,25 @@ public class WorldMapTest {
         final WorldMap map5 = new WorldMap("asd", 3, (short) 1, new Tile[]{null});
         final WorldMap map6 = new WorldMap(null, 4, (short) 1, new Tile[]{});
 
-        assertEquals(map, map);
-        assertEquals(map2, map);
-        assertThat(map, not(equalTo(map3)));
-        assertThat(map, not(equalTo(map4)));
-        assertThat(map, not(equalTo(map5)));
-        assertThat(map6, not(equalTo(map)));
-        assertThat(map, not(equalTo(null)));
-        assertThat(map, not(equalTo(new String())));
+        assertThat(map).isEqualTo(map);
+        assertThat(map).isEqualTo(map2);
+        assertThat(map).isNotEqualTo(map3);
+        assertThat(map).isNotEqualTo(map3);
+        assertThat(map).isNotEqualTo(map4);
+        assertThat(map).isNotEqualTo(map5);
+        assertThat(map6).isNotEqualTo(map);
+        assertThat(map).isNotEqualTo(null);
+        assertThat(map).isNotEqualTo(new String());
     }
 
     @Test
     public void testGetName() {
-        assertEquals("foo", map.getName());
+        assertThat(map.getName()).isEqualTo("foo");
     }
 
     @Test
     public void testGetId() {
-        assertEquals(1, map.getId());
+        assertThat(map.getId()).isEqualTo(1);
     }
 
     @Test
@@ -78,12 +77,12 @@ public class WorldMapTest {
 
         final List<Character> chars = map.getCharactersNearby(7, 7);
 
-        assertEquals(5, chars.size());
-        assertThat(chars, hasItem(map.getTile(8, 8).getCharacter()));
-        assertThat(chars, hasItem(map.getTile(15, 8).getCharacter()));
-        assertThat(chars, hasItem(map.getTile(8, 15).getCharacter()));
-        assertThat(chars, hasItem(map.getTile(15, 15).getCharacter()));
-        assertThat(chars, hasItem(map.getTile(5, 5).getCharacter()));
+        assertThat(chars.size()).isEqualTo(5);
+        assertThat(chars).contains(map.getTile(8, 8).getCharacter());
+        assertThat(chars).contains(map.getTile(15, 8).getCharacter());
+        assertThat(chars).contains(map.getTile(8, 15).getCharacter());
+        assertThat(chars).contains(map.getTile(15, 15).getCharacter());
+        assertThat(chars).contains(map.getTile(5, 5).getCharacter());
     }
 
 }

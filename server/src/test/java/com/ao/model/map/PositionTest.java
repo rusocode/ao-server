@@ -1,9 +1,9 @@
 package com.ao.model.map;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class PositionTest {
 
@@ -12,7 +12,7 @@ public class PositionTest {
 
     private Position pos;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         pos = new Position(X_POSITION, Y_POSITION, 1);
     }
@@ -20,34 +20,34 @@ public class PositionTest {
     @Test
     public void testAddToX() {
         pos.addToX(7);
-        assertEquals(X_POSITION + 7, pos.getX());
+        assertThat(pos.getX()).isEqualTo((byte) (X_POSITION + 7));
         pos.addToX(-6);
-        assertEquals(X_POSITION + 1, pos.getX());
+        assertThat(pos.getX()).isEqualTo((byte) (X_POSITION + 1));
     }
 
     @Test
     public void testAddToY() {
         pos.addToY(7);
-        assertEquals(Y_POSITION + 7, pos.getY());
+        assertThat(pos.getY()).isEqualTo((byte) (Y_POSITION + 7));
         pos.addToY(-6);
-        assertEquals(Y_POSITION + 1, pos.getY());
+        assertThat(pos.getY()).isEqualTo((byte) (Y_POSITION + 1));
     }
 
     @Test
     public void testGetDistance() {
         Position anotherPos = new Position((byte) (X_POSITION + 20), (byte) (Y_POSITION + 20), 1);
-        assertEquals(40, pos.getDistance(anotherPos));
+        assertThat(pos.getDistance(anotherPos)).isEqualTo(40);
     }
 
     @Test
     public void testInVisionRange() {
         Position anotherPos = new Position((byte) (X_POSITION + 20), (byte) (Y_POSITION + 20), pos.getMap());
-        assertFalse(pos.inVisionRange(anotherPos));
+        assertThat(pos.inVisionRange(anotherPos)).isFalse();
         anotherPos.setX((byte) (X_POSITION + 5));
         anotherPos.setY((byte) (Y_POSITION + 5));
-        assertTrue(pos.inVisionRange(anotherPos));
+        assertThat(pos.inVisionRange(anotherPos)).isTrue();
         anotherPos.setMap(2);
-        assertFalse(pos.inVisionRange(anotherPos));
+        assertThat(pos.inVisionRange(anotherPos)).isFalse();
     }
 
 }

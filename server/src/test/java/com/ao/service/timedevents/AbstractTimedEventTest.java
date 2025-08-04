@@ -2,7 +2,7 @@ package com.ao.service.timedevents;
 
 import com.ao.model.character.Character;
 import com.ao.service.TimedEventsService;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -32,4 +32,5 @@ public abstract class AbstractTimedEventTest {
 
         verify(service).addEvent(any(Character.class), event, anyLong(), anyLong(), anyLong());
     }
+
 }

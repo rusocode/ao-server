@@ -3,13 +3,11 @@ package com.ao.model.worldobject;
 import com.ao.model.character.Character;
 import com.ao.model.inventory.Inventory;
 import com.ao.model.worldobject.properties.TemporalStatModifyingItemProperties;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
-import static org.hamcrest.Matchers.greaterThanOrEqualTo;
-import static org.hamcrest.Matchers.lessThanOrEqualTo;
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
@@ -22,7 +20,7 @@ public class StrengthPotionTest extends AbstractItemTest {
     private StrengthPotion potion1;
     private StrengthPotion potion2;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         final TemporalStatModifyingItemProperties props1 = new TemporalStatModifyingItemProperties(WorldObjectType.STRENGTH_POTION, 1, "Green Potion", 1, 1, null, null, false, false, false, false, MIN_STR, MAX_STR, DURATION);
         potion1 = new StrengthPotion(props1, 5);
@@ -61,20 +59,19 @@ public class StrengthPotionTest extends AbstractItemTest {
         verify(character).addToStrength(capture.capture(), eq(DURATION));
 
         /// Make sure the value is in the correct range
-        assertThat(capture.getValue(), greaterThanOrEqualTo(MIN_STR));
-        assertThat(capture.getValue(), lessThanOrEqualTo(MAX_STR));
+        assertThat(capture.getValue()).isBetween(MIN_STR, MAX_STR);
     }
 
     @Test
     public void testGetMinModifier() {
-        assertEquals(MIN_STR, potion1.getMinModifier());
-        assertEquals(MAX_STR, potion2.getMinModifier());
+        assertThat(potion1.getMinModifier()).isEqualTo(MIN_STR);
+        assertThat(potion2.getMinModifier()).isEqualTo(MAX_STR);
     }
 
     @Test
     public void testGetMaxModifier() {
-        assertEquals(MAX_STR, potion1.getMaxModifier());
-        assertEquals(MAX_STR, potion2.getMaxModifier());
+        assertThat(potion1.getMaxModifier()).isEqualTo(MAX_STR);
+        assertThat(potion2.getMaxModifier()).isEqualTo(MAX_STR);
     }
 
     @Test
@@ -82,26 +79,26 @@ public class StrengthPotionTest extends AbstractItemTest {
         final StrengthPotion clone = (StrengthPotion) potion1.clone();
 
         // Make sure all fields match
-        assertEquals(potion1.amount, clone.amount);
-        assertEquals(potion1.properties, clone.properties);
+        assertThat(clone.amount).isEqualTo(potion1.amount);
+        assertThat(clone.properties).isEqualTo(potion1.properties);
 
         // Make sure the object itself is different
-        assertNotSame(potion1, clone);
-
+        assertThat(clone).isNotSameAs(potion1);
 
         final StrengthPotion clone2 = (StrengthPotion) potion2.clone();
 
         // Make sure all fields match
-        assertEquals(potion2.amount, clone2.amount);
-        assertEquals(potion2.properties, clone2.properties);
+        assertThat(clone2.amount).isEqualTo(potion2.amount);
+        assertThat(clone2.properties).isEqualTo(potion2.properties);
 
         // Make sure the object itself is different
-        assertNotSame(potion2, clone2);
+        assertThat(clone2).isNotSameAs(potion2);
     }
 
     @Test
     public void testGetEffectDuration() {
-        assertEquals(DURATION, potion1.getEffectDuration());
-        assertEquals(DURATION, potion2.getEffectDuration());
+        assertThat(potion1.getEffectDuration()).isEqualTo(DURATION);
+        assertThat(potion2.getEffectDuration()).isEqualTo(DURATION);
     }
+
 }

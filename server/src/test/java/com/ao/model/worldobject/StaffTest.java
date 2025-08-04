@@ -1,10 +1,10 @@
 package com.ao.model.worldobject;
 
 import com.ao.model.worldobject.properties.StaffProperties;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class StaffTest extends WeaponTest {
 
@@ -15,7 +15,7 @@ public class StaffTest extends WeaponTest {
     private static final int DAMAGE_BONUS = 20;
 
     @Override
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         final StaffProperties props1 = new StaffProperties(WorldObjectType.WEAPON, 1, "Walnut Rod", 1, 1, 0, null, null, false, false, false, false, 1, true, PIERCING_DAMAGE, MIN_HIT, MAX_HIT, MAGIC_POWER, DAMAGE_BONUS);
         weapon1 = new Staff(props1, 5);
@@ -31,14 +31,14 @@ public class StaffTest extends WeaponTest {
 
     @Test
     public void testGetDamageBonus() {
-        assertEquals(DAMAGE_BONUS, ((Staff) weapon1).getDamageBonus());
-        assertEquals(DAMAGE_BONUS, ((Staff) weapon2).getDamageBonus());
+        assertThat(((Staff) weapon1).getDamageBonus()).isEqualTo(DAMAGE_BONUS);
+        assertThat(((Staff) weapon2).getDamageBonus()).isEqualTo(DAMAGE_BONUS);
     }
 
     @Test
     public void testGetMagicPower() {
-        assertEquals(MAGIC_POWER, ((Staff) weapon1).getMagicPower());
-        assertEquals(MAGIC_POWER, ((Staff) weapon2).getMagicPower());
+        assertThat(((Staff) weapon1).getMagicPower()).isEqualTo(MAGIC_POWER);
+        assertThat(((Staff) weapon2).getMagicPower()).isEqualTo(MAGIC_POWER);
     }
 
 }

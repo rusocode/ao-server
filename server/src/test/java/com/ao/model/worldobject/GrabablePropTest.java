@@ -2,11 +2,10 @@ package com.ao.model.worldobject;
 
 import com.ao.model.character.Character;
 import com.ao.model.worldobject.properties.ItemProperties;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotSame;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verifyNoInteractions;
 
@@ -15,7 +14,7 @@ public class GrabablePropTest extends AbstractItemTest {
     private GrabableProp prop1;
     private GrabableProp prop2;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         final ItemProperties props1 = new ItemProperties(WorldObjectType.GRABABLE_PROP, 1, "Black Potion", 1, 1, null, null, false, true, false, true);
         prop1 = new GrabableProp(props1, 5);
@@ -44,20 +43,20 @@ public class GrabablePropTest extends AbstractItemTest {
         final GrabableProp clone = (GrabableProp) prop1.clone();
 
         // Make sure all fields match
-        assertEquals(prop1.amount, clone.amount);
-        assertEquals(prop1.properties, clone.properties);
+        assertThat(clone.amount).isEqualTo(prop1.amount);
+        assertThat(clone.properties).isEqualTo(prop1.properties);
 
         // Make sure the object itself is different
-        assertNotSame(prop1, clone);
-
+        assertThat(clone).isNotSameAs(prop1);
 
         final GrabableProp clone2 = (GrabableProp) prop2.clone();
 
         // Make sure all fields match
-        assertEquals(prop2.amount, clone2.amount);
-        assertEquals(prop2.properties, clone2.properties);
+        assertThat(clone2.amount).isEqualTo(prop2.amount);
+        assertThat(clone2.properties).isEqualTo(prop2.properties);
 
         // Make sure the object itself is different
-        assertNotSame(prop2, clone2);
+        assertThat(clone2).isNotSameAs(prop2);
     }
+
 }

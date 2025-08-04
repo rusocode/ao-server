@@ -3,13 +3,11 @@ package com.ao.model.worldobject;
 import com.ao.model.character.Character;
 import com.ao.model.inventory.Inventory;
 import com.ao.model.worldobject.properties.StatModifyingItemProperties;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
-import static org.hamcrest.Matchers.greaterThanOrEqualTo;
-import static org.hamcrest.Matchers.lessThanOrEqualTo;
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 public class ManaPotionTest extends AbstractItemTest {
@@ -20,7 +18,7 @@ public class ManaPotionTest extends AbstractItemTest {
     private ManaPotion potion1;
     private ManaPotion potion2;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         final StatModifyingItemProperties props1 = new StatModifyingItemProperties(WorldObjectType.MANA_POTION, 1, "Blue Potion", 1, 1, null, null, false, false, false, false, MIN_MANA, MAX_MANA);
         potion1 = new ManaPotion(props1, 5);
@@ -59,20 +57,19 @@ public class ManaPotionTest extends AbstractItemTest {
         verify(character).addToMana(capture.capture());
 
         /// Make sure the value is in the correct range
-        assertThat(capture.getValue(), greaterThanOrEqualTo(MIN_MANA));
-        assertThat(capture.getValue(), lessThanOrEqualTo(MAX_MANA));
+        assertThat(capture.getValue()).isBetween(MIN_MANA, MAX_MANA);
     }
 
     @Test
     public void testGetMinMana() {
-        assertEquals(MIN_MANA, potion1.getMinMana());
-        assertEquals(MAX_MANA, potion2.getMinMana());
+        assertThat(potion1.getMinMana()).isEqualTo(MIN_MANA);
+        assertThat(potion2.getMinMana()).isEqualTo(MAX_MANA);
     }
 
     @Test
     public void testGetMaxMana() {
-        assertEquals(MAX_MANA, potion1.getMaxMana());
-        assertEquals(MAX_MANA, potion2.getMaxMana());
+        assertThat(potion1.getMaxMana()).isEqualTo(MAX_MANA);
+        assertThat(potion2.getMaxMana()).isEqualTo(MAX_MANA);
     }
 
     @Test
@@ -80,21 +77,20 @@ public class ManaPotionTest extends AbstractItemTest {
         final ManaPotion clone = (ManaPotion) potion1.clone();
 
         // Make sure all fields match
-        assertEquals(potion1.amount, clone.amount);
-        assertEquals(potion1.properties, clone.properties);
+        assertThat(clone.amount).isEqualTo(potion1.amount);
+        assertThat(clone.properties).isEqualTo(potion1.properties);
 
         // Make sure the object itself is different
-        assertNotSame(potion1, clone);
-
+        assertThat(clone).isNotSameAs(potion1);
 
         final ManaPotion clone2 = (ManaPotion) potion2.clone();
 
         // Make sure all fields match
-        assertEquals(potion2.amount, clone2.amount);
-        assertEquals(potion2.properties, clone2.properties);
+        assertThat(clone2.amount).isEqualTo(potion2.amount);
+        assertThat(clone2.properties).isEqualTo(potion2.properties);
 
         // Make sure the object itself is different
-        assertNotSame(potion2, clone2);
+        assertThat(clone2).isNotSameAs(potion2);
     }
 
 }

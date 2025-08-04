@@ -1,10 +1,10 @@
 package com.ao.model.worldobject;
 
 import com.ao.model.worldobject.properties.DoorProperties;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class DoorTest extends AbstractWorldObjectTest {
 
@@ -15,7 +15,7 @@ public class DoorTest extends AbstractWorldObjectTest {
 
     private Door door1;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         final DoorProperties props1 = new DoorProperties(WorldObjectType.DOOR, 1, "Puerta abierta", 1, OPEN, LOCKED, CODE, OTHER_PROPERTIES);
         door1 = new Door(props1);
@@ -25,17 +25,17 @@ public class DoorTest extends AbstractWorldObjectTest {
 
     @Test
     public void testGetOpen() {
-        assertTrue(door1.getOpen());
+        assertThat(door1.getOpen()).isTrue();
     }
 
     @Test
     public void testGetLocked() {
-        assertFalse(door1.getLocked());
+        assertThat(door1.getLocked()).isFalse();
     }
 
     @Test
     public void testGetCode() {
-        assertEquals(CODE, door1.getCode());
+        assertThat(door1.getCode()).isEqualTo(CODE);
     }
 
 }

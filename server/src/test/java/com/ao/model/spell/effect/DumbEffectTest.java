@@ -4,10 +4,11 @@ import com.ao.exception.InvalidTargetException;
 import com.ao.model.character.Character;
 import com.ao.model.character.UserCharacter;
 import com.ao.model.worldobject.WorldObject;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -15,7 +16,7 @@ public class DumbEffectTest {
 
     private DumbEffect dumbEffect;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         dumbEffect = new DumbEffect();
     }
@@ -33,14 +34,14 @@ public class DumbEffectTest {
         final Character target = mock(Character.class);
         final Character caster = mock(Character.class);
 
-        assertFalse(dumbEffect.appliesTo(caster, target));
+        assertThat(dumbEffect.appliesTo(caster, target)).isFalse();
 
         final Character deadUserTarget = mock(UserCharacter.class);
         when(deadUserTarget.isDead()).thenReturn(Boolean.TRUE);
         final Character aliveUserTarget = mock(UserCharacter.class);
 
-        assertTrue(dumbEffect.appliesTo(caster, aliveUserTarget));
-        assertFalse(dumbEffect.appliesTo(caster, deadUserTarget));
+        assertThat(dumbEffect.appliesTo(caster, aliveUserTarget)).isTrue();
+        assertThat(dumbEffect.appliesTo(caster, deadUserTarget)).isFalse();
     }
 
     @Test
@@ -48,7 +49,7 @@ public class DumbEffectTest {
         final Character caster = mock(Character.class);
         final WorldObject target = mock(WorldObject.class);
 
-        assertFalse(dumbEffect.appliesTo(caster, target));
+        assertThat(dumbEffect.appliesTo(caster, target)).isFalse();
     }
 
     @Test
@@ -60,7 +61,7 @@ public class DumbEffectTest {
             dumbEffect.apply(caster, obj);
             fail("Applying an effect for characters to a world object didn't fail.");
         } catch (InvalidTargetException e) {
-            // this is ok
+            // This is ok
         }
     }
 

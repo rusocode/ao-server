@@ -1,12 +1,12 @@
 package com.ao.model.user;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class AccountImplTest {
 
@@ -15,13 +15,13 @@ public class AccountImplTest {
     private static final String ACCOUNT_INVALID_PASSWORD = "invalid pass";
     private static final String ACCOUNT_EMAIL = "anemail@address.com";
     private static final boolean ACCOUNT_BANNED = false;
-    private static final Set<String> ACCOUNT_CHARACTERS = new HashSet<String>();
+    private static final Set<String> ACCOUNT_CHARACTERS = new HashSet<>();
     private static final String TEST_CHARACTER_NAME = "TEST";
     private static final String NON_EXISTING_CHARACTER_NAME = "non existing character";
 
     private AccountImpl account;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         account = new AccountImpl(ACCOUNT_NAME, ACCOUNT_PASSWORD, ACCOUNT_EMAIL, ACCOUNT_CHARACTERS, ACCOUNT_BANNED);
         account.characters.add(TEST_CHARACTER_NAME);
@@ -29,43 +29,43 @@ public class AccountImplTest {
 
     @Test
     public void testGetName() {
-        assertEquals(account.getName(), ACCOUNT_NAME);
+        assertThat(ACCOUNT_NAME).isEqualTo(account.getName()); // Se asegura de que el valor actual sea igual al valor esperado
     }
 
     @Test
     public void testGetMail() {
-        assertEquals(account.getMail(), ACCOUNT_EMAIL);
+        assertThat(ACCOUNT_EMAIL).isEqualTo(account.getMail());
     }
 
     @Test
     public void testGetCharacters() {
-        assertEquals(account.getCharacters(), ACCOUNT_CHARACTERS);
+        assertThat(ACCOUNT_CHARACTERS).isEqualTo(account.getCharacters());
     }
 
     @Test
     public void testHasCharacter() {
-        assertTrue(account.hasCharacter(TEST_CHARACTER_NAME));
-        assertFalse(account.hasCharacter(NON_EXISTING_CHARACTER_NAME));
+        assertThat(account.hasCharacter(TEST_CHARACTER_NAME)).isTrue();
+        assertThat(account.hasCharacter(NON_EXISTING_CHARACTER_NAME)).isFalse();
     }
 
     @Test
     public void testIsBanned() {
-        assertEquals(account.isBanned(), ACCOUNT_BANNED);
+        assertThat(ACCOUNT_BANNED).isEqualTo(account.isBanned());
         account.setBanned(!ACCOUNT_BANNED);
-        assertEquals(account.isBanned(), !ACCOUNT_BANNED);
+        assertThat(!ACCOUNT_BANNED).isEqualTo(account.isBanned());
     }
 
     @Test
     public void testAuthenticate() {
-        assertTrue(account.authenticate(ACCOUNT_PASSWORD));
-        assertFalse(account.authenticate(ACCOUNT_INVALID_PASSWORD));
+        assertThat(account.authenticate(ACCOUNT_PASSWORD)).isTrue();
+        assertThat(account.authenticate(ACCOUNT_INVALID_PASSWORD)).isFalse();
     }
 
     @Test
     public void testAddCharacter() {
         final String charr = "foo";
         account.addCharacter(charr);
-        assertTrue(account.characters.contains(charr));
+        assertThat(account.characters.contains(charr)).isTrue();
     }
 
 }

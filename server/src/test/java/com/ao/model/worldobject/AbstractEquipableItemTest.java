@@ -1,9 +1,9 @@
 package com.ao.model.worldobject;
 
 import com.ao.model.worldobject.properties.EquippableItemProperties;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public abstract class AbstractEquipableItemTest extends AbstractItemTest {
 
@@ -11,21 +11,21 @@ public abstract class AbstractEquipableItemTest extends AbstractItemTest {
 
     @Test
     public void testGetEquippedGraphic() {
-        assertEquals(((EquippableItemProperties) objectProps).getEquippedGraphic(), ((AbstractEquipableItem) object).getEquippedGraphic());
+        assertThat(((AbstractEquipableItem) object).getEquippedGraphic()).isEqualTo(((EquippableItemProperties) objectProps).getEquippedGraphic());
     }
 
     @Test
     public void testIsEquipped() {
-        assertEquals(itemEquipped, ((AbstractEquipableItem) object).isEquipped());
+        assertThat(((AbstractEquipableItem) object).isEquipped()).isEqualTo(itemEquipped);
     }
 
     @Test
     public void testSetEquipped() {
         final AbstractEquipableItem it = (AbstractEquipableItem) object;
         it.setEquipped(false);
-        assertEquals(false, it.isEquipped());
+        assertThat(it.isEquipped()).isFalse();
         it.setEquipped(true);
-        assertEquals(true, it.isEquipped());
+        assertThat(it.isEquipped()).isTrue();
     }
 
 }
