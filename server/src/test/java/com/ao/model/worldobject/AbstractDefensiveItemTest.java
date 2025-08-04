@@ -1,30 +1,30 @@
 package com.ao.model.worldobject;
 
 import com.ao.model.worldobject.properties.DefensiveItemProperties;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public abstract class AbstractDefensiveItemTest extends AbstractEquipableItemTest {
 
     @Test
     public void testGetMaxDef() {
-        assertEquals(((DefensiveItemProperties) objectProps).getMaxDef(), ((AbstractDefensiveItem) object).getMaxDef());
+        assertThat(((AbstractDefensiveItem) object).getMaxDef()).isEqualTo(((DefensiveItemProperties) objectProps).getMaxDef());
     }
 
     @Test
     public void testGetMinDef() {
-        assertEquals(((DefensiveItemProperties) objectProps).getMinDef(), ((AbstractDefensiveItem) object).getMinDef());
+        assertThat(((AbstractDefensiveItem) object).getMinDef()).isEqualTo(((DefensiveItemProperties) objectProps).getMinDef());
     }
 
     @Test
     public void testGetMaxMagicDef() {
-        assertEquals(((DefensiveItemProperties) objectProps).getMaxMagicDef(), ((AbstractDefensiveItem) object).getMaxMagicDef());
+        assertThat(((AbstractDefensiveItem) object).getMaxMagicDef()).isEqualTo(((DefensiveItemProperties) objectProps).getMaxMagicDef());
     }
 
     @Test
     public void testGetMinMagicDef() {
-        assertEquals(((DefensiveItemProperties) objectProps).getMinMagicDef(), ((AbstractDefensiveItem) object).getMinMagicDef());
+        assertThat(((AbstractDefensiveItem) object).getMinMagicDef()).isEqualTo(((DefensiveItemProperties) objectProps).getMinMagicDef());
     }
 
 }

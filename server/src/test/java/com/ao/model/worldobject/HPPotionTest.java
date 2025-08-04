@@ -3,13 +3,11 @@ package com.ao.model.worldobject;
 import com.ao.model.character.Character;
 import com.ao.model.inventory.Inventory;
 import com.ao.model.worldobject.properties.StatModifyingItemProperties;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
-import static org.hamcrest.Matchers.greaterThanOrEqualTo;
-import static org.hamcrest.Matchers.lessThanOrEqualTo;
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 public class HPPotionTest extends AbstractItemTest {
@@ -20,7 +18,7 @@ public class HPPotionTest extends AbstractItemTest {
     private HPPotion potion1;
     private HPPotion potion2;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         final StatModifyingItemProperties props1 = new StatModifyingItemProperties(WorldObjectType.HP_POTION, 1, "Red Potion", 1, 1, null, null, false, false, false, false, MIN_HP, MAX_HP);
         potion1 = new HPPotion(props1, 5);
@@ -58,20 +56,19 @@ public class HPPotionTest extends AbstractItemTest {
         final ArgumentCaptor<Integer> capture = ArgumentCaptor.forClass(Integer.class);
         verify(character).addToHitPoints(capture.capture());
         /// Make sure the value is in the correct range
-        assertThat(capture.getValue(), greaterThanOrEqualTo(MIN_HP));
-        assertThat(capture.getValue(), lessThanOrEqualTo(MAX_HP));
+        assertThat(capture.getValue()).isBetween(MIN_HP, MAX_HP);
     }
 
     @Test
     public void testGetMinHP() {
-        assertEquals(MIN_HP, potion1.getMinHP());
-        assertEquals(MAX_HP, potion2.getMinHP());
+        assertThat(potion1.getMinHP()).isEqualTo(MIN_HP);
+        assertThat(potion2.getMinHP()).isEqualTo(MAX_HP);
     }
 
     @Test
     public void testGetMaxHP() {
-        assertEquals(MAX_HP, potion1.getMaxHP());
-        assertEquals(MAX_HP, potion2.getMaxHP());
+        assertThat(potion1.getMaxHP()).isEqualTo(MAX_HP);
+        assertThat(potion2.getMaxHP()).isEqualTo(MAX_HP);
     }
 
     @Test
@@ -79,21 +76,20 @@ public class HPPotionTest extends AbstractItemTest {
         final HPPotion clone = (HPPotion) potion1.clone();
 
         // Make sure all fields match
-        assertEquals(potion1.amount, clone.amount);
-        assertEquals(potion1.properties, clone.properties);
+        assertThat(clone.amount).isEqualTo(potion1.amount);
+        assertThat(clone.properties).isEqualTo(potion1.properties);
 
         // Make sure the object itself is different
-        assertNotSame(potion1, clone);
-
+        assertThat(clone).isNotSameAs(potion1);
 
         final HPPotion clone2 = (HPPotion) potion2.clone();
 
         // Make sure all fields match
-        assertEquals(potion2.amount, clone2.amount);
-        assertEquals(potion2.properties, clone2.properties);
+        assertThat(clone2.amount).isEqualTo(potion2.amount);
+        assertThat(clone2.properties).isEqualTo(potion2.properties);
 
         // Make sure the object itself is different
-        assertNotSame(potion2, clone2);
+        assertThat(clone2).isNotSameAs(potion2);
     }
 
 }

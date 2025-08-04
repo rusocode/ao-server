@@ -3,17 +3,18 @@ package com.ao.model.spell.effect;
 import com.ao.exception.InvalidTargetException;
 import com.ao.model.character.Character;
 import com.ao.model.worldobject.WorldObject;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 import static org.mockito.Mockito.*;
 
 public class RecoverMobilityEffectTest {
 
     private Effect recoverMobilityEffect;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         recoverMobilityEffect = new RecoverMobilityEffect();
     }
@@ -33,31 +34,31 @@ public class RecoverMobilityEffectTest {
     public void testAppliesToCharacterCharacter() {
         final Character caster = mock(Character.class);
 
-        // An immobilized char is valid.
+        // An immobilized char is valid
         final Character immobilizedTarget = mock(Character.class);
         when(immobilizedTarget.isImmobilized()).thenReturn(Boolean.TRUE);
-        assertTrue(recoverMobilityEffect.appliesTo(caster, immobilizedTarget));
+        assertThat(recoverMobilityEffect.appliesTo(caster, immobilizedTarget)).isTrue();
 
-        // A paralyzed char is valid.
+        // A paralyzed char is valid
         final Character palayzedTarget = mock(Character.class);
         when(palayzedTarget.isParalyzed()).thenReturn(Boolean.TRUE);
-        assertTrue(recoverMobilityEffect.appliesTo(caster, palayzedTarget));
+        assertThat(recoverMobilityEffect.appliesTo(caster, palayzedTarget)).isTrue();
 
-        // A non-paralyzed, non/immobilized char is invalid.
+        // A non-paralyzed, non/immobilized char is invalid
         final Character normalTarget = mock(Character.class);
-        assertFalse(recoverMobilityEffect.appliesTo(caster, normalTarget));
+        assertThat(recoverMobilityEffect.appliesTo(caster, normalTarget)).isFalse();
 
-        // A paralyzed dead char is invalid.
+        // A paralyzed dead char is invalid
         final Character palayzedDeadTarget = mock(Character.class);
         when(palayzedDeadTarget.isParalyzed()).thenReturn(Boolean.TRUE);
         when(palayzedDeadTarget.isDead()).thenReturn(Boolean.TRUE);
-        assertFalse(recoverMobilityEffect.appliesTo(caster, palayzedDeadTarget));
+        assertThat(recoverMobilityEffect.appliesTo(caster, palayzedDeadTarget)).isFalse();
 
-        // A immobilized dead char is invalid.
+        // An immobilized dead char is invalid
         final Character immobilizedDeadTarget = mock(Character.class);
         when(immobilizedDeadTarget.isImmobilized()).thenReturn(Boolean.TRUE);
         when(immobilizedDeadTarget.isDead()).thenReturn(Boolean.TRUE);
-        assertFalse(recoverMobilityEffect.appliesTo(caster, immobilizedDeadTarget));
+        assertThat(recoverMobilityEffect.appliesTo(caster, immobilizedDeadTarget)).isFalse();
     }
 
     @Test
@@ -66,7 +67,7 @@ public class RecoverMobilityEffectTest {
         final Character caster = mock(Character.class);
 
         // Should always false, no matter what
-        assertFalse(recoverMobilityEffect.appliesTo(caster, obj));
+        assertThat(recoverMobilityEffect.appliesTo(caster, obj)).isFalse();
     }
 
     @Test

@@ -2,11 +2,10 @@ package com.ao.model.worldobject;
 
 import com.ao.model.character.Character;
 import com.ao.model.worldobject.properties.WoodProperties;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotSame;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verifyNoInteractions;
 
@@ -15,7 +14,7 @@ public class WoodTest extends AbstractItemTest {
     private Wood wood1;
     private Wood wood2;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         final WoodProperties props1 = new WoodProperties(WorldObjectType.WOOD, 1, "Black Potion", 1, 1, null, null, false, false, false, false, WoodType.NORMAL);
         wood1 = new Wood(props1, 5);
@@ -32,7 +31,7 @@ public class WoodTest extends AbstractItemTest {
     public void testUse() {
         final Character character = mock(Character.class);
 
-        // nothing should happen
+        // Nothing should happen
         wood1.use(character);
         wood2.use(character);
 
@@ -44,27 +43,26 @@ public class WoodTest extends AbstractItemTest {
         final Wood clone = (Wood) wood1.clone();
 
         // Make sure all fields match
-        assertEquals(wood1.amount, clone.amount);
-        assertEquals(wood1.properties, clone.properties);
+        assertThat(clone.amount).isEqualTo(wood1.amount);
+        assertThat(clone.properties).isEqualTo(wood1.properties);
 
         // Make sure the object itself is different
-        assertNotSame(wood1, clone);
-
+        assertThat(clone).isNotSameAs(wood1);
 
         final Wood clone2 = (Wood) wood2.clone();
 
         // Make sure all fields match
-        assertEquals(wood2.amount, clone2.amount);
-        assertEquals(wood2.properties, clone2.properties);
+        assertThat(clone2.amount).isEqualTo(wood2.amount);
+        assertThat(clone2.properties).isEqualTo(wood2.properties);
 
         // Make sure the object itself is different
-        assertNotSame(wood2, clone2);
+        assertThat(clone2).isNotSameAs(wood2);
     }
 
     @Test
     public void testGetWoodType() {
-        assertEquals(WoodType.NORMAL, wood1.getWoodType());
-        assertEquals(WoodType.ELVEN, wood2.getWoodType());
+        assertThat(wood1.getWoodType()).isEqualTo(WoodType.NORMAL);
+        assertThat(wood2.getWoodType()).isEqualTo(WoodType.ELVEN);
     }
 
 }

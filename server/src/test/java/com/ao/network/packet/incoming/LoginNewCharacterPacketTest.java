@@ -20,13 +20,12 @@ import com.ao.security.SecurityManager;
 import com.ao.service.LoginService;
 import com.ao.service.MapService;
 import com.ao.service.login.LoginServiceImpl;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 public class LoginNewCharacterPacketTest {
@@ -59,7 +58,7 @@ public class LoginNewCharacterPacketTest {
     private SecurityManager security;
     private MapService mapService;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         packet = new LoginNewCharacterPacket();
         errPacket = ArgumentCaptor.forClass(ErrorMessagePacket.class);
@@ -77,7 +76,7 @@ public class LoginNewCharacterPacketTest {
         config.setCharacterCreationEnabled(true);
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         ApplicationContext.getInstance(AccountDAO.class).delete(CHARACTER_NAME);
         ApplicationContext.getInstance(AccountDAO.class).delete(INVALID_CHARACTER_NAME);
@@ -91,19 +90,18 @@ public class LoginNewCharacterPacketTest {
 
         packet.handle(inputBuffer, connection);
         verify(connection).send(errPacket.capture());
-        assertEquals(UserCharacterBuilder.INVALID_EMAIL_ERROR, errPacket.getValue().getMessage());
+        assertThat(errPacket.getValue().getMessage()).isEqualTo(UserCharacterBuilder.INVALID_EMAIL_ERROR);
     }
 
     @Test
     public void invalidNameTest() throws Exception {
-
         writeLogin(INVALID_CHARACTER_NAME, CHARACTER_PASSWORD, CLIENT_MAJOR, CLIENT_MINOR,
                 CLIENT_VERSION, "", CHARACTER_RACE, CHARACTER_GENDER, CHARACTER_ARCHETYPE,
                 CHARACTER_HEAD, CHARACTER_MAIL, CHARACTER_HOMELAND);
 
         packet.handle(inputBuffer, connection);
         verify(connection).send(errPacket.capture());
-        assertEquals(UserCharacterBuilder.INVALID_NAME_ERROR, errPacket.getValue().getMessage());
+        assertThat(errPacket.getValue().getMessage()).isEqualTo(UserCharacterBuilder.INVALID_NAME_ERROR);
     }
 
     @Test
@@ -118,9 +116,9 @@ public class LoginNewCharacterPacketTest {
         verify((ConnectedUser) connection.getUser()).setAccount(capture.capture());
         final Account account = capture.getValue();
 
-        assertTrue(account.hasCharacter(CHARACTER_NAME));
-        assertEquals(account.getName(), CHARACTER_NAME);
-        assertEquals(account.getMail(), CHARACTER_MAIL);
+        assertThat(account.hasCharacter(CHARACTER_NAME)).isTrue();
+        assertThat(account.getName()).isEqualTo(CHARACTER_NAME);
+        assertThat(account.getMail()).isEqualTo(CHARACTER_MAIL);
 
         // TODO Check if the charfile was created.
     }
@@ -136,7 +134,7 @@ public class LoginNewCharacterPacketTest {
 
         packet.handle(inputBuffer, connection);
         verify(connection).send(errPacket.capture());
-        assertEquals(String.format(LoginServiceImpl.CLIENT_OUT_OF_DATE_ERROR_FORMAT, CLIENT_MAJOR + "." + CLIENT_MINOR + "." + CLIENT_VERSION), errPacket.getValue().getMessage());
+        assertThat(errPacket.getValue().getMessage()).isEqualTo(String.format(LoginServiceImpl.CLIENT_OUT_OF_DATE_ERROR_FORMAT, CLIENT_MAJOR + "." + CLIENT_MINOR + "." + CLIENT_VERSION));
     }
 
     @Test
@@ -149,7 +147,7 @@ public class LoginNewCharacterPacketTest {
 
         packet.handle(inputBuffer, connection);
         verify(connection).send(errPacket.capture());
-        assertEquals(LoginServiceImpl.ACCOUNT_NAME_TAKEN_ERROR, errPacket.getValue().getMessage());
+        assertThat(errPacket.getValue().getMessage()).isEqualTo(LoginServiceImpl.ACCOUNT_NAME_TAKEN_ERROR);
     }
 
     @Test
@@ -163,7 +161,7 @@ public class LoginNewCharacterPacketTest {
 
         packet.handle(inputBuffer, connection);
         verify(connection).send(errPacket.capture());
-        assertEquals(LoginServiceImpl.MUST_THROW_DICES_BEFORE_ERROR, errPacket.getValue().getMessage());
+        assertThat(errPacket.getValue().getMessage()).isEqualTo(LoginServiceImpl.MUST_THROW_DICES_BEFORE_ERROR);
     }
 
     @Test
@@ -174,7 +172,7 @@ public class LoginNewCharacterPacketTest {
 
         packet.handle(inputBuffer, connection);
         verify(connection).send(errPacket.capture());
-        assertEquals(LoginServiceImpl.INVALID_RACE_ERROR, errPacket.getValue().getMessage());
+        assertThat(errPacket.getValue().getMessage()).isEqualTo(LoginServiceImpl.INVALID_RACE_ERROR);
     }
 
     @Test
@@ -185,7 +183,7 @@ public class LoginNewCharacterPacketTest {
 
         packet.handle(inputBuffer, connection);
         verify(connection).send(errPacket.capture());
-        assertEquals(LoginServiceImpl.INVALID_GENDER_ERROR, errPacket.getValue().getMessage());
+        assertThat(errPacket.getValue().getMessage()).isEqualTo(LoginServiceImpl.INVALID_GENDER_ERROR);
     }
 
     @Test
@@ -196,7 +194,7 @@ public class LoginNewCharacterPacketTest {
 
         packet.handle(inputBuffer, connection);
         verify(connection).send(errPacket.capture());
-        assertEquals(LoginServiceImpl.INVALID_HEAD_ERROR, errPacket.getValue().getMessage());
+        assertThat(errPacket.getValue().getMessage()).isEqualTo(LoginServiceImpl.INVALID_HEAD_ERROR);
     }
 
     @Test
@@ -207,7 +205,7 @@ public class LoginNewCharacterPacketTest {
 
         packet.handle(inputBuffer, connection);
         verify(connection).send(errPacket.capture());
-        assertEquals(LoginServiceImpl.INVALID_ARCHETYPE_ERROR, errPacket.getValue().getMessage());
+        assertThat(errPacket.getValue().getMessage()).isEqualTo(LoginServiceImpl.INVALID_ARCHETYPE_ERROR);
     }
 
     @Test
@@ -220,7 +218,7 @@ public class LoginNewCharacterPacketTest {
 
         packet.handle(inputBuffer, connection);
         verify(connection).send(errPacket.capture());
-        assertEquals(LoginServiceImpl.CHARACTER_CREATION_DISABLED_ERROR, errPacket.getValue().getMessage());
+        assertThat(errPacket.getValue().getMessage()).isEqualTo(LoginServiceImpl.CHARACTER_CREATION_DISABLED_ERROR);
     }
 
     @Test
@@ -233,7 +231,7 @@ public class LoginNewCharacterPacketTest {
 
         packet.handle(inputBuffer, connection);
         verify(connection).send(errPacket.capture());
-        assertEquals(LoginServiceImpl.ONLY_ADMINS_ERROR, errPacket.getValue().getMessage());
+        assertThat(errPacket.getValue().getMessage()).isEqualTo(LoginServiceImpl.ONLY_ADMINS_ERROR);
     }
 
     private void writeLogin(final String charName, final String password, final byte major,

@@ -2,11 +2,10 @@ package com.ao.model.worldobject;
 
 import com.ao.model.character.Character;
 import com.ao.model.worldobject.properties.DefensiveItemProperties;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotSame;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
 public class AccessoryTest extends AbstractDefensiveItemTest {
@@ -20,7 +19,7 @@ public class AccessoryTest extends AbstractDefensiveItemTest {
     private Accessory accessory1;
     private Accessory accessory2;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         final DefensiveItemProperties props1 = new DefensiveItemProperties(WorldObjectType.ACCESSORY, 1, "Gold Ring", 1, 1, 0, null, null, false, false, false, false, 1, MIN_DEF, MAX_DEF, MIN_MAGIC_DEF, MAX_MAGIC_DEF);
         accessory1 = new Accessory(props1, 5);
@@ -39,20 +38,20 @@ public class AccessoryTest extends AbstractDefensiveItemTest {
         final Accessory clone = (Accessory) accessory1.clone();
 
         // Make sure all fields match
-        assertEquals(accessory1.amount, clone.amount);
-        assertEquals(accessory1.properties, clone.properties);
+        assertThat(clone.amount).isEqualTo(accessory1.amount);
+        assertThat(clone.properties).isEqualTo(accessory1.properties);
 
-        // Make sure the object itself is different
-        assertNotSame(accessory1, clone);
+        // Make sure the object itself is different 
+        assertThat(clone).isNotSameAs(accessory1);
 
         final Accessory clone2 = (Accessory) accessory2.clone();
 
         // Make sure all fields match
-        assertEquals(accessory2.amount, clone2.amount);
-        assertEquals(accessory2.properties, clone2.properties);
+        assertThat(clone2.amount).isEqualTo(accessory2.amount);
+        assertThat(clone2.properties).isEqualTo(accessory2.properties);
 
         // Make sure the object itself is different
-        assertNotSame(accessory2, clone2);
+        assertThat(clone2).isNotSameAs(accessory2);
     }
 
     @Test

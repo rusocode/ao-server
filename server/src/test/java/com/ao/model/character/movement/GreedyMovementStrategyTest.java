@@ -3,9 +3,9 @@ package com.ao.model.character.movement;
 import com.ao.model.character.Character;
 import com.ao.model.map.Heading;
 import com.ao.model.map.Position;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -54,7 +54,7 @@ public class GreedyMovementStrategyTest {
     }
 
     private void _moveTest(final Position pos, final Position target, final Heading shouldnt1, final Heading shouldnt2) {
-        // Save these values because they will change and we don't want to modify the original object.
+        // Save these values because they will change, and we don't want to modify the original object.
         final byte x = pos.getX();
         final byte y = pos.getY();
 
@@ -64,15 +64,15 @@ public class GreedyMovementStrategyTest {
             final Heading move = movement.move(pos);
             movePosition(pos, move);
 
-            assertNotNull(move);
-            assertNotSame(shouldnt1, move);
-            assertNotSame(shouldnt2, move);
+            assertThat(move).isNotNull();
+            assertThat(shouldnt1).isNotSameAs(move);
+            assertThat(shouldnt2).isNotSameAs(move);
         }
 
-        // Has arrived to target.
-        assertEquals(target.getX(), pos.getX());
-        assertEquals(target.getY(), pos.getY());
-        assertNull(movement.move(pos));
+        // Has arrived to target
+        assertThat(pos.getX()).isEqualTo(target.getX());
+        assertThat(pos.getY()).isEqualTo(target.getY());
+        assertThat(movement.move(pos)).isNull();
 
         pos.setX(x);
         pos.setY(y);

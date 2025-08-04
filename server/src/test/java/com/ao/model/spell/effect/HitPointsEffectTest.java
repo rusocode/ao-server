@@ -3,10 +3,11 @@ package com.ao.model.spell.effect;
 import com.ao.exception.InvalidTargetException;
 import com.ao.model.character.Character;
 import com.ao.model.worldobject.WorldObject;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -18,7 +19,7 @@ public class HitPointsEffectTest {
     private HitPointsEffect hpEffect1;
     private HitPointsEffect hpEffect2;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         hpEffect1 = new HitPointsEffect(MIN_POINTS, MAX_POINTS);
         hpEffect2 = new HitPointsEffect(-MAX_POINTS, -MIN_POINTS);
@@ -31,10 +32,10 @@ public class HitPointsEffectTest {
         final Character aliveTarget = mock(Character.class);
         final Character caster = mock(Character.class);
 
-        assertTrue(hpEffect1.appliesTo(caster, aliveTarget));
-        assertTrue(hpEffect2.appliesTo(caster, aliveTarget));
-        assertFalse(hpEffect1.appliesTo(caster, deadTarget));
-        assertFalse(hpEffect2.appliesTo(caster, deadTarget));
+        assertThat(hpEffect1.appliesTo(caster, aliveTarget)).isTrue();
+        assertThat(hpEffect2.appliesTo(caster, aliveTarget)).isTrue();
+        assertThat(hpEffect1.appliesTo(caster, deadTarget)).isFalse();
+        assertThat(hpEffect2.appliesTo(caster, deadTarget)).isFalse();
     }
 
     @Test
@@ -42,8 +43,8 @@ public class HitPointsEffectTest {
         final Character caster = mock(Character.class);
         final WorldObject target = mock(WorldObject.class);
 
-        assertFalse(hpEffect1.appliesTo(caster, target));
-        assertFalse(hpEffect2.appliesTo(caster, target));
+        assertThat(hpEffect1.appliesTo(caster, target)).isFalse();
+        assertThat(hpEffect2.appliesTo(caster, target)).isFalse();
     }
 
     @Test
@@ -56,7 +57,7 @@ public class HitPointsEffectTest {
             hpEffect1.apply(caster, obj);
             fail("Applying an effect for characters to a world object didn't fail.");
         } catch (final InvalidTargetException e) {
-            // this is ok
+            // This is ok
         }
     }
 

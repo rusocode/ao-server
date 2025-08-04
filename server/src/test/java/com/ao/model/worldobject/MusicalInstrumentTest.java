@@ -2,13 +2,13 @@ package com.ao.model.worldobject;
 
 import com.ao.model.character.Character;
 import com.ao.model.worldobject.properties.MusicalInstrumentProperties;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.LinkedList;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verifyNoInteractions;
 
@@ -22,7 +22,7 @@ public class MusicalInstrumentTest extends AbstractItemTest {
     private List<Integer> sounds1;
     private List<Integer> sounds2;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         sounds1 = new LinkedList<>();
         sounds1.add(1);
@@ -47,21 +47,20 @@ public class MusicalInstrumentTest extends AbstractItemTest {
         final MusicalInstrument clone = (MusicalInstrument) instrument1.clone();
 
         // Make sure all fields match
-        assertEquals(instrument1.amount, clone.amount);
-        assertEquals(instrument1.properties, clone.properties);
+        assertThat(clone.amount).isEqualTo(instrument1.amount);
+        assertThat(clone.properties).isEqualTo(instrument1.properties);
 
         // Make sure the object itself is different
-        assertNotSame(instrument1, clone);
-
+        assertThat(clone).isNotSameAs(instrument1);
 
         final MusicalInstrument clone2 = (MusicalInstrument) instrument2.clone();
 
         // Make sure all fields match
-        assertEquals(instrument2.amount, clone2.amount);
-        assertEquals(instrument2.properties, clone2.properties);
+        assertThat(clone2.amount).isEqualTo(instrument2.amount);
+        assertThat(clone2.properties).isEqualTo(instrument2.properties);
 
         // Make sure the object itself is different
-        assertNotSame(instrument2, clone2);
+        assertThat(clone2).isNotSameAs(instrument2);
     }
 
     @Test
@@ -78,8 +77,8 @@ public class MusicalInstrumentTest extends AbstractItemTest {
     @Test
     public void testGetSounds() {
         for (int i = 0; i < ATTEMPTS; i++)
-            assertTrue(sounds1.contains(instrument1.getSoundToPlay()));
-        assertEquals(sounds2.get(0), (Integer) instrument2.getSoundToPlay());
+            assertThat(instrument1.getSoundToPlay()).isIn(sounds1);
+        assertThat(instrument2.getSoundToPlay()).isEqualTo(sounds2.get(0));
     }
 
 }

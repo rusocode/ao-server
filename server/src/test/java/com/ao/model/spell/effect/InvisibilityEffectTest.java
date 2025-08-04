@@ -5,17 +5,18 @@ import com.ao.model.character.Character;
 import com.ao.model.character.NPCCharacter;
 import com.ao.model.character.UserCharacter;
 import com.ao.model.worldobject.WorldObject;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 import static org.mockito.Mockito.*;
 
 public class InvisibilityEffectTest {
 
     private Effect invisibilityEffect;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         invisibilityEffect = new InvisibilityEffect();
     }
@@ -37,20 +38,20 @@ public class InvisibilityEffectTest {
         final NPCCharacter target = mock(NPCCharacter.class);
 
         // Test invalid target
-        assertFalse(invisibilityEffect.appliesTo(caster, target));
+        assertThat(invisibilityEffect.appliesTo(caster, target)).isFalse();
 
         // Test dead target
-        assertFalse(invisibilityEffect.appliesTo(caster, deadUserTarget));
+        assertThat(invisibilityEffect.appliesTo(caster, deadUserTarget)).isFalse();
 
         // Test alive target
-        assertTrue(invisibilityEffect.appliesTo(caster, aliveUserTarget));
+        assertThat(invisibilityEffect.appliesTo(caster, aliveUserTarget)).isTrue();
     }
 
     @Test
     public void testAppliesToCharacterWorldObject() {
         final WorldObject obj = mock(WorldObject.class);
         final Character caster = mock(Character.class);
-        assertFalse(invisibilityEffect.appliesTo(caster, obj));
+        assertThat(invisibilityEffect.appliesTo(caster, obj)).isFalse();
     }
 
     @Test

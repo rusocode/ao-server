@@ -2,24 +2,24 @@ package com.ao.data.dao.ini;
 
 import com.ao.model.map.City;
 import org.ini4j.Ini;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.Reader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 
 public class CityDAOIniTest {
 
-    private static final String CITIES_DAT_PATH = "src/test/resources/Ciudades.dat";
+    private static final String CITIES_DAT_PATH = "Ciudades.dat";
     private static final String INIT_HEADER = "INIT";
     private static final String NUM_CITIES_KEY = "NumCities";
     private CityDAOIni dao;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         dao = new CityDAOIni(CITIES_DAT_PATH);
     }
@@ -32,20 +32,20 @@ public class CityDAOIniTest {
 
         Ini iniFile = null;
 
-        try {
-            // Make sure the reader is closed, since Ini4J gives no guarantees
-            final Reader reader = new BufferedReader(new FileReader(CITIES_DAT_PATH));
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream(CITIES_DAT_PATH);
+        if (inputStream == null)
+            throw new IllegalArgumentException("The file " + CITIES_DAT_PATH + " was not found in the classpath");
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
             iniFile = new Ini(reader);
-            reader.close();
-        } catch (final Exception e) {
-            fail("Loading of cities failed with message " + e.getMessage());
+        } catch (Exception e) {
+            fail("Cities loading failed! " + e.getMessage());
         }
 
         final int totalCities = Integer.parseInt(iniFile.get(INIT_HEADER, NUM_CITIES_KEY));
 
         final City[] cities = dao.retrieveAll();
 
-        assertEquals(totalCities, cities.length);
+        assertThat(cities.length).isEqualTo(totalCities);
 
     }
 

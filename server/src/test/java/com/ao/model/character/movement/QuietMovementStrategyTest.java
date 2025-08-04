@@ -2,9 +2,9 @@ package com.ao.model.character.movement;
 
 import com.ao.model.character.Character;
 import com.ao.model.map.Position;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertNull;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
 public class QuietMovementStrategyTest {
@@ -18,13 +18,13 @@ public class QuietMovementStrategyTest {
 
         movement.setTarget(target);
 
-        assertNull(movement.move(pos));
+        assertThat(movement.move(pos)).isNull();
 
         final Character character = mock(Character.class);
 
         movement.setTarget(character);
 
-        assertNull(movement.move(pos));
+        assertThat(movement.move(pos)).isNull();
     }
 
 }

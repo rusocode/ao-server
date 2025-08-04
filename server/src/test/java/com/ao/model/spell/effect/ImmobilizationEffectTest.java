@@ -3,17 +3,18 @@ package com.ao.model.spell.effect;
 import com.ao.exception.InvalidTargetException;
 import com.ao.model.character.Character;
 import com.ao.model.worldobject.WorldObject;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 import static org.mockito.Mockito.*;
 
 public class ImmobilizationEffectTest {
 
     private Effect immobilizationEffect;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         immobilizationEffect = new ImmobilizationEffect();
     }
@@ -32,10 +33,10 @@ public class ImmobilizationEffectTest {
         final Character deadTarget = mock(Character.class);
         when(deadTarget.isDead()).thenReturn(Boolean.TRUE);
         final Character aliveTarget = mock(Character.class);
-        // Paralyzing a dead char is invalid.
-        assertFalse(immobilizationEffect.appliesTo(caster, deadTarget));
-        /// Paralyzing an alive char is valid.
-        assertTrue(immobilizationEffect.appliesTo(caster, aliveTarget));
+        // Paralyzing a dead char is invalid
+        assertThat(immobilizationEffect.appliesTo(caster, deadTarget)).isFalse();
+        // Paralyzing a live char is valid
+        assertThat(immobilizationEffect.appliesTo(caster, aliveTarget)).isTrue();
     }
 
     @Test
@@ -43,7 +44,7 @@ public class ImmobilizationEffectTest {
         final WorldObject obj = mock(WorldObject.class);
         final Character caster = mock(Character.class);
         // Should always false, no matter what
-        assertFalse(immobilizationEffect.appliesTo(caster, obj));
+        assertThat(immobilizationEffect.appliesTo(caster, obj)).isFalse();
     }
 
     @Test

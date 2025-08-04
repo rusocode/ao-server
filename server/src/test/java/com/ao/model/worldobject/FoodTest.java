@@ -3,13 +3,11 @@ package com.ao.model.worldobject;
 import com.ao.model.character.Character;
 import com.ao.model.inventory.Inventory;
 import com.ao.model.worldobject.properties.StatModifyingItemProperties;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
-import static org.hamcrest.Matchers.greaterThanOrEqualTo;
-import static org.hamcrest.Matchers.lessThanOrEqualTo;
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 public class FoodTest extends AbstractItemTest {
@@ -20,7 +18,7 @@ public class FoodTest extends AbstractItemTest {
     private Food food1;
     private Food food2;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         final StatModifyingItemProperties props1 = new StatModifyingItemProperties(WorldObjectType.FOOD, 1, "Apple", 1, 1, null, null, false, false, false, false, MIN_HUN, MAX_HUN);
         food1 = new Food(props1, 5);
@@ -59,20 +57,19 @@ public class FoodTest extends AbstractItemTest {
         verify(character).addToHunger(capture.capture());
 
         /// Make sure the value is in the correct range
-        assertThat(capture.getValue(), greaterThanOrEqualTo(MIN_HUN));
-        assertThat(capture.getValue(), lessThanOrEqualTo(MAX_HUN));
+        assertThat(capture.getValue()).isBetween(MIN_HUN, MAX_HUN);
     }
 
     @Test
     public void testGetMinHun() {
-        assertEquals(MIN_HUN, food1.getMinHun());
-        assertEquals(MAX_HUN, food2.getMinHun());
+        assertThat(food1.getMinHun()).isEqualTo(MIN_HUN);
+        assertThat(food2.getMinHun()).isEqualTo(MAX_HUN);
     }
 
     @Test
     public void testGetMaxHun() {
-        assertEquals(MAX_HUN, food1.getMaxHun());
-        assertEquals(MAX_HUN, food2.getMaxHun());
+        assertThat(food1.getMaxHun()).isEqualTo(MAX_HUN);
+        assertThat(food2.getMaxHun()).isEqualTo(MAX_HUN);
     }
 
     @Test
@@ -80,21 +77,20 @@ public class FoodTest extends AbstractItemTest {
         final Food clone = (Food) food1.clone();
 
         // Make sure all fields match
-        assertEquals(food1.amount, clone.amount);
-        assertEquals(food1.properties, clone.properties);
+        assertThat(clone.amount).isEqualTo(food1.amount);
+        assertThat(clone.properties).isEqualTo(food1.properties);
 
         // Make sure the object itself is different
-        assertNotSame(food1, clone);
-
+        assertThat(clone).isNotSameAs(food1);
 
         final Food clone2 = (Food) food2.clone();
 
         // Make sure all fields match
-        assertEquals(food2.amount, clone2.amount);
-        assertEquals(food2.properties, clone2.properties);
+        assertThat(clone2.amount).isEqualTo(food2.amount);
+        assertThat(clone2.properties).isEqualTo(food2.properties);
 
         // Make sure the object itself is different
-        assertNotSame(food2, clone2);
+        assertThat(clone2).isNotSameAs(food2);
     }
 
 }

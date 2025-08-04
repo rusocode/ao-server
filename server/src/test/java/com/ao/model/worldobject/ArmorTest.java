@@ -2,11 +2,10 @@ package com.ao.model.worldobject;
 
 import com.ao.model.character.Character;
 import com.ao.model.worldobject.properties.DefensiveItemProperties;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotSame;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
 public class ArmorTest extends AbstractDefensiveItemTest {
@@ -20,7 +19,7 @@ public class ArmorTest extends AbstractDefensiveItemTest {
     private Armor armor1;
     private Armor armor2;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         final DefensiveItemProperties props1 = new DefensiveItemProperties(WorldObjectType.ARMOR, 1, "Leather Armor", 1, 1, 0, null, null, false, false, false, false, 1, MIN_DEF, MAX_DEF, MIN_MAGIC_DEF, MAX_MAGIC_DEF);
         armor1 = new Armor(props1, 5);
@@ -39,21 +38,21 @@ public class ArmorTest extends AbstractDefensiveItemTest {
         final Armor clone = (Armor) armor1.clone();
 
         // Make sure all fields match
-        assertEquals(armor1.amount, clone.amount);
-        assertEquals(armor1.properties, clone.properties);
+        assertThat(clone.amount).isEqualTo(armor1.amount);
+        assertThat(clone.properties).isEqualTo(armor1.properties);
 
         // Make sure the object itself is different
-        assertNotSame(armor1, clone);
+        assertThat(clone).isNotSameAs(armor1);
 
 
         final Armor clone2 = (Armor) armor2.clone();
 
         // Make sure all fields match
-        assertEquals(armor2.amount, clone2.amount);
-        assertEquals(armor2.properties, clone2.properties);
+        assertThat(clone2.amount).isEqualTo(armor2.amount);
+        assertThat(clone2.properties).isEqualTo(armor2.properties);
 
         // Make sure the object itself is different
-        assertNotSame(armor2, clone2);
+        assertThat(clone2).isNotSameAs(armor2);
     }
 
     @Test

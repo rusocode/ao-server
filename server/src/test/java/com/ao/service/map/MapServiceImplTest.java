@@ -5,9 +5,9 @@ import com.ao.data.dao.WorldMapDAO;
 import com.ao.model.map.Tile;
 import com.ao.model.map.WorldMap;
 import com.ao.service.MapService;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertSame;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -34,8 +34,7 @@ public class MapServiceImplTest {
 
         final MapService service = new MapServiceImpl(dao, cityDao, areaService);
         service.loadMaps();
-
-        assertSame(map, service.getMap(mapId));
+        assertThat(service.getMap(mapId)).isSameAs(map);
     }
 
 }

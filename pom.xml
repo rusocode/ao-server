@@ -11,30 +11,46 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>Argentum Online Server</name>
-    <description>AO Server - Java implementation of Argentum Online server</description>
+    <name>AO Server</name>
+    <description>Server implementation for Argentum Online</description>
+
+    <issueManagement>
+        <system>Github Issue Tracker</system>
+        <url>https://github.com/ao-server/issues</url>
+    </issueManagement>
+
+    <modules>
+        <module>server</module>
+        <module>server-security</module>
+    </modules>
 
     <properties>
-        <!-- Encoding -->
+        <!-- Build configuration -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <!-- Java version -->
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <java.version>17</java.version>
-        <!-- Dependencies versions -->
-        <logback.version>1.5.13</logback.version>
-        <slf4j.version>2.0.9</slf4j.version>
-        <junit.version>5.10.1</junit.version>
-        <junit4.version>4.13.2</junit4.version>
-        <ini4j.version>0.5.4</ini4j.version>
+
+        <!-- Core dependencies versions -->
+        <netty.version>4.1.119.Final</netty.version>
         <guice.version>7.0.0</guice.version>
         <guava.version>32.0.1-jre</guava.version>
-        <netty.version>4.1.119.Final</netty.version>
+
+        <!-- Logging dependencies versions -->
+        <logback.version>1.5.13</logback.version>
+        <slf4j.version>2.0.9</slf4j.version>
+
+        <!-- Testing dependencies versions -->
+        <junit.version>5.13.4</junit.version>
+        <assertj.version>3.27.3</assertj.version>
         <mockito.version>5.8.0</mockito.version>
+
+        <!-- Utility dependencies versions -->
+        <ini4j.version>0.5.4</ini4j.version>
         <commons.validator.version>1.8.0</commons.validator.version>
-        <hamcrest.version>2.2</hamcrest.version>
         <oro.version>2.0.8</oro.version>
+
         <!-- Plugin versions -->
         <maven.compiler.plugin.version>3.11.0</maven.compiler.plugin.version>
         <maven.surefire.plugin.version>3.2.3</maven.surefire.plugin.version>
@@ -42,25 +58,26 @@
         <jacoco.plugin.version>0.8.11</jacoco.plugin.version>
     </properties>
 
-    <issueManagement>
-        <system>Github Issue Tracker</system>
-        <url>https://github.com/ao-server/issues</url>
-    </issueManagement>
-
-    <!-- Dependencias gestionadas para todos los modulos -->
     <dependencyManagement>
         <dependencies>
+            <!-- Core frameworks -->
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-all</artifactId>
+                <version>${netty.version}</version>
+            </dependency>
             <dependency>
                 <groupId>com.google.inject</groupId>
                 <artifactId>guice</artifactId>
                 <version>${guice.version}</version>
             </dependency>
-            <!-- Forzar version segura de Guava (soluciona CVE-2023-2976) -->
+            <!-- Guava (solves CVE-2023-2976) -->
             <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
                 <version>${guava.version}</version>
             </dependency>
+
             <!-- Logging -->
             <dependency>
                 <groupId>ch.qos.logback</groupId>
@@ -77,28 +94,40 @@
                 <artifactId>slf4j-api</artifactId>
                 <version>${slf4j.version}</version>
             </dependency>
-            <!-- Testing - JUnit 5 -->
+
+            <!-- Utilities -->
+            <dependency>
+                <groupId>org.ini4j</groupId>
+                <artifactId>ini4j</artifactId>
+                <version>${ini4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-validator</groupId>
+                <artifactId>commons-validator</artifactId>
+                <version>${commons.validator.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>oro</groupId>
+                <artifactId>oro</artifactId>
+                <version>${oro.version}</version>
+            </dependency>
+
+            <!-- Testing frameworks -->
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
+                <!-- Dependencia agregada (BOM) que incluye APIs principales (junit-jupiter-api), motor de ejecucion (junit-jupiter-engine) y tests parametrizados (junit-jupiter-params) -->
                 <artifactId>junit-jupiter</artifactId>
                 <version>${junit.version}</version>
                 <scope>test</scope>
             </dependency>
-            <!-- Testing - JUnit 4 (para compatibilidad) -->
             <dependency>
-                <groupId>junit</groupId>
-                <artifactId>junit</artifactId>
-                <version>${junit4.version}</version>
+                <groupId>org.assertj</groupId>
+                <artifactId>assertj-core</artifactId>
+                <version>${assertj.version}</version>
                 <scope>test</scope>
             </dependency>
-            <!-- Testing - Hamcrest (dependencia principal moderna) -->
-            <dependency>
-                <groupId>org.hamcrest</groupId>
-                <artifactId>hamcrest</artifactId>
-                <version>${hamcrest.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <!-- Mockito -->
+
+            <!-- Testing - Mockito -->
             <dependency>
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-core</artifactId>
@@ -111,35 +140,13 @@
                 <version>${mockito.version}</version>
                 <scope>test</scope>
             </dependency>
-            <!-- Networking -->
-            <dependency>
-                <groupId>io.netty</groupId>
-                <artifactId>netty-all</artifactId>
-                <version>${netty.version}</version>
-            </dependency>
-            <!-- Utilidades -->
-            <dependency>
-                <groupId>org.ini4j</groupId>
-                <artifactId>ini4j</artifactId>
-                <version>${ini4j.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>commons-validator</groupId>
-                <artifactId>commons-validator</artifactId>
-                <version>${commons.validator.version}</version>
-            </dependency>
-            <!-- Apache Oro (expresiones regulares) -->
-            <dependency>
-                <groupId>oro</groupId>
-                <artifactId>oro</artifactId>
-                <version>${oro.version}</version>
-            </dependency>
         </dependencies>
     </dependencyManagement>
 
     <build>
         <pluginManagement>
             <plugins>
+                <!-- Core plugins -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
@@ -150,30 +157,37 @@
                         <encoding>${project.build.sourceEncoding}</encoding>
                     </configuration>
                 </plugin>
+
+                <!-- Testing plugins -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>${maven.surefire.plugin.version}</version>
                 </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-assembly-plugin</artifactId>
-                    <version>${maven.assembly.plugin.version}</version>
-                </plugin>
+
+                <!-- Quality plugins -->
                 <plugin>
                     <groupId>org.jacoco</groupId>
                     <artifactId>jacoco-maven-plugin</artifactId>
                     <version>${jacoco.plugin.version}</version>
                 </plugin>
+
+                <!-- Packaging plugins -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-assembly-plugin</artifactId>
+                    <version>${maven.assembly.plugin.version}</version>
+                </plugin>
             </plugins>
         </pluginManagement>
 
         <plugins>
-            <!-- Configuracion del compilador -->
+            <!-- Compiler configuration -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
             </plugin>
+
             <!-- Test coverage -->
             <plugin>
                 <groupId>org.jacoco</groupId>
@@ -189,11 +203,5 @@
             </plugin>
         </plugins>
     </build>
-
-    <!-- Modulos del proyecto -->
-    <modules>
-        <module>server</module>
-        <module>server-security</module>
-    </modules>
 
 </project>

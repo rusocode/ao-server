@@ -2,12 +2,10 @@ package com.ao.model.worldobject;
 
 import com.ao.model.character.Character;
 import com.ao.model.worldobject.properties.BoatProperties;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.Matchers.greaterThanOrEqualTo;
-import static org.hamcrest.Matchers.lessThanOrEqualTo;
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
 public class BoatTest extends AbstractDefensiveItemTest {
@@ -25,7 +23,7 @@ public class BoatTest extends AbstractDefensiveItemTest {
     private Boat boat1;
     private Boat boat2;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         final BoatProperties props1 = new BoatProperties(WorldObjectType.BOAT, 1, "Small Boat", 1, 1, USAGE_DIFFICULTY, 0, null, null, false, false, false, false, 1, MIN_DEF, MAX_DEF, MIN_MAGIC_DEF, MAX_MAGIC_DEF, MIN_HIT, MAX_HIT);
         boat1 = new Boat(props1, 5);
@@ -44,21 +42,20 @@ public class BoatTest extends AbstractDefensiveItemTest {
         final Boat clone = (Boat) boat1.clone();
 
         // Make sure all fields match
-        assertEquals(boat1.amount, clone.amount);
-        assertEquals(boat1.properties, clone.properties);
+        assertThat(clone.amount).isEqualTo(boat1.amount);
+        assertThat(clone.properties).isEqualTo(boat1.properties);
 
         // Make sure the object itself is different
-        assertNotSame(boat1, clone);
-
+        assertThat(clone).isNotSameAs(boat1);
 
         final Boat clone2 = (Boat) boat2.clone();
 
         // Make sure all fields match
-        assertEquals(boat2.amount, clone2.amount);
-        assertEquals(boat2.properties, clone2.properties);
+        assertThat(clone2.amount).isEqualTo(boat2.amount);
+        assertThat(clone2.properties).isEqualTo(boat2.properties);
 
         // Make sure the object itself is different
-        assertNotSame(boat2, clone2);
+        assertThat(clone2).isNotSameAs(boat2);
     }
 
     @Test
@@ -72,35 +69,34 @@ public class BoatTest extends AbstractDefensiveItemTest {
 
     @Test
     public void testGetMinHit() {
-        assertEquals(MIN_HIT, boat1.getMinHit());
-        assertEquals(MAX_HIT, boat2.getMinHit());
+        assertThat(boat1.getMinHit()).isEqualTo(MIN_HIT);
+        assertThat(boat2.getMinHit()).isEqualTo(MAX_HIT);
     }
 
     @Test
     public void testGetMaxHit() {
-        assertEquals(MAX_HIT, boat1.getMaxHit());
-        assertEquals(MAX_HIT, boat2.getMaxHit());
+        assertThat(boat1.getMaxHit()).isEqualTo(MAX_HIT);
+        assertThat(boat2.getMaxHit()).isEqualTo(MAX_HIT);
     }
 
     @Test
     public void testGetDamageBonus() {
         final int damage = boat1.getDamageBonus();
 
-        assertThat(damage, greaterThanOrEqualTo(MIN_HIT));
-        assertThat(damage, lessThanOrEqualTo(MAX_HIT));
-        assertEquals(MAX_HIT, boat2.getDamageBonus());
+        assertThat(damage).isBetween(MIN_HIT, MAX_HIT);
+        assertThat(boat2.getDamageBonus()).isEqualTo(MAX_HIT);
     }
 
     @Test
     @Override
     public void testCanBeStolen() {
-        assertFalse(boat1.canBeStolen());
-        assertFalse(boat2.canBeStolen());
+        assertThat(boat1.canBeStolen()).isFalse();
+        assertThat(boat2.canBeStolen()).isFalse();
     }
 
     @Test
     public void testGetUsageDifficulty() {
-        assertEquals(USAGE_DIFFICULTY, boat1.getUsageDifficulty());
-        assertEquals(USAGE_DIFFICULTY, boat2.getUsageDifficulty());
+        assertThat(boat1.getUsageDifficulty()).isEqualTo(USAGE_DIFFICULTY);
+        assertThat(boat2.getUsageDifficulty()).isEqualTo(USAGE_DIFFICULTY);
     }
 }
