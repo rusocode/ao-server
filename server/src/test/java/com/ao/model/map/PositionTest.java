@@ -20,17 +20,17 @@ public class PositionTest {
     @Test
     public void testAddToX() {
         pos.addToX(7);
-        assertThat(pos.getX()).isEqualTo(X_POSITION + 7);
+        assertThat(pos.getX()).isEqualTo((byte) (X_POSITION + 7));
         pos.addToX(-6);
-        assertThat(pos.getX()).isEqualTo(X_POSITION + 1);
+        assertThat(pos.getX()).isEqualTo((byte) (X_POSITION + 1));
     }
 
     @Test
     public void testAddToY() {
         pos.addToY(7);
-        assertThat(pos.getY()).isEqualTo(Y_POSITION + 7);
+        assertThat(pos.getY()).isEqualTo((byte) (Y_POSITION + 7));
         pos.addToY(-6);
-        assertThat(pos.getY()).isEqualTo(Y_POSITION + 1);
+        assertThat(pos.getY()).isEqualTo((byte) (Y_POSITION + 1));
     }
 
     @Test

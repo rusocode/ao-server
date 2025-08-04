@@ -24,7 +24,7 @@ public class QuietMovementStrategyTest {
 
         movement.setTarget(character);
 
-        assertThat(movement.move(pos)).isNotNull();
+        assertThat(movement.move(pos)).isNull();
     }
 
 }

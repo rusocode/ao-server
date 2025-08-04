@@ -45,7 +45,7 @@ public class InventoryImplTest {
         assertThat(inventory.addItem(newItem)).isEqualTo(0);
         assertThat(inventory.getItemAmount(newItem)).isEqualTo(3);
 
-        // Try to add an item that is repeated when inventory isn't full and the item amount exceeds the limit.
+        // Try to add an item repeated when inventory isn't full and the item amount exceeds the limit.
         inventory.removeItem(0);
         inventory.addItem(item[0]);
 
@@ -120,8 +120,11 @@ public class InventoryImplTest {
         inventory.removeItem(itemRemoved);
         assertThat(inventory.hasItem(item2)).isNotEqualTo(-1);
 
-        // Try to remove an item not in inventory
-        assertThat(inventory.hasItem(item2)).isNull();
+        // Try to check an item not in inventory
+        assertThat(inventory.hasItem(itemRemoved)).isEqualTo(-1);
+
+        // item2 IS in inventory (added above), it should return to its position
+        assertThat(inventory.hasItem(item2)).isNotEqualTo(-1);
     }
 
     @Test

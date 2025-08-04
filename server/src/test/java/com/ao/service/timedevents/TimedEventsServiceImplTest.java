@@ -52,17 +52,18 @@ public class TimedEventsServiceImplTest {
 
         event = MockFactory.mockTimedEvent(chara);
 
-        service.addEvent(chara, event, 50L, 50L, 300L);
-        service.addEvent(chara, event2, 100L);
-        service.addEvent(chara, event3, 200L);
+        service.addEvent(chara, event, 30L, 30L, 300L); // Ejecuta cada 30ms
+        service.addEvent(chara, event2, 150L);          // Ejecuta a los 150ms
+        service.addEvent(chara, event3, 250L);          // Ejecuta a los 250ms
 
-        // Let the first event execute and then stop its repetition.
-        Thread.sleep(55L);
+        // Espera tiempo suficiente para que el primer evento se ejecute varias veces pero antes de que event2 y event3 tengan oportunidad
+        Thread.sleep(100L); // event se ejecuta a 30ms, 60ms, 90ms
 
         service.removeCharacterEvents(chara);
 
-        verify(event).execute();
-        // These hadn't got time to execute
+        // El primer evento debería haberse ejecutado al menos 3 veces
+        verify(event, atLeast(2)).execute();
+        // Estos no deberian haberse ejecutado (cancelados antes de tiempo)
         verifyNoInteractions(event2, event3);
     }
 

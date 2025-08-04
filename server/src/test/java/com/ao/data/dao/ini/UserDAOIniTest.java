@@ -15,8 +15,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -27,7 +25,6 @@ public class UserDAOIniTest {
     private static final String NEW_CHARACTER_NICK = "newchartest";
     private static final String CHARACTER_MAIL = "test@test.com";
     private static final String CHARACTER_PASSWORD = "testpass";
-    private static final String CHARFILES_PATH = "charfiles/";
     private UserDAOIni dao;
 
     @BeforeEach
