@@ -1,5 +1,6 @@
 package com.ao.data.dao.ini;
 
+import com.ao.context.ApplicationProperties;
 import com.ao.data.dao.exception.DAOException;
 import com.ao.model.character.Gender;
 import com.ao.model.character.Race;
@@ -14,6 +15,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -31,7 +34,8 @@ public class UserDAOIniTest {
     public void setUp() throws Exception {
         // Disable escaping for Ini4j
         System.setProperty("org.ini4j.config.escape", "false");
-        dao = new UserDAOIni(CHARFILES_PATH);
+        String charfilesPath = ApplicationProperties.getProperties().getProperty("config.path.charfiles");
+        dao = new UserDAOIni(charfilesPath);
     }
 
     @AfterEach
@@ -80,6 +84,7 @@ public class UserDAOIniTest {
 
     @Test
     public void testCreateCharacter() throws DAOException {
+
         final byte[] skills = new byte[Skill.AMOUNT];
 
         for (int i = 0; i < Skill.AMOUNT; i++) {

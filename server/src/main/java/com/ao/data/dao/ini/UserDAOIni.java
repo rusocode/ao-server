@@ -331,7 +331,6 @@ public class UserDAOIni implements AccountDAO, UserCharacterDAO {
         try {
             Writer writer = new BufferedWriter(new FileWriter(getCharFilePath(name)));
             chara.store(writer);
-
             // Make sure the stream is closed, since Ini4J gives no guarantees.
             writer.close();
         } catch (IOException e) {
@@ -415,17 +414,33 @@ public class UserDAOIni implements AccountDAO, UserCharacterDAO {
     private Ini readCharFile(String username) throws DAOException {
         Ini chara;
 
-        InputStream inputStream = getClass().getClassLoader().getResourceAsStream(getCharFilePath(username));
-        if (inputStream == null)
-            throw new IllegalArgumentException("The file " + getCharFilePath(username) + " was not found in the classpath");
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
-            chara = new Ini(reader);
-        } catch (FileNotFoundException e) {
-            // The account doesn't exist
-            return null;
-        } catch (IOException e) {
-            LOGGER.error("Charfile loading failed!", e);
-            throw new DAOException(e);
+        String filePath = getCharFilePath(username);
+        File charFile = new File(filePath);
+
+        // If the file does exist in the dynamic directory, try searching for it in the classpath (fot test files)
+        if (!charFile.exists()) {
+            InputStream inputStream = getClass().getClassLoader().getResourceAsStream("charfiles/" + username.toUpperCase() + FILE_EXTENSION);
+
+            // The file does exist in the file system and classpath
+            if (inputStream == null) return null;
+
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+                chara = new Ini(reader);
+            } catch (IOException e) {
+                LOGGER.error("Charfile loading from classpath failed!", e);
+                throw new DAOException(e);
+            }
+        } else {
+            // Read from the file system
+            try (BufferedReader reader = new BufferedReader(new FileReader(charFile))) {
+                chara = new Ini(reader);
+            } catch (FileNotFoundException e) {
+                // The file does exist
+                return null;
+            } catch (IOException e) {
+                LOGGER.error("Charfile loading from filesystem failed!", e);
+                throw new DAOException(e);
+            }
         }
 
         return chara;
