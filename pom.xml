@@ -43,7 +43,6 @@
 
         <!-- Testing dependencies versions -->
         <junit.version>5.13.4</junit.version>
-        <hamcrest.version>2.2</hamcrest.version>
         <assertj.version>3.27.3</assertj.version>
         <mockito.version>5.8.0</mockito.version>
 
@@ -119,12 +118,6 @@
                 <!-- Dependencia agregada (BOM) que incluye APIs principales (junit-jupiter-api), motor de ejecucion (junit-jupiter-engine) y tests parametrizados (junit-jupiter-params) -->
                 <artifactId>junit-jupiter</artifactId>
                 <version>${junit.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.hamcrest</groupId>
-                <artifactId>hamcrest</artifactId>
-                <version>${hamcrest.version}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
