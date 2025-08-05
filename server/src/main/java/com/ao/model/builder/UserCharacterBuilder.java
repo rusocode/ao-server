@@ -122,7 +122,7 @@ public class UserCharacterBuilder implements Builder<UserCharacter> {
     }
 
     public UserCharacterBuilder withDescription(String description) {
-        if (!ValidatorService.validCharacterName(name)) throw new IllegalArgumentException();
+        if (!ValidatorService.validDescription(description)) throw new IllegalArgumentException();
         this.description = description;
         return this;
 

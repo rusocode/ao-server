@@ -23,7 +23,6 @@ import com.ao.service.CharacterBodyService;
 import com.ao.service.LoginService;
 import com.ao.service.MapService;
 import com.ao.service.UserService;
-
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 

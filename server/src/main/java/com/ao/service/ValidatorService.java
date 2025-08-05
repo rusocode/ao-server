@@ -17,6 +17,7 @@ import java.util.Set;
 
 public class ValidatorService {
 
+    private static final int MAX_NAME_LENGTH = 30;
 
     /**
      * Factory for creating validator instances using the default configuration from Jakarta Validation (formerly known as Bean
@@ -34,6 +35,7 @@ public class ValidatorService {
      */
     public static boolean validCharacterName(String name) {
         CharacterNameDto dto = new CharacterNameDto(name);
+        // Validate the DTO against all constraint annotations and collect any violations
         Set<ConstraintViolation<CharacterNameDto>> violations = validator.validate(dto);
         return violations.isEmpty();
     }
@@ -50,6 +52,12 @@ public class ValidatorService {
         return violations.isEmpty();
     }
 
+    public static boolean validDescription(String description) {
+        DescriptionDto dto = new DescriptionDto(description);
+        Set<ConstraintViolation<DescriptionDto>> violation = validator.validate(dto);
+        return violation.isEmpty();
+    }
+
     /**
      * DTO for character name validation.
      * <p>
@@ -57,7 +65,7 @@ public class ValidatorService {
      */
     public record CharacterNameDto(
             @NotBlank(message = "Character name cannot be empty")
-            @Size(min = 1, max = 5, message = "Character name must be between 1 and 30 characters")
+            @Size(min = 1, max = MAX_NAME_LENGTH, message = "Character name must be between 1 and 30 characters")
             @Pattern(regexp = "^[A-Za-z][A-Za-z ]*", message = "Character name must start with letter and contain only letters and spaces") String name) {
 
         public CharacterNameDto(String name) {
@@ -74,11 +82,21 @@ public class ValidatorService {
     /**
      * DTO for email validation.
      */
-    public record EmailDto(@NotBlank(message = "Email cannot be empty")
-                           @Email(message = "Invalid email format") String email) {
+    public record EmailDto(
+            @NotBlank(message = "Email cannot be empty")
+            @Email(message = "Invalid email format") String email) {
 
         public EmailDto(String email) {
             this.email = email;
+        }
+
+    }
+
+    public record DescriptionDto(
+            @NotBlank(message = "Description cannot be empty") String description) {
+
+        public DescriptionDto(String description) {
+            this.description = description;
         }
 
     }
