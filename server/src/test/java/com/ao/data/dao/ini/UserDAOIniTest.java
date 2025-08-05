@@ -39,7 +39,7 @@ public class UserDAOIniTest {
     public void tearDown() throws Exception {
         // Be really sure the file is not there before the next test
         final File file = new File(dao.getCharFilePath(NEW_CHARACTER_NICK));
-        file.delete();
+        file.delete(); // Delete the file after testing
     }
 
     @Test

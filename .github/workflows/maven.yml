@@ -60,6 +60,9 @@ jobs:
             ao-server/pom.xml
             ao-server-security/pom.xml
 
+      - name: Create test directories
+        run: mkdir -p data/charfiles/
+
       # Step 3: Compila con Maven PROGRAMANDO la action desde cero (run:) ya que no esta (o no la encontre) en el Marketplace de GitHub
       - name: Build with Maven
         run: mvn -B package --file pom.xml # Compila y empaqueta el proyecto en modo batch (no interactivo) usando el pom.xml
