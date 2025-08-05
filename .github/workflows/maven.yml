@@ -61,7 +61,10 @@ jobs:
             ao-server-security/pom.xml
 
       - name: Create test directories
-        run: mkdir -p data/charfiles/
+        run: |
+          mkdir -p data/charfiles/
+          mkdir -p server/data/charfiles/
+          mkdir -p ao-server-security/data/charfiles/
 
       # Step 3: Compila con Maven PROGRAMANDO la action desde cero (run:) ya que no esta (o no la encontre) en el Marketplace de GitHub
       - name: Build with Maven
