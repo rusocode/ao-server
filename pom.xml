@@ -48,8 +48,8 @@
 
         <!-- Utility dependencies versions -->
         <ini4j.version>0.5.4</ini4j.version>
-        <commons.validator.version>1.8.0</commons.validator.version>
-        <oro.version>2.0.8</oro.version>
+        <hibernate.validator.version>9.0.0.Final</hibernate.validator.version>
+        <expressly.version>6.0.0</expressly.version>
 
         <!-- Plugin versions -->
         <maven.compiler.plugin.version>3.11.0</maven.compiler.plugin.version>
@@ -102,17 +102,18 @@
                 <version>${ini4j.version}</version>
             </dependency>
             <dependency>
-                <groupId>commons-validator</groupId>
-                <artifactId>commons-validator</artifactId>
-                <version>${commons.validator.version}</version>
+                <groupId>org.hibernate.validator</groupId>
+                <artifactId>hibernate-validator</artifactId>
+                <version>${hibernate.validator.version}</version>
             </dependency>
+            <!-- Expression Language (requerido por Hibernate Validator) -->
             <dependency>
-                <groupId>oro</groupId>
-                <artifactId>oro</artifactId>
-                <version>${oro.version}</version>
+                <groupId>org.glassfish.expressly</groupId>
+                <artifactId>expressly</artifactId>
+                <version>${expressly.version}</version>
             </dependency>
 
-            <!-- Testing frameworks -->
+            <!-- Testing -->
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
                 <!-- Dependencia agregada (BOM) que incluye APIs principales (junit-jupiter-api), motor de ejecucion (junit-jupiter-engine) y tests parametrizados (junit-jupiter-params) -->
@@ -126,8 +127,6 @@
                 <version>${assertj.version}</version>
                 <scope>test</scope>
             </dependency>
-
-            <!-- Testing - Mockito -->
             <dependency>
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-core</artifactId>
