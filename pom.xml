@@ -223,7 +223,6 @@
                 <configuration>
                     <!-- Usa la variable de entorno COVERALLS_REPO_TOKEN -->
                     <repoToken>${env.COVERALLS_REPO_TOKEN}</repoToken>
-                    <sourceEncoding>UTF-8</sourceEncoding>
                 </configuration>
             </plugin>
 
