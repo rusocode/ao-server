@@ -55,7 +55,7 @@
         <maven.compiler.plugin.version>3.11.0</maven.compiler.plugin.version>
         <maven.surefire.plugin.version>3.2.3</maven.surefire.plugin.version>
         <maven.assembly.plugin.version>3.6.0</maven.assembly.plugin.version>
-        <coveralls.plugin.version>4.3.0</coveralls.plugin.version>
+        <coveralls.plugin.version>4.7.0</coveralls.plugin.version>
         <jacoco.plugin.version>0.8.11</jacoco.plugin.version>
     </properties>
 
@@ -173,7 +173,7 @@
                 </plugin>
 
                 <plugin>
-                    <groupId>org.eluder.coveralls</groupId>
+                    <groupId>com.github.hazendaz.maven</groupId>
                     <artifactId>coveralls-maven-plugin</artifactId>
                     <version>${coveralls.plugin.version}</version>
                 </plugin>
@@ -217,15 +217,11 @@
                 </executions>
             </plugin>
 
+            <!-- SIN configuracion - GitHub Actions es detectado automaticamente, por lo que no hace falta especificar
+                 el token de Coveralls. -->
             <plugin>
                 <groupId>org.eluder.coveralls</groupId>
                 <artifactId>coveralls-maven-plugin</artifactId>
-                <version>${coveralls.plugin.version}</version>
-                <configuration>
-                    <!-- Usa la variable de entorno COVERALLS_REPO_TOKEN -->
-                    <repoToken>${env.COVERALLS_REPO_TOKEN}</repoToken>
-                    <sourceEncoding>UTF-8</sourceEncoding>
-                </configuration>
             </plugin>
 
         </plugins>
