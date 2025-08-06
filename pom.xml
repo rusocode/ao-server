@@ -55,7 +55,6 @@
         <maven.compiler.plugin.version>3.11.0</maven.compiler.plugin.version>
         <maven.surefire.plugin.version>3.2.3</maven.surefire.plugin.version>
         <maven.assembly.plugin.version>3.6.0</maven.assembly.plugin.version>
-        <coveralls.plugin.version>4.7.0</coveralls.plugin.version>
         <jacoco.plugin.version>0.8.11</jacoco.plugin.version>
     </properties>
 
@@ -156,7 +155,6 @@
                 </configuration>
             </plugin>
 
-            <!-- Test coverage -->
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
@@ -176,13 +174,6 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>com.github.hazendaz.maven</groupId>
-                <artifactId>coveralls-maven-plugin</artifactId>
-                <version>${coveralls.plugin.version}</version>
-                <!-- Sin configuraciOn - GitHub Actions detectado automAticamente -->
             </plugin>
         </plugins>
     </build>
