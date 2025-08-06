@@ -144,62 +144,23 @@
     </dependencyManagement>
 
     <build>
-        <pluginManagement>
-            <plugins>
-                <!-- Core plugins -->
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>${maven.compiler.plugin.version}</version>
-                    <configuration>
-                        <source>${java.version}</source>
-                        <target>${java.version}</target>
-                        <encoding>${project.build.sourceEncoding}</encoding>
-                    </configuration>
-                </plugin>
-
-                <!-- Testing plugins -->
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-surefire-plugin</artifactId>
-                    <version>${maven.surefire.plugin.version}</version>
-                </plugin>
-
-                <!-- Quality plugins -->
-                <plugin>
-                    <groupId>org.jacoco</groupId>
-                    <artifactId>jacoco-maven-plugin</artifactId>
-                    <version>${jacoco.plugin.version}</version>
-                </plugin>
-
-                <plugin>
-                    <groupId>com.github.hazendaz.maven</groupId>
-                    <artifactId>coveralls-maven-plugin</artifactId>
-                    <version>${coveralls.plugin.version}</version>
-                </plugin>
-
-                <!-- Packaging plugins -->
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-assembly-plugin</artifactId>
-                    <version>${maven.assembly.plugin.version}</version>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-
         <plugins>
-            <!-- Compiler configuration -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <!-- No hace falta especificar la version? -->
+                <version>${maven.compiler.plugin.version}</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                </configuration>
             </plugin>
 
             <!-- Test coverage -->
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <!-- No hace falta especificar la version? -->
+                <version>${jacoco.plugin.version}</version>
                 <executions>
                     <execution>
                         <id>prepare-agent</id>
@@ -218,14 +179,11 @@
             </plugin>
 
             <plugin>
-                <groupId>org.eluder.coveralls</groupId>
+                <groupId>com.github.hazendaz.maven</groupId>
                 <artifactId>coveralls-maven-plugin</artifactId>
-                <configuration>
-                    <!-- Usa la variable de entorno COVERALLS_REPO_TOKEN -->
-                    <repoToken>${env.COVERALLS_REPO_TOKEN}</repoToken>
-                </configuration>
+                <version>${coveralls.plugin.version}</version>
+                <!-- Sin configuraciOn - GitHub Actions detectado automAticamente -->
             </plugin>
-
         </plugins>
     </build>
 
