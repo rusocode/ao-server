@@ -60,21 +60,22 @@ jobs:
             ao-server/pom.xml
             ao-server-security/pom.xml
 
+      # Step 3: Crea directorios para los archivos de datos de pruebas (auque para un mejor practica es mejor modificar los tests para usar un directorio temporal)
       - name: Create test directories
         run: |
           mkdir -p data/charfiles/
           mkdir -p server/data/charfiles/
           mkdir -p ao-server-security/data/charfiles/
 
-      # Step 3: Compila con Maven PROGRAMANDO la action desde cero (run:) ya que no esta (o no la encontre) en el Marketplace de GitHub
+      # Step 4: Compila con Maven PROGRAMANDO la action desde cero (run:) ya que no esta (o no la encontre) en el Marketplace de GitHub
       - name: Build with Maven
         run: mvn -B package --file pom.xml # Compila y empaqueta el proyecto en modo batch (no interactivo) usando el pom.xml
 
-      # Step 4: Genera reportes de cobertura
+      # Step 5: Genera reportes de cobertura
       - name: Generate coverage reports
         if: success() # Si el paso anterior fue exitoso...
         run: mvn clean test jacoco:report coveralls:report # Limpia, ejecuta tests, genera reporte JaCoCo y lo envia a Coveralls
 
-      # Step 5: Actualiza dependencias (con pr) para alertas de seguridad automaticas usando Dependabot (detecta vulnerabilidades en las dependencias) con vista grafica en "Dependency graph"
+      # Step 6: Actualiza dependencias (con pr) para alertas de seguridad automaticas usando Dependabot (detecta vulnerabilidades en las dependencias) con vista grafica en "Dependency graph"
       - name: Update dependency graph
         uses: advanced-security/maven-dependency-submission-action@571e99aab1055c2e71a1e2309b9691de18d6b7d6 # El hash largo es la version especifica de la action para garantizar reproducibilidad y seguridad (evita que cambios maliciosos afecten el workflow)
