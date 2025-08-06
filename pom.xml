@@ -221,6 +221,11 @@
                 <groupId>org.eluder.coveralls</groupId>
                 <artifactId>coveralls-maven-plugin</artifactId>
                 <version>${coveralls.plugin.version}</version>
+                <configuration>
+                    <!-- Usa la variable de entorno COVERALLS_REPO_TOKEN -->
+                    <repoToken>${env.COVERALLS_REPO_TOKEN}</repoToken>
+                    <sourceEncoding>UTF-8</sourceEncoding>
+                </configuration>
             </plugin>
 
         </plugins>
