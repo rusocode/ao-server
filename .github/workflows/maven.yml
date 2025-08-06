@@ -75,7 +75,7 @@ jobs:
       - name: Generate coverage reports
         if: success() # Si el paso anterior fue exitoso...
         env:
-          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
+          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }} # Token de acceso a Coveralls
         run: mvn clean test jacoco:report coveralls:report # Limpia, ejecuta tests, genera reporte JaCoCo y lo envia a Coveralls
 
       # Step 6: Actualiza dependencias (con pr) para alertas de seguridad automaticas usando Dependabot (detecta vulnerabilidades en las dependencias) con vista grafica en "Dependency graph"
