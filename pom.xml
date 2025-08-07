@@ -49,8 +49,6 @@
         <expressly.version>6.0.0</expressly.version>
         <!-- Plugin versions -->
         <maven.compiler.plugin.version>3.11.0</maven.compiler.plugin.version>
-        <maven.surefire.plugin.version>3.2.3</maven.surefire.plugin.version>
-        <maven.assembly.plugin.version>3.6.0</maven.assembly.plugin.version>
         <jacoco.plugin.version>0.8.13</jacoco.plugin.version>
     </properties>
 
