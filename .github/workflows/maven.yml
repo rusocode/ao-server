@@ -1,11 +1,13 @@
 # Este workflow de GitHub Actions automatiza el proceso de integracion continua (CI) para un proyecto Maven de Java. Se 
 # ejecuta automaticamente cada vez que se hace push o pull request a la rama main, realizando una secuencia de pasos
-# esenciales: primero configura el entorno con Java 17, luego compila y empaqueta el proyecto en un JAR usando Maven, 
-# despues ejecuta todas las pruebas unitarias y genera reportes de cobertura de codigo con JaCoCo que se envian a 
+# esenciales: primero obtiene el codigo fuente del repositorio, luego configura el entorno con Java 17 y cache de Maven,
+# despues crea los directorios de datos necesarios para las pruebas, compila y empaqueta el proyecto en un JAR usando
+# Maven, ejecuta todas las pruebas unitarias y genera reportes de cobertura de codigo con JaCoCo que se envian a
 # Coveralls para su visualizacion, y finalmente actualiza el grafo de dependencias en GitHub para habilitar las alertas
-# automaticas de seguridad de Dependabot. Todo esto garantiza que el codigo funcione correctamente, mantenga una buena 
-# cobertura de pruebas y este protegido contra vulnerabilidades conocidas en las dependencias, proporcionando un 
+# automaticas de seguridad de Dependabot. Todo esto garantiza que el codigo funcione correctamente, mantenga una buena
+# cobertura de pruebas y este protegido contra vulnerabilidades conocidas en las dependencias, proporcionando un
 # pipeline completo de calidad y seguridad del software.
+
 # Para mas informacion: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-maven
 
 # Marketplace de todas las Actions: https://github.com/marketplace?type=actions
@@ -62,6 +64,7 @@ jobs:
 
       # Step 3: Crea directorios para los archivos de datos de pruebas (auque para un mejor practica es mejor modificar los tests para usar un directorio temporal)
       - name: Create test directories
+        # Crea los directorios de datos necesarios para que las pruebas funcionen correctamente
         run: |
           mkdir -p data/charfiles/
           mkdir -p server/data/charfiles/
@@ -71,17 +74,17 @@ jobs:
       - name: Build with Maven
         run: mvn -B package --file pom.xml # Compila y empaqueta el proyecto en modo batch (no interactivo) usando el pom.xml
 
-      # Step 5: Genera reportes de cobertura por JaCoCo
+      # Step 5: Genera reportes de cobertura con JaCoCo
       - name: Generate coverage reports
         if: success() # Si el paso anterior fue exitoso...
-        run: mvn clean test jacoco:report
+        run: mvn clean test jacoco:report # Limpia el proyecto, ejecuta las pruebas unitarias y genera el reporte de cobertura de codigo con JaCoCo
 
       # Step 6: Envia reportes de cobertura a Coveralls.io
       - name: Send coverage reports to Coveralls
         if: success()
-        uses: coverallsapp/github-action@v2.3.6
+        uses: coverallsapp/github-action@v2.3.6 # https://github.com/marketplace/actions/coveralls-github-action
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }} # Proporciona el token de autenticacion de GitHub para que Coveralls acceda al repositorio
 
       # Step 7: Actualiza dependencias (con pr) para alertas de seguridad automaticas usando Dependabot (detecta vulnerabilidades en las dependencias) con vista grafica en "Dependency graph"
       - name: Update dependency graph

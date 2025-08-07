@@ -20,10 +20,11 @@
     </issueManagement>
 
     <modules>
-        <module>server</module>
+        <module>server</module> <!-- TODO Se podria renombrar a server-core -->
         <module>server-security</module>
     </modules>
 
+    <!-- TODO Revisar versiones -->
     <properties>
         <!-- Build configuration -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -31,31 +32,26 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <java.version>17</java.version>
-
         <!-- Core dependencies versions -->
         <netty.version>4.1.119.Final</netty.version>
         <guice.version>7.0.0</guice.version>
         <guava.version>32.0.1-jre</guava.version>
-
         <!-- Logging dependencies versions -->
         <logback.version>1.5.13</logback.version>
         <slf4j.version>2.0.9</slf4j.version>
-
         <!-- Testing dependencies versions -->
         <junit.version>5.13.4</junit.version>
         <assertj.version>3.27.3</assertj.version>
-        <mockito.version>5.8.0</mockito.version>
-
+        <mockito.version>5.18.0</mockito.version>
         <!-- Utility dependencies versions -->
         <ini4j.version>0.5.4</ini4j.version>
         <hibernate.validator.version>9.0.0.Final</hibernate.validator.version>
         <expressly.version>6.0.0</expressly.version>
-
         <!-- Plugin versions -->
         <maven.compiler.plugin.version>3.11.0</maven.compiler.plugin.version>
         <maven.surefire.plugin.version>3.2.3</maven.surefire.plugin.version>
         <maven.assembly.plugin.version>3.6.0</maven.assembly.plugin.version>
-        <jacoco.plugin.version>0.8.11</jacoco.plugin.version>
+        <jacoco.plugin.version>0.8.13</jacoco.plugin.version>
     </properties>
 
     <dependencyManagement>
