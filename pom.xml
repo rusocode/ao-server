@@ -138,6 +138,7 @@
 
     <build>
         <plugins>
+            <!-- At declared explicit, Maven doesn't use the version of Super POM -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -154,12 +155,14 @@
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>${jacoco.plugin.version}</version>
                 <executions>
+                    <!-- Prepare the JaCoCo agent before execute the all tests (is executed in the default "initialize" phase) -->
                     <execution>
                         <id>prepare-agent</id>
                         <goals>
                             <goal>prepare-agent</goal>
                         </goals>
                     </execution>
+                    <!-- Generate a coverage report (HTML/XML) in the test phase after all the tests are executed -->
                     <execution>
                         <id>report</id>
                         <phase>test</phase>
