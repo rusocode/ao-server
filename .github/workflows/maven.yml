@@ -90,7 +90,14 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }} # Proporciona el token de autenticacion de GitHub para que Coveralls acceda al repositorio
           format: jacoco
-          base-path: src/main/java
+          flag-name: Unit
+          parallel: true
+
+      - name: Coveralls Finished
+        uses: coverallsapp/github-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          parallel-finished: true
 
       # Step 7: Envia el arbol de dependencias Maven a GitHub para alertas de seguridad automaticas via Dependabot
       - name: Maven Dependency Tree Dependency Submission
