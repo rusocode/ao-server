@@ -16,8 +16,6 @@
 # Web principal de Actions: https://github.com/features/actions
 # Documentacion de GitHub Actions: https://docs.github.com/es/actions
 
-# TODO Incluir automatizacion de verificacion en el formateo de sintaxis del codigo
-
 # Define el nombre de la GitHub Action (workflow)
 name: Java CI with Maven
 
@@ -36,10 +34,10 @@ jobs:
   # Indica el proceso de construccion del artefacto/JAR
   build:
 
-    # Indica en que tipo de maquina va a ejecutar la action
+    # Indica en que tipo de maquina virtual va a ejecutar este job del workflow
     runs-on: ubuntu-latest # Maquina virtual de Ubuntu mas reciente
 
-    # Permite la escritura al contenido para enviar el grafo de dependencias a GitHub para Dependabot
+    # Otorga permisos de escritura al contenido del repositorio para enviar el grafo de dependencias a GitHub para Dependabot
     permissions:
       contents: write
 
@@ -66,7 +64,8 @@ jobs:
             ao-server/pom.xml
             ao-server-security/pom.xml
 
-      # Step 3: Crea directorios para los archivos de datos de pruebas (auque para un mejor practica es mejor modificar los tests para usar un directorio temporal)
+      # Step 3: Crea directorios para los archivos de datos de pruebas
+      # NOTA: Como mejor practica, los tests deberian usar directorios temporales en lugar de rutas fijas
       - name: Create test directories
         # Crea los directorios de datos necesarios para que las pruebas funcionen correctamente
         run: |
@@ -83,7 +82,7 @@ jobs:
         if: success() # Si el paso anterior fue exitoso...
         run: mvn clean test jacoco:report # Limpia el proyecto, ejecuta las pruebas unitarias y genera el reporte de cobertura de codigo con JaCoCo
 
-      # Step 6: Envia reportes de cobertura a Coveralls.io
+      # Step 6: Envia los reportes de cobertura a Coveralls.io
       - name: Send coverage reports to Coveralls
         if: success()
         uses: coverallsapp/github-action@v2 # https://github.com/marketplace/actions/coveralls-github-action
