@@ -1,4 +1,7 @@
 # AO-Server
+
+[![Coverage Status](https://coveralls.io/repos/github/rusocode/ao-server/badge.svg?branch=main)](https://coveralls.io/github/rusocode/ao-server?branch=main)
+
 AO-Server is a server written in Java for the game Argentum Online, an MMORPG developed in 1999 using Visual Basic 6.
 
 The server's goal is to leverage multithreading and the features offered by Java (APIs, libraries, and frameworks) to improve game performance.
