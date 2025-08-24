@@ -20,10 +20,10 @@ public class WeaponTest extends AbstractEquipableItemTest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        final WeaponProperties props1 = new WeaponProperties(WorldObjectType.WEAPON, 1, "Bastard Sword", 1, 1, 0, null, null, false, false, false, false, 1, true, PIERCING_DAMAGE, MIN_HIT, MAX_HIT);
+        final WeaponProperties props1 = new WeaponProperties(WorldObjectType.MELEE_WEAPON, 1, "Bastard Sword", 1, 1, 0, null, null, false, false, false, false, 1, true, PIERCING_DAMAGE, MIN_HIT, MAX_HIT);
         weapon1 = new Weapon(props1, 5);
 
-        final WeaponProperties props2 = new WeaponProperties(WorldObjectType.WEAPON, 1, "Halberd", 1, 1, 0, null, null, false, false, false, false, 1, false, PIERCING_DAMAGE, MAX_HIT, MAX_HIT);
+        final WeaponProperties props2 = new WeaponProperties(WorldObjectType.MELEE_WEAPON, 1, "Halberd", 1, 1, 0, null, null, false, false, false, false, 1, false, PIERCING_DAMAGE, MAX_HIT, MAX_HIT);
         weapon2 = new Weapon(props2, 1);
 
         object = weapon1;

@@ -24,7 +24,7 @@ public class CarpenterArchetype extends DefaultArchetype {
     }
 
     @Override
-    protected float getWoodWorkingModifier() {
+    protected float getCarpentryModifier() {
         return WOOD_WORKING_MODIFIER;
     }
 

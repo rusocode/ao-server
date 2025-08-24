@@ -4,50 +4,22 @@ package com.ao.model.map;
  * A city in the game.
  */
 
-public class City {
-
-    private final int map;
-    private final byte x;
-    private final byte y;
+public record City(int map, byte x, byte y) {
 
     /**
      * Creates a new city instance.
      *
      * @param map city map
-     * @param x   city x co-ordinate for users spawn
-     * @param y   city y co-ordinate for users spawn
+     * @param x   city x coordinate
+     * @param y   city y coordinate
+     * @throws IllegalArgumentException if any parameter is invalid
      */
-    public City(int map, byte x, byte y) {
-        this.map = map;
-        this.x = x;
-        this.y = y;
-    }
-
-    /**
-     * Retrieves the city map.
-     *
-     * @return the city map
-     */
-    public int getMap() {
-        return map;
-    }
-
-    /**
-     * Retrieves the city x co-ordinate for users' spawn.
-     *
-     * @return the city x co-ordinate for users spawn
-     */
-    public byte getX() {
-        return x;
-    }
-
-    /**
-     * Retrieves the city y co-ordinate for users' spawn.
-     *
-     * @return the city y co-ordinate for users spawn
-     */
-    public byte getY() {
-        return y;
+    public City {
+        if (map < 0) throw new IllegalArgumentException("Map must be non-negative, got: " + map);
+        if (x < WorldMap.MIN_X || x > WorldMap.MAX_X)
+            throw new IllegalArgumentException("X coordinate must be between " + WorldMap.MIN_X + " and " + WorldMap.MAX_X + " (inclusive), got: " + x);
+        if (y < WorldMap.MIN_Y || y > WorldMap.MAX_Y)
+            throw new IllegalArgumentException("Y coordinate must be between " + WorldMap.MIN_Y + " and " + WorldMap.MAX_Y + " (inclusive), got: " + y);
     }
 
 }

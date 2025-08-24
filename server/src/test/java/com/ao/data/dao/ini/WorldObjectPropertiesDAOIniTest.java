@@ -23,63 +23,62 @@ public class WorldObjectPropertiesDAOIniTest {
     private static final int BACKPACK_INDEX = 866;
     private static final int MINERAL_INDEX = 192;
 
-
-    private static final String TEST_OBJ_DAT = "obj.dat";
+    private static final String OBJ_PATH = "obj.dat";
     private static final int TEST_ITEMS_PER_ROW = 5;
 
     protected WorldObjectPropertiesDAOIni dao;
 
     @BeforeEach
     public void setUp() throws Exception {
-        dao = new WorldObjectPropertiesDAOIni(TEST_OBJ_DAT, TEST_ITEMS_PER_ROW);
+        dao = new WorldObjectPropertiesDAOIni(OBJ_PATH, TEST_ITEMS_PER_ROW);
     }
 
     @Test
-    public void testRetrieveAll() {
+    public void testLoadAll() {
         try {
             dao.loadAll();
-        } catch (final DAOException e) {
-            fail("Loading of objects failed with message " + e.getMessage());
+        } catch (DAOException e) {
+            fail("Loading of objects failed with message: " + e.getMessage());
         }
 
         // Check some items to make sure they loaded properly...
-        final WorldObjectProperties yellowPotion = dao.getWorldObjectProperties(YELLOW_POTION_INDEX);
+        WorldObjectProperties yellowPotion = dao.getWorldObjectProperties(YELLOW_POTION_INDEX);
         assertThat(yellowPotion).isInstanceOf(TemporalStatModifyingItemProperties.class);
         assertThat(yellowPotion.getType()).isEqualTo(WorldObjectType.DEXTERITY_POTION);
 
-        final WorldObjectProperties bluePotion = dao.getWorldObjectProperties(BLUE_POTION_INDEX);
+        WorldObjectProperties bluePotion = dao.getWorldObjectProperties(BLUE_POTION_INDEX);
         assertThat(bluePotion).isInstanceOf(StatModifyingItemProperties.class);
         assertThat(bluePotion.getType()).isEqualTo(WorldObjectType.MANA_POTION);
 
-        final WorldObjectProperties redPotion = dao.getWorldObjectProperties(RED_POTION_INDEX);
+        WorldObjectProperties redPotion = dao.getWorldObjectProperties(RED_POTION_INDEX);
         assertThat(redPotion).isInstanceOf(StatModifyingItemProperties.class);
         assertThat(redPotion.getType()).isEqualTo(WorldObjectType.HP_POTION);
 
-        final WorldObjectProperties greenPotion = dao.getWorldObjectProperties(GREEN_POTION_INDEX);
+        WorldObjectProperties greenPotion = dao.getWorldObjectProperties(GREEN_POTION_INDEX);
         assertThat(greenPotion).isInstanceOf(TemporalStatModifyingItemProperties.class);
         assertThat(greenPotion.getType()).isEqualTo(WorldObjectType.STRENGTH_POTION);
 
-        final WorldObjectProperties violetPotion = dao.getWorldObjectProperties(VIOLET_POTION_INDEX);
+        WorldObjectProperties violetPotion = dao.getWorldObjectProperties(VIOLET_POTION_INDEX);
         assertThat(violetPotion).isInstanceOf(ItemProperties.class);
         assertThat(violetPotion.getType()).isEqualTo(WorldObjectType.POISON_POTION);
 
-        final WorldObjectProperties blackPotion = dao.getWorldObjectProperties(BLACK_POTION_INDEX);
+        WorldObjectProperties blackPotion = dao.getWorldObjectProperties(BLACK_POTION_INDEX);
         assertThat(blackPotion).isInstanceOf(ItemProperties.class);
         assertThat(blackPotion.getType()).isEqualTo(WorldObjectType.DEATH_POTION);
 
-        final WorldObjectProperties sign = dao.getWorldObjectProperties(SIGN_INDEX);
+        WorldObjectProperties sign = dao.getWorldObjectProperties(SIGN_INDEX);
         assertThat(sign).isInstanceOf(SignProperties.class);
         assertThat(sign.getType()).isEqualTo(WorldObjectType.SIGN);
 
-        final WorldObjectProperties ullathorpeForum = dao.getWorldObjectProperties(ULLATHORPE_FORUM_INDEX);
+        WorldObjectProperties ullathorpeForum = dao.getWorldObjectProperties(ULLATHORPE_FORUM_INDEX);
         assertThat(ullathorpeForum).isInstanceOf(ForumProperties.class);
         assertThat(ullathorpeForum.getType()).isEqualTo(WorldObjectType.FORUM);
 
-        final WorldObjectProperties backpack = dao.getWorldObjectProperties(BACKPACK_INDEX);
+        WorldObjectProperties backpack = dao.getWorldObjectProperties(BACKPACK_INDEX);
         assertThat(backpack).isInstanceOf(BackpackProperties.class);
         assertThat(backpack.getType()).isEqualTo(WorldObjectType.BACKPACK);
 
-        final WorldObjectProperties mineral = dao.getWorldObjectProperties(MINERAL_INDEX);
+        WorldObjectProperties mineral = dao.getWorldObjectProperties(MINERAL_INDEX);
         assertThat(mineral).isInstanceOf(MineralProperties.class);
         assertThat(mineral.getType()).isEqualTo(WorldObjectType.MINERAL);
 

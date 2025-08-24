@@ -13,19 +13,19 @@ import java.util.Map;
 public interface WorldObjectPropertiesDAO {
 
     /**
-     * Loads all World Objects Properties.
+     * Loads all objects.
      */
     void loadAll() throws DAOException;
 
     /**
-     * Retrieves all loaded manufacturables.
+     * Gets all loaded manufacturables.
      *
      * @return the complete set of manufacturables
      */
     Map<Integer, Manufacturable> getAllManufacturables() throws DAOException;
 
     /**
-     * Retrieves a World Object Properties by id.
+     * Gets a {@code WorldObjectProperties} by id.
      *
      * @param id id of the world object properties to retrieve
      * @return the requested World Object Properties

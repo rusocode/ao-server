@@ -21,19 +21,19 @@ import com.ao.model.map.City;
 import com.ao.model.map.Heading;
 import com.ao.model.spell.Spell;
 import com.ao.model.worldobject.Item;
-import com.ao.model.worldobject.WorldObject;
 import com.ao.model.worldobject.WorldObjectType;
 import com.ao.model.worldobject.factory.WorldObjectFactory;
 import com.ao.model.worldobject.factory.WorldObjectFactoryException;
 import com.ao.model.worldobject.properties.WorldObjectProperties;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import org.ini4j.Ini;
-import org.ini4j.Profile.Section;
+import org.apache.commons.configuration2.INIConfiguration;
+import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.*;
@@ -44,27 +44,27 @@ import java.util.*;
 
 public class NPCPropertiesDAOIni implements NPCCharacterPropertiesDAO {
 
-    private static final Logger logger = LoggerFactory.getLogger(NPCPropertiesDAOIni.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(NPCPropertiesDAOIni.class);
 
     private static final int MAX_SOUNDS = 3;
 
     private static final String INIT_HEADER = "INIT";
-    private static final String NUM_NPCS_KEY = "NumNPCs";
-
     private static final String NPC_SECTION_PREFIX = "NPC";
-    private static final String NAME_KEY = "Name";
-    private static final String NPC_TYPE_KEY = "NpcType";
-    private static final String DESCRIPTION_KEY = "Desc";
-    private static final String HEAD_KEY = "Head";
-    private static final String BODY_KEY = "Body";
-    private static final String HEADING_KEY = "Heading";
-    private static final String MOVEMENT_KEY = "Movement";
-    private static final String ATTACKABLE_KEY = "Attackable";
-    private static final String RESPAWNABLE_KEY = "Respawn";
-    private static final String HOSTILE_KEY = "Hostile";
-    private static final String TAMEABLE_KEY = "Domable";
-    private static final String ALIGNMENT_KEY = "Alineacion";
-    private static final String COMMERCIABLE_KEY = "Comercia";
+    private static final String NUM_NPCS_KEY = "num_npcs";
+
+    private static final String NAME_KEY = "name";
+    private static final String NPC_TYPE_ID_KEY = "npc_type_id";
+    private static final String DESCRIPTION_KEY = "description";
+    private static final String HEAD_KEY = "head";
+    private static final String BODY_KEY = "body";
+    private static final String HEADING_KEY = "heading";
+    private static final String MOVEMENT_ID_KEY = "movement_id";
+    private static final String ATTACKABLE_KEY = "attackable";
+    private static final String RESPAWNABLE_KEY = "respawnable";
+    private static final String HOSTILE_KEY = "hostile";
+    private static final String TAMEABLE_KEY = "domable"; // Domable?
+    private static final String ALIGNMENT_KEY = "alineacion";
+    private static final String COMMERCIABLE_KEY = "comercia";
     private static final String ITEMS_TYPE_KEY = "TipoItems";
     private static final String ITEMS_AMOUNT_KEY = "NROITEMS";
     private static final String OBJECT_INVENTORY_PREFIX = "Obj";
@@ -117,6 +117,8 @@ public class NPCPropertiesDAOIni implements NPCCharacterPropertiesDAO {
     private final WorldObjectPropertiesDAO worldObjectPropertiesDAO;
     private final WorldObjectFactory worldObjectFactory;
 
+    private NPCProperties[] npcs;
+
     /**
      * Creates a new NPCDAOIni instance.
      *
@@ -125,102 +127,107 @@ public class NPCPropertiesDAOIni implements NPCCharacterPropertiesDAO {
      * @param worldObjectFactory       factory to create world object instances
      */
     @Inject
-    public NPCPropertiesDAOIni(@Named("npcsFilePath") String npcsFilePath,
-                               WorldObjectPropertiesDAO worldObjectPropertiesDAO, WorldObjectFactory worldObjectFactory) {
+    public NPCPropertiesDAOIni(@Named("npcsFilePath") String npcsFilePath, WorldObjectPropertiesDAO worldObjectPropertiesDAO, WorldObjectFactory worldObjectFactory) {
         this.npcsFilePath = npcsFilePath;
         this.worldObjectPropertiesDAO = worldObjectPropertiesDAO;
         this.worldObjectFactory = worldObjectFactory;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.ao.data.dao.NPCDAO#retrieveAll()
-     */
     @Override
-    public NPCProperties[] retrieveAll() throws DAOException {
-        Ini iniFile;
-
+    public NPCProperties[] loadAll() throws DAOException {
+        INIConfiguration ini = null;
+        LOGGER.info("Loading all NPCs from {}", npcsFilePath);
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream(npcsFilePath);
         if (inputStream == null)
             throw new IllegalArgumentException("The file " + npcsFilePath + " was not found in the classpath");
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
-            iniFile = new Ini(reader);
-        } catch (Exception e) {
-            logger.error("NPC loading failed!", e);
-            throw new RuntimeException(e);
+            ini = new INIConfiguration();
+            ini.read(reader);
+            LOGGER.info("NPCs loaded successfully!");
+        } catch (IOException | ConfigurationException e) {
+            LOGGER.error("Error loading NPCs!", e);
+            System.exit(-1);
         }
 
-        int totalNpcs = Integer.parseInt(iniFile.get(INIT_HEADER, NUM_NPCS_KEY));
+        // Required key
+        int numNpcs = IniUtils.getRequiredInt(ini, INIT_HEADER + "." + NUM_NPCS_KEY);
 
-        NPCProperties[] npcs = new NPCProperties[totalNpcs];
+        npcs = new NPCProperties[numNpcs];
 
-        for (int i = 1; i < totalNpcs; i++)
-            npcs[i - 1] = loadNpc(i, iniFile);
+        for (int i = 1; i < numNpcs; i++)
+            npcs[i - 1] = loadNpc(i, ini);
 
         return npcs;
     }
 
     /**
-     * Creates an object's properties from the given section.
+     * Loads a npc.
      *
-     * @param iniFile ini file that contains all world object to be loaded.
-     * @return the world object created.
+     * @param id  npc's id
+     * @param ini ini configuration
+     * @return new npc
      */
-    private NPCProperties loadNpc(int id, Ini iniFile) {
+    private NPCProperties loadNpc(int id, INIConfiguration ini) {
 
-        // The section of the ini file containing the world object to be loaded.
-        Section section = iniFile.get(NPC_SECTION_PREFIX + id);
+        String section = NPC_SECTION_PREFIX + id;
 
-        // Make sure it's valid
-        if (section == null) return null;
+        String name = IniUtils.getString(ini, section + "." + NAME_KEY, "");
+        int npcTypeId = IniUtils.getInt(ini, section + "." + NPC_TYPE_ID_KEY, -1);
+
+        short body = (short) IniUtils.getInt(ini, section + "." + BODY_KEY, 0);
+        short head = getHead(ini, section);
+        Heading heading = Heading.get((byte) (IniUtils.getInt(ini, section + "." + HEADING_KEY, 1) - 1));
+        boolean respawnable = isRespawnable(ini, section);
+        String description = getDescription(ini, section);
+
+        // TODO Unir si es posible
+        Class<? extends Behavior> behavior = getBehavior(id, ini, section);
+        Class<? extends AttackStrategy> attackStrategy = getAttackStrategy(id, ini, section);
+        Class<? extends MovementStrategy> movementStrategy = getMovementStrategy(id, ini, section);
+
+        LegacyNPCType npcType = LegacyNPCType.findById(npcTypeId);
+
+        if (npcType == null) {
+            LOGGER.error("Unknown npc_type_id={} for NPC{}.", npcTypeId, id);
+            return null;
+        }
 
         NPCProperties npc = null;
-        String name = section.get(NAME_KEY);
-        short body = Short.parseShort(section.get(BODY_KEY));
-        short head = getHead(section);
-        Heading heading = Heading.get((byte) (Byte.parseByte(section.get(HEADING_KEY)) - 1));
-        boolean respawn = hasRespawn(section);
-        String desc = getDescription(section);
-        Class<? extends Behavior> behavior = getBehavior(section);
-        Class<? extends AttackStrategy> attackStrategy = getAttackStrategy(section);
-        Class<? extends MovementStrategy> movementStrategy = getMovementStrategy(section);
 
-        LegacyNPCType type = getNpcType(section);
-
-        switch (type) {
+        switch (npcType) {
             case COMMON:
-                if (isCommerciable(section))
-                    npc = loadMerchant(NPCType.MERCHANT, id, name, body, head, heading, respawn, desc, behavior, attackStrategy, movementStrategy, section);
+                if (isCommerciable(ini, section))
+                    npc = loadMerchant(NPCType.MERCHANT, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, ini, section);
                 else
-                    npc = loadCreature(NPCType.COMMON, id, name, body, head, heading, respawn, desc, behavior, attackStrategy, movementStrategy, section);
+                    npc = loadCreature(NPCType.COMMON, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, ini, section);
                 break;
             case DRAGON:
             case PRETORIAN:
-                npc = loadCreature(npcTypeMapper.get(type), id, name, body, head, heading, respawn, desc, behavior, attackStrategy, movementStrategy, section);
+                npc = loadCreature(npcTypeMapper.get(npcType), id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, ini, section);
                 break;
             case TRAINER:
-                npc = loadTrainer(npcTypeMapper.get(type), id, name, body, head, heading, respawn, desc, behavior, attackStrategy, movementStrategy, section);
+                npc = loadTrainer(npcTypeMapper.get(npcType), id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, ini, section);
                 break;
             case GOVERNOR:
-                npc = loadGovernor(npcTypeMapper.get(type), id, name, body, head, heading, respawn, desc, behavior, attackStrategy, movementStrategy, section);
+                npc = loadGovernor(npcTypeMapper.get(npcType), id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, ini, section);
                 break;
             case ROYAL_GUARD:
             case CHAOS_GUARD:
-                npc = loadGuard(npcTypeMapper.get(type), id, name, body, head, heading, respawn, desc, behavior, attackStrategy, movementStrategy, section);
+                npc = loadGuard(npcTypeMapper.get(npcType), id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, ini, section);
                 break;
             case NOBLE:
-                npc = loadNoble(npcTypeMapper.get(type), id, name, body, head, heading, respawn, desc, behavior, attackStrategy, movementStrategy, section);
+                npc = loadNoble(npcTypeMapper.get(npcType), id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, ini, section);
                 break;
             case NEWBIE_RESUCITATOR:
             case RESUCITATOR:
             case GAMBLER:
             case BANKER:
-                npc = loadBasicNpc(npcTypeMapper.get(type), id, name, body, head, heading, respawn,
-                        desc, behavior, attackStrategy, movementStrategy, section);
+                npc = loadBasicNpc(npcTypeMapper.get(npcType), id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, ini, section);
                 break;
             default:
-                logger.error("Unexpected AI type found: " + type + " for NPC with id " + id);
+                LOGGER.error("Unexpected AI type found: {} for NPC with id {}", npcType, id);
         }
+
         return npc;
     }
 
@@ -228,8 +235,8 @@ public class NPCPropertiesDAOIni implements NPCCharacterPropertiesDAO {
                                     short body, short head, Heading heading, boolean respawn,
                                     String desc, Class<? extends Behavior> behavior,
                                     Class<? extends AttackStrategy> attackStrategy,
-                                    Class<? extends MovementStrategy> movementStrategy, Section section) {
-        Alignment alignment = getAlignment(section);
+                                    Class<? extends MovementStrategy> movementStrategy, INIConfiguration ini, String section) {
+        Alignment alignment = getAlignment(ini, section);
         return new NobleNPCProperties(type, id, name, body, head, heading, respawn, desc, behavior, attackStrategy, movementStrategy, alignment);
     }
 
@@ -255,7 +262,8 @@ public class NPCPropertiesDAOIni implements NPCCharacterPropertiesDAO {
                                        String desc, Class<? extends Behavior> behavior,
                                        Class<? extends AttackStrategy> attackStrategy,
                                        Class<? extends MovementStrategy> movementStrategy,
-                                       Section section) {
+                                       INIConfiguration ini,
+                                       String section) {
         return new NPCProperties(type, id, name, body, head, heading, respawn, desc, behavior, attackStrategy, movementStrategy);
     }
 
@@ -281,8 +289,9 @@ public class NPCPropertiesDAOIni implements NPCCharacterPropertiesDAO {
                                        String desc, Class<? extends Behavior> behavior,
                                        Class<? extends AttackStrategy> attackStrategy,
                                        Class<? extends MovementStrategy> movementStrategy,
-                                       Section section) {
-        City city = getCity(section);
+                                       INIConfiguration ini,
+                                       String section) {
+        City city = getCity(ini, section);
         return new GovernorNPCProperties(type, id, name, body, head, heading, respawn, desc, behavior, attackStrategy, movementStrategy, city);
     }
 
@@ -308,12 +317,13 @@ public class NPCPropertiesDAOIni implements NPCCharacterPropertiesDAO {
                                        String desc, Class<? extends Behavior> behavior,
                                        Class<? extends AttackStrategy> attackStrategy,
                                        Class<? extends MovementStrategy> movementStrategy,
-                                       Section section) {
+                                       INIConfiguration ini,
+                                       String section) {
 
-        Inventory inventory = getInventory(section);
+        Inventory inventory = getInventory(ini, section);
 
-        boolean respawnInventory = hasInventoryRespawn(section);
-        Set<WorldObjectType> acceptedTypes = getItemsType(section);
+        boolean respawnInventory = hasInventoryRespawn(ini, section);
+        Set<WorldObjectType> acceptedTypes = getItemsType(ini, section);
 
         return new MerchantNPCProperties(type, id, name, body, head, heading, respawn,
                 behavior, attackStrategy, movementStrategy, desc, inventory,
@@ -343,8 +353,9 @@ public class NPCPropertiesDAOIni implements NPCCharacterPropertiesDAO {
                                       Class<? extends Behavior> behavior,
                                       Class<? extends AttackStrategy> attackStrategy,
                                       Class<? extends MovementStrategy> movementStrategy,
-                                      Section section) {
-        Map<Integer, String> creatures = getCreatures(section);
+                                      INIConfiguration ini,
+                                      String section) {
+        Map<Integer, String> creatures = getCreatures(ini, section);
         return new TrainerNPCProperties(type, id, name, body, head, heading, respawn, desc, behavior, attackStrategy, movementStrategy, creatures);
     }
 
@@ -369,27 +380,28 @@ public class NPCPropertiesDAOIni implements NPCCharacterPropertiesDAO {
                                        short head, Heading heading, boolean respawn, String desc,
                                        Class<? extends Behavior> behavior, Class<? extends AttackStrategy> attackStrategy,
                                        Class<? extends MovementStrategy> movementStrategy,
-                                       Section section) {
+                                       INIConfiguration ini,
+                                       String section) {
 
-        int experience = getExperience(section);
-        int gold = getGold(section);
-        int minHP = getMinHP(section);
-        int maxHP = getMaxHP(section);
-        int minDamage = getMinDamage(section);
-        int maxDamage = getMaxDamage(section);
-        short defense = getDefense(section);
-        short magicDefense = getMagicDefense(section);
-        short accuracy = getAccuracy(section);
-        short dodge = getDodge(section);
-        List<Spell> spells = getSpells(section);
-        boolean canSwim = canSwim(section);
-        boolean canWalk = canWalk(section);
-        boolean attackable = isAttackable(section);
-        boolean poison = canPoison(section);
-        boolean paralyzable = isParalyzable(section);
-        boolean hostile = isHostile(section);
-        boolean tameable = isTameable(section);
-        Drop drops = getDrops(section);
+        int experience = getExperience(ini, section);
+        int gold = getGold(ini, section);
+        int minHP = getMinHP(ini, section);
+        int maxHP = getMaxHP(ini, section);
+        int minDamage = getMinDamage(ini, section);
+        int maxDamage = getMaxDamage(ini, section);
+        short defense = getDefense(ini, section);
+        short magicDefense = getMagicDefense(ini, section);
+        short accuracy = getAccuracy(ini, section);
+        short dodge = getDodge(ini, section);
+        List<Spell> spells = getSpells(ini, section);
+        boolean canSwim = canSwim(ini, section);
+        boolean canWalk = canWalk(ini, section);
+        boolean attackable = isAttackable(ini, section);
+        boolean poison = canPoison(ini, section);
+        boolean paralyzable = isParalyzable(ini, section);
+        boolean hostile = isHostile(ini, section);
+        boolean tameable = isTameable(ini, section);
+        Drop drops = getDrops(ini, section);
 
         return new CreatureNPCProperties(type, id, name, body, head, heading, respawn, desc,
                 behavior, attackStrategy, movementStrategy, experience, gold, minHP, maxHP,
@@ -419,27 +431,28 @@ public class NPCPropertiesDAOIni implements NPCCharacterPropertiesDAO {
                                     Class<? extends Behavior> behavior,
                                     Class<? extends AttackStrategy> attackStrategy,
                                     Class<? extends MovementStrategy> movementStrategy,
-                                    Section section) {
-        int experience = getExperience(section);
-        int gold = getGold(section);
-        int minHP = getMinHP(section);
-        int maxHP = getMaxHP(section);
-        int minDamage = getMinDamage(section);
-        int maxDamage = getMaxDamage(section);
-        short defense = getDefense(section);
-        short magicDefense = getMagicDefense(section);
-        short accuracy = getAccuracy(section);
-        short dodge = getDodge(section);
-        List<Spell> spells = getSpells(section);
-        boolean canSwim = canSwim(section);
-        boolean canWalk = canWalk(section);
-        boolean attackable = isAttackable(section);
-        boolean poison = canPoison(section);
-        boolean paralyzable = isParalyzable(section);
-        boolean hostile = isHostile(section);
-        boolean tameable = isTameable(section);
-        Drop drops = getDrops(section);
-        boolean originalPosition = hasOriginalPosition(section);
+                                    INIConfiguration ini,
+                                    String section) {
+        int experience = getExperience(ini, section);
+        int gold = getGold(ini, section);
+        int minHP = getMinHP(ini, section);
+        int maxHP = getMaxHP(ini, section);
+        int minDamage = getMinDamage(ini, section);
+        int maxDamage = getMaxDamage(ini, section);
+        short defense = getDefense(ini, section);
+        short magicDefense = getMagicDefense(ini, section);
+        short accuracy = getAccuracy(ini, section);
+        short dodge = getDodge(ini, section);
+        List<Spell> spells = getSpells(ini, section);
+        boolean canSwim = canSwim(ini, section);
+        boolean canWalk = canWalk(ini, section);
+        boolean attackable = isAttackable(ini, section);
+        boolean poison = canPoison(ini, section);
+        boolean paralyzable = isParalyzable(ini, section);
+        boolean hostile = isHostile(ini, section);
+        boolean tameable = isTameable(ini, section);
+        Drop drops = getDrops(ini, section);
+        boolean originalPosition = hasOriginalPosition(ini, section);
 
         return new GuardNPCProperties(type, id, name, body, head, heading, respawn, desc,
                 behavior, attackStrategy, movementStrategy, experience, gold, minHP, maxHP, minDamage,
@@ -448,176 +461,191 @@ public class NPCPropertiesDAOIni implements NPCCharacterPropertiesDAO {
     }
 
     /**
-     * Retrieves a npc's type from its section.
+     * Gets a npc's experience.
      *
-     * @param section section from which to read the npc type
-     * @return the npc's type
-     */
-    private LegacyNPCType getNpcType(Section section) {
-        String data = section.get(NPC_TYPE_KEY);
-        int npcType = 0;
-        if (data != null) npcType = Integer.parseInt(data);
-        return LegacyNPCType.valueOf(npcType);
-    }
-
-    /**
-     * Retrieves a npc's experience from its section.
-     *
-     * @param section section from which to read the npc experience
      * @return the npc's experience
      */
-    private int getExperience(Section section) {
-        String data = section.get(EXPERIENCE_KEY);
-        if (data == null) return 0;
-        return Integer.parseInt(data);
+    private int getExperience(INIConfiguration ini, String section) {
+        String giveEXP = ini.getString(section + "." + EXPERIENCE_KEY);
+        if (giveEXP == null) {
+            LOGGER.warn("Missing 'giveEXP' value for section: {}", section);
+            return 0;
+        }
+        return Integer.parseInt(giveEXP);
     }
 
     /**
-     * Retrieves a npc's gold from its section.
+     * Gets a npc's gold.
      *
-     * @param section section from which to read the npc's gold
      * @return the npc's gold
      */
-    private int getGold(Section section) {
-        String data = section.get(GOLD_KEY);
-        if (data == null) return 0;
-        return Integer.parseInt(data);
+    private int getGold(INIConfiguration ini, String section) {
+        String giveGLD = ini.getString(section + "." + GOLD_KEY);
+        if (giveGLD == null) {
+            LOGGER.warn("Missing 'giveGLD' value for section: {}", section);
+            return 0;
+        }
+        return Integer.parseInt(giveGLD);
     }
 
     /**
-     * Retrieves a npc's min hp from its section.
+     * Gets a npc's min hp.
      *
-     * @param section section from which to read the npc's min hp.
      * @return the npc's min hp.
      */
-    private int getMinHP(Section section) {
-        String data = section.get(MIN_HP_KEY);
-        if (data == null) return 0;
-        return Integer.parseInt(data);
+    private int getMinHP(INIConfiguration ini, String section) {
+        String minHp = ini.getString(section + "." + MIN_HP_KEY);
+        if (minHp == null) {
+            LOGGER.warn("Missing 'minHP' value for section: {}", section);
+            return 0;
+        }
+        return Integer.parseInt(minHp);
     }
 
     /**
-     * Retrieves a npc's max hp from its section.
+     * Gets a npc's max hp.
      *
-     * @param section section from which to read the npc's max hp
      * @return the npc's max hp
      */
-    private int getMaxHP(Section section) {
-        String data = section.get(MAX_HP_KEY);
-        if (data == null) return 0;
-        return Integer.parseInt(data);
+    private int getMaxHP(INIConfiguration ini, String section) {
+        String maxHp = ini.getString(section + "." + MAX_HP_KEY);
+        if (maxHp == null) {
+            LOGGER.warn("Missing 'maxHP' value for section: {}", section);
+            return 0;
+        }
+        return Integer.parseInt(maxHp);
     }
 
     /**
-     * Retrieves a npc's min damage from its section.
+     * Gets a npc's min damage.
      *
-     * @param section section from which to read the npc's min damage
      * @return the npc's min damage
      */
-    private int getMinDamage(Section section) {
-        String data = section.get(MIN_HIT_KEY);
-        if (data == null) return 0;
-        return Integer.parseInt(data);
+    private int getMinDamage(INIConfiguration ini, String section) {
+        String minHIT = ini.getString(section + "." + MIN_HIT_KEY);
+        if (minHIT == null) {
+            LOGGER.warn("Missing 'minHIT' value for section: {}", section);
+            return 0;
+        }
+        return Integer.parseInt(minHIT);
     }
 
     /**
-     * Retrieves a npc's max damage from its section.
+     * Gets a npc's max damage
      *
-     * @param section section from which to read the npc's max damage
      * @return the npc's max damage
      */
-    private int getMaxDamage(Section section) {
-        String data = section.get(MAX_HIT_KEY);
-        if (data == null) return 0;
-        return Integer.parseInt(data);
+    private int getMaxDamage(INIConfiguration ini, String section) {
+        String maxHIT = ini.getString(section + "." + MAX_HIT_KEY);
+        if (maxHIT == null) {
+            LOGGER.warn("Missing 'maxHIT' value for section: {}", section);
+            return 0;
+        }
+        return Integer.parseInt(maxHIT);
     }
 
     /**
-     * Retrieves a npc's defense from its section.
+     * Gets a npc's defense
      *
-     * @param section section from which to read the npc's defense
      * @return the npc's defense
      */
-    private short getDefense(Section section) {
-        String data = section.get(DEFENSE_KEY);
-        if (data == null) return 0;
-        return Short.parseShort(data);
+    private short getDefense(INIConfiguration ini, String section) {
+        String def = ini.getString(section + "." + DEFENSE_KEY);
+        if (def == null) {
+            LOGGER.warn("Missing 'def' value for section: {}", section);
+            return 0;
+        }
+        return Short.parseShort(def);
     }
 
     /**
-     * Retrieves a npc's magic defense from its section.
+     * Gets a npc's magic defense
      *
-     * @param section section from which to read the npc's magic defense
      * @return the npc's magic defense
      */
-    private short getMagicDefense(Section section) {
-        String data = section.get(MAGIC_DEFENSE_KEY);
-        if (data == null) return 0;
-        return Short.parseShort(data);
+    private short getMagicDefense(INIConfiguration ini, String section) {
+        String defM = ini.getString(section + "." + MAGIC_DEFENSE_KEY);
+        if (defM == null) {
+            LOGGER.warn("Missing 'defM' value for section: {}", section);
+            return 0;
+        }
+        return Short.parseShort(defM);
     }
 
     /**
-     * Retrieves a npc's acc from its section.
+     * Gets a npc's acc
      *
-     * @param section section from which to read the npc's acc
      * @return the npc's acc
      */
-    private short getAccuracy(Section section) {
-        String data = section.get(ATTACK_POWER_KEY);
-        if (data == null) return 0;
-        return Short.parseShort(data);
+    private short getAccuracy(INIConfiguration ini, String section) {
+        String poderAtaque = ini.getString(section + "." + ATTACK_POWER_KEY);
+        if (poderAtaque == null) {
+            LOGGER.warn("Missing 'poderAtaque' value for section: {}", section);
+            return 0;
+        }
+        return Short.parseShort(poderAtaque);
     }
 
     /**
-     * Retrieves a npc's dodge from its section.
+     * Gets a npc's dodge
      *
-     * @param section section from which to read the npc's dodge
      * @return the npc's dodge
      */
-    private short getDodge(Section section) {
-        String data = section.get(DODGE_POWER_KEY);
-        if (data == null) return 0;
-        return Short.parseShort(data);
+    private short getDodge(INIConfiguration ini, String section) {
+        String poderEvasion = ini.getString(section + "." + DODGE_POWER_KEY);
+        if (poderEvasion == null) {
+            LOGGER.warn("Missing 'poderEvasion' value for section: {}", section);
+            return 0;
+        }
+        return Short.parseShort(poderEvasion);
     }
 
     /**
-     * Retrieves a npc's spell amount from its section.
+     * Gets a npc's spell amount
      *
-     * @param section section from which to read the npc's spell amount
      * @return the npc's spell amount
      */
-    private byte getSpellAmount(Section section) {
-        String data = section.get(SPELLS_AMOUNT_KEY);
-        if (data == null) return 0;
-        return Byte.parseByte(data);
+    private byte getSpellAmount(INIConfiguration ini, String section) {
+        String lanzaSpells = ini.getString(section + "." + SPELLS_AMOUNT_KEY);
+        if (lanzaSpells == null) {
+            LOGGER.warn("Missing 'lanzaSpells' value for section: {}", section);
+            return 0;
+        }
+        return Byte.parseByte(lanzaSpells);
     }
 
     /**
-     * Retrieves a npc's head from its section.
+     * Gets a npc's head from
      *
-     * @param section section from which to read the npc's head
-     * @return the npc's head
+     * @return the npc's head or 0 if none was found
      */
-    private short getHead(Section section) {
-        String data = section.get(HEAD_KEY);
-        if (data == null) return 0;
-        return Short.parseShort(data);
+    private short getHead(INIConfiguration ini, String section) {
+        String head = ini.getString(section + "." + HEAD_KEY);
+        if (head == null) {
+            LOGGER.warn("Missing head value for section: {}", section);
+            return 0;
+        }
+        try {
+            return Short.parseShort(head);
+        } catch (NumberFormatException e) {
+            LOGGER.error("Error parsing head value for section {}: {}", section, e.getMessage());
+            return 0;
+        }
     }
 
     /**
-     * Retrieves a list with the spells from its section.
+     * Gets a list with the spells.
      *
-     * @param section section for the npc
      * @return the npc's spells
      */
-    private List<Spell> getSpells(Section section) {
-        byte amount = getSpellAmount(section);
+    private List<Spell> getSpells(INIConfiguration ini, String section) {
+        byte amount = getSpellAmount(ini, section);
         if (amount <= 0) return null;
 
         List<Spell> spells = null;
         String spell;
         for (byte i = 1; i <= amount; i++) {
-            spell = section.get(SPELL_PREFIX + i);
+            spell = ini.getString(SPELL_PREFIX + i);
             if (spell != null) {
                 // TODO Implement Spells!
             }
@@ -625,115 +653,136 @@ public class NPCPropertiesDAOIni implements NPCCharacterPropertiesDAO {
         return spells;
     }
 
-    /**
-     * Checks if the npc.
-     *
-     * @param section section for the item to check
-     * @return true if the item is a ranged weapon, false otherwise
-     */
-    private boolean canSwim(Section section) {
-        String data = section.get(CAN_WATER_KEY);
-        return data != null && !"0".equals(data);
+    // ?
+    private boolean canSwim(INIConfiguration ini, String section) {
+        String aguaValida = ini.getString(section + "." + CAN_WATER_KEY);
+        if (aguaValida == null) {
+            LOGGER.warn("Missing 'aguaValida' value for section: {}", section);
+            return false;
+        }
+        return !"0".equals(aguaValida);
     }
 
-    /**
-     * Checks if the npc.
-     *
-     * @param section section for the item to check
-     * @return true if the item is a ranged weapon, false otherwise
-     */
-    private boolean canWalk(Section section) {
-        String data = section.get(CAN_EARTH_KEY);
-        return data != null && !"0".equals(data);
+    // ?
+    private boolean canWalk(INIConfiguration ini, String section) {
+        String tierraInvalida = ini.getString(section + "." + CAN_EARTH_KEY);
+        if (tierraInvalida == null) {
+            LOGGER.warn("Missing 'tierraInvalida' value for section: {}", section);
+            return false;
+        }
+        return !"0".equals(tierraInvalida);
     }
 
     /**
      * Checks if the npc is attackable.
      *
-     * @param section section for the npc to check
      * @return true if the npc is attackable, false otherwise
      */
-    private boolean isAttackable(Section section) {
-        String data = section.get(ATTACKABLE_KEY);
-        return data != null && !"0".equals(data);
+    private boolean isAttackable(INIConfiguration ini, String section) {
+        String attackable = ini.getString(section + "." + ATTACKABLE_KEY);
+        if (attackable == null) {
+            LOGGER.warn("Missing 'attackable' value for section: {}", section);
+            return false;
+        }
+        return !"0".equals(attackable);
     }
 
     /**
-     * Checks if the section corresponds to a hostile npc.
+     * Checks if the npc is hostile.
      *
-     * @param section section for the npc
      * @return true if the npc is hostile, false otherwise
      */
-    private boolean isHostile(Section section) {
-        String data = section.get(HOSTILE_KEY);
-        return data != null && !"0".equals(data);
+    private boolean isHostile(INIConfiguration ini, String section) {
+        String hostile = ini.getString(section + "." + HOSTILE_KEY);
+        if (hostile == null) {
+            LOGGER.warn("Missing 'hostile' value for section: {}", section);
+            return false;
+        }
+        return !"0".equals(hostile);
     }
 
     /**
      * Checks if the section corresponds to a tameable npc.
      *
-     * @param section section for the item to check
      * @return true if the item is tameable, false otherwise
      */
-    private boolean isTameable(Section section) {
-        String data = section.get(TAMEABLE_KEY);
-        return data != null && !"0".equals(data);
+    private boolean isTameable(INIConfiguration ini, String section) {
+        String domable = ini.getString(section + "." + TAMEABLE_KEY);
+        if (domable == null) {
+            LOGGER.warn("Missing 'domable' value for section: {}", section);
+            return false;
+        }
+        return !"0".equals(domable);
     }
-
 
     /**
      * Checks if the npc can poison.
      *
-     * @param section section for the npc
      * @return true if the npc can poison, false otherwise
      */
-    private boolean canPoison(Section section) {
-        String data = section.get(CAN_POISON_KEY);
-        return data != null && !"0".equals(data);
+    private boolean canPoison(INIConfiguration ini, String section) {
+        String veneno = ini.getString(section + "." + CAN_POISON_KEY);
+        if (veneno == null) {
+            LOGGER.warn("Missing 'veneno' value for section: {}", section);
+            return false;
+        }
+        return !"0".equals(veneno);
     }
 
     /**
-     * Checks if the section has an original position.
+     * Checks if the npc has an original position.
      *
-     * @param section section for the npc
      * @return true if the npc has the original position, false otherwise
      */
-    private boolean hasOriginalPosition(Section section) {
-        String data = section.get(ORIGINAL_POSITION_KEY);
-        return data != null && !"0".equals(data);
+    private boolean hasOriginalPosition(INIConfiguration ini, String section) {
+        String posOrig = ini.getString(section + "." + ORIGINAL_POSITION_KEY);
+        if (posOrig == null) {
+            LOGGER.warn("Missing 'posOrig' value for section: {}", section);
+            return false;
+        }
+        return !"0".equals(posOrig);
     }
 
     /**
-     * Checks if the section is paralyzable.
+     * Checks if the npc is paralyzable.
      *
-     * @param section section for the npc
      * @return true if the npc is paralyzable, false otherwise
      */
-    private boolean isParalyzable(Section section) {
-        String data = section.get(PARALYZABLE_KEY);
-        return data != null && !"0".equals(data);
+    private boolean isParalyzable(INIConfiguration ini, String section) {
+        String afectaParalisis = ini.getString(section + "." + PARALYZABLE_KEY);
+        if (afectaParalisis == null) {
+            LOGGER.warn("Missing 'afectaParalisis' value for section: {}", section);
+            return false;
+        }
+        return !"0".equals(afectaParalisis);
     }
 
     /**
-     * Retrieves a drop from the given section.
+     * Generates a drop logic object based on the configuration specified in an INI file section. This method determines how items
+     * are dropped by NPCs based on predefined configurations.
      *
-     * @param section section from which to load the drop
-     * @return the drop to be used
+     * @return a {@link Drop} object that contains the drop logic for the NPC, or null if configuration is invalid or missing
      */
-    private Drop getDrops(Section section) {
-        String data = section.get(ITEMS_AMOUNT_KEY);
-        if (data == null) return null;
+    private Drop getDrops(INIConfiguration ini, String section) {
+        String nroItems = ini.getString(section + "." + ITEMS_AMOUNT_KEY);
+        if (nroItems == null) {
+            LOGGER.warn("Missing 'nroItems' value for section: {}", section);
+            return null;
+        }
 
         // Is it a Pretorian NPC?
-        String movement = section.get(MOVEMENT_KEY);
+        String movement = ini.getString(MOVEMENT_ID_KEY);
 
-        if (movement == null) return null;
+        if (movement == null) {
+            LOGGER.warn("Missing 'movement' value for section: {}", section);
+            return null;
+        }
 
-        // Pretorian NPCs drop everything... a little bit hard coded, but we want to be compatible with old AO..
-        LegacyAIType aiType = LegacyAIType.valueOf(Integer.parseInt(movement));
-        if (aiType.isPretorian()) return new DropEverything(getInventory(section));
+        // Pretorian NPCs drop everything... a little bit hard coded, but we want to be compatible with old AO
+        LegacyAIType aiType = LegacyAIType.findById(Integer.parseInt(movement));
+        if (aiType.isPretorian()) return new DropEverything(getInventory(ini, section));
 
-        int count = Integer.parseInt(data);
+        int count = Integer.parseInt(nroItems);
 
         List<Dropable> dropables = new LinkedList<>();
         String slot;
@@ -745,7 +794,7 @@ public class NPCPropertiesDAOIni implements NPCCharacterPropertiesDAO {
          */
         float chance = 0.9f;
         for (int i = 1; i <= count; i++) {
-            slot = section.get(DROP_PREFIX + i);
+            slot = ini.getString(DROP_PREFIX + i);
             if (slot != null) {
                 String[] slotInfo = slot.split("-");
                 // In every step except the last one, leave a 10% chance for the next level
@@ -757,7 +806,7 @@ public class NPCPropertiesDAOIni implements NPCCharacterPropertiesDAO {
             chance *= 0.1f;
         }
 
-        if (dropables.size() > 0) return new RandomDrop(dropables);
+        if (!dropables.isEmpty()) return new RandomDrop(dropables);
 
         return null;
     }
@@ -765,56 +814,57 @@ public class NPCPropertiesDAOIni implements NPCCharacterPropertiesDAO {
     // TODO Use this!
 
     /**
-     * Retrieves all sounds an item may reproduce.
+     * Gets a list of sound for all npc's.
      *
-     * @param section section from which to retrieve values
-     * @return the list of sounds the item may reproduce
+     * @return a list of sound for all npc's
      */
-    private List<Integer> getSounds(Section section) {
+    private List<Integer> getSounds(INIConfiguration ini) {
         List<Integer> sounds = new LinkedList<>();
-        String data;
+        String sound;
         for (int i = 1; i <= MAX_SOUNDS; i++) {
-            data = section.get(SOUND_PREFIX + i);
-            if (data != null) sounds.add(Integer.parseInt(data));
+            sound = ini.getString(SOUND_PREFIX + i);
+            if (sound != null) sounds.add(Integer.parseInt(sound));
         }
         return sounds;
     }
 
     /**
-     * Loads the NPC's inventory.
+     * Gets the inventory configuration for a specific section from the provided INI configuration. The method parses the
+     * configuration file to create an inventory object by reading the items and their amounts associated with the specified
+     * section.
      *
-     * @param section section from which to load the NPC's inventory
-     * @return the NPC's inventory
+     * @return an Inventory object populated with the specified items from the given section, or null if the required
+     * configuration is missing or invalid
      */
-    private Inventory getInventory(Section section) {
-        String data = section.get(ITEMS_AMOUNT_KEY);
-        if (data == null) return null;
+    private Inventory getInventory(INIConfiguration ini, String section) {
+        String nroItems = ini.getString(section + "." + ITEMS_AMOUNT_KEY);
+        if (nroItems == null) {
+            LOGGER.warn("Missing 'nroItems' value for section: {}", section);
+            return null;
+        }
 
         String slot;
-        byte inventorySize = Byte.parseByte(data);
+        byte inventorySize = Byte.parseByte(nroItems);
 
         Inventory inventory = new InventoryImpl(inventorySize);
 
         for (byte i = 1; i <= inventorySize; i++) {
-            slot = section.get(OBJECT_INVENTORY_PREFIX + i);
+            slot = ini.getString(OBJECT_INVENTORY_PREFIX + i);
             if (slot != null) {
                 String[] slotInfo = slot.split("-");
                 int objId = Integer.parseInt(slotInfo[0]);
                 int amount = Integer.parseInt(slotInfo[1]);
-
                 WorldObjectProperties woProperties = worldObjectPropertiesDAO.getWorldObjectProperties(objId);
-                WorldObject worldObject;
+                Item worldObject;
                 try {
                     worldObject = worldObjectFactory.getWorldObject(woProperties, amount);
                 } catch (WorldObjectFactoryException e) {
-                    logger.error("An NPC has an item in it's inventory that can't be created. Object id: " + objId + ". Ignoring it...", e);
+                    LOGGER.warn("An NPC has an item in it's inventory that can't be created. Object id: {}. Ignoring it...", objId, e);
                     continue;
                 }
-
-                if (worldObject instanceof Item) inventory.addItem((Item) worldObject);
+                if (worldObject != null) inventory.addItem(worldObject);
                 else
-                    logger.error("An NPC has the object with id " + objId + " in it's inventory, but the object is not an item. Ignoring it...");
-
+                    LOGGER.error("An NPC has the object with id {} in it's inventory, but the object is not an item. Ignoring it...", objId);
             }
         }
 
@@ -822,20 +872,23 @@ public class NPCPropertiesDAOIni implements NPCCharacterPropertiesDAO {
     }
 
     /**
-     * Loads the creatures the NPC can summon.
+     * Gets a map of creatures where the key is the creature ID and the value is the creature name. The creature information is
+     * parsed from the specified section of the provided INIConfiguration.
      *
-     * @param section section from which to load the creatures
-     * @return A Map of the NPC's id to their names
+     * @return a map containing creature IDs as keys and their corresponding names as values or null if the configuration is
+     * incomplete or missing
      */
-    private Map<Integer, String> getCreatures(Section section) {
-        String data = section.get(CREATURES_AMOUNT_KEY);
-        if (data == null) return null;
-        String creatureId;
-        String creatureName;
+    private Map<Integer, String> getCreatures(INIConfiguration ini, String section) {
+        String nroCriaturas = ini.getString(section + "." + CREATURES_AMOUNT_KEY);
+        if (nroCriaturas == null) {
+            LOGGER.warn("Missing 'nroCriaturas' value for section: {}", section);
+            return null;
+        }
+        String creatureId, creatureName;
         Map<Integer, String> creatures = null;
-        for (int i = 1; i <= Integer.parseInt(data); i++) {
-            creatureId = section.get(CREATURE_ID_PREFIX + i);
-            creatureName = section.get(CREATURE_NAME_PREFIX + i);
+        for (int i = 1; i <= Integer.parseInt(nroCriaturas); i++) {
+            creatureId = ini.getString(CREATURE_ID_PREFIX + i);
+            creatureName = ini.getString(CREATURE_NAME_PREFIX + i);
             if (creatureId != null && creatureName != null) {
                 if (null == creatures) creatures = new HashMap<>();
                 creatures.put(Integer.parseInt(creatureId), creatureName);
@@ -845,140 +898,138 @@ public class NPCPropertiesDAOIni implements NPCCharacterPropertiesDAO {
     }
 
     /**
-     * Retrieves the NPC's alignment.
+     * Gets npc's alignment.
      *
-     * @param section section from which to load the alignment
-     * @return the NPC's alignment
+     * @return the npc's alignment
      */
-    private Alignment getAlignment(Section section) {
-        String data = section.get(ALIGNMENT_KEY);
-        if (!"0".equals(data)) return Alignment.CRIMINAL;
+    private Alignment getAlignment(INIConfiguration ini, String section) {
+        String alineacion = ini.getString(section + "." + ALIGNMENT_KEY);
+        if (alineacion == null) {
+            LOGGER.warn("Missing 'alineacion' value for section: {}", section);
+            return null;
+        }
+        if (!"0".equals(alineacion.trim())) return Alignment.CRIMINAL;
         return Alignment.CITIZEN;
     }
 
     /**
-     * Retrieves the types of the items to be accepted in commerce.
+     * Gets a set of item types based on the specified section and configuration.
      *
-     * @param section section from which to load the types of items accepted in commerce
-     * @return the set of types of items to be accepted
+     * @return a set of WorldObjectType representing the types of items defined in the given section, or null if the type
+     * specification is missing
      */
-    private Set<WorldObjectType> getItemsType(Section section) {
-        String data = section.get(ITEMS_TYPE_KEY);
-        if (data == null) return null;
+    private Set<WorldObjectType> getItemsType(INIConfiguration ini, String section) {
+        String tipoItems = ini.getString(section + "." + ITEMS_TYPE_KEY);
+        if (tipoItems == null) {
+            LOGGER.warn("Missing 'tipoItems' value for section: {}", section);
+            return null;
+        }
         Set<WorldObjectType> acceptedTypes;
-        LegacyWorldObjectType objectType = LegacyWorldObjectType.valueOf(Integer.parseInt(data));
+        LegacyWorldObjectType objectType = LegacyWorldObjectType.findById(Integer.parseInt(tipoItems));
         if (objectType == null) {
             // All item types are accepted
-            acceptedTypes = new HashSet<WorldObjectType>();
+            acceptedTypes = new HashSet<>();
             acceptedTypes.addAll(Arrays.asList(WorldObjectType.values()));
-        } else acceptedTypes = objectType.getPlausibleCurrentType();
+        } else acceptedTypes = objectType.getPlausibleCurrentTypes();
         return acceptedTypes;
     }
 
     /**
-     * Checks if the npc has an inventory respawnable.
+     * Checks if the specified section in the INI configuration is marked as {@code InvReSpawn}.
      *
-     * @param section section for the npc to check
-     * @return true if the npc has an inventory respawneable, false otherwise
+     * @return true if the section is marked as {@code InvReSpawn} and not equal to "0", false otherwise
      */
-    private boolean hasInventoryRespawn(Section section) {
-        String data = section.get(INVENTORY_RESPAWN_KEY);
-        return data != null && !"0".equals(data);
+    private boolean hasInventoryRespawn(INIConfiguration ini, String section) {
+        String invRespawn = ini.getString(section + "." + INVENTORY_RESPAWN_KEY);
+        if (invRespawn == null) {
+            LOGGER.warn("Missing 'invRespawn' value for section: {}", section);
+            return false;
+        }
+        return !"0".equals(invRespawn.trim());
+    }
+
+    private boolean isRespawnable(INIConfiguration ini, String section) {
+        return IniUtils.getBoolean(ini, section + "." + RESPAWNABLE_KEY, true);
     }
 
     /**
-     * Checks if the section corresponds has respawn.
+     * Gets npc's city.
      *
-     * @param section section for the npc to check
-     * @return true if the npc has respawn, false otherwise
-     */
-    private boolean hasRespawn(Section section) {
-        String data = section.get(RESPAWNABLE_KEY);
-        return data != null && !"0".equals(data);
-    }
-
-    /**
-     * Retrieves an npc's city.
-     *
-     * @param section section from which to read the npc's city
      * @return the npc's city
      */
-    private City getCity(Section section) {
-        String data = section.get(CITY_KEY);
-        if (data == null) return null;
+    private City getCity(INIConfiguration ini, String section) {
+        String ciudad = ini.getString(section + "." + CITY_KEY);
+        if (ciudad == null) {
+            LOGGER.warn("Missing 'ciudad' value for section: {}", section);
+            return null;
+        }
         // TODO Implementar Cities :d
         return null;
     }
 
     /**
-     * Checks if the section corresponds to a commerciable npc.
+     * Checks if the specified section in the INI configuration is marked as {@code comercia}.
      *
-     * @param section section for the npc to check
-     * @return true if the npc is commerciable, false otherwise
+     * @return true if the section is marked as {@code comercia} and not equal to "0", false otherwise
      */
-    private boolean isCommerciable(Section section) {
-        String data = section.get(COMMERCIABLE_KEY);
-        return data != null && !"0".equals(data);
+    private boolean isCommerciable(INIConfiguration ini, String section) {
+        String comercia = ini.getString(section + "." + COMMERCIABLE_KEY);
+        if (comercia == null) {
+            LOGGER.warn("Missing 'comercia' value for section: {}", section);
+            return false;
+        }
+        return !"0".equals(comercia.trim());
     }
 
     /**
-     * Retrieves an npc's description.
+     * Gets npc's description.
      *
-     * @param section section from which to read the npc's description
-     * @return the npc's description
+     * @return the npc's description, empty string otherwise
      */
-    private String getDescription(Section section) {
-        String data = section.get(DESCRIPTION_KEY);
-        if (data == null) return null;
-        return data;
+    private String getDescription(INIConfiguration ini, String section) {
+        return IniUtils.getString(ini, section + "." + DESCRIPTION_KEY, "");
     }
 
     /**
-     * Retrieves a npc's behavior from its section.
+     * Gets npc's behavior.
      *
-     * @param section section from which to read the npc's attack strategy
-     * @return the npc's behavior
+     * @return the npc's behavior, null if no behavior is specified
      */
-    private Class<? extends Behavior> getBehavior(Section section) {
-        String data = section.get(MOVEMENT_KEY);
-        if (data == null) return null;
-        LegacyAIType aiType = LegacyAIType.valueOf(Integer.parseInt(data));
-        if (null == aiType) {
-            logger.warn("Invalid AIType found! Value: " + data);
+    private Class<? extends Behavior> getBehavior(int id, INIConfiguration ini, String section) {
+        int movementId = IniUtils.getInt(ini, section + "." + MOVEMENT_ID_KEY, 0);
+        LegacyAIType aiType = LegacyAIType.findById(movementId);
+        if (aiType == null) {
+            LOGGER.warn("Unknown movement_id={} for OBJ{}.", movementId, id);
             return null;
         }
         return aiType.getBehavior();
     }
 
     /**
-     * Retrieves a npc's attack strategy from its section.
+     * Gets npc's attackStrategy.
      *
-     * @param section section from which to read the npc's attack strategy
      * @return the npc's attack strategy
      */
-    private Class<? extends AttackStrategy> getAttackStrategy(Section section) {
-        String data = section.get(MOVEMENT_KEY);
-        if (data == null) return null;
-        LegacyAIType aiType = LegacyAIType.valueOf(Integer.parseInt(data));
-        if (null == aiType) {
-            logger.warn("Invalid AIType found! Value: " + data);
+    private Class<? extends AttackStrategy> getAttackStrategy(int id, INIConfiguration ini, String section) {
+        int movementId = IniUtils.getInt(ini, section + "." + MOVEMENT_ID_KEY, 0);
+        LegacyAIType aiType = LegacyAIType.findById(movementId);
+        if (aiType == null) {
+            LOGGER.warn("Unknown movement_id={} for OBJ{}.", movementId, id);
             return null;
         }
         return aiType.getAttackStrategy();
     }
 
     /**
-     * Retrieves a npc's movement strategy from its section.
+     * Gets npc's movementStrategy.
      *
-     * @param section section from which to read the npc's movement strategy
      * @return the npc's movement strategy
      */
-    private Class<? extends MovementStrategy> getMovementStrategy(Section section) {
-        String data = section.get(MOVEMENT_KEY);
-        if (data == null) return null;
-        LegacyAIType aiType = LegacyAIType.valueOf(Integer.parseInt(data));
-        if (null == aiType) {
-            logger.warn("Invalid AIType found! Value: " + data);
+    private Class<? extends MovementStrategy> getMovementStrategy(int id, INIConfiguration ini, String section) {
+        int movementId = IniUtils.getInt(ini, section + "." + MOVEMENT_ID_KEY, 0);
+        LegacyAIType aiType = LegacyAIType.findById(movementId);
+        if (aiType == null) {
+            LOGGER.warn("Unknown movement_id={} for OBJ{}.", movementId, id);
             return null;
         }
         return aiType.getMovementStrategy();
@@ -988,7 +1039,8 @@ public class NPCPropertiesDAOIni implements NPCCharacterPropertiesDAO {
      * NPC Type enumeration, as it was known in the old days of Visual Basic.
      */
     private enum LegacyNPCType {
-        COMMON(0),
+
+        COMMON(0), // TODO No deberia empezar en 1?
         RESUCITATOR(1),
         ROYAL_GUARD(2),
         TRAINER(3),
@@ -1001,26 +1053,20 @@ public class NPCPropertiesDAOIni implements NPCCharacterPropertiesDAO {
         PRETORIAN(10),
         GOVERNOR(11);
 
-        private final int value;
+        private final int id;
 
         /**
          * Creates a new LegacyWorldObjectType.
          *
-         * @param value value corresponding to the object type. Should be unique
+         * @param id value corresponding to the object type. Should be unique
          */
-        LegacyNPCType(int value) {
-            this.value = value;
+        LegacyNPCType(int id) {
+            this.id = id;
         }
 
-        /**
-         * Retrieves the LegacyWorldObjectType associated with the given value.
-         *
-         * @param value value for which to search for a LegacyWorldObjectType
-         * @return the matched LegacyWorldObjectType, if any
-         */
-        public static LegacyNPCType valueOf(int value) {
+        public static LegacyNPCType findById(int id) {
             for (LegacyNPCType type : LegacyNPCType.values())
-                if (type.value == value) return type;
+                if (type.id == id) return type;
             return null;
         }
 
@@ -1046,35 +1092,29 @@ public class NPCPropertiesDAOIni implements NPCCharacterPropertiesDAO {
         PRETORIAN_HUNTER(23, null, null, null),
         PRETORIAN_KING(24, null, null, null);
 
-        private final int value;
+        private final int id;
         private final Class<? extends Behavior> behavior;
         private final Class<? extends AttackStrategy> attackStrategy;
         private final Class<? extends MovementStrategy> movementStrategy;
 
         /**
-         * @param value            numeric value associated with the AI Type
+         * @param id               numeric value associated with the AI Type
          * @param behavior         behavior class to be used
          * @param attackStrategy   attack strategy class to be used
          * @param movementStrategy movement strategy class to be used
          */
-        LegacyAIType(int value, Class<? extends Behavior> behavior,
+        LegacyAIType(int id, Class<? extends Behavior> behavior,
                      Class<? extends AttackStrategy> attackStrategy,
                      Class<? extends MovementStrategy> movementStrategy) {
-            this.value = value;
+            this.id = id;
             this.behavior = behavior;
             this.attackStrategy = attackStrategy;
             this.movementStrategy = movementStrategy;
         }
 
-        /**
-         * Retrieves the LegacyAIType associated with the given value.
-         *
-         * @param value value for which to search for a LegacyAIType
-         * @return the matched LegacyAIType, if any
-         */
-        public static LegacyAIType valueOf(int value) {
-            for (LegacyAIType type : LegacyAIType.values())
-                if (type.value == value) return type;
+        public static LegacyAIType findById(int id) {
+            for (LegacyAIType aiType : LegacyAIType.values())
+                if (aiType.id == id) return aiType;
             return null;
         }
 
@@ -1096,9 +1136,7 @@ public class NPCPropertiesDAOIni implements NPCCharacterPropertiesDAO {
          * @return true if the NPC is pretorian, false otherwise
          */
         public boolean isPretorian() {
-            return this == PRETORIAN_HUNTER || this == PRETORIAN_KING
-                    || this == PRETORIAN_MAGE || this == PRETORIAN_PRIEST
-                    || this == PRETORIAN_WARRIOR;
+            return this == PRETORIAN_HUNTER || this == PRETORIAN_KING || this == PRETORIAN_MAGE || this == PRETORIAN_PRIEST || this == PRETORIAN_WARRIOR;
         }
 
     }

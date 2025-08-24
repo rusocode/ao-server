@@ -11,8 +11,8 @@ public interface CityDAO {
     /**
      * Loads all Cities.
      *
-     * @return the complete list of Cities positions
+     * @return the array of cities
      */
-    City[] retrieveAll();
+    City[] loadAll(); // TODO DAOException?
 
 }

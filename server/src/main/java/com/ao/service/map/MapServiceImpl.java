@@ -45,7 +45,7 @@ public class MapServiceImpl extends ActionExecutor<MapService> implements MapSer
 
     @Override
     public void loadCities() {
-        cities = citiesDAO.retrieveAll();
+        cities = citiesDAO.loadAll();
     }
 
     @Override

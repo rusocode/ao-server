@@ -7,9 +7,9 @@ package com.ao.model.worldobject;
 public enum WorldObjectType {
 
     FOOD,
-    WEAPON,
+    MELEE_WEAPON,
     RANGED_WEAPON,
-    STAFF,
+    MAGICAL_WEAPON,
     ARMOR,
     DEATH_POTION,
     HP_POTION,

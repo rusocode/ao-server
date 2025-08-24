@@ -34,7 +34,7 @@ public class ChangeInventorySlotPacket implements OutgoingPacket {
         buffer.putBoolean(userCharacter.isEquipped(item));
         buffer.putShort((short) item.getGraphic());
 
-        buffer.putShort((short) LegacyWorldObjectType.valueFor(item.getObjectType()).getValue());
+        buffer.putShort((short) LegacyWorldObjectType.findByType(item.getObjectType()).getId());
 
         if (item instanceof Weapon) {
             buffer.putShort((short) ((Weapon) item).getMaxHit());

@@ -6,15 +6,15 @@ import com.ao.service.login.LoginErrorException;
 public interface LoginService {
 
     /**
-     * Attempts to connect the user using the given name and password.
+     * Attempts to connect the user using the given username and password.
      *
      * @param user       user trying to log in
-     * @param name       character's name
+     * @param username   character's username
      * @param password   character's password
      * @param version    client's version
      * @param clientHash client's integrity check hash
      */
-    void connectExistingCharacter(ConnectedUser user, String name, String password, String version, String clientHash) throws LoginErrorException;
+    void connectExistingCharacter(ConnectedUser user, String username, String password, String version, String clientHash) throws LoginErrorException;
 
     /**
      * Attempts to connect a new character creating it with the given data.

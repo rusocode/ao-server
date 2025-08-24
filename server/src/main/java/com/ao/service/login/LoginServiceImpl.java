@@ -60,6 +60,7 @@ public class LoginServiceImpl implements LoginService {
     private String[] clientHashes;
     private String currentClientVersion;
 
+
     @Inject
     public LoginServiceImpl(AccountDAO accDAO, UserCharacterDAO charDAO,
                             ServerConfig config, UserService userService,
@@ -133,14 +134,18 @@ public class LoginServiceImpl implements LoginService {
         }
 
         // First, we have to create the new account.
-        final Account acc;
+        Account account;
 
         try {
-            acc = accDAO.create(username, password, mail);
+            account = accDAO.create(username, password, mail);
         } catch (NameAlreadyTakenException e) {
-            throw new LoginErrorException(ACCOUNT_NAME_TAKEN_ERROR);
-
+            // Evita que la excepcion se propague
+            // user.getConnection().send(new ErrorMessagePacket(ACCOUNT_NAME_TAKEN_ERROR));
+            // return;
+             throw new LoginErrorException(ACCOUNT_NAME_TAKEN_ERROR);
         } catch (final DAOException e) {
+            // user.getConnection().send(new ErrorMessagePacket(DAO_ERROR));
+            // return;
             accDAO.delete(username);
             throw new LoginErrorException(DAO_ERROR);
         }
@@ -161,15 +166,15 @@ public class LoginServiceImpl implements LoginService {
         }
 
         // Everything is okay, associate the character with the account and the account with the user
-        acc.addCharacter(username);
-        user.setAccount(acc);
+        account.addCharacter(username);
+        user.setAccount(account);
 
         // TODO Put it in the world!
 
     }
 
     @Override
-    public void connectExistingCharacter(final ConnectedUser user, final String name,
+    public void connectExistingCharacter(final ConnectedUser user, final String username,
                                          final String password, final String version, final String clientHash)
             throws LoginErrorException {
 
@@ -180,7 +185,7 @@ public class LoginServiceImpl implements LoginService {
         final Account acc;
 
         try {
-            acc = accDAO.retrieve(name);
+            acc = accDAO.retrieve(username);
         } catch (final DAOException e) {
             throw new LoginErrorException(DAO_ERROR);
         }
@@ -196,11 +201,11 @@ public class LoginServiceImpl implements LoginService {
 
         // TODO Do something with the account!!!
 
-        if (!acc.hasCharacter(name)) throw new LoginErrorException(CHARACTER_NOT_FOUND_ERROR);
+        if (!acc.hasCharacter(username)) throw new LoginErrorException(CHARACTER_NOT_FOUND_ERROR);
 
         final UserCharacter character;
         try {
-            character = charDAO.load(user, name);
+            character = charDAO.load(user, username);
         } catch (final DAOException e) {
             throw new LoginErrorException(DAO_ERROR);
         }

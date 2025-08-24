@@ -10,10 +10,10 @@ import com.ao.model.character.npc.properties.NPCProperties;
 public interface NPCCharacterPropertiesDAO {
 
     /**
-     * Loads all World Objects Properties.
+     * Loads all NPCs.
      *
-     * @return the complete list of WorldObjectsProperties
+     * @return the array of objects
      */
-    NPCProperties[] retrieveAll() throws DAOException;
+    NPCProperties[] loadAll() throws DAOException;
 
 }

@@ -97,7 +97,7 @@ public class Boat extends AbstractDefensiveItem {
      * @return the usage difficulty of the item
      */
     public int getUsageDifficulty() {
-        return ((BoatProperties) properties).getUsageDifficulty();
+        return ((BoatProperties) properties).getNavigationSkill();
     }
 
 }

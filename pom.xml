@@ -44,7 +44,7 @@
         <assertj.version>3.27.3</assertj.version>
         <mockito.version>5.18.0</mockito.version>
         <!-- Utility dependencies versions -->
-        <ini4j.version>0.5.4</ini4j.version>
+        <commons-configuration2.version>2.12.0</commons-configuration2.version>
         <hibernate.validator.version>9.0.0.Final</hibernate.validator.version>
         <expressly.version>6.0.0</expressly.version>
         <!-- Plugin versions -->
@@ -91,9 +91,15 @@
 
             <!-- Utilities -->
             <dependency>
-                <groupId>org.ini4j</groupId>
-                <artifactId>ini4j</artifactId>
-                <version>${ini4j.version}</version>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <!-- Force a safe version of commons-lang3 to fix CVE-2025-48924 -->
+                <version>3.18.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-configuration2</artifactId>
+                <version>${commons-configuration2.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.hibernate.validator</groupId>

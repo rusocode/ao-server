@@ -21,7 +21,7 @@ public class NPCServiceImpl implements NPCService {
 
     @Override
     public void loadNPCs() throws DAOException {
-        npcs = npcsDAO.retrieveAll();
+        npcs = npcsDAO.loadAll();
     }
 
 }

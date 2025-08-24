@@ -43,11 +43,6 @@ public class MinerArchetype extends DefaultArchetype {
     }
 
     @Override
-    protected float getIronWorkingModifier() {
-        return IRON_WORKING_MODIFIER;
-    }
-
-    @Override
     protected float getBlacksmithModifier() {
         return BLACKSMITH_MODIFIER;
     }

@@ -18,10 +18,9 @@ public abstract class DefaultArchetype implements Archetype {
     private static final int STAMINA_INCREMENT = 15;
     private static final float TAMING_TRAINING_CHANCE = 0.3f;
     private static final int WOOD_WORK_STAMINA_COST = 6;
-    private static final float BLACKSMITH_MODIFIER = 4.0f;
-    private static final float IRON_WORKING_MODIFIER = 3.0f;
+    private static final float SMITHING_MODIFIER = 4.0f;
     private static final int MIN_STABBING_SKILL = 10;
-    private static final float WOOD_WORKING_MODIFIER = 3.0f;
+    private static final float CARPENTRY_MODIFIER = 3.0f;
     private static final int BLACKSMITH_STAMINA_COST = 6;
     private static final int FISHING_STAMINA_COST = 3;
     private static final int FISHED_MAX_AMOUNT = 1;
@@ -78,8 +77,8 @@ public abstract class DefaultArchetype implements Archetype {
     }
 
     @Override
-    public boolean canBlacksmith(int blacksmithSkill, Manufacturable item) {
-        return item.getManufactureType() == ManufactureType.BLACKSMITH && blacksmithSkill / getBlacksmithModifier() >= item.getManufactureDifficulty();
+    public boolean canSmithing(int smithingSkill, Manufacturable item) {
+        return item.getManufactureType() == ManufactureType.SMITHING && smithingSkill / SMITHING_MODIFIER >= item.getManufactureDifficulty();
     }
 
     @Override
@@ -103,11 +102,6 @@ public abstract class DefaultArchetype implements Archetype {
     }
 
     @Override
-    public boolean canIronWork(int ironWorkingSkill, Manufacturable item) {
-        return item.getManufactureType() == ManufactureType.IRONWORK && ironWorkingSkill / getIronWorkingModifier() >= item.getManufactureDifficulty();
-    }
-
-    @Override
     public boolean canPickPocket() {
         return false;
     }
@@ -128,8 +122,8 @@ public abstract class DefaultArchetype implements Archetype {
     }
 
     @Override
-    public boolean canWoodWork(int woodWorkSkill, Manufacturable item) {
-        return item.getManufactureType() == ManufactureType.WOODWORK && woodWorkSkill / getWoodWorkingModifier() >= item.getManufactureDifficulty();
+    public boolean canCarpentry(int carpentrySkill, Manufacturable item) {
+        return item.getManufactureType() == ManufactureType.CARPENTRY && carpentrySkill / CARPENTRY_MODIFIER >= item.getManufactureDifficulty();
     }
 
     @Override
@@ -282,16 +276,7 @@ public abstract class DefaultArchetype implements Archetype {
      * @return the blacksmith modifier for the archetype
      */
     protected float getBlacksmithModifier() {
-        return BLACKSMITH_MODIFIER;
-    }
-
-    /**
-     * Retrieves the iron working modifier for the archetype.
-     *
-     * @return the iron working modifier for the archetype
-     */
-    protected float getIronWorkingModifier() {
-        return IRON_WORKING_MODIFIER;
+        return SMITHING_MODIFIER;
     }
 
     /**
@@ -299,8 +284,8 @@ public abstract class DefaultArchetype implements Archetype {
      *
      * @return the wood working modifier for the archetype
      */
-    protected float getWoodWorkingModifier() {
-        return WOOD_WORKING_MODIFIER;
+    protected float getCarpentryModifier() {
+        return CARPENTRY_MODIFIER;
     }
 
 }

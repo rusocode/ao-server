@@ -37,8 +37,8 @@
 
         <!-- Utilities -->
         <dependency>
-            <groupId>org.ini4j</groupId>
-            <artifactId>ini4j</artifactId>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-configuration2</artifactId>
         </dependency>
         <dependency>
             <groupId>org.hibernate.validator</groupId>
@@ -73,6 +73,7 @@
 
     <build>
         <plugins>
+
             <!-- Packaging plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

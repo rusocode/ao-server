@@ -27,7 +27,7 @@ public class Bootstrap {
 
         try {
             server = Bootstrap.bootstrap();
-        } catch (final Exception e) {
+        } catch (Exception e) {
             LOGGER.severe("Server bootstraping failed!" + e.getMessage());
             System.exit(-1);
             return;

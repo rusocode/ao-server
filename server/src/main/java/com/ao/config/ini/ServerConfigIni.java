@@ -3,9 +3,13 @@ package com.ao.config.ini;
 import com.ao.config.ServerConfig;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import org.ini4j.Ini;
+import org.apache.commons.configuration2.INIConfiguration;
+import org.apache.commons.configuration2.ex.ConfigurationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
@@ -15,8 +19,12 @@ import java.io.InputStreamReader;
 
 public class ServerConfigIni implements ServerConfig {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(ServerConfigIni.class);
+
+    /** This is section in an INI file. */
     private static final String INIT_HEADER = "INIT";
 
+    /** INI file keys. */
     private static final String BACKLOG_KEY = "Backlog";
     private static final String MAXUSERS_KEY = "MaxUsers";
     private static final String LISTENING_PORT_KEY = "StartPort";
@@ -29,7 +37,7 @@ public class ServerConfigIni implements ServerConfig {
     private static final String HASHES_AMOUNT_KEY = "MD5Aceptados";
     private static final String HASHES_ACCEPTED_KEY_FORMAT = "Md5Aceptado%d";
 
-    private final Ini config;
+    private final INIConfiguration ini;
 
     /**
      * Creates a new ServerConfigIni instance.
@@ -40,53 +48,77 @@ public class ServerConfigIni implements ServerConfig {
         if (inputStream == null)
             throw new IllegalArgumentException("The file " + serverConfigIni + " was not found in the classpath");
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
-            config = new Ini(reader);
-        } catch (Exception e) {
-            System.err.println("Server config loading failed!" + e.getMessage());
-            throw new RuntimeException(e);
+            ini = new INIConfiguration();
+            ini.read(reader);
+            LOGGER.info("Server configuration loaded successfully from: {}", serverConfigIni);
+        } catch (IOException | ConfigurationException e) {
+            LOGGER.error("Server config loading failed for file: {}", serverConfigIni, e);
+            throw new RuntimeException("Failed to load server configuration from: " + serverConfigIni, e);
         }
     }
 
     @Override
     public int getListeningBacklog() {
-        String backlog = config.get(INIT_HEADER, BACKLOG_KEY);
-        return backlog == null ? DEFAULT_BACKLOG : Integer.valueOf(backlog);
+        String backlog = getString(BACKLOG_KEY);
+        return backlog == null ? DEFAULT_BACKLOG : Integer.parseInt(backlog);
     }
 
     @Override
     public int getMaximumConcurrentUsers() {
-        return Integer.valueOf(config.get(INIT_HEADER, MAXUSERS_KEY));
+        return Integer.parseInt(getString(MAXUSERS_KEY));
     }
 
     @Override
     public int getServerListeningPort() {
-        String listeningPort = config.get(INIT_HEADER, LISTENING_PORT_KEY);
-        return listeningPort == null ? DEFAULT_LISTENING_PORT : Integer.valueOf(listeningPort);
+        String listeningPort = getString(LISTENING_PORT_KEY);
+        return listeningPort == null ? DEFAULT_LISTENING_PORT : Integer.parseInt(listeningPort);
     }
 
     @Override
     public String getVersion() {
-        return config.get(INIT_HEADER, VERSION_KEY);
+        return getString(VERSION_KEY);
     }
 
     @Override
     public boolean isCharacterCreationEnabled() {
-        return config.get(INIT_HEADER, CHARACTER_CREATION_KEY).equals("1");
+        return "1".equals(getString(CHARACTER_CREATION_KEY));
     }
 
     @Override
     public void setCharacterCreationEnabled(boolean enabled) {
-        config.put(INIT_HEADER, CHARACTER_CREATION_KEY, enabled ? "1" : "0");
+        setProperty(CHARACTER_CREATION_KEY, enabled ? "1" : "0");
     }
 
     @Override
     public boolean isRestrictedToAdmins() {
-        return config.get(INIT_HEADER, RESTRICTED_TO_ADMINS_KEY).equals("1");
+        return "1".equals(getString(RESTRICTED_TO_ADMINS_KEY));
     }
 
     @Override
     public void setRestrictedToAdmins(boolean restricted) {
-        config.put(INIT_HEADER, RESTRICTED_TO_ADMINS_KEY, restricted ? "1" : "0");
+        setProperty(RESTRICTED_TO_ADMINS_KEY, restricted ? "1" : "0");
+    }
+
+    // =========== Helper Methods ===========
+
+    /**
+     * Gets a string value from a specific section and key.
+     *
+     * @param key key name
+     * @return the string value, or null if not found
+     */
+    private String getString(String key) {
+        return ini.getString(INIT_HEADER + "." + key);
+    }
+
+    /**
+     * Sets a property value in a specific section.
+     *
+     * @param key   key name
+     * @param value the value to set
+     */
+    private void setProperty(String key, String value) {
+        ini.setProperty(INIT_HEADER + "." + key, value);
     }
 
 }

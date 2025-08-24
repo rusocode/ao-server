@@ -29,8 +29,6 @@ public class UserDAOIniTest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        // Disable escaping for Ini4j
-        System.setProperty("org.ini4j.config.escape", "false");
         String charfilesPath = ApplicationProperties.getProperties().getProperty("config.path.charfiles");
         dao = new UserDAOIni(charfilesPath);
     }
@@ -38,7 +36,7 @@ public class UserDAOIniTest {
     @AfterEach
     public void tearDown() throws Exception {
         // Be really sure the file is not there before the next test
-        final File file = new File(dao.getCharFilePath(NEW_CHARACTER_NICK));
+        File file = new File(dao.getCharFilePath(NEW_CHARACTER_NICK));
         file.delete(); // Delete the file after testing
     }
 

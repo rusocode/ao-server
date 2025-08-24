@@ -12,12 +12,14 @@ import com.ao.model.worldobject.properties.manufacture.Manufacturable;
 import com.ao.model.worldobject.properties.manufacture.ManufactureType;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import org.ini4j.Ini;
-import org.ini4j.Profile.Section;
+import org.apache.commons.configuration2.INIConfiguration;
+import org.apache.commons.configuration2.ex.ConfigurationException;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
@@ -27,104 +29,121 @@ import java.util.Map;
 
 /**
  * Ini-backed implementation of the World Object DAO.
+ * <p>
+ * En las claves de tipo flag (0 o 1, true o false), la claves obvias como por ejemplo {@code droppable=1} (que se puede tirar) no
+ * se especifican en {@code obj.dat} ya que seria redundante especificar que la mayoria de objetos si se pueden tirar al suelo,
+ * por lo tanto esta clave obtiene el valor "true" por defecto desde el metodo {@code isDroppable()} si la clave no se especifico
+ * en el objeto.
+ * <p>
+ * TODO Se podrian reemplazar los archivos .ini por json para mejor comodidad
+ * TODO Si dividieramos el archivo obj.dat en varios archivos especificos de cada objeto, entonces no seria necesario especificar
+ * la clave "object_type" para cada objeto
  */
 
 public class WorldObjectPropertiesDAOIni implements WorldObjectPropertiesDAO {
 
-    protected static final String INIT_HEADER = "INIT";
     private static final Logger LOGGER = LoggerFactory.getLogger(WorldObjectPropertiesDAOIni.class);
-    private static final int MAX_SOUNDS = 3;
-    private static final String NUM_OBJECTS_KEY = "NumOBJs";
 
+    private static final String INIT_HEADER = "INIT";
     private static final String OBJECT_SECTION_PREFIX = "OBJ";
-    private static final String NAME_KEY = "Name";
-    private static final String GRAPHIC_KEY = "GrhIndex";
-    private static final String OBJECT_TYPE_KEY = "ObjType";
-    private static final String VALUE_KEY = "Valor";
-    private static final String WOODWORKING_DIFFICULTY_KEY = "SkCarpinteria";
-    private static final String IRONWORKING_DIFFICULTY_KEY = "SkHerreria";
-    private static final String NEWBIE_KEY = "Newbie";
-    private static final String EQUIPPED_GRAPHIC_KEY = "NumRopaje";
-    private static final String MIN_DEF_KEY = "MinDef";
-    private static final String MAX_DEF_KEY = "MaxDef";
-    private static final String MIN_MAGIC_DEF_KEY = "DefensaMagicaMin";
-    private static final String MAX_MAGIC_DEF_KEY = "DefensaMagicaMax";
-    private static final String DWARF_KEY = "RazaEnana";
-    private static final String DARK_ELF_KEY = "RazaDrow";
-    private static final String ELF_KEY = "RazaElfa";
-    private static final String GNOME_KEY = "RazaGnoma";
-    private static final String HUMAN_KEY = "RazaHumana";
-    private static final String FORBIDDEN_ARCHETYPE_PREFIX = "CP";
-    private static final String MIN_HIT_KEY = "MinHit";
-    private static final String MAX_HIT_KEY = "MaxHit";
-    private static final String STABS_KEY = "Apuñala";
-    private static final String PIERCING_DAMAGE_KEY = "Refuerzo";
-    private static final String IS_RANGED_WEAPON_KEY = "Proyectil";
-    private static final String NEEDS_AMMUNITION_KEY = "Municiones";
-    private static final String MAGIC_POWER_KEY = "StaffPower";
-    private static final String DAMAGE_BONUS_KEY = "StaffDamageBonus";
-    private static final String USAGE_DIFFICULTY_KEY = "MinSkill";
-    private static final String HUNGER_KEY = "MinHam";
-    private static final String THIRST_KEY = "MinAgu";
-    private static final String SOUND_PREFIX = "SND";
-    private static final String RADIUS_KEY = "Radio";
-    private static final String POTION_TYPE_KEY = "TipoPocion";
-    private static final String MIN_MODIFIER = "MinModificador";
-    private static final String MAX_MODIFIER = "MaxModificador";
-    private static final String MODIFIER_TIME = "DuracionEfecto";
-    private static final String EQUIPPED_WEAPON_GRAPHIC_KEY = "Anim";
-    private static final String UNGRABABLE_KEY = "Agarrable";
-    private static final String SPELL_INDEX_KEY = "HechizoIndex";
-    private static final String MINERAL_INDEX_KEY = "MineralIndex";
-    private static final String CODE_KEY = "Clave";
-    private static final String OPEN_KEY = "Abierta";
-    private static final String LOCKED_KEY = "Llave";
-    private static final String OPEN_OBJECT_ID_KEY = "IndexAbierta";
-    private static final String CLOSED_OBJECT_ID_KEY = "IndexCerrada";
-    private static final String RESPAWNEABLE_KEY = "Crucial";
-    private static final String FALLS_KEY = "NoSeCae";
-    private static final String NO_LOG_KEY = "NoLog";
-    private static final String BIG_GRAPHIC_KEY = "VGrande";
-    private static final String TEXT_KEY = "Texto";
-    private static final String FORUM_NAME_KEY = "ID";
-    private static final String BACKPACK_TYPE_KEY = "MochilaType";
-    private static final String INGOT_OBJECT_INDEX_KEY = "Lingoteindex";
-    private static final String WOOD_AMOUNT_KEY = "Madera";
-    private static final String ELVEN_WOOD_AMOUNT_KEY = "MaderaElfica";
-    private static final String INGOT_GOLD_AMOUNT_KEY = "LingO";
-    private static final String INGOT_SILVER_AMOUNT_KEY = "LingP";
-    private static final String INGOT_IRON_AMOUNT_KEY = "LingH";
+    private static final String NUM_OBJS_KEY = "num_objs";
 
-    // Horrible, but it's completely hardwired in an old VB version, and can't be induced from the dat
+    /** Keys for the ini file. */
+    private static final String NAME_KEY = "name";
+    private static final String GRAPHIC_INDEX_KEY = "graphic_index";
+    private static final String OBJECT_TYPE_ID_KEY = "object_type_id";
+    private static final String VALUE_KEY = "value";
+    private static final String SMITHING_SKILL_KEY = "smithing_skill"; // Antes llamada "SkHerreria"
+    private static final String NAVIGATION_SKILL_KEY = "navigation_skill"; // Nueva clave, antes se usaba "MinSkill" (inconsistencia)
+    private static final String CARPENTRY_SKILL_KEY = "carpentry_skill"; // Antes llamada "SkCarpinteria"
+    private static final String NEWBIE_KEY = "newbie";
+    private static final String MIN_ARMOR_DEFENSE_KEY = "min_armor_defense";
+    private static final String MAX_ARMOR_DEFENSE_KEY = "max_armor_defense";
+    private static final String MIN_MAGIC_DEFENSE_KEY = "min_magic_defense";
+    private static final String MAX_MAGIC_DEFENSE_KEY = "max_magic_defense";
+    private static final String DWARF_KEY = "dwarf";
+    private static final String DARK_ELF_KEY = "dark_elf";
+    private static final String ELF_KEY = "elf";
+    private static final String GNOME_KEY = "gnome";
+    private static final String HUMAN_KEY = "human";
+    private static final String FORBIDDEN_ARCHETYPE_KEY = "forbidden_archetype"; // Antes llamada "CP" (clase prohibida)
+    private static final String MIN_HIT_KEY = "min_hit";
+    private static final String MAX_HIT_KEY = "max_hit";
+    private static final String STABBING_KEY = "stabbing"; // Antes llamada "Apuñala"
+    private static final String PIERCING_DAMAGE_KEY = "piercing_damage"; // Antes llamada "Refuerzo"
+    private static final String MAGIC_POWER_KEY = "magic_power"; // Antes llamada "StaffPower" que tambien se usaba para determinar si el objeto era magico (inconsistencia)
+    private static final String MAGICAL_WEAPON_KEY = "magical_weapon"; // Nueva clave, antes se usaba "StaffPower" (inconsistencia)
+    private static final String RANGED_WEAPON_KEY = "ranged_weapon"; // Antes llamada "Proyectil"
+    /**
+     * Puede que sea redundante especificar si el objeto arco tiene municiones, pero esta flag diferencia dos casos dentro de las
+     * armas a distancia: armas que consumen municion externa (p. ej., arcos que usan flechas) y armas arrojadizas/autosuficientes
+     * (p. ej., cuchillas).
+     */
+    private static final String AMMO_KEY = "ammo";
+    private static final String STAFF_DAMAGE_BONUS_KEY = "staff_damage_bonus";
+    private static final String HUNGER_POINTS_KEY = "hunger_points"; // Antes llamada "MinHam"
+    private static final String THIRST_POINTS_KEY = "thirst_points"; // Antes llamada "MinAgu"
+    private static final String RANGE_KEY = "range"; // Antes llamada "Radio"
+    private static final String POTION_TYPE_KEY = "potion_type";
+    private static final String MIN_MODIFIER = "min_modifier";
+    private static final String MAX_MODIFIER = "max_modifier";
+    private static final String EFFECT_DURATION_KEY = "effect_duration";
+    private static final String EQUIPPED_ARMOR_GRAPHIC_KEY = "equipped_armor_graphic"; // Antes llamada "NumRopaje"
+    private static final String EQUIPPED_WEAPON_GRAPHIC_KEY = "equipped_weapon_graphic"; // Antes llamada "Anim"
+    private static final String SPELL_INDEX_KEY = "spell_index";
+    private static final String MINERAL_INDEX_KEY = "mineral_index";
+    private static final String KEY_KEY = "key";
+    private static final String OPEN_KEY = "open";
+    private static final String LOCKED_KEY = "locked";
+    private static final String OPEN_INDEX_KEY = "open_index";
+    private static final String CLOSED_INDEX_KEY = "closed_index";
+    private static final String PICKUPABLE_KEY = "pickupable"; // Antes llamada "Agarrable"
+    private static final String RESPAWNABLE_KEY = "respawnable"; // Antes llamada "Crucial"
+    private static final String DROPPABLE_KEY = "droppable"; // Antes llamada "NoSeCae"
+    private static final String NO_LOG_KEY = "no_log"; // TODO Para que mierda es esta clave?
+    private static final String BIG_GRAPHIC_KEY = "big_graphic"; // Antes llamada "VGrande" TODO En algunos proyectos de AO, esta propiedad suele nombrarse como "GrhSecundario", pero no entiendo para que es
+    private static final String TEXT_KEY = "text";
+    private static final String FORUM_NAME_KEY = "forum_name"; // Antes llamda "ID"
+    private static final String BACKPACK_TYPE_KEY = "backpack_type";
+    private static final String INGOT_INDEX_KEY = "ingot_index";
+    private static final String WOOD_KEY = "wood";
+    private static final String ELVEN_WOOD_KEY = "elven_wood";
+    private static final String GOLD_INGOT_KEY = "gold_ingot";
+    private static final String SILVER_INGOT_KEY = "silver_ingot";
+    private static final String IRON_INGOT_KEY = "iron_ingot";
+    private static final String SOUND_PREFIX_KEY = "sound";
+
+    /** Horrible, but it's completely hardwired in an old VB version and can't be induced from the dat. */
     private static final int WOOD_INDEX = 58;
     private static final int ELVEN_WOOD_INDEX = 1006;
-    private static final int[] INGOTES = {386, 387, 388};
+    private static final int[] INGOTS = {386, 387, 388};
 
-    private static final Map<String, UserArchetype> archetypesByName;
+    /** Maps names from config files to their corresponding UserArchetype enum value. */
+    private static final Map<String, UserArchetype> archetypes;
 
     static {
 
         // Populate aliases from Spanish config files to internal types
-        archetypesByName = new HashMap<>();
+        archetypes = new HashMap<>();
 
-        archetypesByName.put("MAGO", UserArchetype.MAGE);
-        archetypesByName.put("CLERIGO", UserArchetype.CLERIC);
-        archetypesByName.put("GUERRERO", UserArchetype.WARRIOR);
-        archetypesByName.put("ASESINO", UserArchetype.ASSASIN);
-        archetypesByName.put("LADRON", UserArchetype.THIEF);
-        archetypesByName.put("BARDO", UserArchetype.BARD);
-        archetypesByName.put("DRUIDA", UserArchetype.DRUID);
-        archetypesByName.put("BANDIDO", UserArchetype.BANDIT);
-        archetypesByName.put("PALADIN", UserArchetype.PALADIN);
-        archetypesByName.put("CAZADOR", UserArchetype.HUNTER);
-        // se are not used in AO 0.13.x and later, but left in case someone wants them ^_^
+        archetypes.put("MAGO", UserArchetype.MAGE);
+        archetypes.put("CLERIGO", UserArchetype.CLERIC);
+        archetypes.put("GUERRERO", UserArchetype.WARRIOR);
+        archetypes.put("ASESINO", UserArchetype.ASSASIN);
+        archetypes.put("LADRON", UserArchetype.THIEF);
+        archetypes.put("BARDO", UserArchetype.BARD);
+        archetypes.put("DRUIDA", UserArchetype.DRUID);
+        archetypes.put("BANDIDO", UserArchetype.BANDIT);
+        archetypes.put("PALADIN", UserArchetype.PALADIN);
+        archetypes.put("CAZADOR", UserArchetype.HUNTER);
+        // Se are not used in AO 0.13.x and later, but left in case someone wants them ^_^
 //		archetypesByName.put("PESCADOR", UserArchetype.FISHER);
 //		archetypesByName.put("HERRERO", UserArchetype.BLACKSMITH);
 //		archetypesByName.put("LEÑADOR", UserArchetype.LUMBERJACK);
 //		archetypesByName.put("MINERO", UserArchetype.MINER);
 //		archetypesByName.put("CARPINTERO", UserArchetype.CARPENTER);
-        archetypesByName.put("PIRATA", UserArchetype.PIRATE);
-        archetypesByName.put("TRABAJADOR", UserArchetype.PIRATE);
+        archetypes.put("PIRATA", UserArchetype.PIRATE);
+        archetypes.put("TRABAJADOR", UserArchetype.WORKER);
     }
 
     private final String objectsFilePath;
@@ -133,129 +152,117 @@ public class WorldObjectPropertiesDAOIni implements WorldObjectPropertiesDAO {
     private Map<Integer, Manufacturable> manufacturables;
     private WorldObjectProperties[] worldObjectProperties;
 
-    /**
-     * Creates a new WorldObjectDAOIni instance.
-     *
-     * @param objectsFilePath path to the file with all objects definitions
-     */
     @Inject
-    public WorldObjectPropertiesDAOIni(@Named("objectsFilePath") String objectsFilePath,
-                                       @Named("itemsPerRow") int itemsPerRow) {
+    public WorldObjectPropertiesDAOIni(@Named("objectsFilePath") String objectsFilePath, @Named("itemsPerRow") int itemsPerRow) {
         this.objectsFilePath = objectsFilePath;
         this.itemsPerRow = itemsPerRow;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.ao.data.dao.WorldObjectPropertiesDAO#getAllManufacturables()
-     */
+    @Override
+    public void loadAll() throws DAOException {
+        INIConfiguration ini = null;
+        LOGGER.info("Loading all objects from {}", objectsFilePath);
+        // Reset manufacturables
+        manufacturables = new HashMap<>();
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream(objectsFilePath);
+        if (inputStream == null)
+            throw new IllegalArgumentException("The file " + objectsFilePath + " was not found in the classpath");
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+            ini = new INIConfiguration();
+            ini.read(reader);
+            LOGGER.info("Objects loaded successfully!");
+        } catch (IOException | ConfigurationException e) {
+            LOGGER.error("Error loading objects!", e);
+            System.exit(-1);
+        }
+
+        // Required key
+        int numObjs = IniUtils.getRequiredInt(ini, INIT_HEADER + "." + NUM_OBJS_KEY);
+
+        worldObjectProperties = new WorldObjectProperties[numObjs];
+
+        for (int i = 1; i <= numObjs; i++)
+            worldObjectProperties[i - 1] = loadObject(i, ini);
+
+    }
+
     @Override
     public Map<Integer, Manufacturable> getAllManufacturables() throws DAOException {
-        if (null == manufacturables) loadAll(); // Force the ini to be loaded!
+        if (manufacturables == null) loadAll(); // Force the ini to be loaded!
         return manufacturables;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.ao.data.dao.WorldObjectPropertiesDAO#getWorldObjectProperties(int)
-     */
     @Override
     public WorldObjectProperties getWorldObjectProperties(int id) {
         return worldObjectProperties[id - 1];
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.ao.data.dao.WorldObjectDAO#retrieveAll()
+    /**
+     * Loads a object.
+     *
+     * @param id  object's id
+     * @param ini ini configuration
+     * @return new object
      */
-    @Override
-    public void loadAll() throws DAOException {
-        Ini iniFile;
+    private WorldObjectProperties loadObject(int id, INIConfiguration ini) {
 
-        LOGGER.info("Loading all world object properties from ini file.");
+        String section = OBJECT_SECTION_PREFIX + id;
 
-        // Reset manufacturables
-        manufacturables = new HashMap<>();
+        // TODO Que pasa si la clave "name" no existe?
+        String name = IniUtils.getString(ini, section + "." + NAME_KEY, "");
+        // TODO Son obligatorias estas claves?
+        int graphicIndex = IniUtils.getInt(ini, section + "." + GRAPHIC_INDEX_KEY, -1);
+        int objectTypeId = IniUtils.getInt(ini, section + "." + OBJECT_TYPE_ID_KEY, -1);
 
-        InputStream inputStream = getClass().getClassLoader().getResourceAsStream(objectsFilePath);
-        if (inputStream == null)
-            throw new IllegalArgumentException("The file " + objectsFilePath + " was not found in the classpath");
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
-            iniFile = new Ini(reader);
-        } catch (Exception e) {
-            LOGGER.error("World Object loading failed!", e);
-            throw new RuntimeException(e);
+        LegacyWorldObjectType objectType = LegacyWorldObjectType.findById(objectTypeId);
+
+        if (objectType == null) {
+            LOGGER.error("Unknown object_type_id={} for OBJ{}.", objectTypeId, id);
+            return null;
         }
 
-        int totalObjects = Integer.parseInt(iniFile.get(INIT_HEADER, NUM_OBJECTS_KEY));
+        WorldObjectProperties object = null;
 
-        worldObjectProperties = new WorldObjectProperties[totalObjects];
-
-        for (int i = 1; i <= totalObjects; i++)
-            worldObjectProperties[i - 1] = loadObject(i, iniFile);
-
-    }
-
-    /**
-     * Creates an object's properties from the given section.
-     *
-     * @param iniFile ini file that contains all world objects to be loaded
-     * @return the created world object properties
-     */
-    private WorldObjectProperties loadObject(int id, Ini iniFile) {
-
-        //  section of the ini file containing the world object to be loaded
-        Section section = iniFile.get(OBJECT_SECTION_PREFIX + id);
-
-        // Make sure its valid
-        if (section == null) return null;
-
-        WorldObjectProperties obj = null;
-        String name = section.get(NAME_KEY);
-        int graphic = Integer.parseInt(section.get(GRAPHIC_KEY));
-        int objectType = Integer.parseInt(section.get(OBJECT_TYPE_KEY));
-        LegacyWorldObjectType type = LegacyWorldObjectType.valueOf(objectType);
-
-        switch (type) {
+        switch (objectType) {
             case RING:
             case HELMET:
             case ARMOR:
             case SHIELD:
-                obj = loadDefensiveItem(type.getCurrentType(), id, name, graphic, section);
+                object = loadDefensiveItem(objectType.getObjectType(), id, name, graphicIndex, ini, section);
                 break;
             case WEAPON:
-                obj = loadWeapon(id, name, graphic, section);
+                object = loadWeapon(id, name, graphicIndex, ini, section);
                 break;
             case ARROW:
-                obj = loadAmmunition(type.getCurrentType(), id, name, graphic, section);
+                object = loadAmmunition(objectType.getObjectType(), id, name, graphicIndex, ini, section);
                 break;
             case BOAT:
-                obj = loadBoat(type.getCurrentType(), id, name, graphic, section);
+                object = loadBoat(objectType.getObjectType(), id, name, graphicIndex, ini, section);
                 break;
             case DRINK:
             case FILLED_BOTTLE:
             case EMPTY_BOTTLE:
-                obj = loadDrink(type.getCurrentType(), id, name, graphic, section);
+                object = loadDrink(objectType.getObjectType(), id, name, graphicIndex, ini, section);
                 break;
             case USE_ONCE:
-                obj = loadFood(type.getCurrentType(), id, name, graphic, section);
+                object = loadFood(objectType.getObjectType(), id, name, graphicIndex, ini, section);
                 break;
             case MONEY:
             case FORGE:
             case ANVIL:
-                obj = loadGenericItem(type.getCurrentType(), id, name, graphic, section);
+                object = loadGenericItem(objectType.getObjectType(), id, name, graphicIndex, ini, section);
                 break;
             case MUSICAL_INSTRUMENT:
-                obj = loadMusicalInstrument(type.getCurrentType(), id, name, graphic, section);
+                object = loadMusicalInstrument(objectType.getObjectType(), id, name, graphicIndex, ini, section);
                 break;
             case TELEPORT:
-                obj = loadTeleport(type.getCurrentType(), id, name, graphic, section);
+                object = loadTeleport(objectType.getObjectType(), id, name, graphicIndex, ini, section);
                 break;
             case POTION:
-                obj = loadPotion(id, name, graphic, section);
+                object = loadPotion(id, name, graphicIndex, ini, section);
                 break;
             case GEMS:
-                obj = loadGem(id, name, graphic, section);
+                object = loadGem(id, name, graphicIndex, ini, section);
                 break;
             case FLOWERS:
             case JEWELRY:
@@ -264,152 +271,130 @@ public class WorldObjectPropertiesDAOIni implements WorldObjectPropertiesDAO {
             case CONTAINER:
             case FURNITURE:
             case BONFIRE:
-                obj = loadProps(id, name, graphic, section);
+                object = loadProps(id, name, graphicIndex, ini, section);
                 break;
             case PARCHMENT:
-                obj = loadParchment(type.getCurrentType(), id, name, graphic, section);
+                object = loadParchment(objectType.getObjectType(), id, name, graphicIndex, ini, section);
                 break;
             case TREE:
             case ELVEN_TREE:
             case MINE:
-                obj = loadResourceSource(type.getCurrentType(), id, name, graphic, section, type);
+                object = loadResourceSource(objectType.getObjectType(), id, name, graphicIndex, objectType, ini, section);
                 break;
             case WOOD:
-                obj = loadWood(type.getCurrentType(), id, name, graphic, section, id == ELVEN_WOOD_INDEX ? WoodType.ELVEN : WoodType.NORMAL);
+                object = loadWood(objectType.getObjectType(), id, name, graphicIndex, id == ELVEN_WOOD_INDEX ? WoodType.ELVEN : WoodType.NORMAL, ini, section);
                 break;
             case KEY:
-                obj = loadKey(type.getCurrentType(), id, name, graphic, section);
+                object = loadKey(objectType.getObjectType(), id, name, graphicIndex, ini, section);
                 break;
             case DOOR:
-                obj = loadDoor(type.getCurrentType(), id, name, graphic, section);
+                object = loadDoor(objectType.getObjectType(), id, name, graphicIndex, ini, section);
                 break;
             case SIGN:
-                obj = loadSign(type.getCurrentType(), id, name, graphic, section);
+                object = loadSign(objectType.getObjectType(), id, name, graphicIndex, ini, section);
                 break;
             case FORUM:
-                obj = loadForum(type.getCurrentType(), id, name, graphic, section);
+                object = loadForum(objectType.getObjectType(), id, name, graphicIndex, ini, section);
                 break;
             case BACKPACK:
-                obj = loadBackpack(type.getCurrentType(), id, name, graphic, section);
+                object = loadBackpack(objectType.getObjectType(), id, name, graphicIndex, ini, section);
                 break;
             case MINERAL:
-                obj = loadMineral(type.getCurrentType(), id, name, graphic, section);
+                object = loadMineral(objectType.getObjectType(), id, name, graphicIndex, ini, section);
                 break;
             default:
-                LOGGER.error("Unexpected object type found: " + objectType);
+                LOGGER.error("Unexpected object found: {}", objectTypeId);
         }
 
-        // Check if the item is manufacturable
-        if (getManufactureType(section, obj) != null) {
+        // Check if the object is manufacturable
+        if (object != null && getManufactureType(ini, section) != null) {
             try {
-                manufacturables.put(obj.getId(), loadManufacturable(section, obj));
+                manufacturables.put(object.getId(), loadManufacturable(object, ini, section));
             } catch (DAOException e) {
-                LOGGER.error("Item " + id + " seems like manufacturable, but its not!");
+                LOGGER.error("Item {} seems like manufacturable, but its not!", id);
             }
         }
 
-        return obj;
+        return object;
     }
 
     /**
-     * Loads manufacture data from the given section for the provided object.
+     * Loads manufacture data.
      *
-     * @param section section from which to load the manufacture data
-     * @param obj     properties of the object whose manufacture data to laod
-     * @return the loaded manufacturable
+     * @param obj     world object properties
+     * @param ini     ini configuration
+     * @param section section from which to read the value
+     * @return the manufacture data
      */
-    private Manufacturable loadManufacturable(Section section,
-                                              WorldObjectProperties obj) throws DAOException {
+    private Manufacturable loadManufacturable(WorldObjectProperties obj, INIConfiguration ini, String section) throws DAOException {
 
-        ManufactureType manufactureType = getManufactureType(section, obj);
+        ManufactureType manufactureType = getManufactureType(ini, section);
 
-        if (null == manufactureType) throw new DAOException("Item is not manufacturable");
+        if (null == manufactureType) throw new DAOException("Object is not manufacturable!");
 
-        int manufactureDifficulty;
+        int manufactureSkill = getManufactureSkill(ini, section);
 
-        /*
-         * AO's OBJ.dat is totally inconsistent, so MinSkill for Minerals is the required
-         * skill level to build ingots from them, while for boats its the required
-         * skill level to use them and SkCarpitenria is the skill level required
-         * to build them. If you ever edit this format or create a new DAO,
-         * I beg you to try to avoid this and be consistent.
-         */
-        if (obj instanceof MineralProperties) manufactureDifficulty = getUsageDifficulty(section);
-        else manufactureDifficulty = getManufactureDifficulty(section);
+        int wood = getWood(ini, section);
+        int elvenWood = getElvenWood(ini, section);
+        int goldIngot = getGoldIngot(ini, section);
+        int silverIngot = getSilverIngot(ini, section);
+        int ironIngot = getIronIngot(ini, section);
 
-        int requiredWood = getRequiredWoodForManufacture(section);
-        int requiredElvenWood = getRequiredElvenWoodForManufacture(section);
-        int requiredGoldIngot = getRequiredGoldIngotsForManufacture(section);
-        int requiredSilverIngot = getRequiredSilverIngotsForManufacture(section);
-        int requiredIronIngot = getRequiredIronIngotsForManufacture(section);
-
-        return new Manufacturable(obj, manufactureType, manufactureDifficulty,
-                requiredWood, requiredElvenWood, requiredGoldIngot,
-                requiredSilverIngot, requiredIronIngot);
+        return new Manufacturable(obj, manufactureType, manufactureSkill, wood, elvenWood, goldIngot, silverIngot, ironIngot);
     }
 
     /**
-     * Determines the manufacturable type of the item (if any).
+     * Gets the manufacture type.
      *
-     * @param section section from which to read the object's value
-     * @param obj     object's properties
-     * @return the obejct's manufacturable type
+     * @param ini     ini configuration
+     * @param section section from which to read the value
+     * @return the manufacture type or null if no manufacturing type can be determined
      */
-    private ManufactureType getManufactureType(Section section,
-                                               WorldObjectProperties obj) {
-
-        if (obj instanceof MineralProperties) return ManufactureType.BLACKSMITH;
-
-        String value = section.get(WOODWORKING_DIFFICULTY_KEY);
-
-        if (value != null) return ManufactureType.WOODWORK;
-
-        value = section.get(IRONWORKING_DIFFICULTY_KEY);
-
-        if (value != null) return ManufactureType.IRONWORK;
-
+    private ManufactureType getManufactureType(INIConfiguration ini, String section) {
+        String smithingSkill = section + "." + SMITHING_SKILL_KEY;
+        String carpentrySkill = section + "." + CARPENTRY_SKILL_KEY;
+        if (IniUtils.getString(ini, carpentrySkill, null) != null) return ManufactureType.CARPENTRY;
+        if (IniUtils.getString(ini, smithingSkill, null) != null) return ManufactureType.SMITHING;
         return null;
     }
 
     /**
-     * Creates a wood's properties from the given section.
+     * Load the properties of a wood object.
      *
-     * @param worldObjectType object's type
-     * @param id              object's id
-     * @param name            object's name
-     * @param graphic         object's graphic
-     * @param section         section of the ini file containing the world object to be loaded
-     * @param woodType        type of wood this is
-     * @return the created world object properties
+     * @param type     object's type
+     * @param id       object's id
+     * @param name     object's name
+     * @param graphic  object's graphic
+     * @param woodType object's wood type
+     * @param ini      ini configuration
+     * @param section  section from which to read the value
+     * @return an instance of WorldObjectProperties representing the wood properties
      */
-    private WorldObjectProperties loadWood(WorldObjectType worldObjectType, int id, String name, int graphic, Section section, WoodType woodType) {
-
-        int value = getValue(section);
-        boolean newbie = getNewbie(section);
-        List<UserArchetype> forbiddenArchetypes = getForbiddenArchetypes(section);
-        List<Race> forbiddenRaces = getForbiddenRaces(section);
-        boolean noLog = getNoLog(section);
-        boolean falls = getFalls(section);
-        boolean respawneable = getRespawneable(section);
-
-        return new WoodProperties(worldObjectType, id, name, graphic, value, forbiddenArchetypes, forbiddenRaces, newbie, noLog, falls, respawneable, woodType);
+    private WorldObjectProperties loadWood(WorldObjectType type, int id, String name, int graphic, WoodType woodType, INIConfiguration ini, String section) {
+        int value = getValue(ini, section);
+        boolean newbie = isNewbie(ini, section);
+        List<UserArchetype> forbiddenArchetypes = getForbiddenArchetypes(ini, section);
+        List<Race> forbiddenRaces = getForbiddenRaces(ini, section);
+        boolean noLog = getNoLog(ini, section);
+        boolean droppable = isDroppable(ini, section);
+        boolean respawnable = isRespawnable(ini, section);
+        return new WoodProperties(type, id, name, graphic, value, forbiddenArchetypes, forbiddenRaces, newbie, noLog, droppable, respawnable, woodType);
     }
 
     /**
-     * Creates a resource source's properties from the given section.
+     * Load the properties of a resource source object.
      *
      * @param type       object's type
      * @param id         object's id
      * @param name       object's name
      * @param graphic    object's graphic
-     * @param section    section of the ini file containing the world object to be loaded
-     * @param legactType legacy type of the item
-     * @return the created world object properties
+     * @param legactType object's legacy type
+     * @param ini        ini configuration
+     * @param section    section from which to read the value
+     * @return an instance of WorldObjectProperties representing the resource source properties
      */
-    private WorldObjectProperties loadResourceSource(WorldObjectType type, int id, String name, int graphic, Section section, LegacyWorldObjectType legactType) {
-
+    private WorldObjectProperties loadResourceSource(WorldObjectType type, int id, String name, int graphic, LegacyWorldObjectType legactType, INIConfiguration ini, String section) {
         int resourceId = -1;
-
         // Get the resource id
         ResourceSourceType resourceSourceType = null;
         switch (legactType) {
@@ -422,1166 +407,990 @@ public class WorldObjectPropertiesDAOIni implements WorldObjectPropertiesDAO {
                 resourceSourceType = ResourceSourceType.TREE;
                 break;
             case MINE:
-                resourceId = getMineralIndex(section);
+                resourceId = getMineralIndex(ini, section);
                 resourceSourceType = ResourceSourceType.MINE;
                 break;
             default:
-                LOGGER.error("Unexpected resource source of type " + type.name());
+                LOGGER.error("Unexpected resource source of type {}", type.name());
         }
-
         return new ResourceSourceProperties(type, id, name, graphic, resourceId, resourceSourceType);
     }
 
     /**
-     * Creates a defensive item's properties from the given section.
+     * Load the properties of a defensive item object.
      *
      * @param type    object's type
      * @param id      object's id
      * @param name    object's name
      * @param graphic object's graphic
-     * @param section section of the ini file containing the world object to be loaded
-     * @return the created world object properties
+     * @param ini     ini configuration
+     * @param section section from which to read the value
+     * @return an instance of WorldObjectProperties representing the defensive item properties
      */
-    private WorldObjectProperties loadDefensiveItem(WorldObjectType type, int id, String name, int graphic,
-                                                    Section section) {
-
-        int value = getValue(section);
-        int manufactureDifficulty = getManufactureDifficulty(section);
-        boolean newbie = getNewbie(section);
-        int equippedGraphic = getEquippedGraphic(section);
-        int minDef = getMinDef(section);
-        int maxDef = getMaxDef(section);
-        int minMagicDef = getMinMagicDef(section);
-        int maxMagicDef = getMaxMagicDef(section);
-        List<UserArchetype> forbiddenArchetypes = getForbiddenArchetypes(section);
-        List<Race> forbiddenRaces = getForbiddenRaces(section);
-        boolean noLog = getNoLog(section);
-        boolean falls = getFalls(section);
-        boolean respawneable = getRespawneable(section);
-
-        return new DefensiveItemProperties(type, id, name, graphic, value, manufactureDifficulty, forbiddenArchetypes, forbiddenRaces, newbie, noLog, falls, respawneable, equippedGraphic, minDef, maxDef, minMagicDef, maxMagicDef);
+    private WorldObjectProperties loadDefensiveItem(WorldObjectType type, int id, String name, int graphic, INIConfiguration ini, String section) {
+        int value = getValue(ini, section);
+        int manufactureSkill = getManufactureSkill(ini, section);
+        boolean newbie = isNewbie(ini, section);
+        int equippedGraphic = getEquippedGraphic(ini, section);
+        int minArmorDefense = getMinArmorDefense(ini, section);
+        int maxArmorDefense = getMaxArmorDefense(ini, section);
+        int minMagicDefense = getMinMagicDefense(ini, section);
+        int maxMagicDefense = getMaxMagicDefense(ini, section);
+        List<UserArchetype> forbiddenArchetypes = getForbiddenArchetypes(ini, section);
+        List<Race> forbiddenRaces = getForbiddenRaces(ini, section);
+        boolean noLog = getNoLog(ini, section);
+        boolean droppable = isDroppable(ini, section);
+        boolean respawnable = isRespawnable(ini, section);
+        return new DefensiveItemProperties(type, id, name, graphic, value, manufactureSkill, forbiddenArchetypes, forbiddenRaces, newbie, noLog, droppable, respawnable, equippedGraphic, minArmorDefense, maxArmorDefense, minMagicDefense, maxMagicDefense);
     }
 
     /**
-     * Creates a teleport's properties from the given section.
+     * Load the properties of a teleport object.
      *
      * @param type    object's type
      * @param id      object's id
      * @param name    object's name
      * @param graphic object's graphic
-     * @param section section of the ini file containing the world object to be loaded
-     * @return the created world object properties
+     * @param ini     ini configuration
+     * @param section section from which to read the value
+     * @return an instance of WorldObjectProperties representing the teleport's properties
      */
-    private WorldObjectProperties loadTeleport(WorldObjectType type, int id, String name, int graphic,
-                                               Section section) {
-        int radius = getRadius(section);
-        return new TeleportProperties(type, id, name, graphic, radius);
+    private WorldObjectProperties loadTeleport(WorldObjectType type, int id, String name, int graphic, INIConfiguration ini, String section) {
+        return new TeleportProperties(type, id, name, graphic, getRange(ini, section));
     }
 
     /**
-     * Creates a prop's properties from the given section.
+     * Load the properties of a prop object.
      *
      * @param id      object's id
      * @param name    object's name
      * @param graphic object's graphic
-     * @param section section of the ini file containing the world object to be loaded
-     * @return the created world object properties
+     * @param ini     ini configuration
+     * @param section section from which to read the value
+     * @return an instance of WorldObjectProperties representing the prop's properties
      */
-    private WorldObjectProperties loadProps(int id, String name, int graphic, Section section) {
-
-        // Is it grabable or is it just a prop?
-        if (!isGrabable(section))
-            // It's a prop
-            return new WorldObjectProperties(WorldObjectType.PROP, id, name, graphic);
-
-        return loadGenericItem(WorldObjectType.GRABABLE_PROP, id, name, graphic, section);
+    private WorldObjectProperties loadProps(int id, String name, int graphic, INIConfiguration ini, String section) {
+        if (!isPickupable(ini, section)) return new WorldObjectProperties(WorldObjectType.PROP, id, name, graphic);
+        return loadGenericItem(WorldObjectType.GRABABLE_PROP, id, name, graphic, ini, section);
     }
 
     /**
-     * Creates a generic item's properties from the given section.
+     * Load the properties of a generic item object.
      *
      * @param type    object's type
      * @param id      object's id
      * @param name    object's name
      * @param graphic object's graphic
-     * @param section section of the ini file containing the world object to be loaded
-     * @return the generic item created
+     * @param ini     ini configuration
+     * @param section section from which to read the value
+     * @return an instance of WorldObjectProperties representing the generic item properties
      */
-    private WorldObjectProperties loadGenericItem(WorldObjectType type, int id, String name, int graphic,
-                                                  Section section) {
-
-        int value = getValue(section);
-        boolean newbie = getNewbie(section);
-        List<UserArchetype> forbiddenArchetypes = getForbiddenArchetypes(section);
-        List<Race> forbiddenRaces = getForbiddenRaces(section);
-        boolean noLog = getNoLog(section);
-        boolean falls = getFalls(section);
-        boolean respawneable = getRespawneable(section);
-
-        return new ItemProperties(type, id, name, graphic, value, forbiddenArchetypes, forbiddenRaces, newbie, noLog, falls, respawneable);
+    private WorldObjectProperties loadGenericItem(WorldObjectType type, int id, String name, int graphic, INIConfiguration ini, String section) {
+        int value = getValue(ini, section);
+        boolean newbie = isNewbie(ini, section);
+        List<UserArchetype> forbiddenArchetypes = getForbiddenArchetypes(ini, section);
+        List<Race> forbiddenRaces = getForbiddenRaces(ini, section);
+        boolean noLog = getNoLog(ini, section);
+        boolean droppable = isDroppable(ini, section);
+        boolean respawnable = isRespawnable(ini, section);
+        return new ItemProperties(type, id, name, graphic, value, forbiddenArchetypes, forbiddenRaces, newbie, noLog, droppable, respawnable);
     }
 
     /**
-     * Creates a potion's properties from the given section.
+     * Load the properties of a potion object.
      *
      * @param id      object's id
      * @param name    object's name
      * @param graphic object's graphic
-     * @param section section of the ini file containing the world object to be loaded
-     * @return the created world object properties
+     * @param ini     ini configuration
+     * @param section section from which to read the value
+     * @return an instance of WorldObjectProperties representing the potion properties
      */
-    private WorldObjectProperties loadPotion(int id, String name, int graphic,
-                                             Section section) {
+    private WorldObjectProperties loadPotion(int id, String name, int graphic, INIConfiguration ini, String section) {
 
-        int value = getValue(section);
-        boolean newbie = getNewbie(section);
-        List<UserArchetype> forbiddenArchetypes = getForbiddenArchetypes(section);
-        List<Race> forbiddenRaces = getForbiddenRaces(section);
-        boolean noLog = getNoLog(section);
-        boolean falls = getFalls(section);
-        boolean respawneable = getRespawneable(section);
+        int value = getValue(ini, section);
+        boolean newbie = isNewbie(ini, section);
+        List<UserArchetype> forbiddenArchetypes = getForbiddenArchetypes(ini, section);
+        List<Race> forbiddenRaces = getForbiddenRaces(ini, section);
+        boolean noLog = getNoLog(ini, section);
+        boolean droppable = isDroppable(ini, section);
+        boolean respawnable = isRespawnable(ini, section);
 
-        PotionType potionType = getPotionType(section);
+        PotionType potionType = getPotionType(ini, section);
 
-        // Is it a death potion?
         if (potionType == PotionType.DEATH)
-            return new ItemProperties(WorldObjectType.DEATH_POTION, id, name, graphic, value, forbiddenArchetypes, forbiddenRaces, newbie, noLog, falls, respawneable);
+            return new ItemProperties(WorldObjectType.DEATH_POTION, id, name, graphic, value, forbiddenArchetypes, forbiddenRaces, newbie, noLog, droppable, respawnable);
         else if (potionType == PotionType.POISON) // Poison potion?
-            return new ItemProperties(WorldObjectType.POISON_POTION, id, name, graphic, value, forbiddenArchetypes, forbiddenRaces, newbie, noLog, falls, respawneable);
+            return new ItemProperties(WorldObjectType.POISON_POTION, id, name, graphic, value, forbiddenArchetypes, forbiddenRaces, newbie, noLog, droppable, respawnable);
 
-        int minModifier = getMinModifier(section);
-        int maxModifier = getMaxModifier(section);
+        int minModifier = getMinModifier(ini, section);
+        int maxModifier = getMaxModifier(ini, section);
 
-        // Is it an HP potion?
         if (potionType == PotionType.HP)
-            return new StatModifyingItemProperties(WorldObjectType.HP_POTION, id, name, graphic, value, forbiddenArchetypes, forbiddenRaces, newbie, noLog, falls, respawneable, minModifier, maxModifier);
-        else if (potionType == PotionType.MANA) // Mana potion?
-            return new StatModifyingItemProperties(WorldObjectType.MANA_POTION, id, name, graphic, value, forbiddenArchetypes, forbiddenRaces, newbie, noLog, falls, respawneable, minModifier, maxModifier);
+            return new StatModifyingItemProperties(WorldObjectType.HP_POTION, id, name, graphic, value, forbiddenArchetypes, forbiddenRaces, newbie, noLog, droppable, respawnable, minModifier, maxModifier);
+        else if (potionType == PotionType.MANA)
+            return new StatModifyingItemProperties(WorldObjectType.MANA_POTION, id, name, graphic, value, forbiddenArchetypes, forbiddenRaces, newbie, noLog, droppable, respawnable, minModifier, maxModifier);
 
-        int effectTime = getEffectTime(section);
+        int effectDuration = getEffectDuration(ini, section);
 
-        // Strength potion?
         if (potionType == PotionType.STRENGTH)
-            return new TemporalStatModifyingItemProperties(WorldObjectType.STRENGTH_POTION, id, name, graphic, value, forbiddenArchetypes, forbiddenRaces, newbie, noLog, falls, respawneable, minModifier, maxModifier, effectTime);
-        else if (potionType == PotionType.DEXTERITY) // dexterity potion?
-            return new TemporalStatModifyingItemProperties(WorldObjectType.DEXTERITY_POTION, id, name, graphic, value, forbiddenArchetypes, forbiddenRaces, newbie, noLog, falls, respawneable, minModifier, maxModifier, effectTime);
+            return new TemporalStatModifyingItemProperties(WorldObjectType.STRENGTH_POTION, id, name, graphic, value, forbiddenArchetypes, forbiddenRaces, newbie, noLog, droppable, respawnable, minModifier, maxModifier, effectDuration);
+        else if (potionType == PotionType.DEXTERITY)
+            return new TemporalStatModifyingItemProperties(WorldObjectType.DEXTERITY_POTION, id, name, graphic, value, forbiddenArchetypes, forbiddenRaces, newbie, noLog, droppable, respawnable, minModifier, maxModifier, effectDuration);
 
         // This should never happen...
-        LOGGER.error("Parsed a potion with an unmatched potion type: " + potionType.name());
+        LOGGER.error("Parsed a potion with an unmatched potion type: {}", potionType.name());
         return null;
     }
 
     /**
-     * Creates a musical instrument's properties from the given section.
+     * Load the properties of a musical instrument object.
      *
      * @param type    object's type
      * @param id      object's id
      * @param name    object's name
      * @param graphic object's graphic
-     * @param section section of the ini file containing the world object to be loaded
-     * @return the created world object properties
+     * @param ini     ini configuration
+     * @param section section from which to read the value
+     * @return an instance of WorldObjectProperties representing the musical instrument properties
      */
-    private WorldObjectProperties loadMusicalInstrument(WorldObjectType type, int id, String name, int graphic,
-                                                        Section section) {
+    private WorldObjectProperties loadMusicalInstrument(WorldObjectType type, int id, String name, int graphic, INIConfiguration ini, String section) {
 
-        int value = getValue(section);
-        boolean newbie = getNewbie(section);
-        boolean noLog = getNoLog(section);
-        boolean falls = getFalls(section);
-        boolean respawneable = getRespawneable(section);
+        int value = getValue(ini, section);
+        boolean newbie = isNewbie(ini, section);
+        boolean noLog = getNoLog(ini, section);
+        boolean droppable = isDroppable(ini, section);
+        boolean respawnable = isRespawnable(ini, section);
 
-        int equippedGraphic = getEquippedGraphic(section);
-        List<UserArchetype> forbiddenArchetypes = getForbiddenArchetypes(section);
-        List<Race> forbiddenRaces = getForbiddenRaces(section);
-        List<Integer> sounds = getSounds(section);
+        int equippedGraphic = getEquippedGraphic(ini, section);
+        List<UserArchetype> forbiddenArchetypes = getForbiddenArchetypes(ini, section);
+        List<Race> forbiddenRaces = getForbiddenRaces(ini, section);
+        List<Integer> sounds = getSounds(ini, section);
 
-        return new MusicalInstrumentProperties(type, id, name, graphic, value, forbiddenArchetypes, forbiddenRaces, newbie, noLog, falls, respawneable, equippedGraphic, sounds);
+        return new MusicalInstrumentProperties(type, id, name, graphic, value, forbiddenArchetypes, forbiddenRaces, newbie, noLog, droppable, respawnable, equippedGraphic, sounds);
     }
 
     /**
-     * Creates a boat item's properties from the given section.
+     * Load the properties of a boat object.
      *
      * @param type    object's type
      * @param id      object's id
      * @param name    object's name
      * @param graphic object's graphic
-     * @param section section of the ini file containing the world object to be loaded
-     * @return the created world object properties
+     * @param ini     ini configuration
+     * @param section section from which to read the value
+     * @return an instance of WorldObjectProperties representing the boat properties
      */
-    private WorldObjectProperties loadBoat(WorldObjectType type, int id, String name, int graphic,
-                                           Section section) {
-
-        int value = getValue(section);
-        int manufactureDifficulty = getManufactureDifficulty(section);
-        boolean newbie = getNewbie(section);
-        boolean noLog = getNoLog(section);
-        boolean falls = getFalls(section);
-        boolean respawneable = getRespawneable(section);
-        int equippedGraphic = getEquippedGraphic(section);
-        int minDef = getMinDef(section);
-        int maxDef = getMaxDef(section);
-        int minMagicDef = getMinMagicDef(section);
-        int maxMagicDef = getMaxMagicDef(section);
-        List<UserArchetype> forbiddenArchetypes = getForbiddenArchetypes(section);
-        List<Race> forbiddenRaces = getForbiddenRaces(section);
-        int usageDifficulty = getUsageDifficulty(section);
-        int minHit = getMinHit(section);
-        int maxHit = getMaxHit(section);
-
-        return new BoatProperties(type, id, name, graphic, value, usageDifficulty, manufactureDifficulty, forbiddenArchetypes, forbiddenRaces, newbie, noLog, falls, respawneable, equippedGraphic, minDef, maxDef, minMagicDef, maxMagicDef, minHit, maxHit);
-    }
-
-
-    /**
-     * Creates a food item's properties from the given section.
-     *
-     * @param type    object's type
-     * @param id      object's id
-     * @param name    object's name
-     * @param graphic object's graphic
-     * @param section section of the ini file containing the world object to be loaded
-     * @return the created world object properties
-     */
-    private WorldObjectProperties loadFood(WorldObjectType type, int id, String name, int graphic,
-                                           Section section) {
-
-        int value = getValue(section);
-        boolean newbie = getNewbie(section);
-        int modifier = getHunger(section);
-        List<UserArchetype> forbiddenArchetypes = getForbiddenArchetypes(section);
-        List<Race> forbiddenRaces = getForbiddenRaces(section);
-        boolean noLog = getNoLog(section);
-        boolean falls = getFalls(section);
-        boolean respawneable = getRespawneable(section);
-
-        return new StatModifyingItemProperties(type, id, name, graphic, value, forbiddenArchetypes, forbiddenRaces, newbie, noLog, falls, respawneable, modifier, modifier);
+    private WorldObjectProperties loadBoat(WorldObjectType type, int id, String name, int graphic, INIConfiguration ini, String section) {
+        int value = getValue(ini, section);
+        int manufactureSkill = getManufactureSkill(ini, section);
+        boolean newbie = isNewbie(ini, section);
+        boolean noLog = getNoLog(ini, section);
+        boolean droppable = isDroppable(ini, section);
+        boolean respawnable = isRespawnable(ini, section);
+        int equippedGraphic = getEquippedGraphic(ini, section);
+        int minArmorDefense = getMinArmorDefense(ini, section);
+        int maxArmorDefense = getMaxArmorDefense(ini, section);
+        int minMagicDefense = getMinMagicDefense(ini, section);
+        int maxMagicDefense = getMaxMagicDefense(ini, section);
+        List<UserArchetype> forbiddenArchetypes = getForbiddenArchetypes(ini, section);
+        List<Race> forbiddenRaces = getForbiddenRaces(ini, section);
+        int navigationSkill = getNavigationSkill(ini, section);
+        int minHit = getMinHit(ini, section);
+        int maxHit = getMaxHit(ini, section);
+        return new BoatProperties(type, id, name, graphic, value, navigationSkill, manufactureSkill, forbiddenArchetypes, forbiddenRaces, newbie, noLog, droppable, respawnable, equippedGraphic, minArmorDefense, maxArmorDefense, minMagicDefense, maxMagicDefense, minHit, maxHit);
     }
 
     /**
-     * Creates a drink item's properties from the given section.
+     * Load the properties of a food object.
      *
      * @param type    object's type
      * @param id      object's id
      * @param name    object's name
      * @param graphic object's graphic
-     * @param section section of the ini file containing the world object to be loaded
-     * @return the created world object properties
+     * @param ini     ini configuration
+     * @param section section from which to read the value
+     * @return an instance of WorldObjectProperties representing the food properties
      */
-    private WorldObjectProperties loadDrink(WorldObjectType type, int id, String name, int graphic,
-                                            Section section) {
+    private WorldObjectProperties loadFood(WorldObjectType type, int id, String name, int graphic, INIConfiguration ini, String section) {
+        int value = getValue(ini, section);
+        boolean newbie = isNewbie(ini, section);
+        int hungerPoints = getHungerPoints(ini, section);
+        List<UserArchetype> forbiddenArchetypes = getForbiddenArchetypes(ini, section);
+        List<Race> forbiddenRaces = getForbiddenRaces(ini, section);
+        boolean noLog = getNoLog(ini, section);
+        boolean droppable = isDroppable(ini, section);
+        boolean respawnable = isRespawnable(ini, section);
+        // TODO Por que se pasa "hungerPoints" dos veces?
+        return new StatModifyingItemProperties(type, id, name, graphic, value, forbiddenArchetypes, forbiddenRaces, newbie, noLog, droppable, respawnable, hungerPoints, hungerPoints);
+    }
 
-        int value = getValue(section);
-        boolean newbie = getNewbie(section);
+    /**
+     * Load the properties of a drink object.
+     *
+     * @param type    object's type
+     * @param id      object's id
+     * @param name    object's name
+     * @param graphic object's graphic
+     * @param ini     ini configuration
+     * @param section section from which to read the value
+     * @return an instance of WorldObjectProperties representing the drink properties
+     */
+    private WorldObjectProperties loadDrink(WorldObjectType type, int id, String name, int graphic, INIConfiguration ini, String section) {
+
+        int value = getValue(ini, section);
+        boolean newbie = isNewbie(ini, section);
         int modifier = 0;
-        List<UserArchetype> forbiddenArchetypes = getForbiddenArchetypes(section);
-        List<Race> forbiddenRaces = getForbiddenRaces(section);
-        boolean noLog = getNoLog(section);
-        boolean falls = getFalls(section);
-        boolean respawneable = getRespawneable(section);
+        List<UserArchetype> forbiddenArchetypes = getForbiddenArchetypes(ini, section);
+        List<Race> forbiddenRaces = getForbiddenRaces(ini, section);
+        boolean noLog = getNoLog(ini, section);
+        boolean droppable = isDroppable(ini, section);
+        boolean respawnable = isRespawnable(ini, section);
 
-        if (type != WorldObjectType.EMPTY_BOTTLE) getThirst(section);
+        if (type != WorldObjectType.EMPTY_BOTTLE) getThirstPoints(ini, section); // The thirst value is not being used
 
-
-        int emptyObjectId = getOpenObjectId(section);
-        int filledObjectId = getClosedObjectId(section);
+        int openIndex = getOpenIndex(ini, section);
+        int closedIndex = getClosedIndex(ini, section);
 
         // Is it refillable?
-        if (emptyObjectId != 0 && filledObjectId != 0) {
+        if (openIndex != 0 && closedIndex != 0) {
 
-            boolean filled = id == filledObjectId;
+            boolean filled = id == closedIndex;
 
             RefillableStatModifyingItemProperties otherObjectProperties = null;
 
             // Only take the other object when we are loading the latest of both, to make sure the other one is already loaded
-            if (filled && id > emptyObjectId)
-                otherObjectProperties = (RefillableStatModifyingItemProperties) worldObjectProperties[emptyObjectId - 1];
-            else if (!filled && id > filledObjectId)
-                otherObjectProperties = (RefillableStatModifyingItemProperties) worldObjectProperties[filledObjectId - 1];
+            if (filled && id > openIndex)
+                otherObjectProperties = (RefillableStatModifyingItemProperties) worldObjectProperties[openIndex - 1];
+            else if (!filled && id > closedIndex)
+                otherObjectProperties = (RefillableStatModifyingItemProperties) worldObjectProperties[closedIndex - 1];
 
-            return new RefillableStatModifyingItemProperties(type, id, name, graphic, value, forbiddenArchetypes, forbiddenRaces, newbie, noLog, falls, respawneable, modifier, modifier, filled, otherObjectProperties);
+            return new RefillableStatModifyingItemProperties(type, id, name, graphic, value, forbiddenArchetypes, forbiddenRaces, newbie, noLog, droppable, respawnable, modifier, modifier, filled, otherObjectProperties);
         } else
-            return new StatModifyingItemProperties(type, id, name, graphic, value, forbiddenArchetypes, forbiddenRaces, newbie, noLog, falls, respawneable, modifier, modifier);
+            return new StatModifyingItemProperties(type, id, name, graphic, value, forbiddenArchetypes, forbiddenRaces, newbie, noLog, droppable, respawnable, modifier, modifier);
 
     }
 
     /**
-     * Creates a weapon's properties from the given section.
+     * Load the properties of a weapon object.
      *
      * @param id      object's id
      * @param name    object's name
      * @param graphic object's graphic
-     * @param section section of the ini file containing the world object to be loaded
-     * @return the created world object properties
+     * @param ini     ini configuration
+     * @param section section from which to read the value
+     * @return an instance of WorldObjectProperties representing the weapon properties
      */
-    private WorldObjectProperties loadWeapon(int id, String name, int graphic,
-                                             Section section) {
-
-        // Load basic data
-        int value = getValue(section);
-        int manufactureDifficulty = getManufactureDifficulty(section);
-        boolean newbie = getNewbie(section);
-        int equippedGraphic = getEquippedGraphic(section);
-        int minHit = getMinHit(section);
-        int maxHit = getMaxHit(section);
-        boolean stabs = getStabs(section);
-        int piercingDamage = getPiercingDamage(section);
-        List<UserArchetype> forbiddenArchetypes = getForbiddenArchetypes(section);
-        List<Race> forbiddenRaces = getForbiddenRaces(section);
-        boolean noLog = getNoLog(section);
-        boolean falls = getFalls(section);
-        boolean respawneable = getRespawneable(section);
-
-        // Is it a ranged weapon?
-        if (isRangedWeapon(section)) {
-            boolean needsAmmunition = getNeedsAmmunition(section);
-            return new RangedWeaponProperties(WorldObjectType.RANGED_WEAPON, id, name, graphic, value, manufactureDifficulty, forbiddenArchetypes, forbiddenRaces, newbie, noLog, falls, respawneable, equippedGraphic, stabs, piercingDamage, minHit, maxHit, needsAmmunition);
-        } else if (isStaff(section)) { // Is it a staff?
-            int magicPower = getMagicPower(section);
-            int damageBonus = getDamageBonus(section);
-            return new StaffProperties(WorldObjectType.STAFF, id, name, graphic, value, manufactureDifficulty, forbiddenArchetypes, forbiddenRaces, newbie, noLog, falls, respawneable, equippedGraphic, stabs, piercingDamage, minHit, maxHit, magicPower, damageBonus);
+    private WorldObjectProperties loadWeapon(int id, String name, int graphic, INIConfiguration ini, String section) {
+        int value = getValue(ini, section);
+        int manufactureSkill = getManufactureSkill(ini, section);
+        boolean newbie = isNewbie(ini, section);
+        int equippedGraphic = getEquippedGraphic(ini, section);
+        int minHit = getMinHit(ini, section);
+        int maxHit = getMaxHit(ini, section);
+        boolean stabbing = isStabbing(ini, section);
+        int piercingDamage = getPiercingDamage(ini, section);
+        List<UserArchetype> forbiddenArchetypes = getForbiddenArchetypes(ini, section);
+        List<Race> forbiddenRaces = getForbiddenRaces(ini, section);
+        boolean noLog = getNoLog(ini, section);
+        boolean droppable = isDroppable(ini, section);
+        boolean respawnable = isRespawnable(ini, section);
+        if (isRangedWeapon(ini, section)) {
+            boolean ammo = hasAmmo(ini, section);
+            return new RangedWeaponProperties(WorldObjectType.RANGED_WEAPON, id, name, graphic, value, manufactureSkill, forbiddenArchetypes, forbiddenRaces, newbie, noLog, droppable, respawnable, equippedGraphic, stabbing, piercingDamage, minHit, maxHit, ammo);
+        } else if (isMagicalWeapon(ini, section)) {
+            int magicPower = getMagicPower(ini, section);
+            int staffDamageBonus = getStaffDamageBonus(ini, section);
+            return new StaffProperties(WorldObjectType.MAGICAL_WEAPON, id, name, graphic, value, manufactureSkill, forbiddenArchetypes, forbiddenRaces, newbie, noLog, droppable, respawnable, equippedGraphic, stabbing, piercingDamage, minHit, maxHit, magicPower, staffDamageBonus);
         }
-        // Just a normal weapon
-        return new WeaponProperties(WorldObjectType.WEAPON, id, name, graphic, value, manufactureDifficulty, forbiddenArchetypes, forbiddenRaces, newbie, noLog, falls, respawneable, equippedGraphic, stabs, piercingDamage, minHit, maxHit);
+        return new WeaponProperties(WorldObjectType.MELEE_WEAPON, id, name, graphic, value, manufactureSkill, forbiddenArchetypes, forbiddenRaces, newbie, noLog, droppable, respawnable, equippedGraphic, stabbing, piercingDamage, minHit, maxHit);
     }
 
     /**
-     * Creates an ammunition item's properties from the given section.
+     * Load the properties of an ammunition object.
      *
      * @param type    object's type
      * @param id      object's id
      * @param name    object's name
      * @param graphic object's graphic
-     * @param section section of the ini file containing the world object to be loaded
-     * @return the created world object properties
+     * @param ini     ini configuration
+     * @param section section from which to read the value
+     * @return an instance of WorldObjectProperties representing the ammunition properties
      */
-    private WorldObjectProperties loadAmmunition(WorldObjectType type, int id, String name, int graphic,
-                                                 Section section) {
-
-        int value = getValue(section);
-        boolean newbie = getNewbie(section);
-        int equippedGraphic = getEquippedGraphic(section);
-        int minHit = getMinHit(section);
-        int maxHit = getMaxHit(section);
-        List<UserArchetype> forbiddenArchetypes = getForbiddenArchetypes(section);
-        List<Race> forbiddenRaces = getForbiddenRaces(section);
-        boolean noLog = getNoLog(section);
-        boolean falls = getFalls(section);
-        boolean respawneable = getRespawneable(section);
-
-        return new AmmunitionProperties(type, id, name, graphic, value, forbiddenArchetypes, forbiddenRaces, newbie, noLog, falls, respawneable, equippedGraphic, minHit, maxHit);
+    private WorldObjectProperties loadAmmunition(WorldObjectType type, int id, String name, int graphic, INIConfiguration ini, String section) {
+        int value = getValue(ini, section);
+        boolean newbie = isNewbie(ini, section);
+        int equippedGraphic = getEquippedGraphic(ini, section);
+        int minHit = getMinHit(ini, section);
+        int maxHit = getMaxHit(ini, section);
+        List<UserArchetype> forbiddenArchetypes = getForbiddenArchetypes(ini, section);
+        List<Race> forbiddenRaces = getForbiddenRaces(ini, section);
+        boolean noLog = getNoLog(ini, section);
+        boolean droppable = isDroppable(ini, section);
+        boolean respawnable = isRespawnable(ini, section);
+        return new AmmunitionProperties(type, id, name, graphic, value, forbiddenArchetypes, forbiddenRaces, newbie, noLog, droppable, respawnable, equippedGraphic, minHit, maxHit);
     }
 
     /**
-     * Creates a parchment item's properties from the given section.
+     * Load the properties of a parchment object.
      *
      * @param type    object's type
      * @param id      object's id
      * @param name    object's name
      * @param graphic object's graphic
-     * @param section section of the ini file containing the world object to be loaded
-     * @return the created world object properties
+     * @param ini     ini configuration
+     * @param section section from which to read the value
+     * @return an instance of WorldObjectProperties representing the parchment properties
      */
-    private WorldObjectProperties loadParchment(WorldObjectType type, int id, String name, int graphic, Section section) {
-
-        int value = getValue(section);
-        boolean newbie = getNewbie(section);
-        List<UserArchetype> forbiddenArchetypes = getForbiddenArchetypes(section);
-        List<Race> forbiddenRaces = getForbiddenRaces(section);
-        boolean noLog = getNoLog(section);
-        boolean falls = getFalls(section);
-        boolean respawneable = getRespawneable(section);
-        int spellIndex = getSpellIndex(section);
-        // TODO Create the Spell implementation.
-        return new ParchmentProperties(type, id, name, graphic, value, forbiddenArchetypes, forbiddenRaces, newbie, noLog, falls, respawneable, null);
+    private WorldObjectProperties loadParchment(WorldObjectType type, int id, String name, int graphic, INIConfiguration ini, String section) {
+        int value = getValue(ini, section);
+        boolean newbie = isNewbie(ini, section);
+        List<UserArchetype> forbiddenArchetypes = getForbiddenArchetypes(ini, section);
+        List<Race> forbiddenRaces = getForbiddenRaces(ini, section);
+        boolean noLog = getNoLog(ini, section);
+        boolean droppable = isDroppable(ini, section);
+        boolean respawnable = isRespawnable(ini, section);
+        int spellIndex = getSpellIndex(ini, section);
+        // TODO Create the Spell implementation
+        return new ParchmentProperties(type, id, name, graphic, value, forbiddenArchetypes, forbiddenRaces, newbie, noLog, droppable, respawnable, null);
     }
 
     /**
-     * Creates a key's properties from the given section.
+     * Load the properties of a key object.
      *
      * @param type    object's type
      * @param id      object's id
      * @param name    object's name
      * @param graphic object's graphic
-     * @param section section of the ini file containing the world object to be loaded
-     * @return the created world object properties
+     * @param ini     ini configuration
+     * @param section section from which to read the value
+     * @return an instance of WorldObjectProperties representing the key's properties
      */
-    private WorldObjectProperties loadKey(WorldObjectType type, int id, String name, int graphic,
-                                          Section section) {
-
-        int value = getValue(section);
-        int manufactureDifficulty = getManufactureDifficulty(section);
-        boolean newbie = getNewbie(section);
-        List<UserArchetype> forbiddenArchetypes = getForbiddenArchetypes(section);
-        List<Race> forbiddenRaces = getForbiddenRaces(section);
-        int code = getCode(section);
-        boolean noLog = getNoLog(section);
-        boolean falls = getFalls(section);
-        boolean respawneable = getRespawneable(section);
-
-        return new KeyProperties(type, id, name, graphic, value, manufactureDifficulty, forbiddenArchetypes, forbiddenRaces, newbie, noLog, falls, respawneable, code);
+    private WorldObjectProperties loadKey(WorldObjectType type, int id, String name, int graphic, INIConfiguration ini, String section) {
+        int value = getValue(ini, section);
+        int manufactureSkill = getManufactureSkill(ini, section);
+        boolean newbie = isNewbie(ini, section);
+        List<UserArchetype> forbiddenArchetypes = getForbiddenArchetypes(ini, section);
+        List<Race> forbiddenRaces = getForbiddenRaces(ini, section);
+        int key = getKey(ini, section);
+        boolean noLog = getNoLog(ini, section);
+        boolean droppable = isDroppable(ini, section);
+        boolean respawnable = isRespawnable(ini, section);
+        return new KeyProperties(type, id, name, graphic, value, manufactureSkill, forbiddenArchetypes, forbiddenRaces, newbie, noLog, droppable, respawnable, key);
     }
 
     /**
-     * Creates a door's properties from the given section.
+     * Load the properties of a door object.
      *
      * @param type    object's type
      * @param id      object's id
      * @param name    object's name
      * @param graphic object's graphic
-     * @param section section of the ini file containing the world object to be loaded
-     * @return the created world object properties
+     * @param ini     ini configuration
+     * @param section section from which to read the value
+     * @return an instance of WorldObjectProperties representing the door properties
      */
-    private WorldObjectProperties loadDoor(WorldObjectType type, int id, String name, int graphic,
-                                           Section section) {
+    private WorldObjectProperties loadDoor(WorldObjectType type, int id, String name, int graphic, INIConfiguration ini, String section) {
 
-        boolean open = getOpen(section);
-        boolean locked = getLocked(section);
-        int code = getCode(section);
+        boolean open = isOpen(ini, section);
+        boolean locked = isLocked(ini, section);
+        int key = getKey(ini, section);
 
-        int openObjectId = getOpenObjectId(section);
-        int closedObjectId = getClosedObjectId(section);
+        int openIndex = getOpenIndex(ini, section);
+        int closedIndex = getClosedIndex(ini, section);
 
         DoorProperties otherObjectProperties = null;
 
-        if (openObjectId == 0 || closedObjectId == 0) {
-            LOGGER.error("Invalid door definition for id " + id + ". Ids for open and closed states are required.");
+        if (openIndex == 0 || closedIndex == 0) {
+            LOGGER.error("Invalid door definition for id {}. Ids for open and closed states are required.", id);
             return null;
         }
 
         // Only take the other object when we are loading the latest of both, to make sure the other one is already loaded
-        if (open && id > closedObjectId)
-            otherObjectProperties = (DoorProperties) worldObjectProperties[closedObjectId - 1];
-        else if (!open && id > openObjectId)
-            otherObjectProperties = (DoorProperties) worldObjectProperties[openObjectId - 1];
+        if (open && id > closedIndex) otherObjectProperties = (DoorProperties) worldObjectProperties[closedIndex - 1];
+        else if (!open && id > openIndex) otherObjectProperties = (DoorProperties) worldObjectProperties[openIndex - 1];
 
-        return new DoorProperties(type, id, name, graphic, open, locked, code, otherObjectProperties);
+        return new DoorProperties(type, id, name, graphic, open, locked, key, otherObjectProperties);
     }
 
     /**
-     * Creates a sign item's properties from the given section.
+     * Load the properties of a sign object.
      *
      * @param type    object's type
      * @param id      object's id
      * @param name    object's name
      * @param graphic object's graphic
-     * @param section section of the ini file containing the world object to be loaded
-     * @return the created world object properties
+     * @param ini     ini configuration
+     * @param section section from which to read the value
+     * @return an instance of WorldObjectProperties representing the sign properties
      */
-    private WorldObjectProperties loadSign(WorldObjectType type, int id, String name, int graphic, Section section) {
-        int bigGraphic = getBigGraphic(section);
-        String text = getText(section);
+    private WorldObjectProperties loadSign(WorldObjectType type, int id, String name, int graphic, INIConfiguration ini, String section) {
+        int bigGraphic = getBigGraphic(ini, section);
+        String text = getText(ini, section);
         return new SignProperties(type, id, name, graphic, bigGraphic, text);
     }
 
     /**
-     * Creates a forum item's properties from the given section.
+     * Load the properties of a forum object.
      *
      * @param type    object's type
      * @param id      object's id
      * @param name    object's name
      * @param graphic object's graphic
-     * @param section section of the ini file containing the world object to be loaded
-     * @return the created world object properties
+     * @param ini     ini configuration
+     * @param section section from which to read the value
+     * @return an instance of WorldObjectProperties representing the forum properties
      */
-    private WorldObjectProperties loadForum(WorldObjectType type, int id, String name, int graphic, Section section) {
-        String forumName = getForumName(section);
+    private WorldObjectProperties loadForum(WorldObjectType type, int id, String name, int graphic, INIConfiguration ini, String section) {
+        String forumName = getForumName(ini, section);
         return new ForumProperties(type, id, name, graphic, forumName);
     }
 
     /**
-     * Creates a backpack item's properties from the given section.
+     * Loads the properties of a backpack object.
      *
-     * @param type    object's type
      * @param id      object's id
      * @param name    object's name
      * @param graphic object's graphic
-     * @param section section of the ini file containing the world object to be loaded
-     * @return the created world object properties
+     * @param ini     ini configuration
+     * @param section section from which to read the value
+     * @return an instance of WorldObjectProperties representing the backpack properties
      */
-    private WorldObjectProperties loadBackpack(WorldObjectType type, int id, String name, int graphic, Section section) {
-
-        int value = getValue(section);
-        boolean newbie = getNewbie(section);
-        List<UserArchetype> forbiddenArchetypes = getForbiddenArchetypes(section);
-        List<Race> forbiddenRaces = getForbiddenRaces(section);
-        boolean noLog = getNoLog(section);
-        boolean falls = getFalls(section);
-        boolean respawneable = getRespawneable(section);
-
-        int equippedGraphic = getEquippedGraphic(section);
-        int backpackType = getBackpackType(section);
+    private WorldObjectProperties loadBackpack(WorldObjectType type, int id, String name, int graphic, INIConfiguration ini, String section) {
+        int value = getValue(ini, section);
+        boolean newbie = isNewbie(ini, section);
+        List<UserArchetype> forbiddenArchetypes = getForbiddenArchetypes(ini, section);
+        List<Race> forbiddenRaces = getForbiddenRaces(ini, section);
+        boolean noLog = getNoLog(ini, section);
+        boolean droppable = isDroppable(ini, section);
+        boolean respawnable = isRespawnable(ini, section);
+        int equippedGraphic = getEquippedGraphic(ini, section);
+        int backpackType = getBackpackType(ini, section);
         int slots = getAmountForBackpackType(backpackType);
-
-        return new BackpackProperties(type, id, name, graphic, value, forbiddenArchetypes, forbiddenRaces, newbie, noLog, falls, respawneable, equippedGraphic, slots);
+        return new BackpackProperties(type, id, name, graphic, value, forbiddenArchetypes, forbiddenRaces, newbie, noLog, droppable, respawnable, equippedGraphic, slots);
     }
 
     /**
-     * Creates a backpack item's properties from the given section.
-     *
-     * @param type    object's type
-     * @param id      object's id
-     * @param name    object's name
-     * @param graphic object's graphic
-     * @param section section of the ini file containing the world object to be loaded
-     * @return the created world object properties
-     */
-    private WorldObjectProperties loadMineral(WorldObjectType type, int id, String name, int graphic, Section section) {
-
-        int value = getValue(section);
-        boolean newbie = getNewbie(section);
-        List<UserArchetype> forbiddenArchetypes = getForbiddenArchetypes(section);
-        List<Race> forbiddenRaces = getForbiddenRaces(section);
-        boolean noLog = getNoLog(section);
-        boolean falls = getFalls(section);
-        boolean respawneable = getRespawneable(section);
-
-        int ingotObjectIndex = getIngotObjectIndex(section);
-
-        return new MineralProperties(type, id, name, graphic, value, forbiddenArchetypes, forbiddenRaces, newbie, noLog, falls, respawneable, ingotObjectIndex);
-    }
-
-    /**
-     * Creates an ingot property from the given section.
-     *
-     * @param type    object's type
-     * @param id      object's id
-     * @param name    object's name
-     * @param graphic object's graphic
-     * @param section section of the ini file containing the world object to be loaded
-     * @return the ingot item created
-     */
-    private WorldObjectProperties loadIngot(WorldObjectType type, int id, String name, int graphic, Section section) {
-
-        int value = getValue(section);
-        boolean newbie = getNewbie(section);
-        List<UserArchetype> forbiddenArchetypes = getForbiddenArchetypes(section);
-        List<Race> forbiddenRaces = getForbiddenRaces(section);
-        boolean noLog = getNoLog(section);
-        boolean falls = getFalls(section);
-        boolean respawneable = getRespawneable(section);
-
-        return new ItemProperties(type, id, name, graphic, value, forbiddenArchetypes, forbiddenRaces, newbie, noLog, falls, respawneable);
-    }
-
-    /**
-     * Creates a gem property from the given section.
+     * Loads the properties of a mineral object.
      *
      * @param id      object's id
      * @param name    object's name
      * @param graphic object's graphic
-     * @param section section of the ini file containing the world object to be loaded
-     * @return the gem item created
+     * @param ini     ini configuration
+     * @param section section from which to read the value
+     * @return an instance of WorldObjectProperties representing the mineral's properties
      */
-    private WorldObjectProperties loadGem(int id, String name, int graphic, Section section) {
-        for (int i = 0; i < INGOTES.length; i++)
-            if (INGOTES[i] == id) return loadIngot(WorldObjectType.INGOT, id, name, graphic, section);
-        return loadProps(id, name, graphic, section);
+    private WorldObjectProperties loadMineral(WorldObjectType type, int id, String name, int graphic, INIConfiguration ini, String section) {
+        int value = getValue(ini, section);
+        boolean newbie = isNewbie(ini, section);
+        List<UserArchetype> forbiddenArchetypes = getForbiddenArchetypes(ini, section);
+        List<Race> forbiddenRaces = getForbiddenRaces(ini, section);
+        boolean noLog = getNoLog(ini, section);
+        boolean droppable = isDroppable(ini, section);
+        boolean respawnable = isRespawnable(ini, section);
+        int ingotIndex = getIngotIndex(ini, section);
+        return new MineralProperties(type, id, name, graphic, value, forbiddenArchetypes, forbiddenRaces, newbie, noLog, droppable, respawnable, ingotIndex);
     }
 
     /**
-     * Retrieves a list of all forbidden archetypes for this item, if any. Null if all are permited.
+     * Loads the properties of an ingot object.
      *
-     * @param section section from which to parse the forbidden archetypes
-     * @return the list of forbidden archetypes for the item, or null if none
+     * @param id      object's id
+     * @param name    object's name
+     * @param graphic object's graphic
+     * @param ini     ini configuration
+     * @param section section from which to read the value
+     * @return an instance of WorldObjectProperties representing the ingot's properties
      */
-    private List<UserArchetype> getForbiddenArchetypes(Section section) {
-        String data;
-        List<UserArchetype> forbiddenArchetypes = new LinkedList<UserArchetype>();
-        int total = UserArchetype.values().length;
+    private WorldObjectProperties loadIngot(int id, String name, int graphic, INIConfiguration ini, String section) {
+        int value = getValue(ini, section);
+        boolean newbie = isNewbie(ini, section);
+        List<UserArchetype> forbiddenArchetypes = getForbiddenArchetypes(ini, section);
+        List<Race> forbiddenRaces = getForbiddenRaces(ini, section);
+        boolean noLog = getNoLog(ini, section);
+        boolean droppable = isDroppable(ini, section);
+        boolean respawnable = isRespawnable(ini, section);
+        return new ItemProperties(WorldObjectType.INGOT, id, name, graphic, value, forbiddenArchetypes, forbiddenRaces, newbie, noLog, droppable, respawnable);
+    }
 
-        for (int i = 1; i <= total; i++) {
-            data = section.get(FORBIDDEN_ARCHETYPE_PREFIX + i);
-            if (data != null) {
-                if (archetypesByName.containsKey(data)) forbiddenArchetypes.add(archetypesByName.get(data));
-                else LOGGER.error("Unexpected forbidden class loading object: " + data);  // This shouldn't happen!!!
-            }
+    /**
+     * Loads the properties of a gem or an ingot.
+     * <p>
+     * TODO What is gem?
+     *
+     * @param id      object's id
+     * @param name    object's name
+     * @param graphic object's graphic
+     * @param ini     ini configuration
+     * @param section section from which to read the value
+     * @return an instance of WorldObjectProperties representing the gem or ingot's properties
+     */
+    private WorldObjectProperties loadGem(int id, String name, int graphic, INIConfiguration ini, String section) {
+        for (int ingote : INGOTS)
+            if (ingote == id) return loadIngot(id, name, graphic, ini, section);
+        return loadProps(id, name, graphic, ini, section);
+    }
+
+    /**
+     * Gets a list of all forbidden archetypes for this item.
+     *
+     * @param ini     ini configuration
+     * @param section section from which to read the value
+     * @return the list of forbidden archetypes for the item or null if none
+     */
+    private List<UserArchetype> getForbiddenArchetypes(INIConfiguration ini, String section) {
+        List<UserArchetype> forbiddenArchetypes = new LinkedList<>();
+        for (int i = 1; i <= UserArchetype.values().length; i++) {
+            String key = IniUtils.getString(ini, section + "." + FORBIDDEN_ARCHETYPE_KEY + i, null);
+            if (key == null) continue; // Ignore a missing or empty key
+            UserArchetype archetype = archetypes.get(key);
+            if (archetype != null) forbiddenArchetypes.add(archetype);
+            else LOGGER.error("Unexpected forbidden archetype loading object: {}", key); // This shouldn't happen!
         }
-
-        if (forbiddenArchetypes.size() == 0) return null;
-
-        return forbiddenArchetypes;
+        return forbiddenArchetypes.isEmpty() ? null : forbiddenArchetypes;
     }
 
     /**
-     * Retrieves a list of all forbidden races for this item, if any. Null if all are permited.
+     * Gets a list of all forbidden races for this item.
      *
-     * @param section section from which to parse the forbidden races
-     * @return the list of forbidden races for the item, or null if none
+     * @param ini     ini configuration
+     * @param section section from which to read the value
+     * @return the list of forbidden races for the item or null if none
      */
-    private List<Race> getForbiddenRaces(Section section) {
-        String data;
+    private List<Race> getForbiddenRaces(INIConfiguration ini, String section) {
         List<Race> forbiddenRaces = new LinkedList<>();
-
-        data = section.get(DWARF_KEY);
-        if (data != null && !"0".equals(data)) forbiddenRaces.add(Race.DWARF);
-
-        data = section.get(DARK_ELF_KEY);
-        if (data != null && !"0".equals(data)) forbiddenRaces.add(Race.DARK_ELF);
-
-        data = section.get(ELF_KEY);
-        if (data != null && !"0".equals(data)) forbiddenRaces.add(Race.ELF);
-
-        data = section.get(GNOME_KEY);
-        if (data != null && !"0".equals(data)) forbiddenRaces.add(Race.GNOME);
-
-        data = section.get(HUMAN_KEY);
-        if (data != null && !"0".equals(data)) forbiddenRaces.add(Race.HUMAN);
-
-        if (forbiddenRaces.size() == 0) return null;
-
-        return forbiddenRaces;
+        if (IniUtils.getBoolean(ini, section + "." + DWARF_KEY, false)) forbiddenRaces.add(Race.DWARF);
+        if (IniUtils.getBoolean(ini, section + "." + DARK_ELF_KEY, false)) forbiddenRaces.add(Race.DARK_ELF);
+        if (IniUtils.getBoolean(ini, section + "." + ELF_KEY, false)) forbiddenRaces.add(Race.ELF);
+        if (IniUtils.getBoolean(ini, section + "." + GNOME_KEY, false)) forbiddenRaces.add(Race.GNOME);
+        if (IniUtils.getBoolean(ini, section + "." + HUMAN_KEY, false)) forbiddenRaces.add(Race.HUMAN);
+        return forbiddenRaces.isEmpty() ? null : forbiddenRaces;
     }
 
     /**
-     * Retrieves an object's value from its section.
+     * Gets all sounds an object may reproduce.
      *
-     * @param section section from which to read the object's value
-     * @return the object's value
+     * @param ini     ini configuration
+     * @param section section from which to read the value
+     * @return the list of sounds the object may reproduce
      */
-    private int getValue(Section section) {
-        String data = section.get(VALUE_KEY);
-        if (data == null) return 0;
-        return Integer.parseInt(data);
-    }
-
-    /**
-     * Retrieves an object's manufacture difficulty from its section.
-     *
-     * @param section section from which to read the object's value
-     * @return the object's manufacture difficulty
-     */
-    private int getManufactureDifficulty(Section section) {
-        String value = section.get(WOODWORKING_DIFFICULTY_KEY);
-        if (value == null) {
-            value = section.get(IRONWORKING_DIFFICULTY_KEY);
-            if (value == null) return 0;
-        }
-        return Integer.parseInt(value);
-    }
-
-    /**
-     * Retrieves the amount of wood required for manufacturing an item.
-     *
-     * @param section section from which to read the object's value
-     * @return the object's required wood for manufacture
-     */
-    private int getRequiredWoodForManufacture(Section section) {
-        String value = section.get(WOOD_AMOUNT_KEY);
-        if (value == null) return 0;
-        return Integer.parseInt(value);
-    }
-
-    /**
-     * Retrieves the amount of elven wood required for manufacturing an item.
-     *
-     * @param section section from which to read the object's value
-     * @return the object's required elven wood for manufacture
-     */
-    private int getRequiredElvenWoodForManufacture(Section section) {
-        String value = section.get(ELVEN_WOOD_AMOUNT_KEY);
-        if (value == null) return 0;
-        return Integer.parseInt(value);
-    }
-
-    /**
-     * Retrieves the amount of gold ingots required for manufacturing an item.
-     *
-     * @param section section from which to read the object's value
-     * @return the obejct's required gold ingots for manufacture
-     */
-    private int getRequiredGoldIngotsForManufacture(Section section) {
-        String value = section.get(INGOT_GOLD_AMOUNT_KEY);
-        if (value == null) return 0;
-        return Integer.parseInt(value);
-    }
-
-    /**
-     * Retrieves the amount of silver ingots required for manufacturing an item.
-     *
-     * @param section section from which to read the object's value
-     * @return the object required silver ingots for manufacture
-     */
-    private int getRequiredSilverIngotsForManufacture(Section section) {
-        String value = section.get(INGOT_SILVER_AMOUNT_KEY);
-        if (value == null) return 0;
-        return Integer.parseInt(value);
-    }
-
-    /**
-     * Retrieves the amount of iron ingots required for manufacturing an item.
-     *
-     * @param section section from which to read the object's value
-     * @return the object required iron ingots for manufacture
-     */
-    private int getRequiredIronIngotsForManufacture(Section section) {
-        String value = section.get(INGOT_IRON_AMOUNT_KEY);
-        if (value == null) return 0;
-        return Integer.parseInt(value);
-    }
-
-    /**
-     * Checks if an object is for newbies from its section.
-     *
-     * @param section section from which to read the object's value
-     * @return true if the object is for newbies, false otherwise
-     */
-    private boolean getNewbie(Section section) {
-        String data = section.get(NEWBIE_KEY);
-        return data != null && !"0".equals(data);
-    }
-
-    /**
-     * Checks if an object stabs from its section.
-     *
-     * @param section section from which to read the object's value
-     * @return true if the object stabs, false otherwise
-     */
-    private boolean getStabs(Section section) {
-        String data = section.get(STABS_KEY);
-        return data != null && !"0".equals(data);
-    }
-
-    /**
-     * Retrieves an object's equipped graphic from its section.
-     *
-     * @param section section from which to read the object's value
-     * @return the object's equipped graphic
-     */
-    private int getEquippedGraphic(Section section) {
-        String data = section.get(EQUIPPED_GRAPHIC_KEY);
-        if (data == null) {
-            data = section.get(EQUIPPED_WEAPON_GRAPHIC_KEY);
-            if (data == null) return 0;
-        }
-        return Integer.parseInt(data);
-    }
-
-    /**
-     * Retrieves an object's minimum defense from its section.
-     *
-     * @param section section from which to read the object's value
-     * @return the object's minimum defense
-     */
-    private int getMinDef(Section section) {
-        String data = section.get(MIN_DEF_KEY);
-        if (data == null) return 0;
-        return Integer.parseInt(data);
-    }
-
-    /**
-     * Retrieves an object's maximum defense from its section.
-     *
-     * @param section section from which to read the object's value
-     * @return the object's maximum defense
-     */
-    private int getMaxDef(Section section) {
-        String data = section.get(MAX_DEF_KEY);
-        if (data == null) return 0;
-        return Integer.parseInt(data);
-    }
-
-    /**
-     * Retrieves an object's minimum magic defense from its section.
-     *
-     * @param section section from which to read the object's value
-     * @return the object's minimum magic defense
-     */
-    private int getMinMagicDef(Section section) {
-        String data = section.get(MIN_MAGIC_DEF_KEY);
-        if (data == null) return 0;
-        return Integer.parseInt(data);
-    }
-
-    /**
-     * Retrieves an object's maximum magic defense from its section.
-     *
-     * @param section section from which to read the object's value
-     * @return the object's maximum magic defense
-     */
-    private int getMaxMagicDef(Section section) {
-        String data = section.get(MAX_MAGIC_DEF_KEY);
-        if (data == null) return 0;
-        return Integer.parseInt(data);
-    }
-
-    /**
-     * Retrieves an object's minimum hit from its section.
-     *
-     * @param section section from which to read the object's value
-     * @return the object's minimum hit
-     */
-    private int getMinHit(Section section) {
-        String data = section.get(MIN_HIT_KEY);
-        if (data == null) return 0;
-        return Integer.parseInt(data);
-    }
-
-    /**
-     * Retrieves an object's maximum hit from its section.
-     *
-     * @param section section from which to read the object's value
-     * @return the object's maximum hit
-     */
-    private int getMaxHit(Section section) {
-        String data = section.get(MAX_HIT_KEY);
-        if (data == null) return 0;
-        return Integer.parseInt(data);
-    }
-
-    /**
-     * Retrieves an object's hunger restored from its section.
-     *
-     * @param section section from which to read the object's value
-     * @return the object's hunger restored
-     */
-    private int getHunger(Section section) {
-        return Integer.parseInt(section.get(HUNGER_KEY));
-    }
-
-    /**
-     * Retrieves an object's thirst restored from its section.
-     *
-     * @param section section from which to read the object's value
-     * @return the object's thirst restored
-     */
-    private int getThirst(Section section) {
-        return Integer.parseInt(section.get(THIRST_KEY));
-    }
-
-    /**
-     * Retrieves an object's piercing damage from its section.
-     *
-     * @param section section from which to read the object's value
-     * @return the object's piercing damage
-     */
-    private int getPiercingDamage(Section section) {
-        String data = section.get(PIERCING_DAMAGE_KEY);
-        if (data == null) return 0;
-        return Integer.parseInt(data);
-    }
-
-    /**
-     * Retrieves an object's magic power from its section.
-     *
-     * @param section section from which to read the object's value
-     * @return the object's magic power
-     */
-    private int getMagicPower(Section section) {
-        return Integer.parseInt(section.get(MAGIC_POWER_KEY));
-    }
-
-    /**
-     * Retrieves an object's damage bonus from its section.
-     *
-     * @param section section from which to read the object's value
-     * @return the object's damage bonus
-     */
-    private int getDamageBonus(Section section) {
-        return Integer.parseInt(section.get(DAMAGE_BONUS_KEY));
-    }
-
-    /**
-     * Retrieves an object's usage difficulty from its section.
-     *
-     * @param section section from which to read the object's value
-     * @return the object's usage difficulty
-     */
-    private int getUsageDifficulty(Section section) {
-        String data = section.get(USAGE_DIFFICULTY_KEY);
-        if (data == null) return 0;
-        return Integer.parseInt(data);
-    }
-
-    /**
-     * Checks if the section corresponds to a ranged weapon.
-     *
-     * @param section section for the item to check
-     * @return true if the item is a ranged weapon, false otherwise
-     */
-    private boolean isRangedWeapon(Section section) {
-        String data = section.get(IS_RANGED_WEAPON_KEY);
-        return data != null && !"0".equals(data);
-    }
-
-    /**
-     * Checks if the section corresponds to a staff.
-     *
-     * @param section section for the item to check
-     * @return true if the item is a staff, false otherwise
-     */
-    private boolean isStaff(Section section) {
-        String data = section.get(MAGIC_POWER_KEY);
-        return data != null && !"0".equals(data);
-    }
-
-    /**
-     * Checks if the section corresponds to a staff.
-     *
-     * @param section section for the item to check
-     * @return true if the item is a staff, false otherwise
-     */
-    private boolean isGrabable(Section section) {
-        /*
-         * People that wrote the original code in VB weren't precisely consistent...
-         * So Agarrable=1 means "not grabable" just the opposite as expected.
-         * All other values mean grabable.
-         */
-        String data = section.get(UNGRABABLE_KEY);
-        return data == null || !"1".equals(data);
-    }
-
-    /**
-     * Checks if the object requires ammunition.
-     *
-     * @param section section for the item to check
-     * @return true if the item requires ammunition, false otherwise
-     */
-    private boolean getNeedsAmmunition(Section section) {
-        String data = section.get(NEEDS_AMMUNITION_KEY);
-        return data != null && !"0".equals(data);
-    }
-
-    /**
-     * Retrieves all sounds an item may reproduce.
-     *
-     * @param section section from which to retrieve values
-     * @return the list of sounds the item may reproduce
-     */
-    private List<Integer> getSounds(Section section) {
+    private List<Integer> getSounds(INIConfiguration ini, String section) {
+        int maxSounds = 3;
         List<Integer> sounds = new LinkedList<>();
-        String data;
-        for (int i = 1; i <= MAX_SOUNDS; i++) {
-            data = section.get(SOUND_PREFIX + i);
-            if (data != null) sounds.add(Integer.parseInt(data));
+        for (int i = 1; i <= maxSounds; i++) {
+            String key = section + "." + SOUND_PREFIX_KEY + i;
+            if (!ini.containsKey(key)) continue; // Avoid warnings for missing items
+            int value = IniUtils.getInt(ini, key, -1); // log invalid entries; -1 = discard
+            if (value != -1) sounds.add(value);
         }
         return sounds;
     }
 
     /**
-     * Retrieves an object's radius from its section.
+     * Gets object's potion type.
      *
-     * @param section section from which to read the object's value
-     * @return the object's radius
-     */
-    private int getRadius(Section section) {
-        String data = section.get(RADIUS_KEY);
-        if (data == null) return 0;
-        return Integer.parseInt(data);
-    }
-
-    /**
-     * Retrieves an object's potion type from its section.
-     *
-     * @param section section from which to read the object's value
-     * @return the object's potion type
-     */
-    private PotionType getPotionType(Section section) {
-        return PotionType.valueOf(Integer.parseInt(section.get(POTION_TYPE_KEY)));
-    }
-
-    /**
-     * Retrieves the object's minimum modifier.
-     *
+     * @param ini     ini configuration
      * @param section section from which to read the value
-     * @return the object's minimum modifier
+     * @return the object's potion type or 0 if missing/invalid
      */
-    private int getMinModifier(Section section) {
-        return Integer.parseInt(section.get(MIN_MODIFIER));
+    private PotionType getPotionType(INIConfiguration ini, String section) {
+        return PotionType.valueOf(IniUtils.getInt(ini, section + "." + POTION_TYPE_KEY, 0));
     }
 
     /**
-     * Retrieves the object's maximum modifier.
+     * Gets object text.
      *
+     * @param ini     ini configuration
      * @param section section from which to read the value
-     * @return the object's maximum modifier
+     * @return the object text or empty string if missing/invalid
      */
-    private int getMaxModifier(Section section) {
-        return Integer.parseInt(section.get(MAX_MODIFIER));
+    private String getText(INIConfiguration ini, String section) {
+        return IniUtils.getString(ini, section + "." + TEXT_KEY, "");
     }
 
     /**
-     * Retrieves the object's modifier time.
+     * Gets object's forum name.
      *
+     * @param ini     ini configuration
      * @param section section from which to read the value
-     * @return the object's modifier time
+     * @return the object's forum name or empty string if missing/invalid
      */
-    private int getEffectTime(Section section) {
-        return Integer.parseInt(section.get(MODIFIER_TIME));
+    private String getForumName(INIConfiguration ini, String section) {
+        return IniUtils.getString(ini, section + "." + FORUM_NAME_KEY, "");
     }
 
     /**
-     * Retrieves the spell's index.
+     * Gets an object's value.
      *
+     * @param ini     ini configuration
      * @param section section from which to read the value
-     * @return the object's spell index
+     * @return the object's value or 0 if missing/invalid
      */
-    private int getSpellIndex(Section section) {
-        return Integer.parseInt(section.get(SPELL_INDEX_KEY));
+    private int getValue(INIConfiguration ini, String section) {
+        return IniUtils.getInt(ini, section + "." + VALUE_KEY, 0);
     }
 
     /**
-     * Retrieves the mineral's index.
+     * Gets object's manufacture skill.
      *
+     * @param ini     ini configuration
      * @param section section from which to read the value
-     * @return the object's mineral index
+     * @return the object's manufacture skill or 0 if missing/invalid
      */
-    private int getMineralIndex(Section section) {
-        return Integer.parseInt(section.get(MINERAL_INDEX_KEY));
+    private int getManufactureSkill(INIConfiguration ini, String section) {
+        String carpentrySkill = section + "." + CARPENTRY_SKILL_KEY;
+        String blacksmithingSkill = section + "." + SMITHING_SKILL_KEY;
+
+        String value = IniUtils.getString(ini, carpentrySkill, null);
+        if (value == null) {
+            value = IniUtils.getString(ini, blacksmithingSkill, null);
+            if (value == null) return 0;
+        }
+        return NumberUtils.toInt(value, 0);
     }
 
     /**
-     * Retrieves the key's code.
+     * Gets object's wood.
      *
+     * @param ini     ini configuration
      * @param section section from which to read the value
-     * @return the key's code
+     * @return the object's wood or 0 if missing/invalid
      */
-    private int getCode(Section section) {
-        String data = section.get(CODE_KEY);
-        if (data == null) return 0;
-        return Integer.parseInt(data);
+    private int getWood(INIConfiguration ini, String section) {
+        return IniUtils.getInt(ini, section + "." + WOOD_KEY, 0);
     }
 
     /**
-     * Checks if the door is open or not.
+     * Gets object's elven wood.
      *
-     * @param section section from which to read the object's value
-     * @return true if the door is open, false otherwise
+     * @param ini     ini configuration
+     * @param section section from which to read the value
+     * @return the object's elven wood or 0 if missing/invalid
      */
-    private boolean getOpen(Section section) {
-        String data = section.get(OPEN_KEY);
-        return data != null && "0".equals(data);
+    private int getElvenWood(INIConfiguration ini, String section) {
+        return IniUtils.getInt(ini, section + "." + ELVEN_WOOD_KEY, 0);
     }
 
     /**
-     * Checks if the door is locked or not.
+     * Gets object's iron ingots.
      *
-     * @param section section from which to read the object's value
-     * @return true if the door is locked, false otherwise
+     * @param ini     ini configuration
+     * @param section section from which to read the value
+     * @return the object's iron ingots or 0 if missing/invalid
      */
-    private boolean getLocked(Section section) {
-        String data = section.get(LOCKED_KEY);
-        return data != null && !"0".equals(data);
+    private int getIronIngot(INIConfiguration ini, String section) {
+        return IniUtils.getInt(ini, section + "." + IRON_INGOT_KEY, 0);
     }
 
     /**
-     * Retrieves the closed door's id
+     * Gets object's silver ingots.
      *
-     * @param section section from which to read the object's value
-     * @return the closed door's id
+     * @param ini     ini configuration
+     * @param section section from which to read the value
+     * @return the object's silver ingots or 0 if missing/invalid
      */
-    private int getClosedObjectId(Section section) {
-        String data = section.get(CLOSED_OBJECT_ID_KEY);
-        if (data == null) return 0;
-        return Integer.parseInt(data);
+    private int getSilverIngot(INIConfiguration ini, String section) {
+        return IniUtils.getInt(ini, section + "." + SILVER_INGOT_KEY, 0);
     }
 
     /**
-     * Retrieves the open door's id.
+     * Gets object's gold ingots.
      *
-     * @param section section from which to read the object's value
-     * @return the open door's id
+     * @param ini     ini configuration
+     * @param section section from which to read the value
+     * @return the object's gold ingots or 0 if missing/invalid
      */
-    private int getOpenObjectId(Section section) {
-        String data = section.get(OPEN_OBJECT_ID_KEY);
-        if (data == null) return 0;
-        return Integer.parseInt(data);
+    private int getGoldIngot(INIConfiguration ini, String section) {
+        return IniUtils.getInt(ini, section + "." + GOLD_INGOT_KEY, 0);
     }
 
     /**
-     * Checks if the object should be logged or not
+     * Gets object equipped graphic.
      *
-     * @param section section from which to read the object's value
-     * @return true if the object should be logged, false otherwise
+     * @param ini     ini configuration
+     * @param section section from which to read the value
+     * @return the object equipped graphic or 0 if missing/invalid
      */
-    private boolean getNoLog(Section section) {
-        String data = section.get(NO_LOG_KEY);
-        return data != null && "0".equals(data);
+    private int getEquippedGraphic(INIConfiguration ini, String section) {
+        String equippedArmorGraphic = section + "." + EQUIPPED_ARMOR_GRAPHIC_KEY;
+        String equippedWeaponGraphic = section + "." + EQUIPPED_WEAPON_GRAPHIC_KEY;
+
+        // Try the main key first; if missing/empty, use secondary
+        String value = IniUtils.getString(ini, equippedArmorGraphic, null);
+        if (value == null) {
+            value = IniUtils.getString(ini, equippedWeaponGraphic, null);
+            if (value == null) return 0;
+        }
+
+        return NumberUtils.toInt(value, 0);
     }
 
     /**
-     * Checks if the object falls or not.
+     * Gets object's min armor defense.
      *
-     * @param section section from which to read the object's value
-     * @return true if the object falls, false otherwise
+     * @param ini     ini configuration
+     * @param section section from which to read the value
+     * @return the object's min defense or 0 if missing/invalid
      */
-    private boolean getFalls(Section section) {
-        String data = section.get(FALLS_KEY);
-        return data != null && "1".equals(data);
+    private int getMinArmorDefense(INIConfiguration ini, String section) {
+        return IniUtils.getInt(ini, section + "." + MIN_ARMOR_DEFENSE_KEY, 0);
     }
 
     /**
-     * Checks if the object is responsible or not.
+     * Gets object's max armor defense.
      *
-     * @param section section from which to read the object's value
-     * @return true if the object is respawneable, false otherwise
+     * @param ini     ini configuration
+     * @param section section from which to read the value
+     * @return the object's max armor defense or 0 if missing/invalid
      */
-    private boolean getRespawneable(Section section) {
-        String data = section.get(RESPAWNEABLE_KEY);
-        return data != null && "1".equals(data);
+    private int getMaxArmorDefense(INIConfiguration ini, String section) {
+        return IniUtils.getInt(ini, section + "." + MAX_ARMOR_DEFENSE_KEY, 0);
     }
 
     /**
-     * Retrieves the big graphic.
+     * Gets object's min magic defense.
      *
-     * @param section section from which to read the object's value
-     * @return the big graphic
+     * @param ini     ini configuration
+     * @param section section from which to read the value
+     * @return the object's min magic defense or 0 if missing/invalid
      */
-    private int getBigGraphic(Section section) {
-        String data = section.get(BIG_GRAPHIC_KEY);
-        if (data == null) return 0;
-        return Integer.parseInt(data);
+    private int getMinMagicDefense(INIConfiguration ini, String section) {
+        return IniUtils.getInt(ini, section + "." + MIN_MAGIC_DEFENSE_KEY, 0);
     }
 
     /**
-     * Retrieves the text.
+     * Gets an object's max magic defense.
      *
-     * @param section section from which to read the object's value
-     * @return the text
+     * @param ini     ini configuration
+     * @param section section from which to read the value
+     * @return the object's max magic defense or 0 if missing/invalid
      */
-    private String getText(Section section) {
-        String data = section.get(TEXT_KEY);
-        if (data == null) return "";
-        return data;
+    private int getMaxMagicDefense(INIConfiguration ini, String section) {
+        return IniUtils.getInt(ini, section + "." + MAX_MAGIC_DEFENSE_KEY, 0);
     }
 
     /**
-     * Retrieves the text.
+     * Gets object's min hit.
      *
-     * @param section section from which to read the object's value
-     * @return the text
+     * @param ini     ini configuration
+     * @param section section from which to read the value
+     * @return the object's min hit or 0 if missing/invalid
      */
-    private String getForumName(Section section) {
-        String data = section.get(FORUM_NAME_KEY);
-        if (data == null) return "";
-        return data;
+    private int getMinHit(INIConfiguration ini, String section) {
+        return IniUtils.getInt(ini, section + "." + MIN_HIT_KEY, 0);
     }
 
     /**
-     * Retrieves the backpack type.
+     * Gets object's max hit.
      *
-     * @param section section from which to read the objet's value
-     * @return the backpack type
+     * @param ini     ini configuration
+     * @param section section from which to read the value
+     * @return the object's max hit or 0 if missing/invalid
      */
-    private int getBackpackType(Section section) {
-        String data = section.get(BACKPACK_TYPE_KEY);
-        if (data == null) return 0;
-        return Integer.parseInt(data);
+    private int getMaxHit(INIConfiguration ini, String section) {
+        return IniUtils.getInt(ini, section + "." + MAX_HIT_KEY, 0);
     }
 
     /**
-     * Retrieves the backpack type.
+     * Gets object's hunger points.
      *
-     * @param section section from which to read the objet's value
-     * @return the backpack type
+     * @param ini     ini configuration
+     * @param section section from which to read the value
+     * @return the object's hunger points or 0 if missing/invalid
      */
-    private int getIngotObjectIndex(Section section) {
-        String data = section.get(INGOT_OBJECT_INDEX_KEY);
-        if (data == null) return 0;
-        return Integer.parseInt(data);
+    private int getHungerPoints(INIConfiguration ini, String section) {
+        return IniUtils.getInt(ini, section + "." + HUNGER_POINTS_KEY, 0);
     }
 
     /**
-     * Retrieves the amount for the given backpack type
+     * Gets object thirst points.
+     *
+     * @param ini     ini configuration
+     * @param section section from which to read the value
+     * @return the object thirst points or 0 if missing/invalid
+     */
+    private int getThirstPoints(INIConfiguration ini, String section) {
+        return IniUtils.getInt(ini, section + "." + THIRST_POINTS_KEY, 0);
+    }
+
+    /**
+     * Gets object's piercing damage.
+     *
+     * @param ini     ini configuration
+     * @param section section from which to read the value
+     * @return the object's piercing damage or 0 if missing/invalid
+     */
+    private int getPiercingDamage(INIConfiguration ini, String section) {
+        return IniUtils.getInt(ini, section + "." + PIERCING_DAMAGE_KEY, 0);
+    }
+
+    /**
+     * Gets an object's magic power.
+     *
+     * @param ini     ini configuration
+     * @param section section from which to read the value
+     * @return the object's magic power or 0 if missing/invalid
+     */
+    private int getMagicPower(INIConfiguration ini, String section) {
+        return IniUtils.getInt(ini, section + "." + MAGIC_POWER_KEY, 0);
+    }
+
+    /**
+     * Gets object's staff damage bonus.
+     *
+     * @param ini     ini configuration
+     * @param section section from which to read the value
+     * @return the object's staff damage bonus or 0 if missing/invalid
+     */
+    private int getStaffDamageBonus(INIConfiguration ini, String section) {
+        return IniUtils.getInt(ini, section + "." + STAFF_DAMAGE_BONUS_KEY, 0);
+    }
+
+    /**
+     * Gets object's navigation skill.
+     *
+     * @param ini     ini configuration
+     * @param section section from which to read the value
+     * @return the object's navigation skill or 0 if missing/invalid
+     */
+    private int getNavigationSkill(INIConfiguration ini, String section) {
+        return IniUtils.getInt(ini, section + "." + NAVIGATION_SKILL_KEY, 0);
+    }
+
+    /**
+     * Gets object's range.
+     *
+     * @param ini     ini configuration
+     * @param section section from which to read the value
+     * @return the object's range or 0 if missing/invalid
+     */
+    private int getRange(INIConfiguration ini, String section) {
+        return IniUtils.getInt(ini, section + "." + RANGE_KEY, 0);
+    }
+
+    /**
+     * Gets object's min modifier.
+     *
+     * @param ini     ini configuration
+     * @param section section from which to read the value
+     * @return the object's min modifier or 0 if missing/invalid
+     */
+    private int getMinModifier(INIConfiguration ini, String section) {
+        return IniUtils.getInt(ini, section + "." + MIN_MODIFIER, 0);
+    }
+
+    /**
+     * Gets object's max modifier.
+     *
+     * @param ini     ini configuration
+     * @param section section from which to read the value
+     * @return the object's max modifier or 0 if missing/invalid
+     */
+    private int getMaxModifier(INIConfiguration ini, String section) {
+        return IniUtils.getInt(ini, section + "." + MAX_MODIFIER, 0);
+    }
+
+    /**
+     * Gets object effect duration.
+     *
+     * @param ini     ini configuration
+     * @param section section from which to read the value
+     * @return the object effect duration or 0 if missing/invalid
+     */
+    private int getEffectDuration(INIConfiguration ini, String section) {
+        return IniUtils.getInt(ini, section + "." + EFFECT_DURATION_KEY, 0);
+    }
+
+    /**
+     * Gets object's spell index.
+     *
+     * @param ini     ini configuration
+     * @param section section from which to read the value
+     * @return the object's spell index or 0 if missing/invalid
+     */
+    private int getSpellIndex(INIConfiguration ini, String section) {
+        return IniUtils.getInt(ini, section + "." + SPELL_INDEX_KEY, 0);
+    }
+
+    /**
+     * Gets object's mineral index.
+     *
+     * @param ini     ini configuration
+     * @param section section from which to read the value
+     * @return the object's mineral index or 0 if missing/invalid
+     */
+    private int getMineralIndex(INIConfiguration ini, String section) {
+        return IniUtils.getInt(ini, section + "." + MINERAL_INDEX_KEY, 0);
+    }
+
+    /**
+     * Gets object's key.
+     *
+     * @param ini     ini configuration
+     * @param section section from which to read the value
+     * @return the object's key or 0 if missing/invalid
+     */
+    private int getKey(INIConfiguration ini, String section) {
+        return IniUtils.getInt(ini, section + "." + KEY_KEY, 0);
+    }
+
+    /**
+     * Gets object closed index.
+     *
+     * @param ini     ini configuration
+     * @param section section from which to read the value
+     * @return the object closed index or 0 if missing/invalid
+     */
+    private int getClosedIndex(INIConfiguration ini, String section) {
+        return IniUtils.getInt(ini, section + "." + CLOSED_INDEX_KEY, 0);
+    }
+
+    /**
+     * Gets object open index.
+     *
+     * @param ini     ini configuration
+     * @param section section from which to read the value
+     * @return the object open index or 0 if missing/invalid
+     */
+    private int getOpenIndex(INIConfiguration ini, String section) {
+        return IniUtils.getInt(ini, section + "." + OPEN_INDEX_KEY, 0);
+    }
+
+    /**
+     * Gets object's big graphic.
+     *
+     * @param ini     ini configuration
+     * @param section section from which to read the value
+     * @return the object's big graphic or 0 if missing/invalid
+     */
+    private int getBigGraphic(INIConfiguration ini, String section) {
+        return IniUtils.getInt(ini, section + "." + BIG_GRAPHIC_KEY, 0);
+    }
+
+    /**
+     * Gets object's backpack type.
+     *
+     * @param ini     ini configuration
+     * @param section section from which to read the value
+     * @return the object's backpack type or 0 if missing/invalid
+     */
+    private int getBackpackType(INIConfiguration ini, String section) {
+        return IniUtils.getInt(ini, section + "." + BACKPACK_TYPE_KEY, 0);
+    }
+
+    /**
+     * Gets object's ingot index.
+     *
+     * @param ini     ini configuration
+     * @param section section from which to read the value
+     * @return the object's ingot index or 0 if missing/invalid
+     */
+    private int getIngotIndex(INIConfiguration ini, String section) {
+        return IniUtils.getInt(ini, section + "." + INGOT_INDEX_KEY, 0);
+    }
+
+    /**
+     * Gets the amount for the given backpack type
      *
      * @param backpackType backpack type
      * @return the amount for the given backpack type
@@ -1591,7 +1400,138 @@ public class WorldObjectPropertiesDAOIni implements WorldObjectPropertiesDAO {
     }
 
     /**
+     * Checks if the object should be logged or not
+     *
+     * @param ini     ini configuration
+     * @param section section from which to read the value
+     * @return true if the object should be logged or false
+     */
+    private boolean getNoLog(INIConfiguration ini, String section) {
+        return IniUtils.getBoolean(ini, section + "." + NO_LOG_KEY, false);
+    }
+
+    /**
+     * Checks if the object has ammo.
+     *
+     * @param ini     ini configuration
+     * @param section section from which to read the value
+     * @return true if the object has ammo or false
+     */
+    private boolean hasAmmo(INIConfiguration ini, String section) {
+        return IniUtils.getBoolean(ini, section + "." + AMMO_KEY, false);
+    }
+
+    /**
+     * Checks if the object is newbie.
+     * <p>
+     * IMPORTANTE: La clave <b>newbie</b> solo se especifica en obj.dat para los objetos newbies con el valor 1 (newbie=1 es igual
+     * a true), es decir que esta clave es opcional ya que no hace falta especificar newbie=0 para TODOS los otros objetos ya que
+     * para las claves faltantes, newbie=0 en este caso, las maneja con un valor false por defecto. Esto se hace para evitar tener
+     * que especificar la clave <b>newbie</b> en todos los objetos que no son newbies.
+     *
+     * @param ini     ini configuration
+     * @param section section from which to read the value
+     * @return true if the object is newbie or false
+     */
+    private boolean isNewbie(INIConfiguration ini, String section) {
+        return IniUtils.getBoolean(ini, section + "." + NEWBIE_KEY, false);
+    }
+
+    /**
+     * Checks if the object is stabbing.
+     *
+     * @param ini     ini configuration
+     * @param section section from which to read the value
+     * @return true if the object is stabbing or false
+     */
+    private boolean isStabbing(INIConfiguration ini, String section) {
+        return IniUtils.getBoolean(ini, section + "." + STABBING_KEY, false);
+    }
+
+    /**
+     * Checks if the object is a magical weapon.
+     *
+     * @param ini     ini configuration
+     * @param section section from which to read the value
+     * @return true if the object is a magical weapon or false
+     */
+    private boolean isMagicalWeapon(INIConfiguration ini, String section) {
+        return IniUtils.getBoolean(ini, section + "." + MAGICAL_WEAPON_KEY, false);
+    }
+
+    /**
+     * Checks if the object is a ranged weapon.
+     *
+     * @param ini     ini configuration
+     * @param section section from which to read the value
+     * @return true if the object is a ranged weapon or false
+     */
+    private boolean isRangedWeapon(INIConfiguration ini, String section) {
+        return IniUtils.getBoolean(ini, section + "." + RANGED_WEAPON_KEY, false);
+    }
+
+    /**
+     * Checks if the object is pickupable.
+     *
+     * @param ini     ini configuration
+     * @param section section from which to read the value
+     * @return true if the object is pickupable or false
+     */
+    private boolean isPickupable(INIConfiguration ini, String section) {
+        return IniUtils.getBoolean(ini, section + "." + PICKUPABLE_KEY, true); // TODO Si la clave no existe, entonces quiere dicer que si se puede agarrar (como por ejemplo la "Manzana Roja")
+    }
+
+    /**
+     * Checks if the object is droppable.
+     * <p>
+     * La mayoria de los objetos son droppables, por lo tanto no es necesario especificarlos en {@code obj.dat} con {droppable=1}.
+     * Esto significa que solo se especifican los objetos que no son droppables con {droppable=0}.
+     *
+     * @param ini     ini configuration
+     * @param section section from which to read the value
+     * @return true if the object is droppable or false
+     */
+    private boolean isDroppable(INIConfiguration ini, String section) {
+        return IniUtils.getBoolean(ini, section + "." + DROPPABLE_KEY, true);
+    }
+
+    /**
+     * Checks if the object is open.
+     *
+     * @param ini     ini configuration
+     * @param section section from which to read the value
+     * @return true if the object is open or false
+     */
+    private boolean isOpen(INIConfiguration ini, String section) {
+        return IniUtils.getBoolean(ini, section + "." + OPEN_KEY, true);
+    }
+
+    /**
+     * Checks if the object is locked.
+     *
+     * @param ini     ini configuration
+     * @param section section from which to read the value
+     * @return true if the object is locked or false
+     */
+    private boolean isLocked(INIConfiguration ini, String section) {
+        return IniUtils.getBoolean(ini, section + "." + LOCKED_KEY, false);
+    }
+
+    /**
+     * Checks if the object is respawnable.
+     *
+     * @param ini     ini configuration
+     * @param section section from which to read the value
+     * @return true if the object is respawnable or false
+     */
+    private boolean isRespawnable(INIConfiguration ini, String section) {
+        return IniUtils.getBoolean(ini, section + "." + RESPAWNABLE_KEY, true);
+    }
+
+    /**
      * Legacy potion types. Y are separate object types nowadays.
+     * <p>
+     * TODO Separate
      */
     private enum PotionType {
 
@@ -1607,23 +1547,24 @@ public class WorldObjectPropertiesDAOIni implements WorldObjectPropertiesDAO {
         /**
          * Creates a new PotionType.
          *
-         * @param value value corresponding to the potion type. Should be unique
+         * @param value value corresponding to the potion type (should be unique)
          */
         PotionType(int value) {
             this.value = value;
         }
 
         /**
-         * Retrieves the PotionType associated with the given value.
+         * Gets the PotionType corresponding to the given integer value.
          *
-         * @param value value for which to search for a PotionType
-         * @return the matched PotionType, if any
+         * @param value integer value representing a PotionType
+         * @return the PotionType associated with the given value, or null if no match is found
          */
         public static PotionType valueOf(int value) {
             for (PotionType type : PotionType.values())
                 if (type.value == value) return type;
             return null;
         }
+
     }
 
 }

@@ -11,11 +11,11 @@ public interface Archetype {
     /**
      * Checks if the user has the skills needed to create the given item.
      *
-     * @param blacksmithSkill user's blacksmithing skill
-     * @param item            item to be created
+     * @param smithingSkill user's blacksmithing skill
+     * @param item          item to be created
      * @return true if the user can create the item, false otherwise
      */
-    boolean canBlacksmith(int blacksmithSkill, Manufacturable item);
+    boolean canSmithing(int smithingSkill, Manufacturable item);
 
     /**
      * Checks if the user has the skills needed to create the given item.
@@ -24,7 +24,7 @@ public interface Archetype {
      * @param item          item to be created
      * @return true if the user can create the item, false otherwise
      */
-    boolean canWoodWork(int woodWorkSkill, Manufacturable item);
+    boolean canCarpentry(int woodWorkSkill, Manufacturable item);
 
     /**
      * Checks if the user has the skills needed to iron work the given item.
@@ -33,7 +33,7 @@ public interface Archetype {
      * @param item             item to be created
      * @return true if the user can create the item, false otherwise
      */
-    boolean canIronWork(int ironWorkingSkill, Manufacturable item);
+    // boolean canIronWork(int ironWorkingSkill, Manufacturable item);
 
     /**
      * Checks if the user has the skills needed to sail the given boat.

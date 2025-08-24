@@ -46,11 +46,11 @@ public class WorldObjectFactory {
         worldObjectMapper.put(WorldObjectType.RANGED_WEAPON, RangedWeapon.class);
         worldObjectMapper.put(WorldObjectType.SHIELD, Shield.class);
         worldObjectMapper.put(WorldObjectType.SIGN, Sign.class);
-        worldObjectMapper.put(WorldObjectType.STAFF, Staff.class);
+        worldObjectMapper.put(WorldObjectType.MAGICAL_WEAPON, Staff.class);
         worldObjectMapper.put(WorldObjectType.STRENGTH_POTION, StrengthPotion.class);
         worldObjectMapper.put(WorldObjectType.TELEPORT, Teleport.class);
         worldObjectMapper.put(WorldObjectType.TREE, Tree.class);
-        worldObjectMapper.put(WorldObjectType.WEAPON, Weapon.class);
+        worldObjectMapper.put(WorldObjectType.MELEE_WEAPON, Weapon.class);
         worldObjectMapper.put(WorldObjectType.WOOD, Wood.class);
     }
 

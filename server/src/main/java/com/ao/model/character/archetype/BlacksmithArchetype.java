@@ -7,7 +7,7 @@ package com.ao.model.character.archetype;
 public class BlacksmithArchetype extends DefaultArchetype {
 
     private static final float BLACKSMITH_MODIFIER = 1.0f;
-    private static final float IRON_WORKING_MODIFIER = 1.2f;
+    // private static final float IRON_WORKING_MODIFIER = 1.2f;
     private static final int BLACKSMITH_STAMINA_COST = 2;
 
     public BlacksmithArchetype(float evasionModifier,
@@ -24,10 +24,10 @@ public class BlacksmithArchetype extends DefaultArchetype {
         return BLACKSMITH_STAMINA_COST;
     }
 
-    @Override
+    /* @Override
     protected float getIronWorkingModifier() {
         return IRON_WORKING_MODIFIER;
-    }
+    } */
 
     @Override
     protected float getBlacksmithModifier() {

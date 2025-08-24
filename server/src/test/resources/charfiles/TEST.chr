@@ -18,6 +18,7 @@ LastIP5=127.0.0.1 - 02/07/2009:06:55:26 p.m.
 LastIP4=127.0.0.5 - 02/07/2009:06:56:21 p.m.
 LastIP3=127.0.0.1 - 13/09/2009:03:23:27 p.m.
 LastIP2=127.0.0.1 - 13/09/2009:04:09:26 p.m.
+
 [FLAGS]
 Muerto=1
 Escondido=0
@@ -28,11 +29,14 @@ Ban=0
 Navegando=0
 Envenenado=0
 Paralizado=0
+
 [CONSEJO]
 PERTENECE=0
 PERTENECECAOS=0
+
 [COUNTERS]
 Pena=0
+
 [FACCIONES]
 EjercitoReal=0
 EjercitoCaos=0
@@ -49,12 +53,14 @@ NivelIngreso=0
 FechaIngreso=No ingresó a ninguna Facción
 MatadosIngreso=0
 NextRecompensa=0
+
 [ATRIBUTOS]
 AT1=255
 AT2=255
 AT3=20
 AT4=18
 AT5=19
+
 [SKILLS]
 SK1=0
 SK2=100
@@ -77,8 +83,10 @@ SK18=0
 SK19=2
 SK20=0
 SK21=0
+
 [CONTACTO]
 Email=a@a.com
+
 [STATS]
 GLD=328021
 BANCO=2000
@@ -98,9 +106,11 @@ SkillPtsLibres=410
 EXP=26880464
 ELV=51
 ELU=198145361
+
 [MUERTES]
 UserMuertes=0
 NpcsMuertes=1179
+
 [BancoInventory]
 CantidadItems=40
 Obj1=906-99
@@ -143,6 +153,7 @@ Obj37=501-1
 Obj38=135-1
 Obj39=237-1
 Obj40=239-1
+
 [Inventory]
 CantidadItems=0
 Obj1=0-0-0
@@ -172,6 +183,7 @@ EscudoEqpSlot=0
 BarcoSlot=0
 MunicionSlot=0
 AnilloSlot=0
+
 [REP]
 Asesino=0
 Bandido=0
@@ -180,6 +192,7 @@ Ladrones=0
 Nobles=1004500
 Plebe=480
 Promedio=167497
+
 [HECHIZOS]
 H1=2
 H2=0
@@ -216,16 +229,20 @@ H32=0
 H33=0
 H34=0
 H35=0
+
 [MASCOTAS]
 MAS1=0
 MAS2=0
 MAS3=0
 NroMascotas=0
+
 [RESEARCH]
 TrainningTime=64694
+
 [GUILD]
 GUILDINDEX=1
 AspiranteA=0
+
 [PENAS]
 Cant=6
 P1=: BAN POR ip por a 02/07/2009 06:42:46 p.m.

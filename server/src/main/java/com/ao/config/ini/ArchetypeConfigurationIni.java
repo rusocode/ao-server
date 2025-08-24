@@ -4,7 +4,7 @@ import com.ao.config.ArchetypeConfiguration;
 import com.ao.model.character.archetype.Archetype;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import org.ini4j.Ini;
+import org.apache.commons.configuration2.INIConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,7 +22,8 @@ public class ArchetypeConfigurationIni implements ArchetypeConfiguration {
     private static final String RANGED_DAMAGE_HEADER = "MODDAÑOPROYECTILES";
     private static final String WRESTLING_DAMAGE_HEADER = "MODDAÑOWRESTLING";
     private static final Logger LOGGER = LoggerFactory.getLogger(ArchetypeConfigurationIni.class);
-    private final Ini config;
+
+    private final INIConfiguration ini;
 
     /**
      * Constructor loads the configuration file.
@@ -38,7 +39,8 @@ public class ArchetypeConfigurationIni implements ArchetypeConfiguration {
         if (inputStream == null)
             throw new IllegalArgumentException("The file " + archetypeConfigIni + " was not found in the classpath");
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
-            config = new Ini(reader);
+            ini = new INIConfiguration();
+            ini.read(reader);
         } catch (Exception e) {
             LOGGER.error("Archetype configuration loading failed for file: {}", archetypeConfigIni, e);
             throw new RuntimeException("Failed to load archetype configuration", e);
@@ -47,37 +49,38 @@ public class ArchetypeConfigurationIni implements ArchetypeConfiguration {
 
     @Override
     public float getBlockPowerModifier(Class<? extends Archetype> archetype) {
-        return Float.valueOf(config.get(BLOCK_POWER_HEADER).get(getArchetypeName(archetype)));
+        // TODO Deberia manejarlo con valor por defecto?
+        return ini.getFloat(BLOCK_POWER_HEADER + "." + getArchetypeName(archetype));
     }
 
     @Override
     public float getEvasionModifier(Class<? extends Archetype> archetype) {
-        return Float.valueOf(config.get(EVASION_HEADER).get(getArchetypeName(archetype)));
+        return ini.getFloat(EVASION_HEADER + "." + getArchetypeName(archetype));
     }
 
     @Override
     public float getMeleeAccuracyModifier(Class<? extends Archetype> archetype) {
-        return Float.valueOf(config.get(MELEE_ACCURACY_HEADER).get(getArchetypeName(archetype)));
+        return ini.getFloat(MELEE_ACCURACY_HEADER + "." + getArchetypeName(archetype));
     }
 
     @Override
     public float getMeleeDamageModifier(Class<? extends Archetype> archetype) {
-        return Float.valueOf(config.get(MELEE_DAMAGE_HEADER).get(getArchetypeName(archetype)));
+        return ini.getFloat(MELEE_DAMAGE_HEADER + "." + getArchetypeName(archetype));
     }
 
     @Override
     public float getRangedAccuracyModifier(Class<? extends Archetype> archetype) {
-        return Float.valueOf(config.get(RANGED_ACCURACY_HEADER).get(getArchetypeName(archetype)));
+        return ini.getFloat(RANGED_ACCURACY_HEADER + "." + getArchetypeName(archetype));
     }
 
     @Override
     public float getRangedDamageModifier(Class<? extends Archetype> archetype) {
-        return Float.valueOf(config.get(RANGED_DAMAGE_HEADER).get(getArchetypeName(archetype)));
+        return ini.getFloat(RANGED_DAMAGE_HEADER + "." + getArchetypeName(archetype));
     }
 
     @Override
     public float getWrestlingDamageModifier(Class<? extends Archetype> archetype) {
-        return Float.valueOf(config.get(WRESTLING_DAMAGE_HEADER).get(getArchetypeName(archetype)));
+        return ini.getFloat(WRESTLING_DAMAGE_HEADER + "." + getArchetypeName(archetype));
     }
 
     /**

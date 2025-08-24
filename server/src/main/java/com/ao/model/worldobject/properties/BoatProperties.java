@@ -15,7 +15,7 @@ public class BoatProperties extends DefensiveItemProperties {
     protected int minHit;
     protected int maxHit;
 
-    protected int usageDifficulty;
+    protected int navigationSkill;
 
     /**
      * Creates a new BoatProperties instance.
@@ -25,7 +25,7 @@ public class BoatProperties extends DefensiveItemProperties {
      * @param name                  name of the item
      * @param graphic               graphic for the item
      * @param value                 item's value
-     * @param usageDifficulty       item's usage difficulty
+     * @param navigationSkill       item's usage difficulty
      * @param manufactureDifficulty item's manufacture difficulty
      * @param forbiddenArchetypes   list of UserArchetypes not allowed to use this item
      * @param forbiddenRaces        list of Races not allowed to use this item
@@ -41,7 +41,7 @@ public class BoatProperties extends DefensiveItemProperties {
      * @param minHit                minimum hit granted by this boat
      * @param maxHit                maximum hit granted by this boat
      */
-    public BoatProperties(WorldObjectType type, int id, String name, int graphic, int value, int usageDifficulty, int manufactureDifficulty,
+    public BoatProperties(WorldObjectType type, int id, String name, int graphic, int value, int navigationSkill, int manufactureDifficulty,
                           List<UserArchetype> forbiddenArchetypes, List<Race> forbiddenRaces, boolean newbie,
                           boolean noLog, boolean falls, boolean respawnable,
                           int equippedGraphic, int minDef, int maxDef, int minMagicDef,
@@ -51,8 +51,7 @@ public class BoatProperties extends DefensiveItemProperties {
                 minDef, maxDef, minMagicDef, maxMagicDef);
         this.minHit = minHit;
         this.maxHit = maxHit;
-
-        this.usageDifficulty = usageDifficulty;
+        this.navigationSkill = navigationSkill;
     }
 
     public int getMinHit() {
@@ -63,8 +62,8 @@ public class BoatProperties extends DefensiveItemProperties {
         return maxHit;
     }
 
-    public int getUsageDifficulty() {
-        return usageDifficulty;
+    public int getNavigationSkill() {
+        return navigationSkill;
     }
 
 }

@@ -56,7 +56,7 @@ jobs:
         # Parametros
         with:
           distribution: 'temurin'
-          java-version: '17'
+          java-version: '17' # Podria usar una varias versiones con una matrix (ver ejemplo https://github.com/apache/commons-configuration/blob/master/.github/workflows/maven.yml)
           cache: maven # Habilita cache para dependencias Maven, lo cual es excelente para acelerar builds futuras
           # Util para monorepos ya que permite un cache mas granular basado en archivos especificos
           cache-dependency-path: |
