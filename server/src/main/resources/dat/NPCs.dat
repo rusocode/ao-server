@@ -1,49 +1,38 @@
-##############################################
-############TIPOS NPC (NpcType)###############
-##############################################
+## npc_type_id
+# 0: Npcs comunes
+# 1: Puede resucitar
+# 2: Guardia
+# 3: Puede entrenar
+# 4: Banqueros
+# 5: Nobles
+# 6: Dragones
+# 7: Timberos
+# 8: Guardias del caos
+# 9: Puede resucitar solamente a los newbies
 
-# 0 ====== NPCS COMUNES
-# 1 ====== PUEDE RESUCITAR
-# 2 ====== GUARDIA
-# 3 ====== PUEDE ENTRENAR
-# 4 ====== BANQUEROS
-# 5 ====== NOBLES
-# 6 ====== DRAGONES
-# 7 ====== TIMBEROS
-# 8 ====== GUARDIAS DEL CAOS
-# 9 ====== PUEDE RESUCITAR SOLAMENTE A LOS NEWBIES
+## Orden en DAT
+# Vende casas
+# Resucitadores
+# Enlistadores
+# Entrenadores
+# Varios
+# Comerciantes 
+# Decorativos
+# Ullathorpe
+# Nix
+# Banderbill
+# Lindos
+# Arghal
+# Arkhein
+# Esperanza
+# Ciudad Perdida
+# Guardias Armada
+# Guardias Legion
+# No Hostiles
+# Hostiles
+# Pretorianos
 
-
-##############################################
-################ORDEN EN DAT##################
-##############################################
-
-# NPCS VENDECASAS
-# NPCS RESUCITADORES
-# NPCS ENLISTADORES
-# NPCS ENTRENADORES
-# NPCS VARIOS
-# NPCS COMERCIANTES
-# NPCS DECORATIVOS
-# NPCS ULLATHORPE
-# NPCS NIX
-# NPCS BANDERBILL
-# NPCS LINDOS
-# NPCS ARGHAL
-# NPCS ARKHEIN
-# NPCS ESPERANZA
-# NPCS CIUDAD PERDIDA
-# NPCS GUARDIAS ARMADA
-# NPCS GUARDIAS LEGIÓN
-# NPCS NO HOSTILES
-# NPCS HOSTILES
-# NPCS PRETORIANOS
-
-
-##############################################
-##############N�MEROS LIBRES##################
-##############################################
-
+## Numero libres
 # 36
 # 149 a 499
 # 563
@@ -52,48 +41,30 @@
 # 572
 # 580
 # 581
-
 # Actual Npc con Nro más alto: 616
 
-
-##############################################
-###############OBSERVACIONES##################
-##############################################
-
-# 1) lOS NPCs pretorianos se numeran del 900 a 904 (NO CAMBIAR)
-# 2) Al crear un nuevo NPCS traten de asignar primero los n�meros libres que se detallan arriba, intentando asignar pirmero los n�meros m�s bajos.
-
-
-##############################################
-##############################################
-##############################################
-
+## Observaciones
+# 1- Los npc pretorianos se enumeran del 900 a 904 (NO CAMBIAR)
+# 2- Al crear un nuevo npc traten de asignar primero los numeros libres que se detallan arriba, intentando asignar pirmero los numeros mas bajos
 
 [INIT]
-#aca va el n�mero de NPC m�s alto, NO la cantidad de NPCs.
-#esto sirve para que los GMS puedan ver la lista completa de npcs a invocar en una ventanita.
-NumNPCs=923
+num_npcs=923
 
-
-
-
-##############################################################
-#####################NPCS VENDECASAS##########################
-##############################################################
+## Vende casas ##
 
 [NPC34]
-Name=Cullighan
-NpcType=0
-Desc=Usted sabe que no hay persona noble o respetable en estas tierras que no tenga su propia vivienda. �ac�rquese y sea due�o de una de las exclusivas casas de Ullathorpe. �Ser� admirado por toda la poblaci�n!
-Head=33
-Heading=3
-Body=240
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Cullighan
+npc_type_id=0
+description=Usted sabe que no hay persona noble o respetable en estas tierras que no tenga su propia vivienda. �ac�rquese y sea due�o de una de las exclusivas casas de Ullathorpe. �Ser� admirado por toda la poblaci�n!
+head=33
+heading=3
+body=240
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=9
 NROITEMS=4
@@ -107,18 +78,18 @@ BackUp=1
 #############################################
 
 [NPC35]
-Name=Moraday
-NpcType=0
-Desc=�Ha descubierto que la ciudad de Nix es la m�s hermosa de todo Argentum, verdad? �Pues qu� mejor que ser un terrateniente de este para�so! �Ac�rcate que haremos negocios!
-Head=35
-Heading=3
-Body=239
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Moraday
+npc_type_id=0
+description=�Ha descubierto que la ciudad de Nix es la m�s hermosa de todo Argentum, verdad? �Pues qu� mejor que ser un terrateniente de este para�so! �Ac�rcate que haremos negocios!
+head=35
+heading=3
+body=239
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=9
 NROITEMS=10
@@ -138,18 +109,18 @@ BackUp=1
 #############################################
 
 [NPC52]
-Name=Rantarisk
-NpcType=0
-Desc=De lejos pude ver vuestro blaz�n, seguro busca una de las moradas m�s lujosas de todo el Argentum. En la ciudad real de Banderbill es donde deben habitar la flor y la nata de la nobleza �Venga y hagamos negocios!
-Head=32
-Heading=3
-Body=241
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Rantarisk
+npc_type_id=0
+description=De lejos pude ver vuestro blaz�n, seguro busca una de las moradas m�s lujosas de todo el Argentum. En la ciudad real de Banderbill es donde deben habitar la flor y la nata de la nobleza �Venga y hagamos negocios!
+head=32
+heading=3
+body=241
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=9
 NROITEMS=18
@@ -177,17 +148,17 @@ BackUp=1
 #############################################
 
 [NPC62]
-Name=Guldorf
-Desc=Si est� buscando la paz y la tranquilidad en estas tierras ha llegado al lugar indicado... adquiera una de nuestras exclusivas residencias, y cambie su vida para siempre.
-Head=36
-Body=234
-Heading=3
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Guldorf
+description=Si est� buscando la paz y la tranquilidad en estas tierras ha llegado al lugar indicado... adquiera una de nuestras exclusivas residencias, y cambie su vida para siempre.
+head=36
+body=234
+heading=3
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=9
 NROITEMS=6
@@ -203,17 +174,17 @@ BackUp=1
 #############################################
 
 [NPC101]
-Name=Vendedor de propiedades.
-Desc=En estas tierras demon�acas est�n las mejores residencias para los miembros de la Legi�n Oscura... Si no eres legionario puedes tambi�n vivir ac�, �pero os aseguro que los augura un infierno! jajaja!
-Head=34
-Body=170
-Heading=3
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Vendedor de propiedades.
+description=En estas tierras demon�acas est�n las mejores residencias para los miembros de la Legi�n Oscura... Si no eres legionario puedes tambi�n vivir ac�, �pero os aseguro que los augura un infierno! jajaja!
+head=34
+body=170
+heading=3
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=9
 NROITEMS=8
@@ -236,36 +207,36 @@ BackUp=1
 ##############################################################
 
 [NPC5]
-Name=Sacerdote
-NpcType=1
-Desc=�Hola, hijo m�o! Soy el Sacerdote de estas tierras. Si quieres que te resucite escribe /RESUCITAR, o haz doble click sobre m�.
-Head=3
-Heading=3
-Body=49
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Sacerdote
+npc_type_id=1
+description=�Hola, hijo m�o! Soy el Sacerdote de estas tierras. Si quieres que te resucite escribe /RESUCITAR, o haz doble click sobre m�.
+head=3
+heading=3
+body=49
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 BackUp=0
 
 #############################################
 
 [NPC119]
-Name=Sacerdote
-NpcType=9
-Desc=�Hola, hijo m�o! Soy el sacerdote de estas tierras. Si eres newbie te podr� resucitar, s�lo necesitas tipear /RESUCITAR o hacer doble click sobre mi cabeza.
-Head=3
-Heading=3
-Body=49
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Sacerdote
+npc_type_id=9
+description=�Hola, hijo m�o! Soy el sacerdote de estas tierras. Si eres newbie te podr� resucitar, s�lo necesitas tipear /RESUCITAR o hacer doble click sobre mi cabeza.
+head=3
+heading=3
+body=49
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 BackUp=0
 
@@ -277,37 +248,37 @@ BackUp=0
 ##############################################################
 
 [NPC72]
-Name=Tancredo de Hauteville, soberano de Banderbill
-NpcType=5
-Desc=Saludos ciudadano, soy Tancredo de Hauteville, nuevo soberano de Banderbill. Mi deber es mantener el nuevo orden del Imperio. Si deseas unirte a mis filas y ayudarme di /ENLISTAR.
-Head=510
-Heading=3
-Body=409
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Tancredo de Hauteville, soberano de Banderbill
+npc_type_id=5
+description=Saludos ciudadano, soy Tancredo de Hauteville, nuevo soberano de Banderbill. Mi deber es mantener el nuevo orden del Imperio. Si deseas unirte a mis filas y ayudarme di /ENLISTAR.
+head=510
+heading=3
+body=409
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 BackUp=0
 
 #############################################
 
 [NPC98]
-Name=Demonio Legionario
-NpcType=5
-Desc=Si deseas unirte a la Legi�n Oscura escribe /ENLISTAR
-Head=0
-Heading=3
-Body=405
-Movement=1
+name=Demonio Legionario
+npc_type_id=5
+description=Si deseas unirte a la Legi�n Oscura escribe /ENLISTAR
+head=0
+heading=3
+body=405
+movement_id=1
 AguaValida=0
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 Faccion=1
 BackUp=0
@@ -320,18 +291,18 @@ BackUp=0
 ##############################################################
 
 [NPC60]
-Name=O'Riley de Banderbill
-Desc=�Hola amigo! Soy el Maestro de armas de la Milicia de Banderbill, si deseas que traiga una criatura s�lo debes pedirmelo. (Escribe /ENTRENAR)
-NpcType=3
-Head=6
-Heading=3
-Body=57
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=O'Riley de Banderbill
+description=�Hola amigo! Soy el Maestro de armas de la Milicia de Banderbill, si deseas que traiga una criatura s�lo debes pedirmelo. (Escribe /ENTRENAR)
+npc_type_id=3
+head=6
+heading=3
+body=57
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 NroCriaturas=4
 CI1=566
@@ -347,18 +318,18 @@ BackUp=0
 #############################################
 
 [NPC108]
-Name=O'Riley de Arkhein
-NpcType=3
-Desc=�Hola amigo! Escribe /ENTRENAR para divertirte con estas almas malvadas que hemos domado para tu diversi�n en estos festejos.
-Head=6
-Heading=3
-Body=57
-Movement=1
+name=O'Riley de Arkhein
+npc_type_id=3
+description=�Hola amigo! Escribe /ENTRENAR para divertirte con estas almas malvadas que hemos domado para tu diversi�n en estos festejos.
+head=6
+heading=3
+body=57
+movement_id=1
 attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 NroCriaturas=5
 CI1=534
@@ -381,54 +352,54 @@ BackUp=0
 ##############################################################
 
 [NPC16]
-Name=Centinela
-NpcType=0
-Head=0
-Heading=3
-Body=540
-Movement=1
+name=Centinela
+npc_type_id=0
+head=0
+heading=3
+body=540
+movement_id=1
 AguaValida=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 BackUp=0
 
 #############################################
 
 [NPC24]
-Name=Banquero
-NpcType=4
-Desc=Hola, bienvenido a la cadena de finanzas Goliath. Somos la cadena m�s grande en Argentum, contamos con bancos en las ciudades m�s importantes.
-Head=503
-Heading=3
-Body=201
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Banquero
+npc_type_id=4
+description=Hola, bienvenido a la cadena de finanzas Goliath. Somos la cadena m�s grande en Argentum, contamos con bancos en las ciudades m�s importantes.
+head=503
+heading=3
+body=201
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 BackUp=0
 
 #############################################
 
 [NPC104]
-Name=Timbero
-NpcType=7
-Desc=Hola joven! Si deseas apostar escribe /APOSTAR X
-Head=9
-Heading=3
-Body=47
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Timbero
+npc_type_id=7
+description=Hola joven! Si deseas apostar escribe /APOSTAR X
+head=9
+heading=3
+body=47
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 BackUp=0
 
@@ -440,17 +411,17 @@ BackUp=0
 ##############################################################
 
 [NPC14]
-Name=Lilith
-NpcType=0
-Desc=Hola, tengo las mejores Pociones de la Alquimia.
-Head=77
-Heading=3
-Body=200
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
+name=Lilith
+npc_type_id=0
+description=Hola, tengo las mejores Pociones de la Alquimia.
+head=77
+heading=3
+body=200
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
 Comercia=1
 TipoItems=11
 NROITEMS=6
@@ -465,17 +436,17 @@ BackUp=1
 #############################################
 
 [NPC33]
-Name=Le�ador
-NpcType=0
-Desc=�Hola muchacho!, si deseas vender o comprar madera escribe /COMERCIAR.
-Head=4
-Heading=3
-Body=1
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
+name=Le�ador
+npc_type_id=0
+description=�Hola muchacho!, si deseas vender o comprar madera escribe /COMERCIAR.
+head=4
+heading=3
+body=1
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
 Comercia=1
 TipoItems=14
 NROITEMS=2
@@ -486,18 +457,18 @@ BackUp=1
 #############################################
 
 [NPC44]
-Name=Carpintero
-NpcType=0
-Desc=�Hola muchacho!, bienvenido a mi humilde Carpinter�a.
-Head=2
-Heading=3
-Body=1
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Carpintero
+npc_type_id=0
+description=�Hola muchacho!, bienvenido a mi humilde Carpinter�a.
+head=2
+heading=3
+body=1
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=20
 NROITEMS=5
@@ -511,18 +482,18 @@ BackUp=1
 #############################################
 
 [NPC41]
-Name=Pescador
-NpcType=0
-Desc=�Bienvenido al gremio de pescadores!
-Head=2
-Heading=3
-Body=3
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Pescador
+npc_type_id=0
+description=�Bienvenido al gremio de pescadores!
+head=2
+heading=3
+body=3
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=1
 NROITEMS=2
@@ -533,18 +504,18 @@ BackUp=1
 #############################################
 
 [NPC58]
-Name=Pescador
-NpcType=0
-Desc=�Bienvenido al gremio de pescadores!
-Head=101
-Heading=3
-Body=3
-Movement=2
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Pescador
+npc_type_id=0
+description=�Bienvenido al gremio de pescadores!
+head=101
+heading=3
+body=3
+movement_id=2
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=1
 NROITEMS=2
@@ -555,18 +526,18 @@ BackUp=1
 #############################################
 
 [NPC48]
-Name=Minero
-NpcType=0
-Desc=Tengo los mejores utensillos para mineros de todo Argentum.
-Head=2
-Heading=3
-Body=1
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Minero
+npc_type_id=0
+description=Tengo los mejores utensillos para mineros de todo Argentum.
+head=2
+heading=3
+body=1
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=23
 NROITEMS=1
@@ -576,18 +547,18 @@ BackUp=1
 #############################################
 
 [NPC80]
-Name=Mercader
-NpcType=0
-Desc=��Hola buen amigo, compro y vendo todo tipo de mercanc�as!!
-Head=2
-Heading=3
-Body=3
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Mercader
+npc_type_id=0
+description=��Hola buen amigo, compro y vendo todo tipo de mercanc�as!!
+head=2
+heading=3
+body=3
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=1000
 NROITEMS=1
@@ -597,18 +568,18 @@ BackUp=1
 #############################################
 
 [NPC9]
-Name=Ralph
-NpcType=0
-Desc=�Hola, peque�o aventurero, tengo aqu� unas mercader�as para saciar tu hambre y sed!.
-Head=504
-Heading=3
-Body=202
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Ralph
+npc_type_id=0
+description=�Hola, peque�o aventurero, tengo aqu� unas mercader�as para saciar tu hambre y sed!.
+head=504
+heading=3
+body=202
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=1
 NROITEMS=3
@@ -620,18 +591,18 @@ BackUp=1
 #############################################
 
 [NPC42]
-Name=Antogne
-NpcType=0
-Desc=�Hola aventurero! Si estais hambriento habeis venido al lugar apropiador, tengo todo tipo de frutas.
-Head=505
-Heading=3
-Body=202
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Antogne
+npc_type_id=0
+description=�Hola aventurero! Si estais hambriento habeis venido al lugar apropiador, tengo todo tipo de frutas.
+head=505
+heading=3
+body=202
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=1
 NROITEMS=6
@@ -646,18 +617,18 @@ BackUp=1
 #############################################
 
 [NPC114]
-Name=SR
-NpcType=0
-Desc=Bienvenido a la Sastrer�a Real.
-Head=171
-Heading=3
-Body=174
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=SR
+npc_type_id=0
+description=Bienvenido a la Sastrer�a Real.
+head=171
+heading=3
+body=174
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=3
 NROITEMS=13
@@ -679,18 +650,18 @@ BackUp=1
 #############################################
 
 [NPC159]
-Name=SR
-NpcType=0
-Desc=Bienvenido a la Sastrer�a Real.
-Head=309
-Heading=3
-Body=175
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=SR
+npc_type_id=0
+description=Bienvenido a la Sastrer�a Real.
+head=309
+heading=3
+body=175
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=3
 NROITEMS=10
@@ -709,18 +680,18 @@ BackUp=1
 #############################################
 
 [NPC115]
-Name=SC
-NpcType=0
-Desc=�AQU� OBTENDR�S TU ARMADURA LEGIONARIA!
-Head=0
-Heading=3
-Body=69
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=SC
+npc_type_id=0
+description=�AQU� OBTENDR�S TU ARMADURA LEGIONARIA!
+head=0
+heading=3
+body=69
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=3
 NROITEMS=12
@@ -741,18 +712,18 @@ BackUp=1
 ##############################################
 
 [NPC160]
-Name=SC
-NpcType=0
-Desc=�AQU� OBTENDR�S TU ARMADURA LEGIONARIA!
-Head=318
-Heading=3
-Body=177
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=SC
+npc_type_id=0
+description=�AQU� OBTENDR�S TU ARMADURA LEGIONARIA!
+head=318
+heading=3
+body=177
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=3
 NROITEMS=10
@@ -771,17 +742,17 @@ BackUp=1
 ##############################################
 
 [NPC120]
-Name=Ireth
-Desc=Bienvenido amigo, vendo ropajes para MUJERES HUMANAS.
-Head=71
-Heading=3
-Body=254
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Ireth
+description=Bienvenido amigo, vendo ropajes para MUJERES HUMANAS.
+head=71
+heading=3
+body=254
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=3
 NROITEMS=15
@@ -806,17 +777,17 @@ BackUp=1
 ##############################################
 
 [NPC121]
-Name=Isaac
-Desc=�Buscas ropas para HOMBRES HUMANOS? Entonces has hecho bien en acudir a m�.
-Head=7
-Heading=3
-Body=240
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Isaac
+description=�Buscas ropas para HOMBRES HUMANOS? Entonces has hecho bien en acudir a m�.
+head=7
+heading=3
+body=240
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=3
 NROITEMS=7
@@ -832,17 +803,17 @@ BackUp=1
 ##############################################
 
 [NPC122]
-Name=Nelvi
-Desc=Poseo una gran cantidad de ropajes para los astutos GNOMOS, �Deseas algo en particular?
-Head=403
-Heading=3
-Body=294
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Nelvi
+description=Poseo una gran cantidad de ropajes para los astutos GNOMOS, �Deseas algo en particular?
+head=403
+heading=3
+body=294
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=3
 NROITEMS=20
@@ -871,17 +842,17 @@ BackUp=1
 ##############################################
 
 [NPC123]
-Name=Aile
-Desc=Bienvenido, vendo ropas para los hermosos GNOMOS de estas tierras.
-Head=473
-Heading=3
-Body=288
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Aile
+description=Bienvenido, vendo ropas para los hermosos GNOMOS de estas tierras.
+head=473
+heading=3
+body=288
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=3
 NROITEMS=15
@@ -905,17 +876,17 @@ BackUp=1
 ##############################################
 
 [NPC124]
-Name=Varinya
-Desc=Tengo para ofrecerte los mejores ropajes para ELFOS.
-Head=172
-Heading=3
-Body=234
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Varinya
+description=Tengo para ofrecerte los mejores ropajes para ELFOS.
+head=172
+heading=3
+body=234
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=3
 NROITEMS=14
@@ -938,17 +909,17 @@ BackUp=1
 ##############################################
 
 [NPC125]
-Name=Torke
-Desc=Solo tengo ropajes para ENANOS, si no las puedes usar, �vete de aqui!
-Head=371
-Heading=3
-Body=306
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Torke
+description=Solo tengo ropajes para ENANOS, si no las puedes usar, �vete de aqui!
+head=371
+heading=3
+body=306
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=3
 NROITEMS=18
@@ -975,17 +946,17 @@ BackUp=1
 ##############################################
 
 [NPC126]
-Name=Gourk
-Desc=Vendo ropas para DROWS, de hermosas telas y refinados detalles.
-Head=203
-Heading=3
-Body=264
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Gourk
+description=Vendo ropas para DROWS, de hermosas telas y refinados detalles.
+head=203
+heading=3
+body=264
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=3
 NROITEMS=9
@@ -1003,18 +974,18 @@ BackUp=1
 ##############################################
 
 [NPC36]
-Name=Astor
-NpcType=0
-Desc=orcoszhh zson todsh orcshhh..hip..
-Head=2140
-Body=285
-Heading=3
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Astor
+npc_type_id=0
+description=orcoszhh zson todsh orcshhh..hip..
+head=2140
+body=285
+heading=3
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 
 
@@ -1025,414 +996,414 @@ Comercia=0
 ##############################################################
 
 [NPC1]
-Name=Aldeano
-NpcType=0
-Desc=�Hola forastero! Bienvenido a nuestra humilde aldea.
-Head=0
-Heading=3
-Body=18
-Movement=2
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Aldeano
+npc_type_id=0
+description=�Hola forastero! Bienvenido a nuestra humilde aldea.
+head=0
+heading=3
+body=18
+movement_id=2
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 BackUp=0
 
 #############################################
 
 [NPC10]
-Name=Bardo
-NpcType=0
-Desc=��Hola, os gustaria o�r una hermosa melod�a?!.
-Head=0
-Heading=3
-Body=17
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Bardo
+npc_type_id=0
+description=��Hola, os gustaria o�r una hermosa melod�a?!.
+head=0
+heading=3
+body=17
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 BackUp=0
 
 #############################################
 
 [NPC11]
-Name=Aldeana
-NpcType=0
-Desc=�Hola forastero! Bienvenido a nuestra humilde aldea.
-Head=0
-Heading=3
-Body=19
-Movement=2
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Aldeana
+npc_type_id=0
+description=�Hola forastero! Bienvenido a nuestra humilde aldea.
+head=0
+heading=3
+body=19
+movement_id=2
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 BackUp=0
 
 #############################################
 
 [NPC13]
-Name=Gobernador
-NpcType=11
-Desc=Hola, soy el gobernador de Ullathorpe �Bienvenido a nuestra peque�a aldea! Escribe /Hogar para obtener la ciudadan�a.
-Head=0
+name=Gobernador
+npc_type_id=11
+description=Hola, soy el gobernador de Ullathorpe �Bienvenido a nuestra peque�a aldea! Escribe /Hogar para obtener la ciudadan�a.
+head=0
 Ciudad=1
-Heading=3
-Body=4
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+heading=3
+body=4
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 BackUp=0
 
 #############################################
 
 [NPC118]
-Name=Alarnick, antiguo soberano de Banderbill
-NpcType=0
-Desc=�Esto no es digno de un soberano! �Exijo me devuelvan mi trono y me saquen de esta pocilga!...�Maldito Tancredo, me las pagar�s!
-Head=101
-Heading=3
-Body=348
-Movement=2
+name=Alarnick, antiguo soberano de Banderbill
+npc_type_id=0
+description=�Esto no es digno de un soberano! �Exijo me devuelvan mi trono y me saquen de esta pocilga!...�Maldito Tancredo, me las pagar�s!
+head=101
+heading=3
+body=348
+movement_id=2
 attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 BackUp=0
 
 #############################################
 
 [NPC128]
-Name=Nelmasil
-NpcType=0
-Desc=El pueblo de Ullathorpe en contra del alcalde... �Todos aquellos que est�n en contra se presenten en el castillo del rey en Banderbill!
-Head=0
-Body=410
-Heading=3
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Nelmasil
+npc_type_id=0
+description=El pueblo de Ullathorpe en contra del alcalde... �Todos aquellos que est�n en contra se presenten en el castillo del rey en Banderbill!
+head=0
+body=410
+heading=3
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 
 ##############################################
 
 [NPC129]
-Name=Gael Azrraed
-NpcType=0
-Desc=�Todos arder�n! arder�n en el infierno y luciernagas saldr�n de sus ojos!
-Head=2070
-Body=75
-Heading=3
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Gael Azrraed
+npc_type_id=0
+description=�Todos arder�n! arder�n en el infierno y luciernagas saldr�n de sus ojos!
+head=2070
+body=75
+heading=3
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 
 ##############################################
 
 [NPC130]
-Name=Altair de Oteren
-NpcType=0
-Desc=Aprovechad que la pesca es buena a estas horas... Si deseas pescar, puedes comprarle una ca�a al comerciante que se encuentra al oeste del muelle.
-Head=60
-Body=75
-Heading=3
-Movement=0
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Altair de Oteren
+npc_type_id=0
+description=Aprovechad que la pesca es buena a estas horas... Si deseas pescar, puedes comprarle una ca�a al comerciante que se encuentra al oeste del muelle.
+head=60
+body=75
+heading=3
+movement_id=0
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 
 ##############################################
 
 [NPC131]
-Name=Linderoth
-NpcType=0
-Desc=Hey t�, �qu� me andas mirando? He matado Medusas en peligrosos Dungeons desde que era un ni�o...
-Head=2280
-Body=285
-Heading=3
-Movement=0
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Linderoth
+npc_type_id=0
+description=Hey t�, �qu� me andas mirando? He matado Medusas en peligrosos Dungeons desde que era un ni�o...
+head=2280
+body=285
+heading=3
+movement_id=0
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 
 ##############################################
 
 [NPC132]
-Name= Sebastien
-NpcType=0
-Desc=���EH, EH?!! �no! �Yo no he hecho nada! �Vete si no quieres problemas!
-Head=2154
-Body=31
-Heading=3
-Movement=0
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name= Sebastien
+npc_type_id=0
+description=���EH, EH?!! �no! �Yo no he hecho nada! �Vete si no quieres problemas!
+head=2154
+body=31
+heading=3
+movement_id=0
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 
 ##############################################
 
 [NPC133]
-Name=Anthares
-NpcType=0
-Desc=Shhh, ten cuidado, planeo raptar al Demonio. Buscar� refuerzos y la ciudad ser� asediada.
-Head=2050
-Body=378
-Heading=3
-Movement=0
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Anthares
+npc_type_id=0
+description=Shhh, ten cuidado, planeo raptar al Demonio. Buscar� refuerzos y la ciudad ser� asediada.
+head=2050
+body=378
+heading=3
+movement_id=0
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 
 ##############################################
 
 [NPC134]
-Name=Vuragon
-NpcType=0
-Desc=Estoy hasta la coronilla de que se escape mi vaca! ya recibir� su merecido cuando la encuentre.
-Head=60
-Body=501
-Heading=3
-Movement=0
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Vuragon
+npc_type_id=0
+description=Estoy hasta la coronilla de que se escape mi vaca! ya recibir� su merecido cuando la encuentre.
+head=60
+body=501
+heading=3
+movement_id=0
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 
 ##############################################
 
 [NPC135]
-Name=Belial
-NpcType=0
-Desc=�Maldito seas Tancredo de Hauteville! Me obligan limpiar esta mugrosa ciudad por haber hecho algo que ���no hice!!!
-Head=63
-Body=641
-Heading=3
-Movement=0
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Belial
+npc_type_id=0
+description=�Maldito seas Tancredo de Hauteville! Me obligan limpiar esta mugrosa ciudad por haber hecho algo que ���no hice!!!
+head=63
+body=641
+heading=3
+movement_id=0
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 
 ##############################################
 
 [NPC136]
-Name=Efral
-NpcType=0
-Desc=�Qu� miras t�? �Acaso quieres sufrir?
-Head=69
-Body=442
-Heading=3
-Movement=0
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Efral
+npc_type_id=0
+description=�Qu� miras t�? �Acaso quieres sufrir?
+head=69
+body=442
+heading=3
+movement_id=0
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 
 ##############################################
 
 [NPC137]
-Name=Manrique
-NpcType=0
-Desc=El Rey es avaro y sus terratenientes tambi�n, dame algo por favor, no seas como �l...
-Head=0
-Body=411
-Heading=3
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Manrique
+npc_type_id=0
+description=El Rey es avaro y sus terratenientes tambi�n, dame algo por favor, no seas como �l...
+head=0
+body=411
+heading=3
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 
 ##############################################
 
 [NPC138]
-Name=Abel, el monje pensador
-NpcType=0
-Desc=Cuando hayas caido en combate, puedes acercarte al sacerdote de la ciudad para que te devuelva a la vida.
-Head=2050
-Body=381
-Heading=3
-Movement=0
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Abel, el monje pensador
+npc_type_id=0
+description=Cuando hayas caido en combate, puedes acercarte al sacerdote de la ciudad para que te devuelva a la vida.
+head=2050
+body=381
+heading=3
+movement_id=0
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 
 ##############################################
 
 [NPC139]
-Name=Clipsa
-NpcType=0
-Desc=Que la Diosa naturaleza te gu�e.
-Head=67
-Body=357
-Heading=3
-Movement=0
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Clipsa
+npc_type_id=0
+description=Que la Diosa naturaleza te gu�e.
+head=67
+body=357
+heading=3
+movement_id=0
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 
 ##############################################
 
 [NPC140]
-Name=Astor
-NpcType=0
-Desc=orcoszhh zson todsh orcshhh..hip..
-Head=0
-Body=412
-Heading=3
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Astor
+npc_type_id=0
+description=orcoszhh zson todsh orcshhh..hip..
+head=0
+body=412
+heading=3
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 
 ##############################################
 
 [NPC141]
-Name=Zairot
-NpcType=0
-Desc=Podrash caminar de norte a shur, *hip* podrash encontrar sherveza de la mejor *hip* pero ninguna como la del meshon *hip*
-Head=0
-Body=416
-Heading=3
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Zairot
+npc_type_id=0
+description=Podrash caminar de norte a shur, *hip* podrash encontrar sherveza de la mejor *hip* pero ninguna como la del meshon *hip*
+head=0
+body=416
+heading=3
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 
 ##############################################
 
 [NPC142]
-Name=Onkin
-NpcType=0
-Desc=D�jenme tarnquilo... hip hip... descargar� lo que he... hip hip... bebido
-Head=0
-Body=424
-Heading=3
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Onkin
+npc_type_id=0
+description=D�jenme tarnquilo... hip hip... descargar� lo que he... hip hip... bebido
+head=0
+body=424
+heading=3
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 ##############################################
 
 [NPC143]
-Name=Fethresor
-NpcType=0
-Desc=En las batallas m�s escalofriantes, m�s sangrientas... Un bardo siempre est� presente.
-Head=0
-Body=418
-Heading=3
-Movement=0
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Fethresor
+npc_type_id=0
+description=En las batallas m�s escalofriantes, m�s sangrientas... Un bardo siempre est� presente.
+head=0
+body=418
+heading=3
+movement_id=0
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 
 ##############################################
 
 [NPC144]
-Name=Whyx
-NpcType=0
-Desc=Mis melod�as podr�an hacer que hasta el m�s h�bil guerrero, caiga a mis pies...
-Head=0
-Body=419
-Heading=3
-Movement=0
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Whyx
+npc_type_id=0
+description=Mis melod�as podr�an hacer que hasta el m�s h�bil guerrero, caiga a mis pies...
+head=0
+body=419
+heading=3
+movement_id=0
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 
 ##############################################
 
 [NPC145]
-Name=Iklot
-NpcType=0
-Desc=Cuando te encuentres solo, perdido, sin saber para d�nde correr... Respira profundo y susurra mi melod�a.
-Head=0
-Body=420
-Heading=3
-Movement=0
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Iklot
+npc_type_id=0
+description=Cuando te encuentres solo, perdido, sin saber para d�nde correr... Respira profundo y susurra mi melod�a.
+head=0
+body=420
+heading=3
+movement_id=0
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 
 ##############################################
 
 [NPC146]
-Name=Unurbar Gorog
-NpcType=0
-Desc=�Hola! Poseo las mejores y m�s extra�as bebidas de estas tierras, �Qu� desea que le sirva?
-Head=304
-Heading=3
-Body=372
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Unurbar Gorog
+npc_type_id=0
+description=�Hola! Poseo las mejores y m�s extra�as bebidas de estas tierras, �Qu� desea que le sirva?
+head=304
+heading=3
+body=372
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=13
 NROITEMS=8
@@ -1449,18 +1420,18 @@ BackUp=1
 ##############################################
 
 [NPC147]
-Name=Dugh Dhail
-NpcType=0
-Desc=�Hola forastero! Pronto se celebrar� un nuevo aniversario de la creaci�n de la Cerveza. �Acudir�s a los festejos?
-Head=0
-Heading=3
-Body=410
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Dugh Dhail
+npc_type_id=0
+description=�Hola forastero! Pronto se celebrar� un nuevo aniversario de la creaci�n de la Cerveza. �Acudir�s a los festejos?
+head=0
+heading=3
+body=410
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 BackUp=1
 
@@ -1469,18 +1440,18 @@ BackUp=1
 ##############################################################
 
 [NPC8]
-Name=Thorkis
-NpcType=0
-Desc=Hooooola jovencito, tengo las mejores provisiones de Ullathorpe!!
-Head=504
-Heading=3
-Body=202
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Thorkis
+npc_type_id=0
+description=Hooooola jovencito, tengo las mejores provisiones de Ullathorpe!!
+head=504
+heading=3
+body=202
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=1
 NROITEMS=5
@@ -1494,18 +1465,18 @@ BackUp=1
 #############################################
 
 [NPC7]
-Name=Herrero
-NpcType=0
-Desc=Bienvenido, rata de alcantarilla, soy el Herrero de Ullathorpe...tengo algunas armas que pueden ayudarte en tus viajes.
-Head=505
-Heading=3
-Body=199
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Herrero
+npc_type_id=0
+description=Bienvenido, rata de alcantarilla, soy el Herrero de Ullathorpe...tengo algunas armas que pueden ayudarte en tus viajes.
+head=505
+heading=3
+body=199
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=2
 NROITEMS=9
@@ -1523,18 +1494,18 @@ BackUp=1
 #############################################
 
 [NPC46]
-Name=Mago
-NpcType=0
-Desc=Bienvenido a mi peque�a tienda de Ullathorpe... Tengo algunos hechizos que podr�an interesarte.
-Head=110
-Heading=3
-Body=46
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Mago
+npc_type_id=0
+description=Bienvenido a mi peque�a tienda de Ullathorpe... Tengo algunos hechizos que podr�an interesarte.
+head=110
+heading=3
+body=46
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=24
 NROITEMS=6
@@ -1549,18 +1520,18 @@ BackUp=1
 #############################################
 
 [NPC12]
-Name=Sastre
-NpcType=0
-Desc=�Hola forastero! Soy el Sastre de Ullathorpe, Bienvenido!
-Head=9
-Heading=3
-Body=50
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Sastre
+npc_type_id=0
+description=�Hola forastero! Soy el Sastre de Ullathorpe, Bienvenido!
+head=9
+heading=3
+body=50
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=3
 NROITEMS=9
@@ -1578,18 +1549,18 @@ BackUp=1
 #############################################
 
 [NPC19]
-Name=Sastre
-NpcType=0
-Desc=�Bienvenida Viajera! Tengo hermosas vestimentas para ofrecerte...
-Head=70
-Heading=3
-Body=80
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Sastre
+npc_type_id=0
+description=�Bienvenida Viajera! Tengo hermosas vestimentas para ofrecerte...
+head=70
+heading=3
+body=80
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=3
 NROITEMS=5
@@ -1603,18 +1574,18 @@ BackUp=1
 #############################################
 
 [NPC20]
-Name=Sastre
-NpcType=0
-Desc=�Ac�rquese! Tengo peque�as prendas que ser�n de su agrado...
-Head=303
-Heading=3
-Body=180
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Sastre
+npc_type_id=0
+description=�Ac�rquese! Tengo peque�as prendas que ser�n de su agrado...
+head=303
+heading=3
+body=180
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=3
 NROITEMS=6
@@ -1629,17 +1600,17 @@ BackUp=1
 #############################################
 
 [NPC54]
-Name=Armaduras
-Desc=Ac�rcate, tengo algunas armaduras que podr�an protegerte.
-Head=6
-Body=93
-Heading=4
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Armaduras
+description=Ac�rcate, tengo algunas armaduras que podr�an protegerte.
+head=6
+body=93
+heading=4
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=3
 NROITEMS=5
@@ -1663,18 +1634,18 @@ BackUp=1
 ##############################################################
 
 [NPC15]
-Name=Thorkis
-NpcType=0
-Desc=�Qu� tal amigo! Entra, pues tengo las mejores provisiones de Nix!
-Head=504
-Heading=3
-Body=202
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Thorkis
+npc_type_id=0
+description=�Qu� tal amigo! Entra, pues tengo las mejores provisiones de Nix!
+head=504
+heading=3
+body=202
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=1
 NROITEMS=4
@@ -1687,18 +1658,18 @@ BackUp=1
 #############################################
 
 [NPC37]
-Name=Herrero
-NpcType=0
-Desc=Bienvenido, rata de alcantarilla, soy el Herrero de Nix, tengo algunas armas que pueden ayudarte en tus viajes.
-Head=505
-Heading=3
-Body=199
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Herrero
+npc_type_id=0
+description=Bienvenido, rata de alcantarilla, soy el Herrero de Nix, tengo algunas armas que pueden ayudarte en tus viajes.
+head=505
+heading=3
+body=199
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=2
 NROITEMS=9
@@ -1716,18 +1687,18 @@ BackUp=1
 #############################################
 
 [NPC47]
-Name=Mago
-NpcType=0
-Desc=Bienvenido a mi peque�a tienda de Nix... Tengo algunos hechizos que podr�an interesarte.
-Head=110
-Heading=3
-Body=46
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Mago
+npc_type_id=0
+description=Bienvenido a mi peque�a tienda de Nix... Tengo algunos hechizos que podr�an interesarte.
+head=110
+heading=3
+body=46
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=24
 NROITEMS=9
@@ -1745,18 +1716,18 @@ BackUp=1
 #############################################
 
 [NPC21]
-Name=Sastre
-NpcType=0
-Desc=�Hola forastero! Soy el Sastre de Nix, Bienvenido!
-Head=7
-Heading=3
-Body=50
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Sastre
+npc_type_id=0
+description=�Hola forastero! Soy el Sastre de Nix, Bienvenido!
+head=7
+heading=3
+body=50
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=3
 NROITEMS=10
@@ -1775,18 +1746,18 @@ BackUp=1
 #############################################
 
 [NPC22]
-Name=Sastre
-NpcType=0
-Desc=�Bienvenida Viajera! Entra a mi tienda, �Tengo las mejores prendas de Nix!
-Head=71
-Heading=3
-Body=80
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Sastre
+npc_type_id=0
+description=�Bienvenida Viajera! Entra a mi tienda, �Tengo las mejores prendas de Nix!
+head=71
+heading=3
+body=80
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=3
 NROITEMS=5
@@ -1800,18 +1771,18 @@ BackUp=1
 #############################################
 
 [NPC23]
-Name=Sastre
-NpcType=0
-Desc=�Ac�rquese! Tengo peque�as prendas que ser�n de su agrado...
-Head=404
-Heading=3
-Body=180
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Sastre
+npc_type_id=0
+description=�Ac�rquese! Tengo peque�as prendas que ser�n de su agrado...
+head=404
+heading=3
+body=180
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=3
 NROITEMS=6
@@ -1826,17 +1797,17 @@ BackUp=1
 #############################################
 
 [NPC70]
-Name=Armaduras
-Desc=Ac�rcate, tengo algunas armaduras que podr�an protegerte.
-Head=6
-Body=93
-Heading=4
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Armaduras
+description=Ac�rcate, tengo algunas armaduras que podr�an protegerte.
+head=6
+body=93
+heading=4
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=3
 NROITEMS=8
@@ -1858,18 +1829,18 @@ BackUp=1
 ##############################################################
 
 [NPC50]
-Name=Tellez
-NpcType=0
-Desc=�Hola! Bienvenido al "Mes�n Hostigado", �Qu� desea que le sirva?
-Head=505
-Heading=3
-Body=202
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Tellez
+npc_type_id=0
+description=�Hola! Bienvenido al "Mes�n Hostigado", �Qu� desea que le sirva?
+head=505
+heading=3
+body=202
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=13
 NROITEMS=10
@@ -1888,18 +1859,18 @@ BackUp=1
 #############################################
 
 [NPC38]
-Name=Herrero
-NpcType=0
-Desc=�Ven, pasa, que he fabricado las m�s poderosas armas de Banderbill para t�!
-Head=505
-Heading=3
-Body=199
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Herrero
+npc_type_id=0
+description=�Ven, pasa, que he fabricado las m�s poderosas armas de Banderbill para t�!
+head=505
+heading=3
+body=199
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=2
 NROITEMS=9
@@ -1917,18 +1888,18 @@ BackUp=1
 #############################################
 
 [NPC51]
-Name=Mago
-NpcType=0
-Desc=Bienvenido a mi peque�a Tienda de Banderbill... Tengo algunos hechizos que podr�an interesarte.
-Head=110
-Heading=3
-Body=46
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Mago
+npc_type_id=0
+description=Bienvenido a mi peque�a Tienda de Banderbill... Tengo algunos hechizos que podr�an interesarte.
+head=110
+heading=3
+body=46
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=24
 NROITEMS=13
@@ -1950,18 +1921,18 @@ BackUp=1
 #############################################
 
 [NPC25]
-Name=Sastre
-NpcType=0
-Desc=�Bienvenido a la Sastrer�a de Banderbill! �En qu� lo puedo ayudar?
-Head=7
-Heading=3
-Body=56
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Sastre
+npc_type_id=0
+description=�Bienvenido a la Sastrer�a de Banderbill! �En qu� lo puedo ayudar?
+head=7
+heading=3
+body=56
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=3
 NROITEMS=11
@@ -1981,18 +1952,18 @@ BackUp=1
 #############################################
 
 [NPC26]
-Name=Sastre
-NpcType=0
-Desc=�Adelante hermosa ni�a! En mi tienda encontrar�s vestidos hechos para t�!
-Head=173
-Heading=3
-Body=121
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Sastre
+npc_type_id=0
+description=�Adelante hermosa ni�a! En mi tienda encontrar�s vestidos hechos para t�!
+head=173
+heading=3
+body=121
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=3
 NROITEMS=5
@@ -2006,18 +1977,18 @@ BackUp=1
 #############################################
 
 [NPC27]
-Name=Sastre
-NpcType=0
-Desc=�Ven y mira estas prendas que he confeccionado para nuestra raza!
-Head=305
-Heading=3
-Body=159
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Sastre
+npc_type_id=0
+description=�Ven y mira estas prendas que he confeccionado para nuestra raza!
+head=305
+heading=3
+body=159
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=3
 NROITEMS=6
@@ -2032,17 +2003,17 @@ BackUp=1
 #############################################
 
 [NPC74]
-Name=Armaduras
-Desc=Ven, tengo resistentes armaduras para ofrecerte.
-Head=6
-Body=93
-Heading=4
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Armaduras
+description=Ven, tengo resistentes armaduras para ofrecerte.
+head=6
+body=93
+heading=4
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=3
 NROITEMS=6
@@ -2062,18 +2033,18 @@ BackUp=1
 ##############################################################
 
 [NPC43]
-Name=Sorks
-NpcType=0
-Desc=��Est�is sediento y hambriento!?
-Head=505
-Heading=3
-Body=202
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Sorks
+npc_type_id=0
+description=��Est�is sediento y hambriento!?
+head=505
+heading=3
+body=202
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=13
 NROITEMS=4
@@ -2086,18 +2057,18 @@ BackUp=1
 #############################################
 
 [NPC56]
-Name=Herrero
-NpcType=0
-Desc=�Ven, pasa, que he fabricado, aqu� en Lindos, poderosas armas para t�!
-Head=505
-Heading=3
-Body=199
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Herrero
+npc_type_id=0
+description=�Ven, pasa, que he fabricado, aqu� en Lindos, poderosas armas para t�!
+head=505
+heading=3
+body=199
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=2
 NROITEMS=8
@@ -2114,18 +2085,18 @@ BackUp=1
 #############################################
 
 [NPC69]
-Name=Mago
-NpcType=0
-Desc=Ven por aqu� joven, las artes m�gicas superiores te est�n llamando...
-Head=110
-Heading=3
-Body=46
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Mago
+npc_type_id=0
+description=Ven por aqu� joven, las artes m�gicas superiores te est�n llamando...
+head=110
+heading=3
+body=46
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=24
 NROITEMS=15
@@ -2149,18 +2120,18 @@ BackUp=1
 #############################################
 
 [NPC31]
-Name=Sastre
-NpcType=0
-Desc=�Ven aqu�! Te puedo ofrecer las mejores ropas de la isla...
-Head=7
-Heading=3
-Body=46
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Sastre
+npc_type_id=0
+description=�Ven aqu�! Te puedo ofrecer las mejores ropas de la isla...
+head=7
+heading=3
+body=46
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=3
 NROITEMS=11
@@ -2180,18 +2151,18 @@ BackUp=1
 #############################################
 
 [NPC32]
-Name=Sastre
-NpcType=0
-Desc=�Ven y mira estas vestimentas, seguro te encantar�n!
-Head=75
-Heading=3
-Body=118
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Sastre
+npc_type_id=0
+description=�Ven y mira estas vestimentas, seguro te encantar�n!
+head=75
+heading=3
+body=118
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=3
 NROITEMS=5
@@ -2205,18 +2176,18 @@ BackUp=1
 #############################################
 
 [NPC39]
-Name=Sastre
-NpcType=0
-Desc=�Hola forastero! confeccionamos las mejores ropas de la zona.
-Head=304
-Heading=3
-Body=135
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Sastre
+npc_type_id=0
+description=�Hola forastero! confeccionamos las mejores ropas de la zona.
+head=304
+heading=3
+body=135
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=3
 NROITEMS=7
@@ -2232,17 +2203,17 @@ BackUp=1
 #############################################
 
 [NPC113]
-Name=Armaduras
-Desc=�Tengo a la venta las mejores armaduras de la isla!
-Head=6
-Body=93
-Heading=4
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Armaduras
+description=�Tengo a la venta las mejores armaduras de la isla!
+head=6
+body=93
+heading=4
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=3
 NROITEMS=7
@@ -2263,18 +2234,18 @@ BackUp=1
 ##############################################################
 
 [NPC103]
-Name=Carahuel
-NpcType=0
-Desc=�Hola, peque�o amigo! �Est�s buscando algo para llenar tu est�mago? Creo que puedo ayudarte...
-Head=474
-Heading=3
-Body=309
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Carahuel
+npc_type_id=0
+description=�Hola, peque�o amigo! �Est�s buscando algo para llenar tu est�mago? Creo que puedo ayudarte...
+head=474
+heading=3
+body=309
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=13
 NROITEMS=4
@@ -2287,18 +2258,18 @@ BackUp=1
 #############################################
 
 [NPC57]
-Name=Bhoemond
-NpcType=0
-Desc= �Sea bienvenido a la famosa Taberna de Arghal!, Aqu� podr� saciarse con la mejor comida y la mejor bebida de toda la zona.
-Head=17
-Heading=3
-Body=100
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Bhoemond
+npc_type_id=0
+description= �Sea bienvenido a la famosa Taberna de Arghal!, Aqu� podr� saciarse con la mejor comida y la mejor bebida de toda la zona.
+head=17
+heading=3
+body=100
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=13
 NROITEMS=10
@@ -2317,18 +2288,18 @@ BackUp=1
 #############################################
 
 [NPC112]
-Name=Herrero
-NpcType=0
-Desc=Con estas manos he constru�do algunas armas que te podr�n servir en tus aventuras... �paga por ellas y ser�n tuyas!
-Head=16
-Heading=3
-Body=199
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Herrero
+npc_type_id=0
+description=Con estas manos he constru�do algunas armas que te podr�n servir en tus aventuras... �paga por ellas y ser�n tuyas!
+head=16
+heading=3
+body=199
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=2
 NROITEMS=8
@@ -2345,17 +2316,17 @@ BackUp=1
 #############################################
 
 [NPC59]
-Name=Mago
-Desc=Bienvenido, ne�fito a �sta, a mi peque�a escuela de Magia, ubicada en el coraz�n mismo de la ciudad de Arghal.
-Head=20
-Heading=3
-Body=34
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Mago
+description=Bienvenido, ne�fito a �sta, a mi peque�a escuela de Magia, ubicada en el coraz�n mismo de la ciudad de Arghal.
+head=20
+heading=3
+body=34
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=24
 NROITEMS=7
@@ -2371,18 +2342,18 @@ BackUp=1
 #############################################
 
 [NPC63]
-Name=Steve
-NpcType=0
-Desc=Ven, ac�rcate, que tengo para ofrecerte las mejores prendas masculinas de todo Arghal...
-Head=22
-Heading=3
-Body=342
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Steve
+npc_type_id=0
+description=Ven, ac�rcate, que tengo para ofrecerte las mejores prendas masculinas de todo Arghal...
+head=22
+heading=3
+body=342
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=3
 NROITEMS=10
@@ -2401,18 +2372,18 @@ BackUp=1
 #############################################
 
 [NPC64]
-Name=Virgin
-NpcType=0
-Desc=�Bienvenida jovencita! Soy quien hace los mejores atuendos femeninos de todo Arghal, ven y prueba mi mercader�a.
-Head=70
-Heading=3
-Body=80
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Virgin
+npc_type_id=0
+description=�Bienvenida jovencita! Soy quien hace los mejores atuendos femeninos de todo Arghal, ven y prueba mi mercader�a.
+head=70
+heading=3
+body=80
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=3
 NROITEMS=5
@@ -2426,18 +2397,18 @@ BackUp=1
 #############################################
 
 [NPC68]
-Name=Odkon
-NpcType=0
-Desc=�Ac�rquese peque�o vistante de Arghal... Tengo prendas a su medida.
-Head=404
-Heading=3
-Body=371
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Odkon
+npc_type_id=0
+description=�Ac�rquese peque�o vistante de Arghal... Tengo prendas a su medida.
+head=404
+heading=3
+body=371
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=3
 NROITEMS=6
@@ -2450,17 +2421,17 @@ Obj6=707-1000
 BackUp=1
 
 [NPC73]
-Name=Armaduras
-Desc=Si tienes agallas como para abandonar la ciudad y enfrentar el peligro de los bosques, deber�s comprar una de las armaduras que he fabricado.
-Head=39
-Body=93
-Heading=3
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Armaduras
+description=Si tienes agallas como para abandonar la ciudad y enfrentar el peligro de los bosques, deber�s comprar una de las armaduras que he fabricado.
+head=39
+body=93
+heading=3
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=3
 NROITEMS=3
@@ -2476,18 +2447,18 @@ BackUp=1
 ##############################################################
 
 [NPC40]
-Name=Tolloz
-NpcType=0
-Desc=�Hola! Bienvenido a la Taberna de Arkhein, �Qu� desea que le sirva?
-Head=505
-Heading=3
-Body=202
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Tolloz
+npc_type_id=0
+description=�Hola! Bienvenido a la Taberna de Arkhein, �Qu� desea que le sirva?
+head=505
+heading=3
+body=202
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=13
 NROITEMS=10
@@ -2506,18 +2477,18 @@ BackUp=1
 #############################################
 
 [NPC55]
-Name=Herrero
-NpcType=0
-Desc=�Ven, pasa, que he fabricado las m�s poderosas armas de Arkhein para t�!
-Head=505
-Heading=3
-Body=199
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Herrero
+npc_type_id=0
+description=�Ven, pasa, que he fabricado las m�s poderosas armas de Arkhein para t�!
+head=505
+heading=3
+body=199
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=2
 NROITEMS=9
@@ -2535,17 +2506,17 @@ BackUp=1
 #############################################
 
 [NPC61]
-Name=Mago
-Desc=Bienvenido a mi peque�a tienda de Arkhein... Tengo algunos hechizos que podr�an interesarte.
-Head=110
-Heading=3
-Body=46
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Mago
+description=Bienvenido a mi peque�a tienda de Arkhein... Tengo algunos hechizos que podr�an interesarte.
+head=110
+heading=3
+body=46
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=24
 NROITEMS=14
@@ -2568,18 +2539,18 @@ BackUp=1
 #############################################
 
 [NPC28]
-Name=Sastre
-NpcType=0
-Desc=�Entrad Valiente Viajero! En la Sastrer�a de Arkhein est�n las mejores ropas del continente.
-Head=15
-Heading=3
-Body=56
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Sastre
+npc_type_id=0
+description=�Entrad Valiente Viajero! En la Sastrer�a de Arkhein est�n las mejores ropas del continente.
+head=15
+heading=3
+body=56
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=3
 NROITEMS=14
@@ -2602,18 +2573,18 @@ BackUp=1
 #############################################
 
 [NPC29]
-Name=Sastre
-NpcType=0
-Desc=�Ven y mira estas vestimentas, seguro te encantar�n!
-Head=173
-Heading=3
-Body=80
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Sastre
+npc_type_id=0
+description=�Ven y mira estas vestimentas, seguro te encantar�n!
+head=173
+heading=3
+body=80
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=3
 NROITEMS=4
@@ -2626,18 +2597,18 @@ BackUp=1
 #############################################
 
 [NPC30]
-Name=Sastre
-NpcType=0
-Desc=Aqu� encontrar�s las mejores prendas para enanos �Y a muy buen precio!
-Head=404
-Heading=3
-Body=159
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Sastre
+npc_type_id=0
+description=Aqu� encontrar�s las mejores prendas para enanos �Y a muy buen precio!
+head=404
+heading=3
+body=159
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=3
 NROITEMS=6
@@ -2652,17 +2623,17 @@ BackUp=1
 #############################################
 
 [NPC111]
-Name=Armaduras
-Desc=Ven, tengo resistentes armaduras para ofrecerte.
-Head=6
-Body=93
-Heading=4
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Armaduras
+description=Ven, tengo resistentes armaduras para ofrecerte.
+head=6
+body=93
+heading=4
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=3
 NROITEMS=6
@@ -2682,18 +2653,18 @@ BackUp=1
 ##############################################################
 
 [NPC53]
-Name=Roksar
-NpcType=0
-Desc=�Hola, buen viajero! Dispongo de todo tipo de provisiones... �Qu� deseas?
-Head=505
-Heading=3
-Body=202
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Roksar
+npc_type_id=0
+description=�Hola, buen viajero! Dispongo de todo tipo de provisiones... �Qu� deseas?
+head=505
+heading=3
+body=202
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=1
 NROITEMS=8
@@ -2715,18 +2686,18 @@ BackUp=1
 ##############################################################
 
 [NPC71]
-Name=Herrero
-NpcType=0
-Desc=Tened aqu� las armas m�s poderosas de estas tierras... �Pasad y ved!
-Head=505
-Heading=3
-Body=199
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Herrero
+npc_type_id=0
+description=Tened aqu� las armas m�s poderosas de estas tierras... �Pasad y ved!
+head=505
+heading=3
+body=199
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=2
 NROITEMS=9
@@ -2744,18 +2715,18 @@ BackUp=1
 #############################################
 
 [NPC99]
-Name=Mago
-NpcType=0
-Desc=�Est�s buscando los hechizos m�s poderosos? A buen puerto has llegado...
-Head=110
-Heading=3
-Body=46
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Mago
+npc_type_id=0
+description=�Est�s buscando los hechizos m�s poderosos? A buen puerto has llegado...
+head=110
+heading=3
+body=46
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=24
 NROITEMS=4
@@ -2768,18 +2739,18 @@ BackUp=1
 #############################################
 
 [NPC109]
-Name=Sastre
-NpcType=0
-Desc=�Bienvenidos a la Gran Sastrer�a de la Ciudad Perdida! Aqu� encontrar�n las ropas m�s ex�ticas del mundo...
-Head=406
-Heading=3
-Body=130
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Sastre
+npc_type_id=0
+description=�Bienvenidos a la Gran Sastrer�a de la Ciudad Perdida! Aqu� encontrar�n las ropas m�s ex�ticas del mundo...
+head=406
+heading=3
+body=130
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=3
 NROITEMS=10
@@ -2798,18 +2769,18 @@ BackUp=1
 #############################################
 
 [NPC110]
-Name=Sastre
-NpcType=0
-Desc=�Entra! Jam�s ver�s prendas m�s bellas que las que tengo para ofrecerte...
-Head=474
-Heading=3
-Body=124
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Sastre
+npc_type_id=0
+description=�Entra! Jam�s ver�s prendas m�s bellas que las que tengo para ofrecerte...
+head=474
+heading=3
+body=124
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=3
 NROITEMS=6
@@ -2824,18 +2795,18 @@ BackUp=1
 #############################################
 
 [NPC117]
-Name=Sastre
-NpcType=0
-Desc=�Aqu� en la Ciudad Perdida encontrar�n las mejores ropas peque�as de todo el mundo!
-Head=402
-Heading=3
-Body=136
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Sastre
+npc_type_id=0
+description=�Aqu� en la Ciudad Perdida encontrar�n las mejores ropas peque�as de todo el mundo!
+head=402
+heading=3
+body=136
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=3
 NROITEMS=6
@@ -2850,17 +2821,17 @@ BackUp=1
 #############################################
 
 [NPC116]
-Name=Armaduras
-Desc=Si est�s buscando las mejores armaduras de estas tierras, has llegado al lugar correcto...
-Head=6
-Body=93
-Heading=4
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Armaduras
+description=Si est�s buscando las mejores armaduras de estas tierras, has llegado al lugar correcto...
+head=6
+body=93
+heading=4
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=1
 TipoItems=3
 NROITEMS=11
@@ -2886,20 +2857,20 @@ BackUp=1
 ##############################################################
 
 [NPC6]
-Name=Guardia Imperial
-NpcType=2
-Desc=�Dar� c�rcel a todos los criminales!
-Head=0
-Heading=3
-Body=15
-Movement=5
+name=Guardia Imperial
+npc_type_id=2
+description=�Dar� c�rcel a todos los criminales!
+head=0
+heading=3
+body=15
+movement_id=5
 PosOrig=1
 GuardiaPersigue=0
-Attackable=1
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+attackable=1
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 GiveEXP=0
 GiveGLD=0
@@ -2915,19 +2886,19 @@ BackUp=0
 #############################################
 
 [NPC100]
-Name=Guardia Imperial
-NpcType=2
-Desc=�Dar� c�rcel a todos los criminales y los perseguir� hasta el fin!
-Head=0
-Heading=3
-Body=15
-Movement=5
+name=Guardia Imperial
+npc_type_id=2
+description=�Dar� c�rcel a todos los criminales y los perseguir� hasta el fin!
+head=0
+heading=3
+body=15
+movement_id=5
 PosOrig=1
 attackable=1
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 GiveEXP=0
 GiveGLD=0
@@ -2943,19 +2914,19 @@ BackUp=0
 #############################################
 
 [NPC49]
-Name=Guardia Imperial
-NpcType=2
-Desc=�Dar� c�rcel a todos los criminales!
-Head=0
-Heading=3
-Body=15
-Movement=2
+name=Guardia Imperial
+npc_type_id=2
+description=�Dar� c�rcel a todos los criminales!
+head=0
+heading=3
+body=15
+movement_id=2
 PosOrig=1
-Attackable=1
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+attackable=1
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 GiveEXP=0
 GiveGLD=0
@@ -2972,19 +2943,19 @@ BackUp=0
 #############################################
 
 [NPC102]
-Name=Guardia Imperial
-NpcType=2
-Desc=�Dar� c�rcel a todos los criminales!
-Head=0
-Heading=3
-Body=15
-Movement=11
+name=Guardia Imperial
+npc_type_id=2
+description=�Dar� c�rcel a todos los criminales!
+head=0
+heading=3
+body=15
+movement_id=11
 PosOrig=1
-Attackable=1
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+attackable=1
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 GiveEXP=0
 GiveGLD=0
@@ -3001,19 +2972,19 @@ BackUp=0
 #############################################
 
 [NPC106]
-Name=Arquera Real
-NpcType=2
-Desc=Ning�n criminal escapar� de mi punter�a.
-Head=172
-Heading=3
-Body=131
-Movement=5
+name=Arquera Real
+npc_type_id=2
+description=Ning�n criminal escapar� de mi punter�a.
+head=172
+heading=3
+body=131
+movement_id=5
 PosOrig=1
-Attackable=1
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+attackable=1
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 GiveEXP=0
 GiveGLD=0
@@ -3033,19 +3004,19 @@ BackUp=0
 #############################################
 
 [NPC81]
-Name=Sacerdote Imperial
-NpcType=2
-Desc=Ohhh hijo m�o!! que la llama de la virtud arda en tu coraz�n!!!
-Head=4
-Heading=3
-Body=101
-Movement=5
+name=Sacerdote Imperial
+npc_type_id=2
+description=Ohhh hijo m�o!! que la llama de la virtud arda en tu coraz�n!!!
+head=4
+heading=3
+body=101
+movement_id=5
 PosOrig=1
-Attackable=1
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+attackable=1
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 GiveEXP=0
 GiveGLD=0
@@ -3064,19 +3035,19 @@ BackUp=0
 #############################################
 
 [NPC82]
-Name=Sacerdote Imperial
-NpcType=2
-Desc=Ohhh hijo m�o!! que la llama de la virtud arda en tu coraz�n!!!
-Head=5
-Heading=3
-Body=101
-Movement=5
+name=Sacerdote Imperial
+npc_type_id=2
+description=Ohhh hijo m�o!! que la llama de la virtud arda en tu coraz�n!!!
+head=5
+heading=3
+body=101
+movement_id=5
 PosOrig=1
-Attackable=1
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+attackable=1
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 GiveEXP=0
 GiveGLD=0
@@ -3095,19 +3066,19 @@ BackUp=0
 #############################################
 
 [NPC83]
-Name=Druida Imperial
-NpcType=2
-Desc=Ohhh hijo m�o!! que la llama de la virtud arda en tu coraz�n!!!
-Head=101
-Heading=3
-Body=56
-Movement=5
+name=Druida Imperial
+npc_type_id=2
+description=Ohhh hijo m�o!! que la llama de la virtud arda en tu coraz�n!!!
+head=101
+heading=3
+body=56
+movement_id=5
 PosOrig=1
-Attackable=1
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+attackable=1
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 GiveEXP=0
 GiveGLD=0
@@ -3118,7 +3089,7 @@ MinHIT=100
 DEF=10
 PoderAtaque=1500
 PoderEvasion=190
-Domable=0
+domable=0
 LanzaSpells=2
 Sp1=24
 Sp2=23
@@ -3127,19 +3098,19 @@ BackUp=0
 #############################################
 
 [NPC84]
-Name=Druida Imperial
-NpcType=2
-Desc=Ohhh hijo m�o!! que la llama de la virtud arda en tu coraz�n!!!
-Head=102
-Heading=3
-Body=56
-Movement=2
+name=Druida Imperial
+npc_type_id=2
+description=Ohhh hijo m�o!! que la llama de la virtud arda en tu coraz�n!!!
+head=102
+heading=3
+body=56
+movement_id=2
 PosOrig=1
-Attackable=1
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+attackable=1
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 GiveEXP=0
 GiveGLD=0
@@ -3150,7 +3121,7 @@ MinHIT=100
 DEF=10
 PoderAtaque=1500
 PoderEvasion=190
-Domable=0
+domable=0
 LanzaSpells=2
 Sp1=24
 Sp2=23
@@ -3159,19 +3130,19 @@ BackUp=0
 #############################################
 
 [NPC85]
-Name=Druida Imperial
-NpcType=2
-Desc=Ohhh hijo m�o!! que la llama de la virtud arda en tu coraz�n!!!
-Head=103
-Heading=3
-Body=56
-Movement=2
+name=Druida Imperial
+npc_type_id=2
+description=Ohhh hijo m�o!! que la llama de la virtud arda en tu coraz�n!!!
+head=103
+heading=3
+body=56
+movement_id=2
 PosOrig=1
-Attackable=1
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+attackable=1
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 GiveEXP=0
 GiveGLD=0
@@ -3182,7 +3153,7 @@ MinHIT=100
 DEF=10
 PoderAtaque=1500
 PoderEvasion=190
-Domable=0
+domable=0
 LanzaSpells=2
 Sp1=24
 Sp2=23
@@ -3191,19 +3162,19 @@ BackUp=0
 #############################################
 
 [NPC86]
-Name=Mago Imperial
-NpcType=2
-Desc=Ohhh hijo m�o!! que la llama de la virtud arda en tu coraz�n!!!
-Head=6
-Heading=3
-Body=130
-Movement=2
+name=Mago Imperial
+npc_type_id=2
+description=Ohhh hijo m�o!! que la llama de la virtud arda en tu coraz�n!!!
+head=6
+heading=3
+body=130
+movement_id=2
 PosOrig=1
-Attackable=1
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+attackable=1
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 GiveEXP=0
 GiveGLD=0
@@ -3222,19 +3193,19 @@ BackUp=0
 #############################################
 
 [NPC87]
-Name=Mago Imperial
-NpcType=2
-Desc=Ohhh hijo m�o!! que la llama de la virtud arda en tu coraz�n!!!
-Head=6
-Heading=3
-Body=128
-Movement=2
+name=Mago Imperial
+npc_type_id=2
+description=Ohhh hijo m�o!! que la llama de la virtud arda en tu coraz�n!!!
+head=6
+heading=3
+body=128
+movement_id=2
 PosOrig=1
-Attackable=1
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+attackable=1
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 GiveEXP=0
 GiveGLD=0
@@ -3253,19 +3224,19 @@ BackUp=0
 #############################################
 
 [NPC148]
-Name=Guardia Imperial
-NpcType=0
-Desc=�Atenci�n! Si eres criminal e ingresas aqu� seras atacado por los guardias reales.
-Head=0
-Heading=3
-Body=15
-Movement=1
+name=Guardia Imperial
+npc_type_id=0
+description=�Atenci�n! Si eres criminal e ingresas aqu� seras atacado por los guardias reales.
+head=0
+heading=3
+body=15
+movement_id=1
 PosOrig=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 GiveEXP=0
 GiveGLD=0
@@ -3281,95 +3252,95 @@ BackUp=0
 #############################################
 
 [NPC150]
-Name=Gobernador
-NpcType=11
-Desc=Hola, soy el gobernador de Nix �Bienvenido a nuestra peque�a aldea! Escribe /Hogar para obtener la ciudadan�a.
-Head=0
-Heading=3
-Body=4
-Movement=1
+name=Gobernador
+npc_type_id=11
+description=Hola, soy el gobernador de Nix �Bienvenido a nuestra peque�a aldea! Escribe /Hogar para obtener la ciudadan�a.
+head=0
+heading=3
+body=4
+movement_id=1
 Ciudad=2
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 BackUp=0
 
 #############################################
 
 [NPC151]
-Name=Gobernador
-NpcType=11
-Desc=Hola, soy el gobernador de Banderbill �Bienvenido a nuestra peque�a aldea! Escribe /Hogar para obtener la ciudadan�a.
-Head=0
-Heading=3
-Body=4
-Movement=1
+name=Gobernador
+npc_type_id=11
+description=Hola, soy el gobernador de Banderbill �Bienvenido a nuestra peque�a aldea! Escribe /Hogar para obtener la ciudadan�a.
+head=0
+heading=3
+body=4
+movement_id=1
 Ciudad=3
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 BackUp=0
 
 #############################################
 
 [NPC152]
-Name=Gobernador
-NpcType=11
-Desc=Hola, soy el gobernador de Lindos �Bienvenido a nuestra peque�a aldea! Escribe /Hogar para obtener la ciudadan�a.
-Head=0
-Heading=3
-Body=4
-Movement=1
+name=Gobernador
+npc_type_id=11
+description=Hola, soy el gobernador de Lindos �Bienvenido a nuestra peque�a aldea! Escribe /Hogar para obtener la ciudadan�a.
+head=0
+heading=3
+body=4
+movement_id=1
 Ciudad=4
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 BackUp=0
 
 #############################################
 
 [NPC153]
-Name=Gobernador
-NpcType=11
-Desc=Hola, soy el gobernador de Arghal �Bienvenido a nuestra peque�a aldea! Escribe /Hogar para obtener la ciudadan�a.
-Head=0
-Heading=3
-Body=4
-Movement=1
+name=Gobernador
+npc_type_id=11
+description=Hola, soy el gobernador de Arghal �Bienvenido a nuestra peque�a aldea! Escribe /Hogar para obtener la ciudadan�a.
+head=0
+heading=3
+body=4
+movement_id=1
 Ciudad=5
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 BackUp=0
 
 #############################################
 
 [NPC158]
-Name=Gobernador
-NpcType=11
-Desc=Hola, soy el gobernador de Arkhein �Bienvenido a nuestra peque�a aldea! Escribe /Hogar para obtener la ciudadan�a.
-Head=0
-Heading=3
-Body=4
-Movement=1
+name=Gobernador
+npc_type_id=11
+description=Hola, soy el gobernador de Arkhein �Bienvenido a nuestra peque�a aldea! Escribe /Hogar para obtener la ciudadan�a.
+head=0
+heading=3
+body=4
+movement_id=1
 Ciudad=6
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 BackUp=0
 
@@ -3378,20 +3349,20 @@ BackUp=0
 ##############################################################
 
 [NPC127]
-Name=Guardia Infernal
-NpcType=8
-Desc=�Por el Se�or Oscuro, aniquilar� a quienes lo deshonran!
-Head=201
-Heading=3
-Body=170
-Movement=2
+name=Guardia Infernal
+npc_type_id=8
+description=�Por el Se�or Oscuro, aniquilar� a quienes lo deshonran!
+head=201
+heading=3
+body=170
+movement_id=2
 PosOrig=1
 GuardiaPersigue=0
-Attackable=1
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=0
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=0
 GiveGLD=0
@@ -3407,19 +3378,19 @@ BackUp=0
 #############################################
 
 [NPC105]
-Name=Mago del Caos
-NpcType=8
-Desc=�El mal prevalecer� sobre estas tierras!
-Head=202
-Heading=3
-Body=129
-Movement=2
+name=Mago del Caos
+npc_type_id=8
+description=�El mal prevalecer� sobre estas tierras!
+head=202
+heading=3
+body=129
+movement_id=2
 PosOrig=1
-Attackable=1
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=0
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=0
 GiveGLD=0
@@ -3438,17 +3409,17 @@ BackUp=0
 #############################################
 
 [NPC107]
-Name=Golem Oscuro
-NpcType=8
-Head=0
-Heading=3
-Body=141
-Movement=2
-Attackable=1
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=2
+name=Golem Oscuro
+npc_type_id=8
+head=0
+heading=3
+body=141
+movement_id=2
+attackable=1
+respawnable=0
+hostile=0
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=0
 GiveGLD=0
@@ -3467,20 +3438,20 @@ BackUp=0
 
 
 [NPC149]
-Name=Guardia Infernal
-NpcType=0
-Desc=�Atenci�n! Si eres ciudadano e ingresas aqu� seras atacado por los guardias de la Legi�n.
-Head=201
-Heading=3
-Body=170
-Movement=1
+name=Guardia Infernal
+npc_type_id=0
+description=�Atenci�n! Si eres ciudadano e ingresas aqu� seras atacado por los guardias de la Legi�n.
+head=201
+heading=3
+body=170
+movement_id=1
 PosOrig=1
 GuardiaPersigue=0
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 GiveEXP=0
 GiveGLD=0
@@ -3496,17 +3467,17 @@ BackUp=0
 #############################################
 
 [NPC154]
-Name=Lilith
-NpcType=0
-Desc=Hola, tengo las mejores Pociones de la Alquimia para principiantes.
-Head=77
-Heading=3
-Body=200
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
+name=Lilith
+npc_type_id=0
+description=Hola, tengo las mejores Pociones de la Alquimia para principiantes.
+head=77
+heading=3
+body=200
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
 Comercia=1
 TipoItems=11
 NROITEMS=5
@@ -3520,17 +3491,17 @@ BackUp=1
 #############################################
 
 [NPC155]
-Name=Armaduras Newbie
-NpcType=0
-Desc=Si est�s buscando t�nicas y armaduras para principiantes, has llegado al lugar indicado.
-Head=6
-Heading=3
-Body=93
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
+name=Armaduras Newbie
+npc_type_id=0
+description=Si est�s buscando t�nicas y armaduras para principiantes, has llegado al lugar indicado.
+head=6
+heading=3
+body=93
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
 Comercia=1
 TipoItems=3
 NROITEMS=7
@@ -3546,17 +3517,17 @@ BackUp=1
 #############################################
 
 [NPC156]
-Name=Armas Newbie
-NpcType=0
-Desc=Hola novato, tengo algunas armas que pueden ayudarte en tus aventuras.
-Head=505
-Heading=3
-Body=199
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
+name=Armas Newbie
+npc_type_id=0
+description=Hola novato, tengo algunas armas que pueden ayudarte en tus aventuras.
+head=505
+heading=3
+body=199
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
 Comercia=1
 TipoItems=2
 NROITEMS=8
@@ -3573,17 +3544,17 @@ BackUp=1
 #############################################
 
 [NPC157]
-Name=Magia Newbie
-NpcType=0
-Desc=Bienvenido a mi peque�a tienda. Tengo algunos hechizos que podr�an interesarte.
-Head=110
-Heading=3
-Body=46
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
+name=Magia Newbie
+npc_type_id=0
+description=Bienvenido a mi peque�a tienda. Tengo algunos hechizos que podr�an interesarte.
+head=110
+heading=3
+body=46
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
 Comercia=1
 TipoItems=24
 NROITEMS=12
@@ -3606,18 +3577,18 @@ BackUp=1
 ##############################################################
 
 [NPC2]
-Name=Gallo
-NpcType=0
-Head=0
-Heading=3
-Body=5
-Movement=2
+name=Gallo
+npc_type_id=0
+head=0
+heading=3
+body=5
+movement_id=2
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=0
-Domable=450
-Alineacion=0
+attackable=1
+respawnable=0
+hostile=0
+domable=450
+alineacion=0
 Comercia=0
 GiveEXP=10
 GiveGLD=0
@@ -3633,18 +3604,18 @@ BackUp=0
 #############################################
 
 [NPC3]
-Name=Cerdo
-NpcType=0
-Head=0
-Heading=3
-Body=6
-Movement=2
+name=Cerdo
+npc_type_id=0
+head=0
+heading=3
+body=6
+movement_id=2
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=0
-Domable=500
-Alineacion=0
+attackable=1
+respawnable=0
+hostile=0
+domable=500
+alineacion=0
 Comercia=0
 GiveEXP=15
 GiveGLD=0
@@ -3661,18 +3632,18 @@ BackUp=0
 #############################################
 
 [NPC4]
-Name=Vaca
-NpcType=0
-Head=0
-Heading=3
-Body=7
-Movement=2
+name=Vaca
+npc_type_id=0
+head=0
+heading=3
+body=7
+movement_id=2
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=0
-Domable=810
-Alineacion=0
+attackable=1
+respawnable=0
+hostile=0
+domable=810
+alineacion=0
 Comercia=0
 GiveEXP=10
 GiveGLD=0
@@ -3689,18 +3660,18 @@ BackUp=0
 #############################################
 
 [NPC17]
-Name=Conejo
-NpcType=0
-Head=0
-Heading=3
-Body=11
-Movement=2
+name=Conejo
+npc_type_id=0
+head=0
+heading=3
+body=11
+movement_id=2
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=0
-Domable=450
-Alineacion=0
+attackable=1
+respawnable=0
+hostile=0
+domable=450
+alineacion=0
 Comercia=0
 GiveEXP=10
 GiveGLD=0
@@ -3716,18 +3687,18 @@ BackUp=0
 #############################################
 
 [NPC18]
-Name=Pavo Real
-NpcType=0
-Head=0
-Heading=3
-Body=20
-Movement=2
+name=Pavo Real
+npc_type_id=0
+head=0
+heading=3
+body=20
+movement_id=2
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=0
-Domable=450
-Alineacion=0
+attackable=1
+respawnable=0
+hostile=0
+domable=450
+alineacion=0
 Comercia=0
 GiveEXP=10
 GiveGLD=0
@@ -3743,38 +3714,38 @@ BackUp=0
 #############################################
 
 [NPC45]
-Name=Esp�ritu
-NpcType=0
-Desc=�Huye de aqu� mientras puedas!
-Head=514
-Heading=3
-Body=8
-Movement=2
+name=Esp�ritu
+npc_type_id=0
+description=�Huye de aqu� mientras puedas!
+head=514
+heading=3
+body=8
+movement_id=2
 AguaValida=0
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
-ReSpawn=0
+respawnable=0
 BackUp=0
 
 #############################################
 
 [NPC65]
-Name=Gallo
-NpcType=0
-Head=0
-Heading=3
-Body=5
-Movement=2
+name=Gallo
+npc_type_id=0
+head=0
+heading=3
+body=5
+movement_id=2
 AguaValida=0
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 GiveEXP=10
 GiveGLD=0
@@ -3790,18 +3761,18 @@ BackUp=0
 #############################################
 
 [NPC66]
-Name=Cerdo
-NpcType=0
-Head=0
-Heading=3
-Body=6
-Movement=2
+name=Cerdo
+npc_type_id=0
+head=0
+heading=3
+body=6
+movement_id=2
 AguaValida=0
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 GiveEXP=15
 GiveGLD=0
@@ -3817,18 +3788,18 @@ BackUp=0
 #############################################
 
 [NPC67]
-Name=Vaca
-NpcType=0
-Head=0
-Heading=3
-Body=7
-Movement=2
+name=Vaca
+npc_type_id=0
+head=0
+heading=3
+body=7
+movement_id=2
 AguaValida=0
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 GiveEXP=10
 GiveGLD=0
@@ -3844,18 +3815,18 @@ BackUp=0
 #############################################
 
 [NPC75]
-Name=Cuervo
-NpcType=0
-Head=0
-Heading=3
-Body=68
-Movement=2
+name=Cuervo
+npc_type_id=0
+head=0
+heading=3
+body=68
+movement_id=2
 AguaValida=1
-Attackable=1
-ReSpawn=0
-Hostile=0
-Domable=1100
-Alineacion=0
+attackable=1
+respawnable=0
+hostile=0
+domable=1100
+alineacion=0
 Comercia=0
 GiveEXP=55
 GiveGLD=0
@@ -3871,18 +3842,18 @@ BackUp=0
 #############################################
 
 [NPC76]
-Name=Hormiga
-NpcType=0
-Head=0
-Heading=3
-Body=70
-Movement=2
+name=Hormiga
+npc_type_id=0
+head=0
+heading=3
+body=70
+movement_id=2
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=0
-Domable=425
-Alineacion=0
+attackable=1
+respawnable=0
+hostile=0
+domable=425
+alineacion=0
 Comercia=0
 GiveEXP=5
 GiveGLD=0
@@ -3898,18 +3869,18 @@ BackUp=0
 #############################################
 
 [NPC77]
-Name=Rata
-NpcType=0
-Head=0
-Heading=3
-Body=71
-Movement=2
+name=Rata
+npc_type_id=0
+head=0
+heading=3
+body=71
+movement_id=2
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=0
-Domable=700
-Alineacion=0
+attackable=1
+respawnable=0
+hostile=0
+domable=700
+alineacion=0
 Comercia=0
 GiveEXP=5
 GiveGLD=0
@@ -3927,18 +3898,18 @@ BackUp=0
 #############################################
 
 [NPC78]
-Name=Oso Pardo Domesticado
-NpcType=0
-Head=0
-Heading=3
-Body=73
-Movement=2
+name=Oso Pardo Domesticado
+npc_type_id=0
+head=0
+heading=3
+body=73
+movement_id=2
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=0
-Domable=2010
-Alineacion=0
+attackable=1
+respawnable=0
+hostile=0
+domable=2010
+alineacion=0
 Comercia=0
 GiveEXP=550
 GiveGLD=0
@@ -3954,18 +3925,18 @@ BackUp=0
 #############################################
 
 [NPC79]
-Name=Tortuga de Mar
-NpcType=0
-Head=0
-Heading=3
-Body=74
-Movement=2
+name=Tortuga de Mar
+npc_type_id=0
+head=0
+heading=3
+body=74
+movement_id=2
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=0
-Domable=2010
-Alineacion=0
+attackable=1
+respawnable=0
+hostile=0
+domable=2010
+alineacion=0
 Comercia=0
 GiveEXP=350
 GiveGLD=0
@@ -3981,18 +3952,18 @@ BackUp=0
 #############################################
 
 [NPC88]
-Name=Ely
-NpcType=0
-Head=0
-Heading=3
-Body=143
-Movement=2
+name=Ely
+npc_type_id=0
+head=0
+heading=3
+body=143
+movement_id=2
 AguaValida=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 GiveEXP=0
 GiveGLD=0
@@ -4010,18 +3981,18 @@ BackUp=0
 #############################################
 
 [NPC89]
-Name=Fuego Fatuo
-NpcType=0
-Head=0
-Heading=3
-Body=144
-Movement=2
+name=Fuego Fatuo
+npc_type_id=0
+head=0
+heading=3
+body=144
+movement_id=2
 AguaValida=1
-Attackable=1
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+attackable=1
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 GiveEXP=6000
 GiveGLD=1000
@@ -4040,18 +4011,18 @@ BackUp=0
 #############################################
 
 [NPC90]
-Name=Morgolock's Soul
-NpcType=0
-Head=0
-Heading=3
-Body=144
-Movement=2
+name=Morgolock's Soul
+npc_type_id=0
+head=0
+heading=3
+body=144
+movement_id=2
 AguaValida=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 GiveEXP=2000
 GiveGLD=2000
@@ -4070,18 +4041,18 @@ BackUp=0
 #############################################
 
 [NPC91]
-Name=Gran �guila
-NpcType=0
-Head=0
-Heading=3
-Body=59
-Movement=2
+name=Gran �guila
+npc_type_id=0
+head=0
+heading=3
+body=59
+movement_id=2
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=0
-Domable=1200
-Alineacion=0
+attackable=1
+respawnable=0
+hostile=0
+domable=1200
+alineacion=0
 Comercia=0
 GiveEXP=75
 GiveGLD=0
@@ -4097,18 +4068,18 @@ BackUp=0
 #############################################
 
 [NPC92]
-Name=Elemental de Agua
-NpcType=0
-Head=0
-Heading=3
-Body=541
-Movement=2
+name=Elemental de Agua
+npc_type_id=0
+head=0
+heading=3
+body=541
+movement_id=2
 AguaValida=1
-Attackable=1
-ReSpawn=1
-Hostile=0
-Domable=0
-Alineacion=0
+attackable=1
+respawnable=1
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 GiveEXP=0
 GiveGLD=0
@@ -4124,18 +4095,18 @@ BackUp=0
 #############################################
 
 [NPC93]
-Name=Elemental de Fuego
-NpcType=0
-Head=0
-Heading=3
-Body=153
-Movement=2
+name=Elemental de Fuego
+npc_type_id=0
+head=0
+heading=3
+body=153
+movement_id=2
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+attackable=1
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 GiveEXP=0
 GiveGLD=0
@@ -4153,18 +4124,18 @@ BackUp=0
 #############################################
 
 [NPC94]
-Name=Elemental de Tierra
-NpcType=0
-Head=0
-Heading=3
-Body=543
-Movement=2
+name=Elemental de Tierra
+npc_type_id=0
+head=0
+heading=3
+body=543
+movement_id=2
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+attackable=1
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 GiveEXP=0
 GiveGLD=0
@@ -4182,18 +4153,18 @@ BackUp=0
 #############################################
 
 [NPC95]
-Name=Jabal�
-NpcType=0
-Head=0
-Heading=3
-Body=150
-Movement=2
+name=Jabal�
+npc_type_id=0
+head=0
+heading=3
+body=150
+movement_id=2
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=0
-Domable=2010
-Alineacion=0
+attackable=1
+respawnable=0
+hostile=0
+domable=2010
+alineacion=0
 Comercia=0
 GiveEXP=550
 GiveGLD=0
@@ -4209,18 +4180,18 @@ BackUp=0
 #############################################
 
 [NPC96]
-Name=Tigre de Bengala
-NpcType=0
-Head=0
-Heading=3
-Body=147
-Movement=2
+name=Tigre de Bengala
+npc_type_id=0
+head=0
+heading=3
+body=147
+movement_id=2
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=0
-Domable=2010
-Alineacion=0
+attackable=1
+respawnable=0
+hostile=0
+domable=2010
+alineacion=0
 Comercia=0
 GiveEXP=600
 GiveGLD=0
@@ -4236,18 +4207,18 @@ BackUp=0
 #############################################
 
 [NPC97]
-Name=Pato
-NpcType=0
-Head=0
-Heading=3
-Body=88
-Movement=2
+name=Pato
+npc_type_id=0
+head=0
+heading=3
+body=88
+movement_id=2
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=0
-Domable=660
-Alineacion=0
+attackable=1
+respawnable=0
+hostile=0
+domable=660
+alineacion=0
 Comercia=0
 GiveEXP=20
 GiveGLD=0
@@ -4270,18 +4241,18 @@ BackUp=0
 ##############################################################
 
 [NPC500]
-Name=Murci�lago
-NpcType=0
-Head=0
-Heading=3
-Body=9
-Movement=3
+name=Murci�lago
+npc_type_id=0
+head=0
+heading=3
+body=9
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=400
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=400
+alineacion=2
 Comercia=0
 GiveEXP=10
 MinHP=15
@@ -4302,18 +4273,18 @@ Drop5=12-70
 ############################################
 
 [NPC501]
-Name=Lobo
-NpcType=0
-Head=0
-Heading=3
-Body=10
-Movement=3
+name=Lobo
+npc_type_id=0
+head=0
+heading=3
+body=10
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=1250
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=1250
+alineacion=2
 Comercia=0
 GiveEXP=100
 MinHP=75
@@ -4335,18 +4306,18 @@ Drop4=394-1
 ############################################
 
 [NPC502]
-Name=Zombie
-NpcType=0
-Head=507
-Heading=3
-Body=196
-Movement=3
+name=Zombie
+npc_type_id=0
+head=507
+heading=3
+body=196
+movement_id=3
 AguaValida=0
-Attackable=1
-Respawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=175
 MinHP=250
@@ -4368,18 +4339,18 @@ Drop4=38-30
 ############################################
 
 [NPC503]
-Name=Esqueleto
-NpcType=0
-Head=0
-Heading=3
-Body=12
-Movement=3
+name=Esqueleto
+npc_type_id=0
+head=0
+heading=3
+body=12
+movement_id=3
 AguaValida=0
-Attackable=1
-Respawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=47
 MinHP=50
@@ -4400,18 +4371,18 @@ Drop5=197-1
 ############################################
 
 [NPC504]
-Name=Serpiente
-NpcType=0
-Head=0
-Heading=3
-Body=13
-Movement=3
+name=Serpiente
+npc_type_id=0
+head=0
+heading=3
+body=13
+movement_id=3
 AguaValida=0
-Attackable=1
-Respawn=0
-Hostile=1
-Domable=400
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=400
+alineacion=2
 Comercia=0
 GiveEXP=15
 MinHP=22
@@ -4431,18 +4402,18 @@ Drop5=202-1
 ############################################
 
 [NPC505]
-Name=Goblin
-NpcType=0
-Head=0
-Heading=3
-Body=14
-Movement=3
+name=Goblin
+npc_type_id=0
+head=0
+heading=3
+body=14
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=1500
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=1500
+alineacion=2
 Comercia=0
 GiveEXP=95
 MinHP=110
@@ -4464,18 +4435,18 @@ Drop5=39-10
 ############################################
 
 [NPC506]
-Name=Gallo Salvaje
-NpcType=0
-Head=0
-Heading=3
-Body=5
-Movement=3
+name=Gallo Salvaje
+npc_type_id=0
+head=0
+heading=3
+body=5
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=450
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=450
+alineacion=2
 Comercia=0
 GiveEXP=10
 MinHP=15
@@ -4495,18 +4466,18 @@ Drop3=12-50
 ############################################
 
 [NPC507]
-Name=Lord Zombie
-NpcType=0
-Head=508
-Heading=3
-Body=197
-Movement=3
+name=Lord Zombie
+npc_type_id=0
+head=508
+heading=3
+body=197
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=355
 MinHP=350
@@ -4528,18 +4499,18 @@ Drop5=395-1
 ############################################
 
 [NPC508]
-Name=Esqueleto Guerrero
-NpcType=0
-Head=0
-Heading=3
-Body=393
-Movement=3
+name=Esqueleto Guerrero
+npc_type_id=0
+head=0
+heading=3
+body=393
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=155
 MinHP=150
@@ -4559,18 +4530,18 @@ Drop5=380-1
 ############################################
 
 [NPC509]
-Name=Drag�n Rojo
-NpcType=0
-Head=0
-Heading=3
-Body=41
-Movement=3
+name=Drag�n Rojo
+npc_type_id=0
+head=0
+heading=3
+body=41
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=8500
 MinHP=5000
@@ -4593,18 +4564,18 @@ Drop5=481-1
 ############################################
 
 [NPC510]
-Name=Ara�a Gigante
-NpcType=0
-Head=0
-Heading=3
-Body=42
-Movement=3
+name=Ara�a Gigante
+npc_type_id=0
+head=0
+heading=3
+body=42
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=1450
 MinHP=1000
@@ -4626,18 +4597,18 @@ Drop5=206-1
 ############################################
 
 [NPC511]
-Name=Ogro Esclavo
-NpcType=0
-Head=0
-Heading=3
-Body=205
-Movement=3
+name=Ogro Esclavo
+npc_type_id=0
+head=0
+heading=3
+body=205
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=4110
 MinHP=2750
@@ -4659,18 +4630,18 @@ Drop5=697-1
 ############################################
 
 [NPC512]
-Name=Lobo
-NpcType=0
-Head=0
-Heading=3
-Body=10
-Movement=3
+name=Lobo
+npc_type_id=0
+head=0
+heading=3
+body=10
+movement_id=3
 AguaValida=0
-Attackable=1
-Respawn=1
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=1
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=0
 GiveGLD=0
@@ -4688,18 +4659,18 @@ BackUp=0
 ############################################
 
 [NPC513]
-Name=C�clope Guardi�n
-NpcType=0
-Head=0
-Heading=3
-Body=206
-Movement=3
+name=C�clope Guardi�n
+npc_type_id=0
+head=0
+heading=3
+body=206
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=7288
 MinHP=4500
@@ -4722,18 +4693,18 @@ Drop5=359-3
 ############################################
 
 [NPC514]
-Name=Serpiente de Anthares
-NpcType=0
-Head=0
-Heading=3
-Body=207
-Movement=3
+name=Serpiente de Anthares
+npc_type_id=0
+head=0
+heading=3
+body=207
+movement_id=3
 AguaValida=0
-Attackable=1
-Respawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=3410
 MinHP=5000
@@ -4756,18 +4727,18 @@ Drop5=503-2
 ############################################
 
 [NPC515]
-Name=Gorila Salvaje
-NpcType=0
-Head=0
-Heading=3
-Body=213
-Movement=3
+name=Gorila Salvaje
+npc_type_id=0
+head=0
+heading=3
+body=213
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=1880
 MinHP=1300
@@ -4789,18 +4760,18 @@ Drop5=697-2
 ############################################
 
 [NPC516]
-Name=Goblin
-NpcType=0
-Head=0
-Heading=3
-Body=14
-Movement=3
+name=Goblin
+npc_type_id=0
+head=0
+heading=3
+body=14
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=1
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=1
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=45
 GiveGLD=0
@@ -4816,17 +4787,17 @@ BackUp=0
 ############################################
 
 [NPC517]
-Name=Djinn de Viento
-NpcType=0
-Heading=3
-Body=215
-Movement=3
+name=Djinn de Viento
+npc_type_id=0
+heading=3
+body=215
+movement_id=3
 AguaValida=1
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=7000
 MinHP=4200
@@ -4850,18 +4821,18 @@ Drop5=531-1
 ############################################
 
 [NPC518]
-Name=Drag�n de las Profundidades
-NpcType=0
-Head=0
-Heading=3
-Body=218
-Movement=3
+name=Drag�n de las Profundidades
+npc_type_id=0
+head=0
+heading=3
+body=218
+movement_id=3
 AguaValida=1
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=2100
 MinHP=2000
@@ -4885,18 +4856,18 @@ Drop5=206-1
 ############################################
 
 [NPC519]
-Name=Gusano de Arena
-NpcType=0
-Head=0
-Heading=3
-Body=216
-Movement=3
+name=Gusano de Arena
+npc_type_id=0
+head=0
+heading=3
+body=216
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=1450
 MinHP=1000
@@ -4917,18 +4888,18 @@ Drop4=480-365
 ############################################
 
 [NPC520]
-Name=Esqueleto Guerrero
-NpcType=0
-Head=0
-Heading=3
-Body=393
-Movement=3
+name=Esqueleto Guerrero
+npc_type_id=0
+head=0
+heading=3
+body=393
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=1
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=1
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=0
 GiveGLD=0
@@ -4944,18 +4915,18 @@ BackUp=0
 ############################################
 
 [NPC521]
-Name=Tigre Salvaje
-NpcType=0
-Head=0
-Heading=3
-Body=147
-Movement=3
+name=Tigre Salvaje
+npc_type_id=0
+head=0
+heading=3
+body=147
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=2010
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=2010
+alineacion=2
 Comercia=0
 GiveEXP=600
 MinHP=800
@@ -4975,18 +4946,18 @@ Drop5=1004-1
 ############################################
 
 [NPC522]
-Name=Orco
-NpcType=0
-Head=0
-Heading=3
-Body=185
-Movement=3
+name=Orco
+npc_type_id=0
+head=0
+heading=3
+body=185
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=1
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=1
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=395
 MinHP=350
@@ -5007,18 +4978,18 @@ Drop5=359-2
 ############################################
 
 [NPC523]
-Name=Orco
-NpcType=0
-Head=0
-Heading=3
-Body=185
-Movement=3
+name=Orco
+npc_type_id=0
+head=0
+heading=3
+body=185
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=395
 GiveGLD=44
@@ -5040,18 +5011,18 @@ BackUp=0
 ############################################
 
 [NPC524]
-Name=Jefe Orco
-NpcType=0
-Head=0
-Heading=3
-Body=43
-Movement=3
+name=Jefe Orco
+npc_type_id=0
+head=0
+heading=3
+body=43
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=1
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=1
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=2000
 MinHP=1000
@@ -5073,18 +5044,18 @@ Drop5=183-1
 ############################################
 
 [NPC525]
-Name=�guila
-NpcType=0
-Head=0
-Heading=3
-Body=59
-Movement=3
+name=�guila
+npc_type_id=0
+head=0
+heading=3
+body=59
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=1200
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=1200
+alineacion=2
 Comercia=0
 GiveEXP=10
 MinHP=40
@@ -5103,18 +5074,18 @@ Drop3=544-5
 ############################################
 
 [NPC526]
-Name=Ara�a Malaheing
-NpcType=0
-Head=0
-Heading=3
-Body=42
-Movement=3
+name=Ara�a Malaheing
+npc_type_id=0
+head=0
+heading=3
+body=42
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=1
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=1
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=1450
 MinHP=3000
@@ -5137,18 +5108,18 @@ Drop5=174-1
 ############################################
 
 [NPC527]
-Name=Drag�n Rojo
-NpcType=0
-Head=0
-Heading=3
-Body=41
-Movement=3
+name=Drag�n Rojo
+npc_type_id=0
+head=0
+heading=3
+body=41
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=1
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=1
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=8500
 MinHP=5000
@@ -5170,18 +5141,18 @@ Drop5=178-1
 ############################################
 
 [NPC528]
-Name=Anfisbena
-NpcType=0
-Head=0
-Heading=3
-Body=203
-Movement=3
+name=Anfisbena
+npc_type_id=0
+head=0
+heading=3
+body=203
+movement_id=3
 AguaValida=0
-Attackable=1
-Respawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=51
 MinHP=75
@@ -5201,18 +5172,18 @@ Drop3=12-50
 ############################################
 
 [NPC529]
-Name=Escorpi�n
-NpcType=0
-Head=0
-Heading=3
-Body=51
-Movement=3
+name=Escorpi�n
+npc_type_id=0
+head=0
+heading=3
+body=51
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=600
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=600
+alineacion=2
 Comercia=0
 GiveEXP=32
 MinHP=32
@@ -5234,18 +5205,18 @@ Drop5=164-1
 ############################################
 
 [NPC530]
-Name=Bandido
-NpcType=0
-Head=2
-Heading=3
-Body=47
-Movement=3
+name=Bandido
+npc_type_id=0
+head=2
+heading=3
+body=47
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=266
 MinHP=200
@@ -5266,18 +5237,18 @@ Drop4=873-1
 ############################################
 
 [NPC531]
-Name=Asesino
-NpcType=0
-Head=201
-Heading=3
-Body=48
-Movement=3
+name=Asesino
+npc_type_id=0
+head=201
+heading=3
+body=48
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=1500
 MinHP=850
@@ -5299,18 +5270,18 @@ Drop5=356-1
 ############################################
 
 [NPC532]
-Name=Osezno
-NpcType=0
-Head=0
-Heading=3
-Body=236
-Movement=3
+name=Osezno
+npc_type_id=0
+head=0
+heading=3
+body=236
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=550
 MinHP=400
@@ -5329,18 +5300,18 @@ Drop4=480-50
 ############################################
 
 [NPC533]
-Name=Cuervo Salvaje
-NpcType=0
-Head=0
-Heading=3
-Body=68
-Movement=3
+name=Cuervo Salvaje
+npc_type_id=0
+head=0
+heading=3
+body=68
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=1100
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=1100
+alineacion=2
 Comercia=0
 GiveEXP=41
 GiveGLD=0
@@ -5363,18 +5334,18 @@ Drop5=12-1000
 ############################################
 
 [NPC534]
-Name=Hormiga Gigante
-NpcType=0
-Head=0
-Heading=3
-Body=69
-Movement=3
+name=Hormiga Gigante
+npc_type_id=0
+head=0
+heading=3
+body=69
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=2010
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=2010
+alineacion=2
 Comercia=0
 GiveEXP=500
 MinHP=400
@@ -5395,18 +5366,18 @@ Drop5=480-500
 ############################################
 
 [NPC535]
-Name=Hormiga Marabunta
-NpcType=0
-Head=0
-Heading=3
-Body=70
-Movement=3
+name=Hormiga Marabunta
+npc_type_id=0
+head=0
+heading=3
+body=70
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=425
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=425
+alineacion=2
 Comercia=0
 GiveEXP=5
 MinHP=5
@@ -5425,18 +5396,18 @@ Drop5=12-200
 ############################################
 
 [NPC536]
-Name=Rata Salvaje
-NpcType=0
-Head=0
-Heading=3
-Body=71
-Movement=3
+name=Rata Salvaje
+npc_type_id=0
+head=0
+heading=3
+body=71
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=700
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=700
+alineacion=2
 Comercia=0
 GiveEXP=16
 MinHP=15
@@ -5459,18 +5430,18 @@ Drop5=12-100
 ############################################
 
 [NPC537]
-Name=Beholder
-NpcType=0
-Head=0
-Heading=3
-Body=72
-Movement=3
+name=Beholder
+npc_type_id=0
+head=0
+heading=3
+body=72
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=2500
 MinHP=1400
@@ -5491,18 +5462,18 @@ Drop5=12-10000
 ############################################
 
 [NPC538]
-Name=Oso Pardo
-NpcType=0
-Head=0
-Heading=3
-Body=73
-Movement=3
+name=Oso Pardo
+npc_type_id=0
+head=0
+heading=3
+body=73
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=2010
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=2010
+alineacion=2
 Comercia=0
 GiveEXP=850
 MinHP=600
@@ -5523,18 +5494,18 @@ Drop5=38-100
 ############################################
 
 [NPC539]
-Name=Tortuga Gigante
-NpcType=0
-Head=0
-Heading=3
-Body=74
-Movement=3
+name=Tortuga Gigante
+npc_type_id=0
+head=0
+heading=3
+body=74
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=2010
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=2010
+alineacion=2
 Comercia=0
 GiveEXP=500
 MinHP=550
@@ -5554,18 +5525,18 @@ Drop4=203-1
 ############################################
 
 [NPC540]
-Name=Duende
-NpcType=0
-Head=0
-Heading=3
-Body=75
-Movement=3
+name=Duende
+npc_type_id=0
+head=0
+heading=3
+body=75
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=1700
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=1700
+alineacion=2
 Comercia=0
 GiveEXP=245
 MinHP=210
@@ -5586,18 +5557,18 @@ Drop5=204-1
 ############################################
 
 [NPC541]
-Name=Ogro
-NpcType=0
-Head=0
-Heading=3
-Body=76
-Movement=3
+name=Ogro
+npc_type_id=0
+head=0
+heading=3
+body=76
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=3500
 MinHP=2250
@@ -5619,18 +5590,18 @@ Drop5=698-1
 ############################################
 
 [NPC542]
-Name=Gran Drag�n Rojo
-NpcType=6
-Head=0
-Heading=3
-Body=82
-Movement=3
+name=Gran Drag�n Rojo
+npc_type_id=6
+head=0
+heading=3
+body=82
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=265000
 MinHP=200000
@@ -5658,18 +5629,18 @@ Drop5=481-3
 ############################################
 
 [NPC543]
-Name=Demonio
-NpcType=0
-Head=0
-Heading=3
-Body=83
-Movement=3
+name=Demonio
+npc_type_id=0
+head=0
+heading=3
+body=83
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=14200
 MinHP=15000
@@ -5691,18 +5662,18 @@ Drop5=495-1
 ############################################
 
 [NPC544]
-Name=Unicornio
-NpcType=0
-Head=0
-Heading=3
-Body=183
-Movement=3
+name=Unicornio
+npc_type_id=0
+head=0
+heading=3
+body=183
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=200
 MinHP=500
@@ -5723,18 +5694,18 @@ Drop5=12-5000
 ############################################
 
 [NPC545]
-Name=Lic�ntropo
-NpcType=0
-Head=0
-Heading=3
-Body=212
-Movement=3
+name=Lic�ntropo
+npc_type_id=0
+head=0
+heading=3
+body=212
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=850
 MinHP=600
@@ -5755,18 +5726,18 @@ Drop5=394-1
 ############################################
 
 [NPC546]
-Name=Zombie
-NpcType=0
-Head=507
-Heading=3
-Body=196
-Movement=3
+name=Zombie
+npc_type_id=0
+head=507
+heading=3
+body=196
+movement_id=3
 AguaValida=0
-Attackable=1
-Respawn=1
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=1
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=0
 GiveGLD=0
@@ -5783,18 +5754,18 @@ BackUp=0
 ############################################
 
 [NPC547]
-Name=Tar�ntula
-NpcType=0
-Head=0
-Heading=3
-Body=36
-Movement=3
+name=Tar�ntula
+npc_type_id=0
+head=0
+heading=3
+body=36
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=1450
 MinHP=1000
@@ -5816,19 +5787,19 @@ Drop5=159-5
 ############################################
 
 [NPC548]
-Name=Leviathan
-NpcType=0
-Head=0
-Heading=3
-Body=99
-Movement=3
+name=Leviathan
+npc_type_id=0
+head=0
+heading=3
+body=99
+movement_id=3
 AguaValida=1
 TierraInvalida=1
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=8500
 MinHP=6000
@@ -5850,18 +5821,18 @@ Drop5=496-1
 ############################################
 
 [NPC549]
-Name=Orco Brujo
-NpcType=0
-Head=0
-Heading=3
-Body=186
-Movement=3
+name=Orco Brujo
+npc_type_id=0
+head=0
+heading=3
+body=186
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=2250
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=2250
+alineacion=2
 Comercia=0
 GiveEXP=2810
 MinHP=1900
@@ -5885,18 +5856,18 @@ Drop5=37-500
 ############################################
 
 [NPC550]
-Name=Bruja
-NpcType=0
-Head=271
-Heading=3
-Body=125
-Movement=3
+name=Bruja
+npc_type_id=0
+head=271
+heading=3
+body=125
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=6100
 MinHP=4200
@@ -5923,18 +5894,18 @@ Drop5=12-15000
 ############################################
 
 [NPC551]
-Name=Mago Malvado
-NpcType=0
-Head=401
-Heading=3
-Body=135
-Movement=3
+name=Mago Malvado
+npc_type_id=0
+head=401
+heading=3
+body=135
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=4000
 MinHP=3000
@@ -5959,18 +5930,18 @@ Drop5=660-5
 ############################################
 
 [NPC552]
-Name=Golem
-NpcType=0
-Head=0
-Heading=3
-Body=141
-Movement=3
+name=Golem
+npc_type_id=0
+head=0
+heading=3
+body=141
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=41800
 MinHP=35000
@@ -5993,18 +5964,18 @@ Drop5=485-1
 ############################################
 
 [NPC553]
-Name=Medusa
-NpcType=0
-Head=0
-Heading=3
-Body=151
-Movement=3
+name=Medusa
+npc_type_id=0
+head=0
+heading=3
+body=151
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=12250
 MinHP=6500
@@ -6030,18 +6001,18 @@ Drop5=531-1
 ############################################
 
 [NPC554]
-Name=Liche
-NpcType=0
-Head=0
-Heading=3
-Body=149
-Movement=3
+name=Liche
+npc_type_id=0
+head=0
+heading=3
+body=149
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=3000
 MinHP=2000
@@ -6063,18 +6034,18 @@ Drop5=660-5
 ############################################
 
 [NPC555]
-Name=Lord Orco
-NpcType=0
-Head=0
-Heading=3
-Body=187
-Movement=3
+name=Lord Orco
+npc_type_id=0
+head=0
+heading=3
+body=187
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=2500
 MinHP=1750
@@ -6095,18 +6066,18 @@ Drop5=130-3
 ############################################
 
 [NPC556]
-Name=Quark
-NpcType=0
-Head=0
-Heading=3
-Body=146
-Movement=3
+name=Quark
+npc_type_id=0
+head=0
+heading=3
+body=146
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=800
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=800
+alineacion=2
 Comercia=0
 GiveEXP=25
 MinHP=50
@@ -6127,18 +6098,18 @@ Drop5=12-750
 ############################################
 
 [NPC557]
-Name=Jabal� Salvaje
-NpcType=0
-Head=0
-Heading=3
-Body=150
-Movement=2
+name=Jabal� Salvaje
+npc_type_id=0
+head=0
+heading=3
+body=150
+movement_id=2
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=2010
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=2010
+alineacion=2
 Comercia=0
 GiveEXP=340
 MinHP=515
@@ -6158,18 +6129,18 @@ Drop3=38-20
 ############################################
 
 [NPC558]
-Name=Dark mOrGoLoCk
-NpcType=0
-Head=101
-Heading=3
-Body=56
-Movement=3
+name=Dark mOrGoLoCk
+npc_type_id=0
+head=101
+heading=3
+body=56
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=45000
 GiveGLD=25000
@@ -6185,18 +6156,18 @@ BackUp=0
 ############################################
 
 [NPC559]
-Name=Dark NuKeR
-NpcType=0
-Head=102
-Heading=3
-Body=93
-Movement=3
+name=Dark NuKeR
+npc_type_id=0
+head=102
+heading=3
+body=93
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=45000
 GiveGLD=25000
@@ -6212,18 +6183,18 @@ BackUp=0
 ############################################
 
 [NPC560]
-Name=Dark Valkira
-NpcType=0
-Head=72
-Heading=3
-Body=104
-Movement=3
+name=Dark Valkira
+npc_type_id=0
+head=72
+heading=3
+body=104
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=45000
 GiveGLD=25000
@@ -6239,18 +6210,18 @@ BackUp=0
 ############################################
 
 [NPC561]
-Name=Dark Chatillon
-NpcType=0
-Head=9
-Heading=3
-Body=140
-Movement=3
+name=Dark Chatillon
+npc_type_id=0
+head=9
+heading=3
+body=140
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=45000
 GiveGLD=25000
@@ -6266,18 +6237,18 @@ BackUp=0
 ############################################
 
 [NPC562]
-Name=Dark Jennifer
-NpcType=0
-Head=72
-Heading=3
-Body=64
-Movement=3
+name=Dark Jennifer
+npc_type_id=0
+head=72
+heading=3
+body=64
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=45000
 GiveGLD=25000
@@ -6293,18 +6264,18 @@ BackUp=0
 ############################################
 
 [NPC564]
-Name=Escorpi�n
-NpcType=0
-Head=0
-Heading=3
-Body=51
-Movement=3
+name=Escorpi�n
+npc_type_id=0
+head=0
+heading=3
+body=51
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=1
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=1
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=32
 GiveGLD=0
@@ -6321,18 +6292,18 @@ BackUp=0
 ############################################
 
 [NPC565]
-Name=Serpiente
-NpcType=0
-Head=0
-Heading=3
-Body=13
-Movement=3
+name=Serpiente
+npc_type_id=0
+head=0
+heading=3
+body=13
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=1
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=1
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=15
 GiveGLD=0
@@ -6350,18 +6321,18 @@ BackUp=0
 ############################################
 
 [NPC566]
-Name=Murci�lago
-NpcType=0
-Head=0
-Heading=3
-Body=9
-Movement=3
+name=Murci�lago
+npc_type_id=0
+head=0
+heading=3
+body=9
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=1
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=1
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=12
 GiveGLD=0
@@ -6377,18 +6348,18 @@ BackUp=0
 #############################################
 
 [NPC567]
-Name=Duende M�gico
-NpcType=0
-Head=0
-Heading=3
-Body=75
-Movement=3
+name=Duende M�gico
+npc_type_id=0
+head=0
+heading=3
+body=75
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=0
 MinHP=310
@@ -6410,19 +6381,19 @@ Drop4=199-5
 ############################################
 
 [NPC568]
-Name=Gale�n Pirata
-NpcType=0
-Head=0
-Heading=3
-Body=86
-Movement=3
+name=Gale�n Pirata
+npc_type_id=0
+head=0
+heading=3
+body=86
+movement_id=3
 AguaValida=1
 TierraInvalida=1
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=6000
 MinHP=4000
@@ -6443,19 +6414,19 @@ Drop5=476-1
 ############################################
 
 [NPC569]
-Name=Gale�n Fantasmal
-NpcType=0
-Head=0
-Heading=3
-Body=487
-Movement=3
+name=Gale�n Fantasmal
+npc_type_id=0
+head=0
+heading=3
+body=487
+movement_id=3
 AguaValida=1
 TierraInvalida=1
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=10000
 MinHP=7000
@@ -6476,19 +6447,19 @@ Drop4=475-1
 ############################################
 
 [NPC573]
-Name=�rbol Encantado
-NpcType=0
-Desc=�Odio los le�adores!
-Head=0
-Heading=4
-Body=25
-Movement=2
+name=�rbol Encantado
+npc_type_id=0
+description=�Odio los le�adores!
+head=0
+heading=4
+body=25
+movement_id=2
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=100
 MinHP=10
@@ -6506,18 +6477,18 @@ Drop2=58-15
 ############################################
 
 [NPC574]
-Name=Ucorno
-NpcType=0
-Head=0
-Heading=3
-Body=25
-Movement=3
+name=Ucorno
+npc_type_id=0
+head=0
+heading=3
+body=25
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=900
 MinHP=1500
@@ -6541,18 +6512,18 @@ Drop5=58-10000
 ############################################
 
 [NPC575]
-Name=�rbol de Jungla
-NpcType=0
-Head=0
-Heading=3
-Body=25
-Movement=2
+name=�rbol de Jungla
+npc_type_id=0
+head=0
+heading=3
+body=25
+movement_id=2
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=100
 MinHP=1500
@@ -6574,18 +6545,18 @@ Drop3=696-5
 ############################################
 
 [NPC576]
-Name=�rbol de Jungla
-NpcType=0
-Head=0
-Heading=4
-Body=25
-Movement=1
+name=�rbol de Jungla
+npc_type_id=0
+head=0
+heading=4
+body=25
+movement_id=1
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=100
 MinHP=10
@@ -6603,19 +6574,19 @@ Drop2=58-15
 ############################################
 
 [NPC577]
-Name=Alma Putrefacta
-NpcType=0
-Desc=Soy un esclavo del mi se�or del mal
-Head=514
-Heading=3
-Body=145
-Movement=3
+name=Alma Putrefacta
+npc_type_id=0
+description=Soy un esclavo del mi se�or del mal
+head=514
+heading=3
+body=145
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=500
 MinHP=700
@@ -6637,19 +6608,19 @@ Drop3=645-1
 ############################################
 
 [NPC578]
-Name=Cerdo Salvaje
-NpcType=0
-Desc=Oink Oink
-Head=0
-Heading=3
-Body=6
-Movement=3
+name=Cerdo Salvaje
+npc_type_id=0
+description=Oink Oink
+head=0
+heading=3
+body=6
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=500
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=500
+alineacion=2
 Comercia=0
 GiveEXP=15
 MinHP=35
@@ -6667,19 +6638,19 @@ Drop2=12-10
 ############################################
 
 [NPC579]
-Name=Vaca Salvaje
-NpcType=0
-Desc=Muuuuu
-Head=0
-Heading=3
-Body=7
-Movement=3
+name=Vaca Salvaje
+npc_type_id=0
+description=Muuuuu
+head=0
+heading=3
+body=7
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=810
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=810
+alineacion=2
 Comercia=0
 GiveEXP=25
 MinHP=65
@@ -6698,18 +6669,18 @@ Drop2=12-50
 ############################################
 
 [NPC582]
-Name=Enano de las Profundidades
-NpcType=0
-Head=304
-Heading=3
-Body=54
-Movement=10
+name=Enano de las Profundidades
+npc_type_id=0
+head=304
+heading=3
+body=54
+movement_id=10
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=5000
 MinHP=3000
@@ -6731,18 +6702,18 @@ Drop5=393-3
 ############################################
 
 [NPC583]
-Name=Liche Infernal
-NpcType=0
-Head=0
-Heading=3
-Body=149
-Movement=3
+name=Liche Infernal
+npc_type_id=0
+head=0
+heading=3
+body=149
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=10000
 MinHP=10000
@@ -6768,18 +6739,18 @@ Drop5=400-3
 ############################################
 
 [NPC584]
-Name=Demonio Infernal
-NpcType=0
-Head=0
-Heading=3
-Body=83
-Movement=3
+name=Demonio Infernal
+npc_type_id=0
+head=0
+heading=3
+body=83
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=10000
 MinHP=15000
@@ -6801,18 +6772,18 @@ Drop5=495-2
 ############################################
 
 [NPC585]
-Name=Drag�n Rojo Infernal
-NpcType=0
-Head=0
-Heading=3
-Body=41
-Movement=3
+name=Drag�n Rojo Infernal
+npc_type_id=0
+head=0
+heading=3
+body=41
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=2500
 MinHP=5000
@@ -6834,18 +6805,18 @@ Drop5=402-1
 ############################################
 
 [NPC586]
-Name=Golem Infernal
-NpcType=0
-Head=0
-Heading=3
-Body=181
-Movement=3
+name=Golem Infernal
+npc_type_id=0
+head=0
+heading=3
+body=181
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=35000
 MinHP=49000
@@ -6868,18 +6839,18 @@ Drop5=485-2
 ############################################
 
 [NPC587]
-Name=Astaroth
-NpcType=0
-Head=0
-Heading=3
-Body=204
-Movement=3
+name=Astaroth
+npc_type_id=0
+head=0
+heading=3
+body=204
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=2000
 MinHP=3500
@@ -6905,18 +6876,18 @@ Drop5=699-3
 ############################################
 
 [NPC588]
-Name=Elemental de Fuego
-NpcType=0
-Head=0
-Heading=3
-Body=153
-Movement=3
+name=Elemental de Fuego
+npc_type_id=0
+head=0
+heading=3
+body=153
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=100
 MinHP=600
@@ -6938,18 +6909,18 @@ Drop4=205-1
 ############################################
 
 [NPC589]
-Name=Elemental de Fuego Anciano
-NpcType=0
-Head=0
-Heading=3
-Body=394
-Movement=3
+name=Elemental de Fuego Anciano
+npc_type_id=0
+head=0
+heading=3
+body=394
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=1000
 MinHP=7000
@@ -6976,18 +6947,18 @@ Drop5=532-1
 ############################################
 
 [NPC590]
-Name=Blattodea
-NpcType=0
-Head=0
-Heading=3
-Body=231
-Movement=3
+name=Blattodea
+npc_type_id=0
+head=0
+heading=3
+body=231
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=455
 MinHP=435
@@ -7008,18 +6979,18 @@ Drop5=12-1200
 ############################################
 
 [NPC591]
-Name=Artopleura
-NpcType=0
-Head=0
-Heading=3
-Body=229
-Movement=3
+name=Artopleura
+npc_type_id=0
+head=0
+heading=3
+body=229
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=1100
 MinHP=700
@@ -7040,18 +7011,18 @@ Drop5=12-1500
 ############################################
 
 [NPC592]
-Name=Ara�a de los Rincones
-NpcType=0
-Head=0
-Heading=3
-Body=230
-Movement=3
+name=Ara�a de los Rincones
+npc_type_id=0
+head=0
+heading=3
+body=230
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=700
 MinHP=650
@@ -7070,18 +7041,18 @@ Drop4=202-1
 ############################################
 
 [NPC593]
-Name=Pirata
-NpcType=0
-Head=509
-Heading=3
-Body=386
-Movement=3
+name=Pirata
+npc_type_id=0
+head=509
+heading=3
+body=386
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=850
 MinHP=700
@@ -7101,18 +7072,18 @@ Drop5=873-1
 ############################################
 
 [NPC594]
-Name=Escarabajo Gigante
-NpcType=0
-Head=0
-Heading=3
-Body=391
-Movement=3
+name=Escarabajo Gigante
+npc_type_id=0
+head=0
+heading=3
+body=391
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=500
 MinHP=550
@@ -7131,18 +7102,18 @@ Drop3=12-600
 ############################################
 
 [NPC595]
-Name=Tent�culo Putrefacto
-NpcType=0
-Head=0
-Heading=3
-Body=392
-Movement=3
+name=Tent�culo Putrefacto
+npc_type_id=0
+head=0
+heading=3
+body=392
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=900
 MinHP=600
@@ -7161,18 +7132,18 @@ Drop3=12-200
 ############################################
 
 [NPC596]
-Name=Esp�ritu chocarrero
-NpcType=0
-Head=0
-Heading=3
-Body=219
-Movement=3
+name=Esp�ritu chocarrero
+npc_type_id=0
+head=0
+heading=3
+body=219
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=500
 MinHP=400
@@ -7191,18 +7162,18 @@ Drop2=38-10
 ############################################
 
 [NPC597]
-Name=Protector de los muertos
-NpcType=0
-Head=0
-Heading=3
-Body=426
-Movement=3
+name=Protector de los muertos
+npc_type_id=0
+head=0
+heading=3
+body=426
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=455
 MinHP=435
@@ -7221,18 +7192,18 @@ Drop5=380-1
 ############################################
 
 [NPC598]
-Name=Hada Oscura
-NpcType=0
-Head=511
-Heading=3
-Body=427
-Movement=3
+name=Hada Oscura
+npc_type_id=0
+head=511
+heading=3
+body=427
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=700
 MinHP=650
@@ -7253,18 +7224,18 @@ Drop5=513-1
 ############################################
 
 [NPC599]
-Name=Engendro de las profundidades
-NpcType=0
-Head=0
-Heading=3
-Body=387
-Movement=3
+name=Engendro de las profundidades
+npc_type_id=0
+head=0
+heading=3
+body=387
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=500
 MinHP=550
@@ -7285,18 +7256,18 @@ Drop4=30-1
 ############################################
 
 [NPC600]
-Name=Ave de las profundidades
-NpcType=0
-Head=0
-Heading=3
-Body=425
-Movement=3
+name=Ave de las profundidades
+npc_type_id=0
+head=0
+heading=3
+body=425
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=900
 MinHP=700
@@ -7315,18 +7286,18 @@ Drop3=552-50
 ############################################
 
 [NPC601]
-Name=Lic�ntropo
-NpcType=0
-Head=0
-Heading=3
-Body=212
-Movement=3
+name=Lic�ntropo
+npc_type_id=0
+head=0
+heading=3
+body=212
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=850
 MinHP=600
@@ -7346,19 +7317,19 @@ Drop5=1002-5
 ############################################
 
 [NPC602]
-Name=Pira�a
-NpcType=0
-Head=0
-Heading=3
-Body=433
-Movement=3
+name=Pira�a
+npc_type_id=0
+head=0
+heading=3
+body=433
+movement_id=3
 AguaValida=1
 TierraInvalida=1
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=1150
 MinHP=800
@@ -7377,19 +7348,19 @@ Drop3=36-10
 ############################################
 
 [NPC603]
-Name=Sirena
-NpcType=0
-Head=0
-Heading=3
-Body=434
-Movement=3
+name=Sirena
+npc_type_id=0
+head=0
+heading=3
+body=434
+movement_id=3
 AguaValida=1
 TierraInvalida=1
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=1825
 MinHP=1300
@@ -7412,19 +7383,19 @@ Drop5=542-1
 ############################################
 
 [NPC604]
-Name=Manta raya
-NpcType=0
-Head=0
-Heading=3
-Body=407
-Movement=3
+name=Manta raya
+npc_type_id=0
+head=0
+heading=3
+body=407
+movement_id=3
 AguaValida=1
 TierraInvalida=1
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=550
 MinHP=600
@@ -7443,19 +7414,19 @@ Drop3=36-4
 ############################################
 
 [NPC605]
-Name=Lutra
-NpcType=0
-Head=0
-Heading=3
-Body=435
-Movement=3
+name=Lutra
+npc_type_id=0
+head=0
+heading=3
+body=435
+movement_id=3
 AguaValida=1
 TierraInvalida=1
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=2730
 MinHP=2100
@@ -7476,19 +7447,19 @@ Drop4=12-13500
 ############################################
 
 [NPC606]
-Name=Tibur�n
-NpcType=0
-Head=0
-Heading=3
-Body=436
-Movement=3
+name=Tibur�n
+npc_type_id=0
+head=0
+heading=3
+body=436
+movement_id=3
 AguaValida=1
 TierraInvalida=1
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=3500
 MinHP=2500
@@ -7509,18 +7480,18 @@ Drop4=12-2100
 ############################################
 
 [NPC607]
-Name=Capit�n Pirata
-NpcType=0
-Head=512
-Heading=3
-Body=428
-Movement=3
+name=Capit�n Pirata
+npc_type_id=0
+head=512
+heading=3
+body=428
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=2700
 MinHP=2700
@@ -7541,19 +7512,19 @@ Drop4=474-1
 ############################################
 
 [NPC608]
-Name=Guardi�n de las Profundidades
-NpcType=0
-Head=0
-Heading=3
-Body=218
-Movement=3
+name=Guardi�n de las Profundidades
+npc_type_id=0
+head=0
+heading=3
+body=218
+movement_id=3
 AguaValida=1
 TierraInvalida=1
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=3500
 MinHP=2000
@@ -7574,19 +7545,19 @@ Drop4=361-1
 ############################################
 
 [NPC609]
-Name=Elemental de Agua Anciano
-NpcType=0
-Head=0
-Heading=3
-Body=542
-Movement=3
+name=Elemental de Agua Anciano
+npc_type_id=0
+head=0
+heading=3
+body=542
+movement_id=3
 AguaValida=1
 TierraInvalida=1
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=2000
 MinHP=7000
@@ -7612,19 +7583,19 @@ Drop5=537-1
 ############################################
 
 [NPC610]
-Name=Kraken
-NpcType=0
-Head=0
-Heading=3
-Body=408
-Movement=3
+name=Kraken
+npc_type_id=0
+head=0
+heading=3
+body=408
+movement_id=3
 AguaValida=1
 TierraInvalida=1
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=10500
 MinHP=6250
@@ -7650,19 +7621,19 @@ Drop5=475-1
 ############################################
 
 [NPC611]
-Name=Fango
-NpcType=0
-Head=0
-Heading=3
-Body=403
-Movement=3
+name=Fango
+npc_type_id=0
+head=0
+heading=3
+body=403
+movement_id=3
 AguaValida=0
 TierraInvalida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=800
 MinHP=750
@@ -7683,19 +7654,19 @@ Drop5=39-10
 ############################################
 
 [NPC612]
-Name=Cocodrilo
-NpcType=0
-Head=0
-Heading=3
-Body=208
-Movement=3
+name=Cocodrilo
+npc_type_id=0
+head=0
+heading=3
+body=208
+movement_id=3
 AguaValida=0
 TierraInvalida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=1000
 MinHP=550
@@ -7715,19 +7686,19 @@ Drop5=365-1
 ############################################
 
 [NPC613]
-Name=Unicornio
-NpcType=0
-Head=0
-Heading=3
-Body=183
-Movement=3
+name=Unicornio
+npc_type_id=0
+head=0
+heading=3
+body=183
+movement_id=3
 AguaValida=0
 TierraInvalida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=1900
 MinHP=1350
@@ -7750,19 +7721,19 @@ Drop5=698-1
 ############################################
 
 [NPC614]
-Name=Elfo Guardi�n
-NpcType=0
-Head=0
-Heading=3
-Body=402
-Movement=3
+name=Elfo Guardi�n
+npc_type_id=0
+head=0
+heading=3
+body=402
+movement_id=3
 AguaValida=0
 TierraInvalida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=2300
 MinHP=1500
@@ -7786,19 +7757,19 @@ Drop5=665-6
 ############################################
 
 [NPC615]
-Name=�rbol capturador de Almas
-NpcType=0
-Head=0
-Heading=3
-Body=401
-Movement=3
+name=�rbol capturador de Almas
+npc_type_id=0
+head=0
+heading=3
+body=401
+movement_id=3
 AguaValida=0
 TierraInvalida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=3100
 MinHP=2500
@@ -7824,19 +7795,19 @@ Drop4=203-1
 ############################################
 
 [NPC616]
-Name=Sapo
-NpcType=0
-Head=0
-Heading=3
-Body=432
-Movement=3
+name=Sapo
+npc_type_id=0
+head=0
+heading=3
+body=432
+movement_id=3
 AguaValida=0
 TierraInvalida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=900
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=900
+alineacion=2
 Comercia=0
 GiveEXP=60
 MinHP=35
@@ -7856,18 +7827,18 @@ Drop5=12-5000
 ############################################
 
 [NPC617]
-Name=Peque�o Escarabajo
-NpcType=0
-Head=0
-Heading=3
-Body=533
-Movement=3
+name=Peque�o Escarabajo
+npc_type_id=0
+head=0
+heading=3
+body=533
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=175
 MinHP=200
@@ -7888,18 +7859,18 @@ Drop5=126-1
 ############################################
 
 [NPC618]
-Name=Peque�o Duende
-NpcType=0
-Head=0
-Heading=3
-Body=75
-Movement=3
+name=Peque�o Duende
+npc_type_id=0
+head=0
+heading=3
+body=75
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=80
 MinHP=100
@@ -7919,18 +7890,18 @@ Drop5=696-1
 ############################################
 
 [NPC619]
-Name=Hada del Bosque
-NpcType=0
-Head=0
-Heading=3
-Body=532
-Movement=3
+name=Hada del Bosque
+npc_type_id=0
+head=0
+heading=3
+body=532
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=417
 MinHP=278
@@ -7952,18 +7923,18 @@ Drop5=205-1
 ############################################
 
 [NPC620]
-Name=Peque�a Ara�a
-NpcType=0
-Head=0
-Heading=3
-Body=534
-Movement=3
+name=Peque�a Ara�a
+npc_type_id=0
+head=0
+heading=3
+body=534
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=75
 MinHP=125
@@ -7984,19 +7955,19 @@ Drop5=30-1
 ############################################
 
 [NPC621]
-Name=Pira�a
-NpcType=0
-Head=0
-Heading=3
-Body=433
-Movement=3
+name=Pira�a
+npc_type_id=0
+head=0
+heading=3
+body=433
+movement_id=3
 AguaValida=1
 TierraInvalida=1
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=135
 MinHP=150
@@ -8017,19 +7988,19 @@ Drop4=1009-20
 ############################################
 
 [NPC622]
-Name=Peque�o Drag�n M�gico
-NpcType=0
-Head=0
-Heading=3
-Body=537
-Movement=3
+name=Peque�o Drag�n M�gico
+npc_type_id=0
+head=0
+heading=3
+body=537
+movement_id=3
 AguaValida=1
 TierraInvalida=1
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=160
 MinHP=200
@@ -8052,18 +8023,18 @@ Drop5=665-1
 ############################################
 
 [NPC623]
-Name=Mini Elemental de Fuego
-NpcType=0
-Head=0
-Heading=3
-Body=535
-Movement=3
+name=Mini Elemental de Fuego
+npc_type_id=0
+head=0
+heading=3
+body=535
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=120
 MinHP=210
@@ -8084,18 +8055,18 @@ Drop5=123-3
 ############################################
 
 [NPC624]
-Name=Peque�o Drag�n Rojo
-NpcType=0
-Head=0
-Heading=3
-Body=536
-Movement=3
+name=Peque�o Drag�n Rojo
+npc_type_id=0
+head=0
+heading=3
+body=536
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=500
 MinHP=300
@@ -8116,17 +8087,17 @@ Drop5=990-3
 ############################################
 
 [NPC625]
-Name=V�bora
-NpcType=0
-Head=0
-Heading=3
-Body=13
-Movement=3
+name=V�bora
+npc_type_id=0
+head=0
+heading=3
+body=13
+movement_id=3
 AguaValida=0
-Attackable=1
-Respawn=0
-Hostile=1
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+alineacion=2
 Comercia=0
 GiveEXP=30
 MinHP=22
@@ -8146,17 +8117,17 @@ Drop5=202-1
 ############################################
 
 [NPC626]
-Name=Goblin Travieso
-NpcType=0
-Head=0
-Heading=3
-Body=14
-Movement=3
+name=Goblin Travieso
+npc_type_id=0
+head=0
+heading=3
+body=14
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+alineacion=2
 Comercia=0
 GiveEXP=70
 MinHP=75
@@ -8177,18 +8148,18 @@ Drop4=479-1
 ############################################
 
 [NPC627]
-Name=Protector de almas
-NpcType=0
-Head=0
-Heading=3
-Body=426
-Movement=3
+name=Protector de almas
+npc_type_id=0
+head=0
+heading=3
+body=426
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=100
 MinHP=130
@@ -8210,18 +8181,18 @@ Drop5=470-1
 ############################################
 
 [NPC628]
-Name=Tar�ntula venenosa
-NpcType=0
-Head=0
-Heading=3
-Body=538
-Movement=3
+name=Tar�ntula venenosa
+npc_type_id=0
+head=0
+heading=3
+body=538
+movement_id=3
 AguaValida=0
-Attackable=1
-ReSpawn=0
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=0
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=95
 MinHP=95
@@ -8244,522 +8215,522 @@ Drop4=396-1
 ############################################
 
 [NPC629]
-Name=Guerrero tutor I
-NpcType=0
-Desc= Los guerreros se especializan en el combate cuerpo a cuerpo por lo que las criaturas m�s adecuadas para ellos son aquellas que no poseen demasiada evasi�n y poder de ataque.
-Head=301
-Heading=3
-Body=54
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Guerrero tutor I
+npc_type_id=0
+description= Los guerreros se especializan en el combate cuerpo a cuerpo por lo que las criaturas m�s adecuadas para ellos son aquellas que no poseen demasiada evasi�n y poder de ataque.
+head=301
+heading=3
+body=54
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 BackUp=0
 
 ############################################
 
 [NPC630]
-Name=Guerrero tutor II
-NpcType=0
-Desc= Debido a sus caracter�sticas, dentro de esta isla, los guerreros prefieren entrenar en el desierto al este de la ciudad.
-Head=370
-Heading=3
-Body=54
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Guerrero tutor II
+npc_type_id=0
+description= Debido a sus caracter�sticas, dentro de esta isla, los guerreros prefieren entrenar en el desierto al este de la ciudad.
+head=370
+heading=3
+body=54
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 BackUp=0
 
 ############################################
 
 [NPC631]
-Name= Cazador tutor I
-NpcType=0
-Desc= Los cazadores se especializan en el combate a distancia, por lo que las criaturas m�s indicadas para ellos, son las que no tengan un gran poder de evasi�n.
-Head=303
-Heading=3
-Body=155
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name= Cazador tutor I
+npc_type_id=0
+description= Los cazadores se especializan en el combate a distancia, por lo que las criaturas m�s indicadas para ellos, son las que no tengan un gran poder de evasi�n.
+head=303
+heading=3
+body=155
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 BackUp=0
 
 ############################################
 
 [NPC632]
-Name= Cazador tutor II
-NpcType=0
-Desc= Debido a sus caracter�sticas, dentro de esta isla, los cazadores, prefieren entrenar en el bosque, al oeste de la ciudad
-Head=4
-Heading=3
-Body=58
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name= Cazador tutor II
+npc_type_id=0
+description= Debido a sus caracter�sticas, dentro de esta isla, los cazadores, prefieren entrenar en el bosque, al oeste de la ciudad
+head=4
+heading=3
+body=58
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 BackUp=0
 
 ############################################
 
 [NPC633]
-Name= Pirata tutor I
-NpcType=0
-Desc= Los piratas pueden combatir tanto cuerpo a cuerpo como a distancia, por lo tanto, las criaturas m�s adecuadas para ellos, son aquellas que no posean gran poder de evasi�n ni de ataque.
-Head=380
-Heading=3
-Body=161
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name= Pirata tutor I
+npc_type_id=0
+description= Los piratas pueden combatir tanto cuerpo a cuerpo como a distancia, por lo tanto, las criaturas m�s adecuadas para ellos, son aquellas que no posean gran poder de evasi�n ni de ataque.
+head=380
+heading=3
+body=161
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 BackUp=0
 
 ############################################
 
 [NPC634]
-Name= Pirata tutor II
-NpcType=0
-Desc= Por sus caracter�sticas, dentro de esta isla, los piratas, pueden entrenar tanto en el desierto (cuerpo a cuerpo) como en el bosque (a distancia), al este u oeste de la ciudad.
-Head=305
-Heading=3
-Body=161
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name= Pirata tutor II
+npc_type_id=0
+description= Por sus caracter�sticas, dentro de esta isla, los piratas, pueden entrenar tanto en el desierto (cuerpo a cuerpo) como en el bosque (a distancia), al este u oeste de la ciudad.
+head=305
+heading=3
+body=161
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 BackUp=0
 
 ############################################
 
 [NPC635]
-Name= Bandido tutor I
-NpcType=0
-Desc= Los bandidos se especializan en el combate cuerpo a cuerpo, por lo tanto, las criaturas m�s adecuadas para esta clase, son aquellas que no posean un gran poder de evasi�n ni de ataque.
-Head=9
-Heading=3
-Body=321
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name= Bandido tutor I
+npc_type_id=0
+description= Los bandidos se especializan en el combate cuerpo a cuerpo, por lo tanto, las criaturas m�s adecuadas para esta clase, son aquellas que no posean un gran poder de evasi�n ni de ataque.
+head=9
+heading=3
+body=321
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 BackUp=0
 
 ############################################
 
 [NPC636]
-Name= Bandido tutor II
-NpcType=0
-Desc= Debido a sus caracter�sticas, dentro de esta isla, los bandidos, prefieren entrenar en el desierto, al este de la ciudad.
-Head=72
-Heading=3
-Body=321
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name= Bandido tutor II
+npc_type_id=0
+description= Debido a sus caracter�sticas, dentro de esta isla, los bandidos, prefieren entrenar en el desierto, al este de la ciudad.
+head=72
+heading=3
+body=321
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 BackUp=0
 
 ############################################
 
 [NPC637]
-Name= Ladron tutor I
-NpcType=0
-Desc= Los ladrones se destacan en el arte de ocultarse y el combate a distancia, por lo tanto, las criaturas m�s adecuadas para esta clase, son aquellas que no posean gran poder de evasi�n.
-Head=75
-Heading=3
-Body=337
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name= Ladron tutor I
+npc_type_id=0
+description= Los ladrones se destacan en el arte de ocultarse y el combate a distancia, por lo tanto, las criaturas m�s adecuadas para esta clase, son aquellas que no posean gran poder de evasi�n.
+head=75
+heading=3
+body=337
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 BackUp=0
 
 ############################################
 
 [NPC638]
-Name= Ladron tutor II
-NpcType=0
-Desc= Debido a sus caracter�sticas, dentro de esta isla, los ladrones, prefieren entrenar en el bosque, al oeste de la ciudad
-Head=37
-Heading=3
-Body=337
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name= Ladron tutor II
+npc_type_id=0
+description= Debido a sus caracter�sticas, dentro de esta isla, los ladrones, prefieren entrenar en el bosque, al oeste de la ciudad
+head=37
+heading=3
+body=337
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 BackUp=0
 
 ############################################
 
 [NPC639]
-Name= Mago tutor I
-NpcType=0
-Desc= Los magos se especializan en ataques m�gicos, por lo tanto, las criaturas m�s adecuadas para esta clase, son aquellas que no posean defensa m�gica.
-Head=407
-Heading=3
-Body=159
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name= Mago tutor I
+npc_type_id=0
+description= Los magos se especializan en ataques m�gicos, por lo tanto, las criaturas m�s adecuadas para esta clase, son aquellas que no posean defensa m�gica.
+head=407
+heading=3
+body=159
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 BackUp=0
 
 ############################################
 
 [NPC640]
-Name= Mago tutor II
-NpcType=0
-Desc= Debido a sus caracter�sticas, dentro de esta isla, los magos, prefieren entrenar en el bosque, al norte de la ciudad
-Head=109
-Heading=3
-Body=353
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name= Mago tutor II
+npc_type_id=0
+description= Debido a sus caracter�sticas, dentro de esta isla, los magos, prefieren entrenar en el bosque, al norte de la ciudad
+head=109
+heading=3
+body=353
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 BackUp=0
 
 ############################################
 
 [NPC641]
-Name=Bardo Tutor I
-NpcType=0
-Desc=Los bardos se especializan en conjurar hechizos y evadir golpes, por lo tanto, las criaturas m�s adecuadas para esta clase, son aquellas que no posean defensa m�gica.
-Head=220
-Heading=3
-Body=130
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Bardo Tutor I
+npc_type_id=0
+description=Los bardos se especializan en conjurar hechizos y evadir golpes, por lo tanto, las criaturas m�s adecuadas para esta clase, son aquellas que no posean defensa m�gica.
+head=220
+heading=3
+body=130
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 BackUp=0
 
 ############################################
 
 [NPC642]
-Name=Bardo Tutor II
-NpcType=0
-Desc=Debido a sus caracter�sticas, dentro de esta isla, los bardos, prefieren entrenar en el bosque, al norte de la ciudad
-Head=179
-Heading=3
-Body=319
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Bardo Tutor II
+npc_type_id=0
+description=Debido a sus caracter�sticas, dentro de esta isla, los bardos, prefieren entrenar en el bosque, al norte de la ciudad
+head=179
+heading=3
+body=319
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 BackUp=0
 
 ############################################
 
 [NPC643]
-Name=Cl�rigo Tutor I
-NpcType=0
-Desc=Los cl�rigos combinan la magia con el combate cuerpo a cuerpo, por lo tanto, las criaturas m�s adecuadas para ellos, son las que no posean defensa m�gica o posean bajo ataque y evasi�n.
-Head=22
-Heading=3
-Body=314
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Cl�rigo Tutor I
+npc_type_id=0
+description=Los cl�rigos combinan la magia con el combate cuerpo a cuerpo, por lo tanto, las criaturas m�s adecuadas para ellos, son las que no posean defensa m�gica o posean bajo ataque y evasi�n.
+head=22
+heading=3
+body=314
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 BackUp=0
 
 ############################################
 
 [NPC644]
-Name=Cl�rigo Tutor II
-NpcType=0
-Desc=Por sus caracter�sticas, dentro de esta isla, los cl�rigos, pueden entrenar tanto en el desierto (cuerpo a cuerpo) como en el bosque (magia), al este o norte de la ciudad.
-Head=112
-Heading=3
-Body=314
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Cl�rigo Tutor II
+npc_type_id=0
+description=Por sus caracter�sticas, dentro de esta isla, los cl�rigos, pueden entrenar tanto en el desierto (cuerpo a cuerpo) como en el bosque (magia), al este o norte de la ciudad.
+head=112
+heading=3
+body=314
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 BackUp=0
 
 ############################################
 
 [NPC645]
-Name=Druida Tutor I
-NpcType=0
-Desc=Los druidas se especializan en ataques m�gicos, por lo tanto, las criaturas m�s adecuadas para esta clase, son las que no posean defensa m�gica. Tambi�n pueden entrenar con mascotas al domar
-Head=284
-Heading=3
-Body=56
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Druida Tutor I
+npc_type_id=0
+description=Los druidas se especializan en ataques m�gicos, por lo tanto, las criaturas m�s adecuadas para esta clase, son las que no posean defensa m�gica. Tambi�n pueden entrenar con mascotas al domar
+head=284
+heading=3
+body=56
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 BackUp=0
 
 ############################################
 
 [NPC646]
-Name=Druida Tutor II
-NpcType=0
-Desc=Debido a sus caracter�sticas, dentro de esta isla, los druidas, prefieren entrenar en el bosque, al norte de la ciudad
-Head=115
-Heading=3
-Body=56
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Druida Tutor II
+npc_type_id=0
+description=Debido a sus caracter�sticas, dentro de esta isla, los druidas, prefieren entrenar en el bosque, al norte de la ciudad
+head=115
+heading=3
+body=56
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 BackUp=0
 
 ############################################
 
 [NPC647]
-Name=Palad�n Tutor I
-NpcType=0
-Desc=Los paladines combinan el golpe cuerpo a cuerpo con la magia, por lo tanto, las criaturas m�s adecuadas para esta clase, son aquellas que no posean un gran poder de evasi�n ni de ataque.
-Head=30
-Heading=3
-Body=45
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Palad�n Tutor I
+npc_type_id=0
+description=Los paladines combinan el golpe cuerpo a cuerpo con la magia, por lo tanto, las criaturas m�s adecuadas para esta clase, son aquellas que no posean un gran poder de evasi�n ni de ataque.
+head=30
+heading=3
+body=45
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 BackUp=0
 
 ############################################
 
 [NPC648]
-Name=Palad�n Tutor II
-NpcType=0
-Desc=Debido a sus caracter�sticas, dentro de esta isla los paladines prefieren entrenar en el desierto al este de la ciudad.
-Head=382
-Heading=3
-Body=54
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Palad�n Tutor II
+npc_type_id=0
+description=Debido a sus caracter�sticas, dentro de esta isla los paladines prefieren entrenar en el desierto al este de la ciudad.
+head=382
+heading=3
+body=54
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 BackUp=0
 
 ############################################
 
 [NPC649]
-Name=Asesino Tutor I
-NpcType=0
-Desc=Los asesinos combinan el golpe cuerpo a cuerpo con la magia, por lo tanto, las criaturas m�s adecuadas para esta clase, son aquellas que no posean un gran poder de evasi�n ni de ataque.
-Head=288
-Heading=3
-Body=48
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Asesino Tutor I
+npc_type_id=0
+description=Los asesinos combinan el golpe cuerpo a cuerpo con la magia, por lo tanto, las criaturas m�s adecuadas para esta clase, son aquellas que no posean un gran poder de evasi�n ni de ataque.
+head=288
+heading=3
+body=48
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 BackUp=0
 
 ############################################
 
 [NPC650]
-Name=Asesino Tutor II
-NpcType=0
-Desc=Debido a sus caracter�sticas, dentro de esta isla los asesinos prefieren entrenar en el desierto al este de la ciudad.
-Head=309
-Heading=3
-Body=539
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Asesino Tutor II
+npc_type_id=0
+description=Debido a sus caracter�sticas, dentro de esta isla los asesinos prefieren entrenar en el desierto al este de la ciudad.
+head=309
+heading=3
+body=539
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 BackUp=0
 
 ############################################
 
 [NPC651]
-Name=Herrero Tutor
-NpcType=0
-Desc=Se considera Herrero al trabajador que tenga 100 skills en la habilidad Herrer�a. Los mismos se encargan de construir armas y armaduras para los aventureros de estas tierras.
-Head=7
-Heading=3
-Body=93
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Herrero Tutor
+npc_type_id=0
+description=Se considera Herrero al trabajador que tenga 100 skills en la habilidad Herrer�a. Los mismos se encargan de construir armas y armaduras para los aventureros de estas tierras.
+head=7
+heading=3
+body=93
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 BackUp=0
 
 ############################################
 
 [NPC652]
-Name=Minero Tutor
-NpcType=0
-Desc=Se considera Minero al trabajador que tenga 100 skills en la habilidad Miner�a. Los mismos se encargan de extraer minerales y transformarlos en lingotes para el uso de los herreros.
-Head=109
-Heading=3
-Body=100
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Minero Tutor
+npc_type_id=0
+description=Se considera Minero al trabajador que tenga 100 skills en la habilidad Miner�a. Los mismos se encargan de extraer minerales y transformarlos en lingotes para el uso de los herreros.
+head=109
+heading=3
+body=100
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 BackUp=0
 
 ############################################
 
 [NPC653]
-Name=Carpintero Tutor
-NpcType=0
-Desc=Se considera Carpintero al trabajador que tenga 100 skills en la habilidad Carpinter�a. Los mismos se encargan de construir todo tipo de objetos que requieran madera.
-Head=308
-Heading=3
-Body=373
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Carpintero Tutor
+npc_type_id=0
+description=Se considera Carpintero al trabajador que tenga 100 skills en la habilidad Carpinter�a. Los mismos se encargan de construir todo tipo de objetos que requieran madera.
+head=308
+heading=3
+body=373
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 BackUp=0
 
 ############################################
 
 [NPC654]
-Name=Le�ador Tutor
-NpcType=0
-Desc=Se considera Le�ador al trabajador que tenga 100 skills en la habilidad Tala. Los mismos se encargan de extraer le�a com�n y le�a �lfica para el uso de los carpinteros.
-Head=216
-Heading=3
-Body=382
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Le�ador Tutor
+npc_type_id=0
+description=Se considera Le�ador al trabajador que tenga 100 skills en la habilidad Tala. Los mismos se encargan de extraer le�a com�n y le�a �lfica para el uso de los carpinteros.
+head=216
+heading=3
+body=382
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 BackUp=0
 
 ############################################
 
 [NPC655]
-Name=Pescador Tutor
-NpcType=0
-Desc=Se considera Pescador al trabajador que tenga 100 skills en la habilidad Pesca. Los mismos se encargan de extraer peces de los r�os y mares para el venderselos al mejor postor.
-Head=410
-Heading=3
-Body=301
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Pescador Tutor
+npc_type_id=0
+description=Se considera Pescador al trabajador que tenga 100 skills en la habilidad Pesca. Los mismos se encargan de extraer peces de los r�os y mares para el venderselos al mejor postor.
+head=410
+heading=3
+body=301
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 BackUp=0
 
 ############################################
 
 [NPC656]
-Name=Trabajador Tutor I
-NpcType=0
-Desc=Los trabajadores pueden combatir tanto cuerpo a cuerpo como a distancia, por lo tanto, las criaturas m�s adecuadas para ellos, son aquellas que no posean gran poder de evasi�n ni de ataque.
-Head=172
-Heading=3
-Body=348
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Trabajador Tutor I
+npc_type_id=0
+description=Los trabajadores pueden combatir tanto cuerpo a cuerpo como a distancia, por lo tanto, las criaturas m�s adecuadas para ellos, son aquellas que no posean gran poder de evasi�n ni de ataque.
+head=172
+heading=3
+body=348
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 BackUp=0
 
 ############################################
 
 [NPC657]
-Name=Trabajador Tutor II
-NpcType=0
-Desc=Por sus caracter�sticas, dentro de esta isla, los trabajadores, pueden entrenar tanto en el desierto (cuerpo a cuerpo) como en el bosque (a distancia), al este u oeste de la ciudad.
-Head=372
-Heading=3
-Body=376
-Movement=1
-Attackable=0
-ReSpawn=0
-Hostile=0
-Domable=0
-Alineacion=0
+name=Trabajador Tutor II
+npc_type_id=0
+description=Por sus caracter�sticas, dentro de esta isla, los trabajadores, pueden entrenar tanto en el desierto (cuerpo a cuerpo) como en el bosque (a distancia), al este u oeste de la ciudad.
+head=372
+heading=3
+body=376
+movement_id=1
+attackable=0
+respawnable=0
+hostile=0
+domable=0
+alineacion=0
 Comercia=0
 BackUp=0
 
@@ -8770,18 +8741,18 @@ BackUp=0
 ###############no cambiar los �ndices asignados###############
 
 [NPC900]
-Name=Rey Pretoriano
-NpcType=10
-Head=14
-Heading=3
-Body=63
-Movement=24
+name=Rey Pretoriano
+npc_type_id=10
+head=14
+heading=3
+body=63
+movement_id=24
 AguaValida=0
-Attackable=1
-ReSpawn=1
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=1
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=35000
 GiveGLD=30000
@@ -8807,18 +8778,18 @@ BackUp=0
 ############################################
 
 [NPC901]
-Name=Rey Pretoriano
-NpcType=10
-Head=14
-Heading=3
-Body=180
-Movement=24
+name=Rey Pretoriano
+npc_type_id=10
+head=14
+heading=3
+body=180
+movement_id=24
 AguaValida=0
-Attackable=1
-ReSpawn=1
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=1
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=35000
 GiveGLD=30000
@@ -8844,18 +8815,18 @@ BackUp=0
 ############################################
 
 [NPC902]
-Name=Clerigo Pretoriano
-NpcType=10
-Head=74
-Heading=3
-Body=130
-Movement=20
+name=Clerigo Pretoriano
+npc_type_id=10
+head=74
+heading=3
+body=130
+movement_id=20
 AguaValida=0
-Attackable=1
-ReSpawn=1
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=1
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=10000
 MinHP=8000
@@ -8883,18 +8854,18 @@ BackUp=0
 ############################################
 
 [NPC903]
-Name=Clerigo Pretoriano
-NpcType=10
-Head=74
-Heading=3
-Body=136
-Movement=20
+name=Clerigo Pretoriano
+npc_type_id=10
+head=74
+heading=3
+body=136
+movement_id=20
 AguaValida=0
-Attackable=1
-ReSpawn=1
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=1
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=10000
 MinHP=8000
@@ -8922,18 +8893,18 @@ BackUp=0
 ############################################
 
 [NPC904]
-Name=Bardo Pretoriano
-NpcType=10
-Head=74
-Heading=3
-Body=130
-Movement=20
+name=Bardo Pretoriano
+npc_type_id=10
+head=74
+heading=3
+body=130
+movement_id=20
 AguaValida=0
-Attackable=1
-ReSpawn=1
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=1
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=10000
 MinHP=8000
@@ -8961,18 +8932,18 @@ BackUp=0
 ############################################
 
 [NPC905]
-Name=Bardo Pretoriano
-NpcType=10
-Head=74
-Heading=3
-Body=136
-Movement=20
+name=Bardo Pretoriano
+npc_type_id=10
+head=74
+heading=3
+body=136
+movement_id=20
 AguaValida=0
-Attackable=1
-ReSpawn=1
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=1
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=10000
 MinHP=8000
@@ -9000,18 +8971,18 @@ BackUp=0
 ############################################
 
 [NPC906]
-Name=Mago Pretoriano
-NpcType=10
-Head=104
-Heading=3
-Body=49
-Movement=22
+name=Mago Pretoriano
+npc_type_id=10
+head=104
+heading=3
+body=49
+movement_id=22
 AguaValida=0
-Attackable=1
-ReSpawn=1
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=1
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=10000
 MinHP=5000
@@ -9035,18 +9006,18 @@ BackUp=0
 ############################################
 
 [NPC907]
-Name=Mago Pretoriano
-NpcType=10
-Head=104
-Heading=3
-Body=159
-Movement=22
+name=Mago Pretoriano
+npc_type_id=10
+head=104
+heading=3
+body=159
+movement_id=22
 AguaValida=0
-Attackable=1
-ReSpawn=1
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=1
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=10000
 MinHP=5000
@@ -9070,18 +9041,18 @@ BackUp=0
 ############################################
 
 [NPC908]
-Name=Druida Pretoriano
-NpcType=10
-Head=104
-Heading=3
-Body=56
-Movement=22
+name=Druida Pretoriano
+npc_type_id=10
+head=104
+heading=3
+body=56
+movement_id=22
 AguaValida=0
-Attackable=1
-ReSpawn=1
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=1
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=10000
 MinHP=5000
@@ -9105,18 +9076,18 @@ BackUp=0
 ############################################
 
 [NPC909]
-Name=Druida Pretoriano
-NpcType=10
-Head=104
-Heading=3
-Body=135
-Movement=22
+name=Druida Pretoriano
+npc_type_id=10
+head=104
+heading=3
+body=135
+movement_id=22
 AguaValida=0
-Attackable=1
-ReSpawn=1
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=1
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=10000
 MinHP=5000
@@ -9140,18 +9111,18 @@ BackUp=0
 ############################################
 
 [NPC910]
-Name=Cazador Pretoriano
-NpcType=10
-Head=301
-Heading=3
-Body=58
-Movement=23
+name=Cazador Pretoriano
+npc_type_id=10
+head=301
+heading=3
+body=58
+movement_id=23
 AguaValida=0
-Attackable=1
-ReSpawn=1
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=1
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=5000
 MinHP=10000
@@ -9177,18 +9148,18 @@ BackUp=0
 ############################################
 
 [NPC911]
-Name=Cazador Pretoriano
-NpcType=10
-Head=301
-Heading=3
-Body=155
-Movement=23
+name=Cazador Pretoriano
+npc_type_id=10
+head=301
+heading=3
+body=155
+movement_id=23
 AguaValida=0
-Attackable=1
-ReSpawn=1
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=1
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=5000
 MinHP=10000
@@ -9214,18 +9185,18 @@ BackUp=0
 ############################################
 
 [NPC912]
-Name=Pirata Pretoriano
-NpcType=10
-Head=301
-Heading=3
-Body=130
-Movement=23
+name=Pirata Pretoriano
+npc_type_id=10
+head=301
+heading=3
+body=130
+movement_id=23
 AguaValida=0
-Attackable=1
-ReSpawn=1
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=1
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=5000
 MinHP=10000
@@ -9249,18 +9220,18 @@ BackUp=0
 ############################################
 
 [NPC913]
-Name=Pirata Pretoriano
-NpcType=10
-Head=301
-Heading=3
-Body=136
-Movement=23
+name=Pirata Pretoriano
+npc_type_id=10
+head=301
+heading=3
+body=136
+movement_id=23
 AguaValida=0
-Attackable=1
-ReSpawn=1
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=1
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=5000
 MinHP=10000
@@ -9284,18 +9255,18 @@ BackUp=0
 ############################################
 
 [NPC914]
-Name=Guerrero Pretoriano
-NpcType=10
-Head=7
-Heading=3
-Body=45
-Movement=21
+name=Guerrero Pretoriano
+npc_type_id=10
+head=7
+heading=3
+body=45
+movement_id=21
 AguaValida=0
-Attackable=1
-ReSpawn=1
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=1
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=5000
 MinHP=15000
@@ -9320,18 +9291,18 @@ BackUp=0
 ############################################
 
 [NPC915]
-Name=Guerrero Pretoriano
-NpcType=10
-Head=7
-Heading=3
-Body=54
-Movement=21
+name=Guerrero Pretoriano
+npc_type_id=10
+head=7
+heading=3
+body=54
+movement_id=21
 AguaValida=0
-Attackable=1
-ReSpawn=1
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=1
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=5000
 MinHP=15000
@@ -9356,18 +9327,18 @@ BackUp=0
 ############################################
 
 [NPC916]
-Name=Paladin Pretoriano
-NpcType=10
-Head=7
-Heading=3
-Body=45
-Movement=21
+name=Paladin Pretoriano
+npc_type_id=10
+head=7
+heading=3
+body=45
+movement_id=21
 AguaValida=0
-Attackable=1
-ReSpawn=1
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=1
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=5000
 MinHP=15000
@@ -9391,18 +9362,18 @@ BackUp=0
 ############################################
 
 [NPC917]
-Name=Paladin Pretoriano
-NpcType=10
-Head=7
-Heading=3
-Body=54
-Movement=21
+name=Paladin Pretoriano
+npc_type_id=10
+head=7
+heading=3
+body=54
+movement_id=21
 AguaValida=0
-Attackable=1
-ReSpawn=1
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=1
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=5000
 MinHP=15000
@@ -9426,18 +9397,18 @@ BackUp=0
 ############################################
 
 [NPC918]
-Name=Asesino Pretoriano
-NpcType=10
-Head=7
-Heading=3
-Body=48
-Movement=21
+name=Asesino Pretoriano
+npc_type_id=10
+head=7
+heading=3
+body=48
+movement_id=21
 AguaValida=0
-Attackable=1
-ReSpawn=1
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=1
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=5000
 MinHP=15000
@@ -9462,18 +9433,18 @@ BackUp=0
 ############################################
 
 [NPC919]
-Name=Asesino Pretoriano
-NpcType=10
-Head=7
-Heading=3
-Body=539
-Movement=21
+name=Asesino Pretoriano
+npc_type_id=10
+head=7
+heading=3
+body=539
+movement_id=21
 AguaValida=0
-Attackable=1
-ReSpawn=1
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=1
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=5000
 MinHP=15000
@@ -9498,18 +9469,18 @@ BackUp=0
 ############################################
 
 [NPC920]
-Name=Bandido Pretoriano
-NpcType=10
-Head=7
-Heading=3
-Body=45
-Movement=21
+name=Bandido Pretoriano
+npc_type_id=10
+head=7
+heading=3
+body=45
+movement_id=21
 AguaValida=0
-Attackable=1
-ReSpawn=1
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=1
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=5000
 MinHP=15000
@@ -9534,18 +9505,18 @@ BackUp=0
 ############################################
 
 [NPC921]
-Name=Bandido Pretoriano
-NpcType=10
-Head=7
-Heading=3
-Body=54
-Movement=21
+name=Bandido Pretoriano
+npc_type_id=10
+head=7
+heading=3
+body=54
+movement_id=21
 AguaValida=0
-Attackable=1
-ReSpawn=1
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=1
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=5000
 MinHP=15000
@@ -9570,18 +9541,18 @@ BackUp=0
 ############################################
 
 [NPC922]
-Name=Ladr�n Pretoriano
-NpcType=10
-Head=7
-Heading=3
-Body=47
-Movement=21
+name=Ladr�n Pretoriano
+npc_type_id=10
+head=7
+heading=3
+body=47
+movement_id=21
 AguaValida=0
-Attackable=1
-ReSpawn=1
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=1
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=5000
 MinHP=3000
@@ -9604,18 +9575,18 @@ BackUp=0
 ############################################
 
 [NPC923]
-Name=Ladr�n Pretoriano
-NpcType=10
-Head=7
-Heading=3
-Body=374
-Movement=21
+name=Ladr�n Pretoriano
+npc_type_id=10
+head=7
+heading=3
+body=374
+movement_id=21
 AguaValida=0
-Attackable=1
-ReSpawn=1
-Hostile=1
-Domable=0
-Alineacion=2
+attackable=1
+respawnable=1
+hostile=1
+domable=0
+alineacion=2
 Comercia=0
 GiveEXP=5000
 MinHP=3000
