@@ -8,9 +8,6 @@ import com.ao.data.dao.exception.DAOException;
 
 public interface NPCService {
 
-    /**
-     * Loads all NPCs.
-     */
-    void loadNPCs() throws DAOException;
+    void loadNpcs() throws DAOException;
 
 }

@@ -103,13 +103,13 @@ public class Bootstrap {
         LOGGER.info("Loading cities...");
         mapService.loadCities();
 
-        LOGGER.info("Loading world objects...");
+        LOGGER.info("Loading objects...");
         WorldObjectService objectService = ApplicationContext.getInstance(WorldObjectService.class);
         objectService.loadObjects();
 
-        LOGGER.info("Loading NPCs...");
+        LOGGER.info("Loading npcs...");
         NPCService npcService = ApplicationContext.getInstance(NPCService.class);
-        npcService.loadNPCs();
+        npcService.loadNpcs();
 
         // TODO Load other services and classes from application context
     }

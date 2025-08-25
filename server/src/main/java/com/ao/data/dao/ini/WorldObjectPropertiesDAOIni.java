@@ -32,12 +32,12 @@ import java.util.Map;
  * Ini-backed implementation of the World Object DAO.
  * <p>
  * En las claves de tipo flag (0 o 1, true o false), la claves obvias como por ejemplo {@code droppable=1} (que se puede tirar) no
- * se especifican en {@code obj.dat} ya que seria redundante especificar que la mayoria de objetos si se pueden tirar al suelo,
- * por lo tanto esta clave obtiene el valor "true" por defecto desde el metodo {@code isDroppable()} si la clave no se especifico
- * en el objeto.
+ * se especifican en {@code objects.dat} ya que seria redundante especificar que la mayoria de objetos si se pueden tirar al
+ * suelo, por lo tanto esta clave obtiene el valor "true" por defecto desde el metodo {@code isDroppable()} si la clave no se
+ * especifico en el objeto.
  * <p>
  * TODO Se podrian reemplazar los archivos .ini por json para mejor comodidad
- * TODO Si dividieramos el archivo obj.dat en varios archivos especificos de cada objeto, entonces no seria necesario especificar
+ * TODO Si dividieramos el archivo objects.dat en varios archivos especificos de cada objeto, entonces no seria necesario especificar
  * la clave "object_type" para cada objeto
  */
 
@@ -1425,10 +1425,10 @@ public class WorldObjectPropertiesDAOIni implements WorldObjectPropertiesDAO {
     /**
      * Checks if the object is newbie.
      * <p>
-     * IMPORTANTE: La clave <b>newbie</b> solo se especifica en obj.dat para los objetos newbies con el valor 1 (newbie=1 es igual
-     * a true), es decir que esta clave es opcional ya que no hace falta especificar newbie=0 para TODOS los otros objetos ya que
-     * para las claves faltantes, newbie=0 en este caso, las maneja con un valor false por defecto. Esto se hace para evitar tener
-     * que especificar la clave <b>newbie</b> en todos los objetos que no son newbies.
+     * IMPORTANTE: La clave <b>newbie</b> solo se especifica en objects.dat para los objetos newbies con el valor 1 (newbie=1 es
+     * igual a true), es decir que esta clave es opcional ya que no hace falta especificar newbie=0 para TODOS los otros objetos
+     * ya que para las claves faltantes, newbie=0 en este caso, las maneja con un valor false por defecto. Esto se hace para
+     * evitar tener que especificar la clave <b>newbie</b> en todos los objetos que no son newbies.
      *
      * @param ini     ini configuration
      * @param section section from which to read the value
@@ -1485,8 +1485,8 @@ public class WorldObjectPropertiesDAOIni implements WorldObjectPropertiesDAO {
     /**
      * Checks if the object is droppable.
      * <p>
-     * La mayoria de los objetos son droppables, por lo tanto no es necesario especificarlos en {@code obj.dat} con {droppable=1}.
-     * Esto significa que solo se especifican los objetos que no son droppables con {droppable=0}.
+     * La mayoria de los objetos son droppables, por lo tanto no es necesario especificarlos en {@code objects.dat} con
+     * {droppable=1}. Esto significa que solo se especifican los objetos que no son droppables con {droppable=0}.
      *
      * @param ini     ini configuration
      * @param section section from which to read the value

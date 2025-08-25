@@ -13,7 +13,7 @@ public class CityDAOIniTest {
 
     @BeforeEach
     public void setUp() throws DAOException {
-        cityDAOIni = new CityDAOIni("cities.dat");
+        cityDAOIni = new CityDAOIni("dat/cities.dat");
     }
 
     @Test

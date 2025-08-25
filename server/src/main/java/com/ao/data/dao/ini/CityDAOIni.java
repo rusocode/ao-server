@@ -17,6 +17,8 @@ import java.io.InputStreamReader;
 
 /**
  * Implementation of the City DAO backed by INI files.
+ * <p>
+ * TODO Podria renombrar la carpeta "dat" a "data"
  */
 
 public record CityDAOIni(String citiesFilePath) implements CityDAO {

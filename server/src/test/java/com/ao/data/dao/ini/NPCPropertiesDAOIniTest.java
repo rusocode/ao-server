@@ -35,75 +35,73 @@ public class NPCPropertiesDAOIniTest {
     private static final int BANKER_NPC_INDEX = 23;
     private static final int NOBLE_NPC_INDEX = 71;
 
-    private static final String TEST_NPCS_DAT = "NPCs.dat";
-
-    private NPCPropertiesDAOIni dao;
+    private NPCPropertiesDAOIni npcPropertiesDAOIni;
 
     @BeforeEach
     public void setUp() throws Exception {
-        final WorldObjectProperties woProperties = mock(WorldObjectProperties.class);
-        final AbstractItem item = mock(AbstractItem.class);
+        WorldObjectProperties woProperties = mock(WorldObjectProperties.class);
+        AbstractItem item = mock(AbstractItem.class);
 
-        final WorldObjectPropertiesDAO woDao = mock(WorldObjectPropertiesDAO.class);
+        WorldObjectPropertiesDAO woDao = mock(WorldObjectPropertiesDAO.class);
         when(woDao.getWorldObjectProperties(anyInt())).thenReturn(woProperties);
 
-        final WorldObjectFactory woFactory = mock(WorldObjectFactory.class);
+        WorldObjectFactory woFactory = mock(WorldObjectFactory.class);
         when(woFactory.getWorldObject(eq(woProperties), anyInt())).thenReturn(item);
 
-        dao = new NPCPropertiesDAOIni(TEST_NPCS_DAT, woDao, woFactory);
+        npcPropertiesDAOIni = new NPCPropertiesDAOIni("dat/npcs.dat", woDao, woFactory);
     }
 
     @Test
     public void testLoad() {
-        final NPCProperties[] npcProperties;
+        NPCProperties[] npcProperties;
         try {
-            npcProperties = dao.load();
-        } catch (final DAOException e) {
+            npcProperties = npcPropertiesDAOIni.load();
+        } catch (DAOException e) {
             fail("Loading of npcs failed with message " + e.getMessage());
             return;
         }
 
-        final NPCProperties snake = npcProperties[COMMON_NPC_INDEX];
+        NPCProperties snake = npcProperties[COMMON_NPC_INDEX];
         assertThat(snake).isInstanceOf(CreatureNPCProperties.class);
         assertThat(snake.getType()).isEqualTo(NPCType.COMMON);
 
-        final NPCProperties dragon = npcProperties[DRAGON_NPC_INDEX];
+        NPCProperties dragon = npcProperties[DRAGON_NPC_INDEX];
         assertThat(dragon).isInstanceOf(CreatureNPCProperties.class);
         assertThat(dragon.getType()).isEqualTo(NPCType.DRAGON);
 
-        final NPCProperties trainer = npcProperties[TRAINER_NPC_INDEX];
+        NPCProperties trainer = npcProperties[TRAINER_NPC_INDEX];
         assertThat(trainer).isInstanceOf(TrainerNPCProperties.class);
         assertThat(trainer.getType()).isEqualTo(NPCType.TRAINER);
 
-        final NPCProperties governor = npcProperties[GOVERNOR_NPC_INDEX];
+        NPCProperties governor = npcProperties[GOVERNOR_NPC_INDEX];
         assertThat(governor).isInstanceOf(GovernorNPCProperties.class);
         assertThat(governor.getType()).isEqualTo(NPCType.GOVERNOR);
 
-        final NPCProperties royalGuard = npcProperties[ROYAL_GUARD_NPC_INDEX];
+        NPCProperties royalGuard = npcProperties[ROYAL_GUARD_NPC_INDEX];
         assertThat(royalGuard).isInstanceOf(GuardNPCProperties.class);
         assertThat(royalGuard.getType()).isEqualTo(NPCType.ROYAL_GUARD);
 
-        final NPCProperties chaosGuard = npcProperties[CHAOS_GUARD_NPC_INDEX];
+        NPCProperties chaosGuard = npcProperties[CHAOS_GUARD_NPC_INDEX];
         assertThat(chaosGuard).isInstanceOf(GuardNPCProperties.class);
         assertThat(chaosGuard.getType()).isEqualTo(NPCType.CHAOS_GUARD);
 
-        final NPCProperties newbieResucitator = npcProperties[NEWBIE_RESUCITATOR_NPC_INDEX];
+        NPCProperties newbieResucitator = npcProperties[NEWBIE_RESUCITATOR_NPC_INDEX];
         assertThat(newbieResucitator).isInstanceOf(NPCProperties.class);
         assertThat(newbieResucitator.getType()).isEqualTo(NPCType.NEWBIE_RESUCITATOR);
 
-        final NPCProperties resucitator = npcProperties[RESUCITATOR_NPC_INDEX];
+        NPCProperties resucitator = npcProperties[RESUCITATOR_NPC_INDEX];
         assertThat(resucitator).isInstanceOf(NPCProperties.class);
         assertThat(resucitator.getType()).isEqualTo(NPCType.RESUCITATOR);
 
-        final NPCProperties gambler = npcProperties[GAMBLER_NPC_INDEX];
+        NPCProperties gambler = npcProperties[GAMBLER_NPC_INDEX];
         assertThat(gambler).isInstanceOf(NPCProperties.class);
         assertThat(gambler.getType()).isEqualTo(NPCType.GAMBLER);
 
-        final NPCProperties banker = npcProperties[BANKER_NPC_INDEX];
+        NPCProperties banker = npcProperties[BANKER_NPC_INDEX];
         assertThat(banker).isInstanceOf(NPCProperties.class);
         assertThat(banker.getType()).isEqualTo(NPCType.BANKER);
 
-        final NPCProperties noble = npcProperties[NOBLE_NPC_INDEX];
+        NPCProperties noble = npcProperties[NOBLE_NPC_INDEX];
         assertThat(noble).isInstanceOf(NobleNPCProperties.class);
         assertThat(noble.getType()).isEqualTo(NPCType.NOBLE);
 

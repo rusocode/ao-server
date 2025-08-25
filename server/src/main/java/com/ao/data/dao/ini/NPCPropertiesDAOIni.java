@@ -137,16 +137,16 @@ public class NPCPropertiesDAOIni implements NPCCharacterPropertiesDAO {
     @Override
     public NPCProperties[] load() throws DAOException {
         INIConfiguration ini = null;
-        LOGGER.info("Loading all NPCs from {}", npcsFilePath);
+        LOGGER.info("Loading all npcs from {}", npcsFilePath);
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream(npcsFilePath);
         if (inputStream == null)
             throw new IllegalArgumentException("The file " + npcsFilePath + " was not found in the classpath");
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
             ini = new INIConfiguration();
             ini.read(reader);
-            LOGGER.info("NPCs loaded successfully!");
+            LOGGER.info("Npcs loaded successfully!");
         } catch (IOException | ConfigurationException e) {
-            LOGGER.error("Error loading NPCs!", e);
+            LOGGER.error("Error loading npcs!", e);
             System.exit(-1);
         }
 
@@ -760,7 +760,7 @@ public class NPCPropertiesDAOIni implements NPCCharacterPropertiesDAO {
 
     /**
      * Generates a drop logic object based on the configuration specified in an INI file section. This method determines how items
-     * are dropped by NPCs based on predefined configurations.
+     * are dropped by npcs based on predefined configurations.
      *
      * @return a {@link Drop} object that contains the drop logic for the NPC, or null if configuration is invalid or missing
      */
@@ -779,7 +779,7 @@ public class NPCPropertiesDAOIni implements NPCCharacterPropertiesDAO {
             return null;
         }
 
-        // Pretorian NPCs drop everything... a little bit hard coded, but we want to be compatible with old AO
+        // Pretorian npc drop everything... a little bit hard coded, but we want to be compatible with old AO
         LegacyAIType aiType = LegacyAIType.findById(Integer.parseInt(movement));
         if (aiType.isPretorian()) return new DropEverything(getInventory(ini, section));
 
