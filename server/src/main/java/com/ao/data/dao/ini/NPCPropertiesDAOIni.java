@@ -25,6 +25,7 @@ import com.ao.model.worldobject.WorldObjectType;
 import com.ao.model.worldobject.factory.WorldObjectFactory;
 import com.ao.model.worldobject.factory.WorldObjectFactoryException;
 import com.ao.model.worldobject.properties.WorldObjectProperties;
+import com.ao.utils.IniUtils;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import org.apache.commons.configuration2.INIConfiguration;
