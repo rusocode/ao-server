@@ -46,7 +46,7 @@ public class Connection {
      * @param packet packet being sent
      */
     public void send(final OutgoingPacket packet) {
-        socket.write(packet);
+        socket.writeAndFlush(packet);
     }
 
     /**

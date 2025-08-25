@@ -37,9 +37,9 @@ public class ClientPacketsManager {
         LOGIN_EXISTING_CHARACTER(LoginExistingCharacterPacket.class),
         THROW_DICE(ThrowDicesPacket.class),
         LOGIN_NEW_CHARACTER(LoginNewCharacterPacket.class),
-        TALK(null),
-        YELL(null),
-        WHISPER(null),
+        // TALK(null),
+        // YELL(null),
+        // WHISPER(null),
         WALK(WalkPacket.class);
 
         private final IncomingPacket handler;
