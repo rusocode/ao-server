@@ -9,18 +9,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class CityDAOIniTest {
 
-    private static final String DAT_PATH = "ciudades.dat";
-
-    private CityDAOIni dao;
+    private CityDAOIni cityDAOIni;
 
     @BeforeEach
     public void setUp() throws DAOException {
-        dao = new CityDAOIni(DAT_PATH);
+        cityDAOIni = new CityDAOIni("cities.dat");
     }
 
     @Test
     public void testLoad() {
-        City[] cities = dao.load();
+        City[] cities = cityDAOIni.load();
         assertThat(cities.length).isEqualTo(7); // Se asegura que el valor actual sea igual al valor esperado
     }
 
