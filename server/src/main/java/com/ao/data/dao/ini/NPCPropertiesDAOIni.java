@@ -137,10 +137,10 @@ public class NPCPropertiesDAOIni implements NPCCharacterPropertiesDAO {
     @Override
     public NPCProperties[] load() throws DAOException {
         INIConfiguration ini = null;
-        LOGGER.info("Loading all npcs from {}", npcsFilePath);
+        LOGGER.info("Loading all npcs from '{}'", npcsFilePath);
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream(npcsFilePath);
         if (inputStream == null)
-            throw new IllegalArgumentException("The file " + npcsFilePath + " was not found in the classpath");
+            throw new IllegalArgumentException("The file '" + npcsFilePath + "' was not found in the classpath!");
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
             ini = new INIConfiguration();
             ini.read(reader);

@@ -162,12 +162,12 @@ public class WorldObjectPropertiesDAOIni implements WorldObjectPropertiesDAO {
     @Override
     public void load() throws DAOException {
         INIConfiguration ini = null;
-        LOGGER.info("Loading all objects from {}", objectsFilePath);
+        LOGGER.info("Loading all objects from '{}'", objectsFilePath);
         // Reset manufacturables
         manufacturables = new HashMap<>();
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream(objectsFilePath);
         if (inputStream == null)
-            throw new IllegalArgumentException("The file " + objectsFilePath + " was not found in the classpath");
+            throw new IllegalArgumentException("The file '" + objectsFilePath + "' was not found in the classpath!");
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
             ini = new INIConfiguration();
             ini.read(reader);

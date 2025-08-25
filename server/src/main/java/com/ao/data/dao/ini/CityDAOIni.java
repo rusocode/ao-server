@@ -46,11 +46,11 @@ public record CityDAOIni(String citiesFilePath) implements CityDAO {
     @Override
     public City[] load() {
         INIConfiguration ini = null;
-        LOGGER.info("Loading all cities from {}", citiesFilePath);
+        LOGGER.info("Loading all cities from '{}'", citiesFilePath);
         // Load from a classpath using try-with-resources for automatic resource management
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream(citiesFilePath);
         if (inputStream == null)
-            throw new IllegalArgumentException("The file " + citiesFilePath + " was not found in the classpath");
+            throw new IllegalArgumentException("The file '" + citiesFilePath + "' was not found in the classpath!");
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
             ini = new INIConfiguration();
             ini.read(reader);

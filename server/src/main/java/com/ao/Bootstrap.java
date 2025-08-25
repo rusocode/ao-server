@@ -6,12 +6,13 @@ import com.ao.data.dao.exception.DAOException;
 import com.ao.service.MapService;
 import com.ao.service.NPCService;
 import com.ao.service.WorldObjectService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.Inet4Address;
 import java.net.InetSocketAddress;
 import java.util.Timer;
-import java.util.logging.Logger;
 
 /**
  * Bootstraps the application.
@@ -19,21 +20,21 @@ import java.util.logging.Logger;
 
 public class Bootstrap {
 
-    private static final Logger LOGGER = Logger.getLogger(Bootstrap.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(Bootstrap.class);
 
     public static void main(String[] args) {
 
-        final AOServer server;
+        AOServer server;
 
         try {
             server = Bootstrap.bootstrap();
         } catch (Exception e) {
-            LOGGER.severe("Server bootstraping failed!" + e.getMessage());
+            LOGGER.error("Server bootstrapping failed: {}", e.getMessage(), e);
             System.exit(-1);
             return;
         }
 
-        LOGGER.info("AO Server ready. Enjoy it!");
+        LOGGER.info("\u001B[1;32mServer ready!\u001B[0m");
         server.run();
     }
 
@@ -53,7 +54,7 @@ public class Bootstrap {
         startTimers(server);
         configureNetworking(server);
 
-        LOGGER.info("AO Server initialized. Took " + (System.currentTimeMillis() - timeMillis) + "ms.");
+        LOGGER.info("\u001B[1;32mServer initialized in {} ms\u001B[0m", System.currentTimeMillis() - timeMillis);
 
         return server;
     }
