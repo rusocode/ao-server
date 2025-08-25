@@ -54,10 +54,10 @@ public class NPCPropertiesDAOIniTest {
     }
 
     @Test
-    public void testLoadAll() {
+    public void testLoad() {
         final NPCProperties[] npcProperties;
         try {
-            npcProperties = dao.loadAll();
+            npcProperties = dao.load();
         } catch (final DAOException e) {
             fail("Loading of npcs failed with message " + e.getMessage());
             return;

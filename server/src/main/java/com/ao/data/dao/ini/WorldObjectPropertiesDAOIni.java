@@ -160,7 +160,7 @@ public class WorldObjectPropertiesDAOIni implements WorldObjectPropertiesDAO {
     }
 
     @Override
-    public void loadAll() throws DAOException {
+    public void load() throws DAOException {
         INIConfiguration ini = null;
         LOGGER.info("Loading all objects from {}", objectsFilePath);
         // Reset manufacturables
@@ -189,7 +189,7 @@ public class WorldObjectPropertiesDAOIni implements WorldObjectPropertiesDAO {
 
     @Override
     public Map<Integer, Manufacturable> getAllManufacturables() throws DAOException {
-        if (manufacturables == null) loadAll(); // Force the ini to be loaded!
+        if (manufacturables == null) load(); // Force the ini to be loaded!
         return manufacturables;
     }
 

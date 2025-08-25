@@ -30,7 +30,7 @@ public class MapServiceImplTest {
         final CityDAO cityDao = mock(CityDAO.class);
         final AreaService areaService = mock(AreaService.class);
 
-        when(dao.retrieveAll()).thenReturn(new WorldMap[]{map});
+        when(dao.load()).thenReturn(new WorldMap[]{map});
 
         final MapService service = new MapServiceImpl(dao, cityDao, areaService);
         service.loadMaps();

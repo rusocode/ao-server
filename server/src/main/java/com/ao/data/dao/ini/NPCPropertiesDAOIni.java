@@ -135,7 +135,7 @@ public class NPCPropertiesDAOIni implements NPCCharacterPropertiesDAO {
     }
 
     @Override
-    public NPCProperties[] loadAll() throws DAOException {
+    public NPCProperties[] load() throws DAOException {
         INIConfiguration ini = null;
         LOGGER.info("Loading all NPCs from {}", npcsFilePath);
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream(npcsFilePath);

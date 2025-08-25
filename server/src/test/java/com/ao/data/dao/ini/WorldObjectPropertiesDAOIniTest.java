@@ -34,9 +34,9 @@ public class WorldObjectPropertiesDAOIniTest {
     }
 
     @Test
-    public void testLoadAll() {
+    public void testLoad() {
         try {
-            dao.loadAll();
+            dao.load();
         } catch (DAOException e) {
             fail("Loading of objects failed with message: " + e.getMessage());
         }

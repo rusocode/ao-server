@@ -19,8 +19,8 @@ public class CityDAOIniTest {
     }
 
     @Test
-    public void testLoadAll() {
-        City[] cities = dao.loadAll();
+    public void testLoad() {
+        City[] cities = dao.load();
         assertThat(cities.length).isEqualTo(7); // Se asegura que el valor actual sea igual al valor esperado
     }
 

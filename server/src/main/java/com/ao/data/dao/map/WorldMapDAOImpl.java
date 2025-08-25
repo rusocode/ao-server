@@ -52,7 +52,7 @@ public class WorldMapDAOImpl implements WorldMapDAO {
     }
 
     @Override
-    public WorldMap[] retrieveAll() {
+    public WorldMap[] load() {
         final WorldMap[] maps = new WorldMap[mapsAmount];
         // Maps enumeration starts at 1
         for (int i = 1; i <= mapsAmount; i++)

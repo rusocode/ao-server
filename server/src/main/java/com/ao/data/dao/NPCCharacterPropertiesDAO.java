@@ -14,6 +14,6 @@ public interface NPCCharacterPropertiesDAO {
      *
      * @return the array of objects
      */
-    NPCProperties[] loadAll() throws DAOException;
+    NPCProperties[] load() throws DAOException;
 
 }
