@@ -2,7 +2,8 @@
 
 <configuration>
 
-    <property name="pattern" value="%d{yyyy-MM-dd HH:mm:ss} [%thread] %highlight(%-5level) %logger{100}.%M %L - %msg%n"/>
+    <property name="pattern"
+              value="%d{yyyy-MM-dd HH:mm:ss} [%thread] %highlight(%-5level) %logger{100}.%M %L - %msg%n"/>
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
@@ -10,10 +11,10 @@
         </encoder>
     </appender>
 
-    <!-- Logger para Netty menos verboso, aunque no recomiendo activarlo en caso de querer depurar -->
-    <!-- <logger name="io.netty" level="WARN"/> -->
+    <!-- Netty logger -->
+    <logger name="io.netty" level="INFO"/> <!-- Use INFO level for a cleaner log or DEBUG for more details -->
 
-    <root level="DEBUG">
+    <root level="DEBUG"> <!-- Use INFO level for a cleaner log or DEBUG for more details  -->
         <appender-ref ref="STDOUT"/>
     </root>
 
