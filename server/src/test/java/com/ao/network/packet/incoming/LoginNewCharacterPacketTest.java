@@ -46,7 +46,7 @@ public class LoginNewCharacterPacketTest {
     private static final byte CLIENT_VERSION = 2;
 
     static {
-        ApplicationProperties.loadProperties("test.properties");
+        ApplicationProperties.loadProperties("project.properties");
         ApplicationContext.reload();
     }
 
