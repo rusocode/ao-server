@@ -16,17 +16,6 @@ public class ApplicationProperties {
     private static final Properties properties = new Properties();
 
     static {
-        ClassLoader loader = Thread.currentThread().getContextClassLoader();
-
-        // Load global.properties
-        try {
-            Properties globalProperties = new Properties();
-            globalProperties.load(loader.getResourceAsStream("global.properties"));
-            System.getProperties().putAll(globalProperties);
-        } catch (Exception e) {
-            LOGGER.error("Error global loading application properties", e);
-        }
-
         loadProperties("project.properties");
     }
 
@@ -38,15 +27,12 @@ public class ApplicationProperties {
     public static void loadProperties(String name) {
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
         Properties props = new Properties();
-
-        // Load project.properties
         try {
             props.load(loader.getResourceAsStream(name));
+            properties.putAll(props);
         } catch (Exception e) {
-            LOGGER.error("Error loading {} properties file.", name, e);
+            LOGGER.error("Error loading {} properties file!", name, e);
         }
-
-        properties.putAll(props);
     }
 
     public static Properties getProperties() {
