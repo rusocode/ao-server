@@ -20,7 +20,6 @@ import com.ao.security.SecurityManager;
 import com.ao.service.LoginService;
 import com.ao.service.MapService;
 import com.ao.service.login.LoginServiceImpl;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -30,7 +29,7 @@ import static org.mockito.Mockito.*;
 
 public class LoginNewCharacterPacketTest {
 
-    private static final String CHARACTER_NAME = "testnew";
+    private static final String CHARACTER_NAME = "test";
     private static final String CHARACTER_PASSWORD = "a";
     private static final String CHARACTER_MAIL = "test@ao.com";
     private static final byte CHARACTER_ARCHETYPE = (byte) UserArchetype.ASSASIN.ordinal();
@@ -74,9 +73,10 @@ public class LoginNewCharacterPacketTest {
 
         config.setRestrictedToAdmins(false);
         config.setCharacterCreationEnabled(true);
+
     }
 
-    @AfterEach
+    // @AfterEach
     public void tearDown() {
         ApplicationContext.getInstance(AccountDAO.class).delete(CHARACTER_NAME);
         ApplicationContext.getInstance(AccountDAO.class).delete(INVALID_CHARACTER_NAME);
@@ -112,9 +112,9 @@ public class LoginNewCharacterPacketTest {
 
         packet.handle(inputBuffer, connection);
 
-        final ArgumentCaptor<Account> capture = ArgumentCaptor.forClass(Account.class);
+        ArgumentCaptor<Account> capture = ArgumentCaptor.forClass(Account.class);
         verify((ConnectedUser) connection.getUser()).setAccount(capture.capture());
-        final Account account = capture.getValue();
+        Account account = capture.getValue();
 
         assertThat(account.hasCharacter(CHARACTER_NAME)).isTrue();
         assertThat(account.getName()).isEqualTo(CHARACTER_NAME);

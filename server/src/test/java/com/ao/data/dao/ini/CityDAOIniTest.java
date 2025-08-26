@@ -11,6 +11,11 @@ public class CityDAOIniTest {
 
     private CityDAOIni cityDAOIni;
 
+    /**
+     * La etiqueta @BeforeEach es una anotacion de JUnit 5 (Jupiter) que indica que el metodo anotado debe ejecutarse antes de
+     * cada metodo de prueba (@Test) de la clase. Sirve para preparar el "estado inicial" o dependencias necesarias para cada
+     * prueba (por ejemplo, crear una nueva instancia de CityDAOIni).
+     */
     @BeforeEach
     public void setUp() throws DAOException {
         cityDAOIni = new CityDAOIni("dat/cities.dat");

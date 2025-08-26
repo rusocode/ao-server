@@ -64,31 +64,22 @@ jobs:
             ao-server/pom.xml
             ao-server-security/pom.xml
 
-      # Step 3: Crea directorios para los archivos de datos de pruebas
-      # NOTA: Como mejor practica, los tests deberian usar directorios temporales en lugar de rutas fijas
-      - name: Create test directories
-        # Crea los directorios de datos necesarios para que las pruebas funcionen correctamente
-        run: |
-          mkdir -p data/charfiles/
-          mkdir -p server/data/charfiles/
-          mkdir -p ao-server-security/data/charfiles/
-
-      # Step 4: Compila con Maven PROGRAMANDO la action desde cero (run:) ya que no esta (o no la encontre) en el Marketplace de GitHub
+      # Step 3: Compila con Maven PROGRAMANDO la action desde cero (run:) ya que no esta (o no la encontre) en el Marketplace de GitHub
       - name: Build with Maven
         run: mvn -B package --file pom.xml # Compila y empaqueta el proyecto en modo batch (no interactivo) usando el pom.xml
 
-      # Step 5: Genera reportes de cobertura con JaCoCo
+      # Step 4: Genera reportes de cobertura con JaCoCo
       - name: Generate coverage reports
         if: success() # Si el paso anterior fue exitoso...
         run: mvn clean test jacoco:report # Limpia el proyecto, ejecuta las pruebas unitarias y genera el reporte de cobertura de codigo con JaCoCo
 
-      # Step 6: Envia los reportes de cobertura a Coveralls.io
+      # Step 5: Envia los reportes de cobertura a Coveralls.io
       - name: Send coverage reports to Coveralls
         if: success()
         uses: coverallsapp/github-action@v2 # https://github.com/marketplace/actions/coveralls-github-action
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }} # Proporciona el token de autenticacion de GitHub para que Coveralls acceda al repositorio
 
-      # Step 7: Envia el arbol de dependencias Maven a GitHub para alertas de seguridad automaticas via Dependabot
+      # Step 6: Envia el arbol de dependencias Maven a GitHub para alertas de seguridad automaticas via Dependabot
       - name: Maven Dependency Tree Dependency Submission
         uses: advanced-security/maven-dependency-submission-action@v5

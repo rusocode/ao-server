@@ -23,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -195,16 +196,18 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
         // If it is not created, then create it
         if (exists(name)) throw new NameAlreadyTakenException();
 
-        INIConfiguration account = new INIConfiguration();
+        INIConfiguration ini = new INIConfiguration();
 
-        account.setProperty(INIT_HEADER + "." + PASSWORD_KEY, password);
-        account.setProperty(CONTACT_HEADER + "." + MAIL_KEY, mail);
-        account.setProperty(FLAGS_HEADER + "." + BANNED_KEY, "0");
+        ini.setProperty(INIT_HEADER + "." + PASSWORD_KEY, password);
+        ini.setProperty(CONTACT_HEADER + "." + MAIL_KEY, mail);
+        ini.setProperty(FLAGS_HEADER + "." + BANNED_KEY, "0");
 
-        try (Writer writer = new BufferedWriter(new FileWriter(getCharFilePath(name)))) {
-            account.write(writer);
+        String filePath = getCharFilePath(name);
+
+        try (Writer writer = new BufferedWriter(new FileWriter(filePath))) {
+            ini.write(writer);
         } catch (IOException | ConfigurationException e) {
-            LOGGER.error("Charfile (account data) creation failed!", e);
+            LOGGER.error("Error creating charfile! {}", e.getMessage());
             throw new DAOException(e);
         }
 
@@ -400,7 +403,6 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
         return userCharacter;
     }
 
-
     /**
      * Gets the full file path of the character based on the provided name.
      *
@@ -408,7 +410,7 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
      * @return the full file path of the character based on the provided name
      */
     String getCharFilePath(String name) {
-        return charfilesPath + name.toUpperCase() + FILE_EXTENSION;
+        return Paths.get(charfilesPath).resolve(name + FILE_EXTENSION).toString();
     }
 
     private INIConfiguration readCharFile(String username) throws DAOException {
