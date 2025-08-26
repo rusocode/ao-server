@@ -68,7 +68,7 @@ public class CreatureNPCProperties extends NPCProperties {
      * @param paralyzable      whether the npc is paralyzable or not
      * @param hostile          whether the npc is hostile or not
      * @param tameable         whether the npc is tameable or not
-     * @param drop             NPCs drop
+     * @param drop             npcs drop
      */
     public CreatureNPCProperties(NPCType type, int id, String name, short body, short head,
                                  Heading heading, boolean respawn, String description, Class<? extends Behavior> behavior,

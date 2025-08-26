@@ -14,7 +14,7 @@ import java.util.Properties;
 
 public class DaoModule extends AbstractModule {
 
-    protected Properties properties;
+    private final Properties properties;
 
     /**
      * Creates a new DaoModule.

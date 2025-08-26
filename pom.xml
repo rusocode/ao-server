@@ -37,8 +37,8 @@
         <guice.version>7.0.0</guice.version>
         <guava.version>32.0.1-jre</guava.version>
         <!-- Logging dependencies versions -->
-        <logback.version>1.5.13</logback.version>
-        <slf4j.version>2.0.9</slf4j.version>
+        <logback.version>1.5.18</logback.version>
+        <slf4j.version>2.0.17</slf4j.version>
         <!-- Testing dependencies versions -->
         <junit.version>5.13.4</junit.version>
         <assertj.version>3.27.3</assertj.version>
@@ -72,17 +72,18 @@
                 <version>${guava.version}</version>
             </dependency>
 
-            <!-- Logging -->
-            <dependency>
-                <groupId>ch.qos.logback</groupId>
-                <artifactId>logback-classic</artifactId>
-                <version>${logback.version}</version>
-            </dependency>
+            <!-- Logback (implementation)  -->
             <dependency>
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-core</artifactId>
                 <version>${logback.version}</version>
             </dependency>
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>${logback.version}</version>
+            </dependency>
+            <!-- SLF4J API (facade), the advantage of using this library is that I can use logback or log4j without any problems -->
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>

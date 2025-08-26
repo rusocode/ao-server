@@ -7,7 +7,7 @@ import com.ao.model.character.movement.MovementStrategy;
 import com.ao.model.map.Heading;
 
 /**
- * Defines a NPC's properties. Allows a lightweight pattern implementation.
+ * Defines a npcs properties. Allows a lightweight pattern implementation.
  */
 
 public class NPCProperties {
@@ -19,7 +19,7 @@ public class NPCProperties {
     protected short head;
     protected Heading heading;
     protected boolean respawn;
-    protected String description; // TODO Debería ser una lista? Hay tres NPCs que tienen más de una desc pero ni se usan :p
+    protected String description; // TODO Deberia ser una lista? Hay tres npcs que tienen mas de una desc pero ni se usan :p
     protected Class<? extends Behavior> behavior;
     protected Class<? extends AttackStrategy> attackStrategy;
     protected Class<? extends MovementStrategy> movementStrategy;

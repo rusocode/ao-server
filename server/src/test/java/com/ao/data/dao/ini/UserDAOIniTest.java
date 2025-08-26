@@ -25,54 +25,54 @@ public class UserDAOIniTest {
     private static final String NEW_CHARACTER_NICK = "newchartest";
     private static final String CHARACTER_MAIL = "test@test.com";
     private static final String CHARACTER_PASSWORD = "testpass";
-    private UserDAOIni dao;
+    private UserDAOIni userDAOIni;
 
     @BeforeEach
     public void setUp() throws Exception {
         String charfilesPath = ApplicationProperties.getProperties().getProperty("config.path.charfiles");
-        dao = new UserDAOIni(charfilesPath);
+        userDAOIni = new UserDAOIni(charfilesPath);
     }
 
     @AfterEach
     public void tearDown() throws Exception {
         // Be really sure the file is not there before the next test
-        File file = new File(dao.getCharFilePath(NEW_CHARACTER_NICK));
+        File file = new File(userDAOIni.getCharFilePath(NEW_CHARACTER_NICK));
         file.delete(); // Delete the file after testing
     }
 
     @Test
     public void testRetrieve() throws DAOException {
-        final Account acc = dao.retrieve(CHARACTER_NICK);
-        assertThat(acc).isNotNull();
+        Account account = userDAOIni.retrieve(CHARACTER_NICK);
+        assertThat(account).isNotNull();
         // Ensure we get the requested character and not another one
-        assertThat(acc.getName()).isEqualTo(CHARACTER_NICK);
+        assertThat(account.getName()).isEqualTo(CHARACTER_NICK);
     }
 
     @Test
     public void testCreateAccount() throws DAOException {
-        final Account acc = dao.create(NEW_CHARACTER_NICK, CHARACTER_PASSWORD, CHARACTER_MAIL);
+        Account account = userDAOIni.create(NEW_CHARACTER_NICK, CHARACTER_PASSWORD, CHARACTER_MAIL);
 
-        assertThat(acc.getName()).isEqualTo(NEW_CHARACTER_NICK);
-        assertThat(acc.getMail()).isEqualTo(CHARACTER_MAIL);
+        assertThat(account.getName()).isEqualTo(NEW_CHARACTER_NICK);
+        assertThat(account.getMail()).isEqualTo(CHARACTER_MAIL);
 
-        assertThat(acc.authenticate(CHARACTER_PASSWORD)).isTrue();
+        assertThat(account.authenticate(CHARACTER_PASSWORD)).isTrue();
 
-        final File file = new File(dao.getCharFilePath(NEW_CHARACTER_NICK));
+        File file = new File(userDAOIni.getCharFilePath(NEW_CHARACTER_NICK));
 
         assertThat(file.exists()).isTrue();
 
         // Don't leave the file there!
-        file.delete();
+        // file.delete();
     }
 
     @Test
     public void testDelete() throws DAOException {
-        dao.create(NEW_CHARACTER_NICK, CHARACTER_PASSWORD, CHARACTER_MAIL);
-        final File file = new File(dao.getCharFilePath(NEW_CHARACTER_NICK));
+        userDAOIni.create(NEW_CHARACTER_NICK, CHARACTER_PASSWORD, CHARACTER_MAIL);
+        File file = new File(userDAOIni.getCharFilePath(NEW_CHARACTER_NICK));
 
         assertThat(file.exists()).isTrue();
 
-        dao.delete(NEW_CHARACTER_NICK);
+        userDAOIni.delete(NEW_CHARACTER_NICK);
 
         assertThat(file.exists()).isFalse();
     }
@@ -80,21 +80,21 @@ public class UserDAOIniTest {
     @Test
     public void testCreateCharacter() throws DAOException {
 
-        final byte[] skills = new byte[Skill.AMOUNT];
+        byte[] skills = new byte[Skill.AMOUNT];
 
         for (int i = 0; i < Skill.AMOUNT; i++) {
             if (i == 1) skills[i] = 10;
             else skills[i] = 0;
         }
 
-        final City city = mock(City.class);
+        City city = mock(City.class);
 
         // TODO Use constants!!
-        final UserCharacter chara = dao.create(mock(ConnectedUser.class), NEW_CHARACTER_NICK, Race.HUMAN, Gender.FEMALE,
+        UserCharacter chara = userDAOIni.create(mock(ConnectedUser.class), NEW_CHARACTER_NICK, Race.HUMAN, Gender.FEMALE,
                 UserArchetype.ASSASIN, 75, city, (byte) 18, (byte) 18,
                 (byte) 18, (byte) 18, (byte) 18, 10, 1);
 
-        final File file = new File(dao.getCharFilePath(NEW_CHARACTER_NICK));
+        File file = new File(userDAOIni.getCharFilePath(NEW_CHARACTER_NICK));
 
         assertThat(file.exists()).isTrue();
 

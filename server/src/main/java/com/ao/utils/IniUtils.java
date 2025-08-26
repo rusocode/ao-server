@@ -1,4 +1,4 @@
-package com.ao.data.dao.ini;
+package com.ao.utils;
 
 import org.apache.commons.configuration2.INIConfiguration;
 import org.apache.commons.configuration2.ex.ConversionException;

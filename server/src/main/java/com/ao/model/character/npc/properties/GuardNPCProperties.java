@@ -50,7 +50,7 @@ public class GuardNPCProperties extends CreatureNPCProperties {
      * @param paralyzable      whether the npc is paralyzable or not
      * @param hostile          whether the npc is hostile or not
      * @param tameable         whether the npc is tameable or not
-     * @param drop             NPCs drop
+     * @param drop             npc drop
      * @param originalPosition whether the npc is an original position or not
      */
     public GuardNPCProperties(NPCType type, int id, String name, short body,

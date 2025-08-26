@@ -33,7 +33,7 @@ public class MapServiceImpl extends ActionExecutor<MapService> implements MapSer
 
     @Override
     public void loadMaps() {
-        maps = mapsDAO.retrieveAll();
+        maps = mapsDAO.load();
     }
 
     @Override
@@ -45,7 +45,7 @@ public class MapServiceImpl extends ActionExecutor<MapService> implements MapSer
 
     @Override
     public void loadCities() {
-        cities = citiesDAO.loadAll();
+        cities = citiesDAO.load();
     }
 
     @Override

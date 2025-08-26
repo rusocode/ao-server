@@ -7,7 +7,7 @@ import com.ao.model.worldobject.properties.manufacture.Manufacturable;
 import java.util.Map;
 
 /**
- * DAO for WorldObjectProperties.
+ * DAO for objects.
  */
 
 public interface WorldObjectPropertiesDAO {
@@ -15,7 +15,7 @@ public interface WorldObjectPropertiesDAO {
     /**
      * Loads all objects.
      */
-    void loadAll() throws DAOException;
+    void load() throws DAOException;
 
     /**
      * Gets all loaded manufacturables.

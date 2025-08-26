@@ -3,16 +3,16 @@ package com.ao.data.dao;
 import com.ao.model.map.City;
 
 /**
- * DAO for Cities.
+ * DAO for cities.
  */
 
 public interface CityDAO {
 
     /**
-     * Loads all Cities.
+     * Loads all cities.
      *
      * @return the array of cities
      */
-    City[] loadAll(); // TODO DAOException?
+    City[] load(); // TODO DAOException?
 
 }
