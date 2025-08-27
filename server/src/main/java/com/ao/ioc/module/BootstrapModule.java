@@ -28,7 +28,7 @@ public class BootstrapModule extends AbstractModule {
     @Override
     protected void configure() {
         // General server configuration
-        bind(ServerConfig.class).to(ServerConfigIni.class).in(Singleton.class);
+        bind(ServerConfig.class).to(ServerConfigIni.class).in(Singleton.class); // Le dice a Guice: "Cuando alguien pida ServerConfig, dale ServerConfigIni
         bind(String.class).annotatedWith(Names.named("ServerConfigIni")).toInstance(properties.getProperty("config.path.server"));
     }
 

@@ -23,7 +23,7 @@ import java.net.InetSocketAddress;
 import java.util.List;
 
 /**
- * The server application.
+ * Central server class that handles network connections.
  */
 
 public class AOServer implements Runnable {
