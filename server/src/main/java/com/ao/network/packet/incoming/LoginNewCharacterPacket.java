@@ -40,9 +40,7 @@ public class LoginNewCharacterPacket implements IncomingPacket {
         byte homeland = buffer.get();
 
         try {
-            service.connectNewCharacter((ConnectedUser) connection.getUser(),
-                    nick, password, race, gender, archetype, head, mail,
-                    homeland, clientHash, version);
+            service.connectNewCharacter((ConnectedUser) connection.getUser(), nick, password, race, gender, archetype, head, mail, homeland, clientHash, version);
 
         } catch (LoginErrorException e) {
             loginError(connection, e.getMessage());

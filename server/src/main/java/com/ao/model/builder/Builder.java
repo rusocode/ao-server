@@ -9,7 +9,7 @@ public interface Builder<T> {
     /**
      * Builds the instance as described by the builder.
      *
-     * @return The built instance
+     * @return the built instance
      */
     T build();
 

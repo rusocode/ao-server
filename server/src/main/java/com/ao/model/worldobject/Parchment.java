@@ -4,35 +4,17 @@ import com.ao.model.character.Character;
 import com.ao.model.spell.Spell;
 import com.ao.model.worldobject.properties.ParchmentProperties;
 
-/**
- * A spell parchment.
- */
-
 public class Parchment extends ConsumableItem {
 
-    /**
-     * Creates a new Parchment instance.
-     *
-     * @param properties item's properties
-     * @param amount     item's amount
-     */
     public Parchment(ParchmentProperties properties, int amount) {
         super(properties, amount);
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.ao.model.worldobject.AbstractItem#clone()
-     */
     @Override
     public Item clone() {
         return new Parchment((ParchmentProperties) properties, amount);
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.ao.model.worldobject.ConsumableItem#use(ao.model.character.Character)
-     */
     @Override
     public void use(Character character) {
         Spell spell = ((ParchmentProperties) properties).getSpell();

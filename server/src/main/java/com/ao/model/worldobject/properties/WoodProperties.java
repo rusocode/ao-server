@@ -32,11 +32,9 @@ public class WoodProperties extends ItemProperties {
      * @param woodType            type of wood this is
      */
     // @param tradeable true if it's tradeable, false otherwise
-    public WoodProperties(WorldObjectType type, int id, String name, int graphic,
-                          int value, List<UserArchetype> forbiddenArchetypes, List<Race> forbiddenRaces,
-                          boolean newbie, boolean noLog, boolean falls, boolean respawnable,
-                          WoodType woodType) {
-        super(type, id, name, graphic, value, forbiddenArchetypes, forbiddenRaces,  newbie, noLog, falls, respawnable);
+    public WoodProperties(WorldObjectType type, int id, String name, int graphic, int value, List<UserArchetype> forbiddenArchetypes, List<Race> forbiddenRaces,
+                          boolean newbie, boolean noLog, boolean falls, boolean respawnable, WoodType woodType) {
+        super(type, id, name, graphic, value, forbiddenArchetypes, forbiddenRaces, newbie, noLog, falls, respawnable);
         this.woodType = woodType;
     }
 

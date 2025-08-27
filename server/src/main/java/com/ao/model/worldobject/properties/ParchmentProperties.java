@@ -27,11 +27,8 @@ public class ParchmentProperties extends ItemProperties {
      * @param respawnable         whether this item respawns or not when in a merchant NPC's inventory
      * @param spell               parchment's spell
      */
-    // @param tradeable true if it's tradeable, false otherwise
-    public ParchmentProperties(WorldObjectType type, int id, String name,
-                               int graphic, int value, List<UserArchetype> forbiddenArchetypes,
-                               List<Race> forbiddenRaces, boolean newbie,
-                               boolean noLog, boolean falls, boolean respawnable, Spell spell) {
+    public ParchmentProperties(WorldObjectType type, int id, String name, int graphic, int value, List<UserArchetype> forbiddenArchetypes,
+                               List<Race> forbiddenRaces, boolean newbie, boolean noLog, boolean falls, boolean respawnable, Spell spell) {
         super(type, id, name, graphic, value, forbiddenArchetypes, forbiddenRaces, newbie, noLog, falls, respawnable);
         this.spell = spell;
     }

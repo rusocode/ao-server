@@ -62,8 +62,7 @@ public class LoginServiceImpl implements LoginService {
 
 
     @Inject
-    public LoginServiceImpl(AccountDAO accDAO, UserCharacterDAO charDAO,
-                            ServerConfig config, UserService userService,
+    public LoginServiceImpl(AccountDAO accDAO, UserCharacterDAO charDAO, ServerConfig config, UserService userService,
                             CharacterBodyService characterBodyService, MapService mapService,
                             @Named("initialAvailableSkills") int initialAvailableSkills) {
         this.accDAO = accDAO;
@@ -79,7 +78,6 @@ public class LoginServiceImpl implements LoginService {
     @Override
     public void connectNewCharacter(ConnectedUser user, String username, String password, byte bRace, byte bGender, byte bArchetype,
                                     int head, String mail, byte bHomeland, String clientHash, String version) throws LoginErrorException {
-
         checkClient(clientHash, version);
 
         if (!config.isCharacterCreationEnabled()) throw new LoginErrorException(CHARACTER_CREATION_DISABLED_ERROR);
@@ -164,39 +162,37 @@ public class LoginServiceImpl implements LoginService {
     }
 
     @Override
-    public void connectExistingCharacter(final ConnectedUser user, final String username,
-                                         final String password, final String version, final String clientHash)
-            throws LoginErrorException {
+    public void connectExistingCharacter(ConnectedUser user, String username, String password, String version, String clientHash) throws LoginErrorException {
 
         checkClient(clientHash, version);
 
         // TODO Check for max users limit?
 
-        final Account acc;
+        Account account;
 
         try {
-            acc = accDAO.retrieve(username);
-        } catch (final DAOException e) {
+            account = accDAO.retrieve(username);
+        } catch (DAOException e) {
             throw new LoginErrorException(DAO_ERROR);
         }
 
         // TODO Is the ip in use?
 
-        if (acc == null) throw new LoginErrorException(CHARACTER_NOT_FOUND_ERROR);
-        if (!acc.authenticate(password)) throw new LoginErrorException(INCORRECT_PASSWORD_ERROR);
-        if (acc.isBanned()) throw new LoginErrorException(BANNED_CHARACTER_ERROR);
+        if (account == null) throw new LoginErrorException(CHARACTER_NOT_FOUND_ERROR);
+        if (!account.authenticate(password)) throw new LoginErrorException(INCORRECT_PASSWORD_ERROR);
+        if (account.isBanned()) throw new LoginErrorException(BANNED_CHARACTER_ERROR);
         if (userService.isLoggedIn(user)) throw new LoginErrorException(CHARACTER_IS_LOGGED_IN);
 
         // TODO Add ip to connected ips
 
         // TODO Do something with the account!!!
 
-        if (!acc.hasCharacter(username)) throw new LoginErrorException(CHARACTER_NOT_FOUND_ERROR);
+        if (!account.hasCharacter(username)) throw new LoginErrorException(CHARACTER_NOT_FOUND_ERROR);
 
-        final UserCharacter character;
+        UserCharacter character;
         try {
             character = charDAO.load(user, username);
-        } catch (final DAOException e) {
+        } catch (DAOException e) {
             throw new LoginErrorException(DAO_ERROR);
         }
 
@@ -212,7 +208,7 @@ public class LoginServiceImpl implements LoginService {
 
         // Upgrade the user to a logged user
         user.getConnection().changeUser((User) character);
-        user.setAccount(acc);
+        user.setAccount(account);
 
         userService.logIn(user);
     }
@@ -222,22 +218,22 @@ public class LoginServiceImpl implements LoginService {
      *
      * @param version new client version
      */
-    public void setCurrentClientVersion(final String version) {
+    public void setCurrentClientVersion(String version) {
         // TODO Update the config!
         currentClientVersion = version;
     }
 
-    private void sendInitialState(final ConnectedUser user, final UserCharacter character) {
-        final Connection connection = user.getConnection();
+    private void sendInitialState(ConnectedUser user, UserCharacter character) {
+        Connection connection = user.getConnection();
 
         // inventory
-        final int invCapacity = character.getInventory().getCapacity();
+        int invCapacity = character.getInventory().getCapacity();
         for (int i = 0; i < invCapacity; i++)
             connection.send(new ChangeInventorySlotPacket(character, (byte) i));
 
         // spellbook
-        final Spell[] spellbook = character.getSpells();
-        final int spells = spellbook.length;
+        Spell[] spellbook = character.getSpells();
+        int spells = spellbook.length;
         for (int i = 0; i < spells; i++)
             connection.send(new ChangeSpellSlotPacket(spellbook[i], (byte) i));
 
@@ -277,8 +273,7 @@ public class LoginServiceImpl implements LoginService {
      * @param hash    hash to check
      * @param version client's version
      */
-    private void checkClient(final String hash, final String version)
-            throws LoginErrorException {
+    private void checkClient(String hash, String version) throws LoginErrorException {
 
         if (!currentClientVersion.equals(version))
             throw new LoginErrorException(String.format(CLIENT_OUT_OF_DATE_ERROR_FORMAT, currentClientVersion));
@@ -289,7 +284,7 @@ public class LoginServiceImpl implements LoginService {
 
         if (clientHashes.length < 1) return;
 
-        for (final String validHash : clientHashes)
+        for (String validHash : clientHashes)
             if (hash.equals(validHash)) return;
 
         throw new LoginErrorException(CORRUPTED_CLIENT_ERROR);

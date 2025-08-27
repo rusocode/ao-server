@@ -20,12 +20,12 @@ public class UserIndexInServer implements OutgoingPacket {
      *
      * @param userIndex index to tell to the client
      */
-    public UserIndexInServer(final short userIndex) {
+    public UserIndexInServer(short userIndex) {
         this.userIndex = userIndex;
     }
 
     @Override
-    public void write(final DataBuffer buffer) throws UnsupportedEncodingException {
+    public void write(DataBuffer buffer) throws UnsupportedEncodingException {
         buffer.putShort(userIndex);
     }
 

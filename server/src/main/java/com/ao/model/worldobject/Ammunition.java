@@ -9,44 +9,24 @@ import com.ao.model.worldobject.properties.AmmunitionProperties;
 
 public class Ammunition extends AbstractEquipableItem {
 
-    /**
-     * Creates a new Ammunition instance.
-     *
-     * @param properties item's properties
-     * @param amount     item's amount
-     */
     public Ammunition(AmmunitionProperties properties, int amount) {
         super(properties, amount);
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.ao.model.worldobject.AbstractItem#clone()
-     */
     @Override
     public Item clone() {
         return new Ammunition((AmmunitionProperties) properties, amount);
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.ao.model.worldobject.Item#use(ao.model.character.Character)
-     */
     @Override
     public void use(Character character) {
         // Ammunitions can't be used
     }
 
-    /**
-     * @return the minHit
-     */
     public int getMinHit() {
         return ((AmmunitionProperties) properties).getMinHit();
     }
 
-    /**
-     * @return the maxHit
-     */
     public int getMaxHit() {
         return ((AmmunitionProperties) properties).getMaxHit();
     }

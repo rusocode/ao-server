@@ -34,10 +34,8 @@ public class TemporalStatModifyingItemProperties extends StatModifyingItemProper
      * @param effectTime          time for which the effect is valid
      */
     // @param tradeable True if it's tradeable, false otherwise
-    public TemporalStatModifyingItemProperties(WorldObjectType type, int id,
-                                               String name, int graphic, int value, List<UserArchetype> forbiddenArchetypes,
-                                               List<Race> forbiddenRaces, boolean newbie,
-                                               boolean noLog, boolean falls, boolean respawnable,
+    public TemporalStatModifyingItemProperties(WorldObjectType type, int id, String name, int graphic, int value, List<UserArchetype> forbiddenArchetypes,
+                                               List<Race> forbiddenRaces, boolean newbie, boolean noLog, boolean falls, boolean respawnable,
                                                int minModifier, int maxModifier, int effectTime) {
         super(type, id, name, graphic, value, forbiddenArchetypes, forbiddenRaces, newbie, noLog, falls, respawnable, minModifier, maxModifier);
         this.effectTime = effectTime;

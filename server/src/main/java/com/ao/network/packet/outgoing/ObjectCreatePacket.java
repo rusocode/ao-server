@@ -12,17 +12,14 @@ public class ObjectCreatePacket implements OutgoingPacket {
     private final byte posX;
     private final byte posY;
 
-    /**
-     * Creates an object.
-     */
-    public ObjectCreatePacket(final WorldObject object, final byte posX, final byte posY) {
+    public ObjectCreatePacket(WorldObject object, byte posX, byte posY) {
         this.object = object;
         this.posX = posX;
         this.posY = posY;
     }
 
     @Override
-    public void write(final DataBuffer buffer) throws UnsupportedEncodingException {
+    public void write(DataBuffer buffer) throws UnsupportedEncodingException {
         buffer.put(posX);
         buffer.put(posY);
         buffer.putShort((short) object.getGraphic());

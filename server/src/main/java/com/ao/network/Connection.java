@@ -19,7 +19,7 @@ public class Connection {
      *
      * @param socket channel over which to communicate with the client
      */
-    public Connection(final Channel socket) {
+    public Connection(Channel socket) {
         this.socket = socket;
         user = new ConnectedUser(this);
     }
@@ -45,7 +45,7 @@ public class Connection {
      *
      * @param packet packet being sent
      */
-    public void send(final OutgoingPacket packet) {
+    public void send(OutgoingPacket packet) {
         socket.writeAndFlush(packet);
     }
 
@@ -54,7 +54,7 @@ public class Connection {
      *
      * @param user new user model to be used
      */
-    public void changeUser(final User user) {
+    public void changeUser(User user) {
         this.user = user;
     }
 

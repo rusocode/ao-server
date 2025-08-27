@@ -12,8 +12,7 @@ import java.util.List;
 
 public class BoatProperties extends DefensiveItemProperties {
 
-    protected int minHit;
-    protected int maxHit;
+    protected int minHit, maxHit;
 
     protected int navigationSkill;
 
@@ -42,12 +41,9 @@ public class BoatProperties extends DefensiveItemProperties {
      * @param maxHit                maximum hit granted by this boat
      */
     public BoatProperties(WorldObjectType type, int id, String name, int graphic, int value, int navigationSkill, int manufactureDifficulty,
-                          List<UserArchetype> forbiddenArchetypes, List<Race> forbiddenRaces, boolean newbie,
-                          boolean noLog, boolean falls, boolean respawnable,
-                          int equippedGraphic, int minDef, int maxDef, int minMagicDef,
-                          int maxMagicDef, int minHit, int maxHit) {
-        super(type, id, name, graphic, value,
-                manufactureDifficulty, forbiddenArchetypes, forbiddenRaces, newbie, noLog, falls, respawnable, equippedGraphic,
+                          List<UserArchetype> forbiddenArchetypes, List<Race> forbiddenRaces, boolean newbie, boolean noLog, boolean falls, boolean respawnable,
+                          int equippedGraphic, int minDef, int maxDef, int minMagicDef, int maxMagicDef, int minHit, int maxHit) {
+        super(type, id, name, graphic, value, manufactureDifficulty, forbiddenArchetypes, forbiddenRaces, newbie, noLog, falls, respawnable, equippedGraphic,
                 minDef, maxDef, minMagicDef, maxMagicDef);
         this.minHit = minHit;
         this.maxHit = maxHit;

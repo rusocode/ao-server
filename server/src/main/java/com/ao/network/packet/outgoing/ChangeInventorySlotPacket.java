@@ -17,16 +17,15 @@ public class ChangeInventorySlotPacket implements OutgoingPacket {
     private final UserCharacter userCharacter;
     private final Item item;
 
-    public ChangeInventorySlotPacket(final UserCharacter character, final byte slot) {
-        final Inventory inventory = character.getInventory();
-
+    public ChangeInventorySlotPacket(UserCharacter character, byte slot) {
+        Inventory inventory = character.getInventory();
         userCharacter = character;
         this.slot = slot;
         item = inventory.getItem(slot);
     }
 
     @Override
-    public void write(final DataBuffer buffer) throws UnsupportedEncodingException {
+    public void write(DataBuffer buffer) throws UnsupportedEncodingException {
         buffer.put(slot);
         buffer.putShort((short) item.getId());
         buffer.putASCIIString(item.getName());

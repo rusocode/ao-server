@@ -36,7 +36,7 @@ public class ApplicationContext {
      * @param clazz class of the object being requested
      * @return an instance of the requested class
      */
-    public static <T> T getInstance(final Class<T> clazz) {
+    public static <T> T getInstance(Class<T> clazz) {
         return injector.getInstance(clazz); // Guice resuelve automaticamente
     }
 
@@ -44,7 +44,7 @@ public class ApplicationContext {
      * Reloads all modules and associations. BEWARE, all previously created objects are no longer attached!
      */
     public static void reload() {
-        final Properties properties = ApplicationProperties.getProperties();
+        Properties properties = ApplicationProperties.getProperties();
         injector = InjectorFactory.get(properties);
     }
 

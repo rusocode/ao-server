@@ -8,8 +8,8 @@ import java.io.UnsupportedEncodingException;
 public class ParalizedPacket implements OutgoingPacket {
 
     @Override
-    public void write(final DataBuffer buffer) throws UnsupportedEncodingException {
-        // we have no extra data to write
+    public void write(DataBuffer buffer) throws UnsupportedEncodingException {
+        // We have no extra data to write
     }
 
 }

@@ -21,8 +21,7 @@ public class UpdateHungerAndThirstPacket implements OutgoingPacket {
      * @param minThirst user's current thirst level
      * @param maxThirst user's total thirst
      */
-    public UpdateHungerAndThirstPacket(final int minHunger, final int maxHunger,
-                                       final int minThirst, final int maxThirst) {
+    public UpdateHungerAndThirstPacket(int minHunger, int maxHunger, int minThirst, int maxThirst) {
         this.minHunger = (byte) minHunger;
         this.maxHunger = (byte) maxHunger;
         this.minThirst = (byte) minThirst;

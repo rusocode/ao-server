@@ -5,10 +5,6 @@ import com.ao.model.worldobject.EquipableItem;
 import com.ao.model.worldobject.Staff;
 import com.ao.model.worldobject.Weapon;
 
-/**
- * A mage archetype.
- */
-
 public class MageArchetype extends DefaultArchetype {
 
     private static final float MANA_MODIFIER = 2.8f;
@@ -16,13 +12,9 @@ public class MageArchetype extends DefaultArchetype {
     private static final int STAMINA_INCREMENT = 14;
     private static final int INITIAL_MANA_MODIFIER = 3;
 
-    public MageArchetype(float evasionModifier, float meleeAccuracyModifier,
-                         float rangedAccuracyModifier, float meleeDamageModifier,
-                         float rangedDamageModifier, float wrestlingDamageModifier,
-                         float blockPowerModifier) {
-        super(evasionModifier, meleeAccuracyModifier, rangedAccuracyModifier,
-                meleeDamageModifier, rangedDamageModifier, wrestlingDamageModifier,
-                blockPowerModifier);
+    public MageArchetype(float evasionModifier, float meleeAccuracyModifier, float rangedAccuracyModifier, float meleeDamageModifier,
+                         float rangedDamageModifier, float wrestlingDamageModifier, float blockPowerModifier) {
+        super(evasionModifier, meleeAccuracyModifier, rangedAccuracyModifier, meleeDamageModifier, rangedDamageModifier, wrestlingDamageModifier, blockPowerModifier);
     }
 
     @Override

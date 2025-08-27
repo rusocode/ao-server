@@ -18,18 +18,8 @@ public interface Account {
      */
     boolean hasCharacter(String name);
 
-    /**
-     * Checks whether the account is banned or not.
-     *
-     * @return true if the account is banned, false otherwise
-     */
     boolean isBanned();
 
-    /**
-     * Sets the account's ban status.
-     *
-     * @param banned whether the account is banned, or not
-     */
     void setBanned(boolean banned);
 
     /**

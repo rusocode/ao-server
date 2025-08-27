@@ -32,10 +32,8 @@ public class BackpackProperties extends EquippableItemProperties {
      * @param slots               slots to be added
      */
     // @param tradeable true if it's tradeable, false otherwise
-    public BackpackProperties(WorldObjectType type, int id, String name, int graphic,
-                              int value, List<UserArchetype> forbiddenArchetypes, List<Race> forbiddenRaces,
-                              boolean newbie, boolean noLog, boolean falls, boolean respawnable,
-                              int equippedGraphic, int slots) {
+    public BackpackProperties(WorldObjectType type, int id, String name, int graphic, int value, List<UserArchetype> forbiddenArchetypes, List<Race> forbiddenRaces,
+                              boolean newbie, boolean noLog, boolean falls, boolean respawnable, int equippedGraphic, int slots) {
         super(type, id, name, graphic, value, forbiddenArchetypes, forbiddenRaces, newbie, noLog, falls, respawnable, equippedGraphic);
         this.slots = slots;
     }

@@ -31,10 +31,8 @@ public class MineralProperties extends ItemProperties {
      * @param ingotObjectIndex    ingot's index
      */
     // @param tradeable true if it's tradeable, false otherwise
-    public MineralProperties(WorldObjectType type, int id, String name, int graphic,
-                             int value, List<UserArchetype> forbiddenArchetypes, List<Race> forbiddenRaces,
-                             boolean newbie, boolean noLog, boolean falls, boolean respawnable,
-                             int ingotObjectIndex) {
+    public MineralProperties(WorldObjectType type, int id, String name, int graphic, int value, List<UserArchetype> forbiddenArchetypes, List<Race> forbiddenRaces,
+                             boolean newbie, boolean noLog, boolean falls, boolean respawnable, int ingotObjectIndex) {
         super(type, id, name, graphic, value, forbiddenArchetypes, forbiddenRaces, newbie, noLog, falls, respawnable);
         this.ingotObjectIndex = ingotObjectIndex;
     }

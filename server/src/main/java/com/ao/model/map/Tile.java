@@ -3,10 +3,6 @@ package com.ao.model.map;
 import com.ao.model.character.Character;
 import com.ao.model.worldobject.WorldObject;
 
-/**
- * A map tile.
- */
-
 public class Tile {
 
     private final Trigger trigger;
@@ -28,9 +24,7 @@ public class Tile {
      * @param character   character currently standing in this position, if any
      * @param worldObject object laying in this position, if any
      */
-    public Tile(final boolean blocked, final boolean isWater, final boolean isLava,
-                final Trigger trigger, final Position tileExit, final Character character,
-                final WorldObject worldObject) {
+    public Tile(boolean blocked, boolean isWater, boolean isLava, Trigger trigger, Position tileExit, Character character, WorldObject worldObject) {
         this.blocked = blocked;
         this.isWater = isWater;
         this.isLava = isLava;

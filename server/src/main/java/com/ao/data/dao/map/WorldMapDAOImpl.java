@@ -43,9 +43,7 @@ public class WorldMapDAOImpl implements WorldMapDAO {
     private final Set<Short> lavaGrhs = new HashSet<>();
 
     @Inject
-    public WorldMapDAOImpl(@Named("mapsPath") final String mapsPath,
-                           @Named("mapsAmount") final int mapsAmount,
-                           @Named("mapsConfigFile") final String mapsConfigFile) {
+    public WorldMapDAOImpl(@Named("mapsPath") String mapsPath, @Named("mapsAmount") int mapsAmount, @Named("mapsConfigFile") String mapsConfigFile) {
         this.mapsPath = mapsPath;
         this.mapsAmount = mapsAmount;
         loadMapsConfig(mapsConfigFile);
@@ -53,7 +51,7 @@ public class WorldMapDAOImpl implements WorldMapDAO {
 
     @Override
     public WorldMap[] load() {
-        final WorldMap[] maps = new WorldMap[mapsAmount];
+        WorldMap[] maps = new WorldMap[mapsAmount];
         // Maps enumeration starts at 1
         for (int i = 1; i <= mapsAmount; i++)
             maps[i - 1] = loadMap(i);
@@ -65,13 +63,12 @@ public class WorldMapDAOImpl implements WorldMapDAO {
      *
      * @param id map's id
      */
-    private WorldMap loadMap(final int id) {
-        final byte[] bufInf;
-        final byte[] bufMap;
+    private WorldMap loadMap(int id) {
+        byte[] bufInf, bufMap;
 
         // TODO Load .dat file too
-        final String infFileName = mapsPath + String.format(INF_FILE_NAME_FORMAT, id);
-        final String mapFileName = mapsPath + String.format(MAP_FILE_NAME_FORMAT, id);
+        String infFileName = mapsPath + String.format(INF_FILE_NAME_FORMAT, id);
+        String mapFileName = mapsPath + String.format(MAP_FILE_NAME_FORMAT, id);
 
         try {
             // Load .inf file from the classpath
@@ -88,27 +85,27 @@ public class WorldMapDAOImpl implements WorldMapDAO {
                 bufMap = mapStream.readAllBytes();
             }
 
-        } catch (final IOException e) {
+        } catch (IOException e) {
             LOGGER.error("Map " + id + " loading failed!", e);
             throw new RuntimeException(e);
         }
 
-        final ByteBuffer infBuffer = ByteBuffer.wrap(bufInf);
-        final ByteBuffer mapBuffer = ByteBuffer.wrap(bufMap);
+        ByteBuffer infBuffer = ByteBuffer.wrap(bufInf);
+        ByteBuffer mapBuffer = ByteBuffer.wrap(bufMap);
 
         // The map files are written with Little-Endian, and the default byte order in Java is Big Endian
         infBuffer.order(ByteOrder.LITTLE_ENDIAN);
         mapBuffer.order(ByteOrder.LITTLE_ENDIAN);
 
         // Load the map header
-        final short mapVersion = mapBuffer.getShort();
+        short mapVersion = mapBuffer.getShort();
 
-        final byte[] description = new byte[255];
+        byte[] description = new byte[255];
         mapBuffer.get(description);
 
         // Never actually implemented
-        @SuppressWarnings("unused") final int crc = mapBuffer.getInt();
-        @SuppressWarnings("unused") final int magicWord = mapBuffer.getInt();
+        @SuppressWarnings("unused") int crc = mapBuffer.getInt();
+        @SuppressWarnings("unused") int magicWord = mapBuffer.getInt();
 
         // Unused header value
         mapBuffer.getLong();
@@ -117,7 +114,7 @@ public class WorldMapDAOImpl implements WorldMapDAO {
         infBuffer.getLong();
         infBuffer.getShort();
 
-        final Tile[] tiles = new Tile[WorldMap.MAP_HEIGHT * WorldMap.MAP_WIDTH];
+        Tile[] tiles = new Tile[WorldMap.MAP_HEIGHT * WorldMap.MAP_WIDTH];
 
         byte flag;
         boolean blocked;
@@ -224,20 +221,20 @@ public class WorldMapDAOImpl implements WorldMapDAO {
      *
      * @param configFile file path to the config file
      */
-    private void loadMapsConfig(final String configFile) {
-        final Properties props = new Properties();
+    private void loadMapsConfig(String configFile) {
+        Properties properties = new Properties();
         try {
             InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(configFile);
             if (inputStream == null)
                 throw new FileNotFoundException("The file " + configFile + " was not found in the classpath");
-            props.load(inputStream);
+            properties.load(inputStream);
             inputStream.close();
-        } catch (final IOException e) {
+        } catch (IOException e) {
             LOGGER.error("Error loading maps properties file({})", configFile);
             throw new RuntimeException(e);
         }
-        waterGrhs.addAll(RangeParser.parseShorts(props.getProperty("maps.water")));
-        lavaGrhs.addAll(RangeParser.parseShorts(props.getProperty("maps.lava")));
+        waterGrhs.addAll(RangeParser.parseShorts(properties.getProperty("maps.water")));
+        lavaGrhs.addAll(RangeParser.parseShorts(properties.getProperty("maps.lava")));
     }
 
 }
