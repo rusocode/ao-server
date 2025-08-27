@@ -1,9 +1,5 @@
 package com.ao.model.character.archetype;
 
-/**
- * A miner archetype.
- */
-
 public class MinerArchetype extends DefaultArchetype {
 
     private static final int STAMINA_INCREMENT = 40;
@@ -13,13 +9,9 @@ public class MinerArchetype extends DefaultArchetype {
     private static final float BLACKSMITH_MODIFIER = 1.2f;
     private static final float IRON_WORKING_MODIFIER = 1.0f;
 
-    public MinerArchetype(float evasionModifier, float meleeAccuracyModifier,
-                          float rangedAccuracyModifier, float meleeDamageModifier,
-                          float rangedDamageModifier, float wrestlingDamageModifier,
-                          float blockPowerModifier) {
-        super(evasionModifier, meleeAccuracyModifier, rangedAccuracyModifier,
-                meleeDamageModifier, rangedDamageModifier, wrestlingDamageModifier,
-                blockPowerModifier);
+    public MinerArchetype(float evasionModifier, float meleeAccuracyModifier, float rangedAccuracyModifier, float meleeDamageModifier,
+                          float rangedDamageModifier, float wrestlingDamageModifier, float blockPowerModifier) {
+        super(evasionModifier, meleeAccuracyModifier, rangedAccuracyModifier, meleeDamageModifier, rangedDamageModifier, wrestlingDamageModifier, blockPowerModifier);
     }
 
     @Override

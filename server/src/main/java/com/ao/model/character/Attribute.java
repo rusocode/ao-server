@@ -1,9 +1,5 @@
 package com.ao.model.character;
 
-/**
- * List of character attributes.
- */
-
 public enum Attribute {
 
     STRENGTH,

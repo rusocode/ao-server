@@ -9,29 +9,15 @@ import com.ao.model.worldobject.properties.ItemProperties;
 
 public class GrabableProp extends AbstractItem {
 
-    /**
-     * Creates a new GrabableProp instance.
-     *
-     * @param properties item's properties
-     * @param amount     item's amount
-     */
     public GrabableProp(ItemProperties properties, int amount) {
         super(properties, amount);
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.ao.model.worldobject.AbstractItem#clone()
-     */
     @Override
     public Item clone() {
         return new GrabableProp((ItemProperties) properties, amount);
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.ao.model.worldobject.ConsumableItem#use(ao.model.character.Character)
-     */
     @Override
     public void use(Character character) {
         // We do nothing, it's still just a prop

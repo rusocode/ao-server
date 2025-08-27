@@ -27,18 +27,13 @@ public class InventoryImpl implements Inventory {
         this.inventory = inventory;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.ao.model.inventory.Inventory#addItem(ao.model.worldobject.Item)
-     */
     @Override
     public int addItem(final Item item) {
         int i;
-
         if ((i = hasItem(item)) != -1) {
             int amount = item.getAmount();
             int newAmount, oldAmount;
-            final int id = item.getId();
+            int id = item.getId();
             // Stack the item to previous slots
             for (; i < inventory.length; i++) {
                 if (inventory[i] != null && inventory[i].getId() == id) {
@@ -62,20 +57,12 @@ public class InventoryImpl implements Inventory {
         return item.getAmount();
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.ao.model.inventory.Inventory#getItem(int)
-     */
     @Override
     public Item getItem(int slot) {
         if (slot < 0 || slot >= inventory.length) return null;
         return inventory[slot];
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.ao.model.inventory.Inventory#hasFreeSlots()
-     */
     @Override
     public boolean hasFreeSlots() {
         for (Item item : inventory)
@@ -83,23 +70,14 @@ public class InventoryImpl implements Inventory {
         return false;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.ao.model.inventory.Inventory#hasItem(ao.model.worldobject.Item)
-     */
     @Override
     public int hasItem(Item item) {
         int id = item.getId();
         for (int i = 0; i < inventory.length; i++)
-            if (inventory[i] != null && inventory[i].getId() == id)
-                return i;
+            if (inventory[i] != null && inventory[i].getId() == id) return i;
         return -1;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.ao.model.inventory.Inventory#removeItem(int)
-     */
     @Override
     public Item removeItem(int slot) {
         Item item = getItem(slot);
@@ -107,10 +85,6 @@ public class InventoryImpl implements Inventory {
         return item;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.ao.model.inventory.Inventory#removeItem(ao.model.worldobject.Item)
-     */
     @Override
     public Item removeItem(Item item) {
         int i;
@@ -132,10 +106,6 @@ public class InventoryImpl implements Inventory {
         return itemRemoved;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.ao.model.inventory.Inventory#removeItem(int, int)
-     */
     @Override
     public Item removeItem(int slot, int amount) {
         Item item = getItem(slot);
@@ -150,19 +120,11 @@ public class InventoryImpl implements Inventory {
         return itemRemoved;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.ao.model.inventory.Inventory#getCapacity()
-     */
     @Override
     public int getCapacity() {
         return inventory.length;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.ao.model.inventory.Inventory#setCapacity(int)
-     */
     @Override
     public void setCapacity(int capacity) {
         Item[] tmpInventory = new Item[capacity];
@@ -172,29 +134,19 @@ public class InventoryImpl implements Inventory {
         inventory = tmpInventory;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.ao.model.inventory.Inventory#getItemAmount(ao.model.worldobject.Item)
-     */
     @Override
     public int getItemAmount(Item item) {
         int amount = 0;
         int id = item.getId();
         for (Item i : inventory)
-            if (i != null && id == i.getId())
-                amount += i.getAmount();
+            if (i != null && id == i.getId()) amount += i.getAmount();
         return amount;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.ao.model.inventory.Inventory#cleanup()
-     */
     @Override
     public void cleanup() {
         for (int i = inventory.length - 1; i >= 0; i--)
-            if (inventory[i] != null && inventory[i].getAmount() == 0)
-                inventory[i] = null;
+            if (inventory[i] != null && inventory[i].getAmount() == 0) inventory[i] = null;
     }
 
     @Override

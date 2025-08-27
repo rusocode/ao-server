@@ -20,32 +20,22 @@ public class UserCharacterBuilder implements Builder<UserCharacter> {
     public static final String INVALID_NAME_ERROR = "El nombre ingresado no es válido.";
     public static final String INVALID_EMAIL_ERROR = "La dirección de e-mail ingresada no es válida.";
 
-    protected String name;
-    protected String email;
+    protected String name, email;
     protected Race race;
     protected Gender gender;
     protected ConnectedUser user;
     protected City homeland;
     protected UserArchetype archetype;
 
-    protected Integer minHp;
-    protected Integer maxHp;
-    protected Integer minMana;
-    protected Integer maxMana;
-
+    protected Integer minHp, maxHp;
+    protected Integer minMana, maxMana;
 
     protected Integer head;
     protected Integer body;
     protected Map<Skill, Byte> skills;
-    protected boolean paralyzed = false;
-    protected boolean dumbed = false;
     protected String description;
-    protected boolean hidden = false;
-    protected boolean mimetized = false;
-    protected boolean immobilized = false;
-    protected boolean invisible = false;
+    protected boolean paralyzed, dumbed, hidden, mimetized, immobilized, invisible, poisoned;
     protected byte lvl = 1;
-    protected boolean poisoned = false;
     protected Guild guild;
     protected Long exp;
     protected int maxThirstiness = 100;
@@ -56,7 +46,6 @@ public class UserCharacterBuilder implements Builder<UserCharacter> {
     protected Spell[] spells;
     protected Reputation reputation;
     protected Position position;
-
 
     public UserCharacterBuilder withCity(City homeland) {
         this.homeland = Objects.requireNonNull(homeland);
@@ -249,7 +238,7 @@ public class UserCharacterBuilder implements Builder<UserCharacter> {
         Objects.requireNonNull(reputation);
         Objects.requireNonNull(position);
 
-        //TODO Set everything!
+        // TODO Set everything!
 
         return new LoggedUser(user, reputation, race, gender, archetype.getArchetype(), poisoned,
                 paralyzed, immobilized, mimetized, invisible, dumbed, hidden, maxMana, minMana, maxHp, minHp,

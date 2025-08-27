@@ -12,8 +12,7 @@ import java.util.List;
 
 public class StatModifyingItemProperties extends ItemProperties {
 
-    protected int minModifier;
-    protected int maxModifier;
+    protected int minModifier, maxModifier;
 
     /**
      * Creates a new StatModifyingItemProperties instance.
@@ -33,10 +32,8 @@ public class StatModifyingItemProperties extends ItemProperties {
      * @param maxModifier         maximum amount by which the stats are to be modified
      */
     // @param tradeable true if it's tradeable, false otherwise
-    public StatModifyingItemProperties(WorldObjectType type, int id, String name, int graphic,
-                                       int value, List<UserArchetype> forbiddenArchetypes,
-                                       List<Race> forbiddenRaces, boolean newbie,
-                                       boolean noLog, boolean falls, boolean respawnable, int minModifier, int maxModifier) {
+    public StatModifyingItemProperties(WorldObjectType type, int id, String name, int graphic, int value, List<UserArchetype> forbiddenArchetypes,
+                                       List<Race> forbiddenRaces, boolean newbie, boolean noLog, boolean falls, boolean respawnable, int minModifier, int maxModifier) {
         super(type, id, name, graphic, value, forbiddenArchetypes, forbiddenRaces, newbie, noLog, falls, respawnable);
         this.minModifier = minModifier;
         this.maxModifier = maxModifier;

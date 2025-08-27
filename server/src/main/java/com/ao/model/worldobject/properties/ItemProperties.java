@@ -37,12 +37,8 @@ public class ItemProperties extends WorldObjectProperties {
      * @param falls               whether this item falls or not
      * @param respawnable         whether this item respawns or not when in a merchant NPC's inventory
      */
-    // @param tradeable true if it's tradeable, false otherwise
-    public ItemProperties(WorldObjectType type, int id, String name, int graphic,
-                          int value, List<UserArchetype> forbiddenArchetypes,
-                          List<Race> forbiddenRaces, boolean newbie,
-                          boolean noLog, boolean falls, boolean respawnable) {
-
+    public ItemProperties(WorldObjectType type, int id, String name, int graphic, int value, List<UserArchetype> forbiddenArchetypes,
+                          List<Race> forbiddenRaces, boolean newbie, boolean noLog, boolean falls, boolean respawnable) {
         super(type, id, name, graphic);
         this.value = value;
         this.forbiddenArchetypes = forbiddenArchetypes;

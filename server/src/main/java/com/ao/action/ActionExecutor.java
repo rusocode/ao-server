@@ -9,9 +9,8 @@ public abstract class ActionExecutor<S> {
     private final ExecutorService processor = Executors.newSingleThreadExecutor();
     private final AtomicInteger pendingJobs = new AtomicInteger(0);
 
-    public final void dispatch(final Action<S> action) {
+    public final void dispatch(Action<S> action) {
         pendingJobs.incrementAndGet();
-
         processor.execute(() -> {
             action.performAction(getService());
             pendingJobs.decrementAndGet();

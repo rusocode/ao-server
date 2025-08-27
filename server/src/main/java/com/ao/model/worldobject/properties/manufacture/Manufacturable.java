@@ -31,10 +31,8 @@ public class Manufacturable {
      * @param requiredSilverIngot   silver ingots required for this manufacture
      * @param requiredIronIngot     iron ingots required for this manufacture
      */
-    public Manufacturable(WorldObjectProperties object, ManufactureType manufactureType,
-                          int manufactureDifficulty, int requiredWood, int requiredElvenWood,
-                          int requiredGoldIngot, int requiredSilverIngot,
-                          int requiredIronIngot) {
+    public Manufacturable(WorldObjectProperties object, ManufactureType manufactureType, int manufactureDifficulty, int requiredWood, int requiredElvenWood,
+                          int requiredGoldIngot, int requiredSilverIngot, int requiredIronIngot) {
         super();
         this.object = object;
         this.manufactureType = manufactureType;

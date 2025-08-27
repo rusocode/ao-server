@@ -30,10 +30,6 @@ public class HitPointsEffect implements Effect {
         this.deltaPoints = maxPoints - minPoints;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.ao.model.spell.effect.Effect#apply(ao.model.character.Character, com.ao.model.character.Character)
-     */
     @Override
     public void apply(Character caster, Character target) {
         int points = minPoints + randomGenerator.nextInt(deltaPoints);
@@ -41,28 +37,16 @@ public class HitPointsEffect implements Effect {
         target.addToHitPoints(points);
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.ao.model.spell.effect.Effect#appliesTo(ao.model.character.Character, com.ao.model.character.Character)
-     */
     @Override
     public boolean appliesTo(Character caster, Character target) {
         return !target.isDead();
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.ao.model.spell.effect.Effect#appliesTo(ao.model.character.Character, com.ao.model.worldobject.WorldObject)
-     */
     @Override
     public boolean appliesTo(Character caster, WorldObject worldobject) {
         return false;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.ao.model.spell.effect.Effect#apply(ao.model.character.Character, com.ao.model.worldobject.WorldObject)
-     */
     @Override
     public void apply(Character caster, WorldObject target) {
         throw new InvalidTargetException();

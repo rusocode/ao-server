@@ -82,9 +82,7 @@ public class ValidatorService {
     /**
      * DTO for email validation.
      */
-    public record EmailDto(
-            @NotBlank(message = "Email cannot be empty")
-            @Email(message = "Invalid email format") String email) {
+    public record EmailDto(@NotBlank(message = "Email cannot be empty") @Email(message = "Invalid email format") String email) {
 
         public EmailDto(String email) {
             this.email = email;
@@ -92,8 +90,7 @@ public class ValidatorService {
 
     }
 
-    public record DescriptionDto(
-            @NotBlank(message = "Description cannot be empty") String description) {
+    public record DescriptionDto(@NotBlank(message = "Description cannot be empty") String description) {
 
         public DescriptionDto(String description) {
             this.description = description;

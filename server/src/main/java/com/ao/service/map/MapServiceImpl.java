@@ -9,7 +9,6 @@ import com.ao.model.map.Heading;
 import com.ao.model.map.Position;
 import com.ao.model.map.WorldMap;
 import com.ao.service.MapService;
-
 import com.google.inject.Inject;
 
 /**
@@ -25,7 +24,7 @@ public class MapServiceImpl extends ActionExecutor<MapService> implements MapSer
     private City[] cities;
 
     @Inject
-    public MapServiceImpl(final WorldMapDAO mapsDAO, final CityDAO citiesDAO, final AreaService areaService) {
+    public MapServiceImpl(WorldMapDAO mapsDAO, CityDAO citiesDAO, AreaService areaService) {
         this.mapsDAO = mapsDAO;
         this.citiesDAO = citiesDAO;
         this.areaService = areaService;
@@ -37,7 +36,7 @@ public class MapServiceImpl extends ActionExecutor<MapService> implements MapSer
     }
 
     @Override
-    public WorldMap getMap(final int id) {
+    public WorldMap getMap(int id) {
         if (id < 1 || id > maps.length) return null;
         // Maps enumeration starts at 1, not 0
         return maps[id - 1];
@@ -49,22 +48,22 @@ public class MapServiceImpl extends ActionExecutor<MapService> implements MapSer
     }
 
     @Override
-    public City getCity(final byte id) {
+    public City getCity(byte id) {
         if (id < 1 || id > cities.length) return null;
         // City enumeration starts at 1, not 0
         return cities[id - 1];
     }
 
     @Override
-    public void putCharacterAtPos(final Character chara, final Position pos) {
+    public void putCharacterAtPos(Character chara, Position pos) {
         final WorldMap map = getMap(pos.getMap());
         map.putCharacterAtPos(chara, pos.getX(), pos.getY());
         areaService.addCharToMap(map, chara);
     }
 
     @Override
-    public void moveCharacterTo(final Character character, final Heading heading) {
-        final Position position = character.getPosition();
+    public void moveCharacterTo(Character character, Heading heading) {
+        Position position = character.getPosition();
         byte x = position.getX();
         byte y = position.getY();
         switch (heading) {
@@ -82,7 +81,7 @@ public class MapServiceImpl extends ActionExecutor<MapService> implements MapSer
                 break;
         }
 
-        final WorldMap map = getMap(position.getMap());
+        WorldMap map = getMap(position.getMap());
 
         // Check if the position is available
         if (map.isTileAvailable(x, y, !character.isSailing(), character.isSailing(), true, true)) {

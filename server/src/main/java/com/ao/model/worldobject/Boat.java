@@ -35,19 +35,11 @@ public class Boat extends AbstractDefensiveItem {
         super(properties, amount);
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.ao.model.worldobject.AbstractItem#clone()
-     */
     @Override
     public Item clone() {
         return new Boat((BoatProperties) properties, amount);
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.ao.model.worldobject.Item#use(ao.model.character.Character)
-     */
     @Override
     public void use(Character character) {
         // We do nothing to the character
@@ -82,10 +74,6 @@ public class Boat extends AbstractDefensiveItem {
         return (int) (Math.random() * (maxModifier - minModifier + 1)) + minModifier;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.ao.model.worldobject.AbstractItem#canBeStolen()
-     */
     @Override
     public boolean canBeStolen() {
         return false; // Boats can't be stolen

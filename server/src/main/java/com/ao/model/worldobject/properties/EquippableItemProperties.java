@@ -31,10 +31,8 @@ public class EquippableItemProperties extends ItemProperties {
      * @param equippedGraphic     id of the graphic to display when equipped
      */
     // @param tradeable true if it's tradeable, false otherwise
-    public EquippableItemProperties(WorldObjectType type, int id, String name, int graphic,
-                                    int value, List<UserArchetype> forbiddenArchetypes, List<Race> forbiddenRaces,
-                                    boolean newbie, boolean noLog, boolean falls, boolean respawnable,
-                                    int equippedGraphic) {
+    public EquippableItemProperties(WorldObjectType type, int id, String name, int graphic, int value, List<UserArchetype> forbiddenArchetypes, List<Race> forbiddenRaces,
+                                    boolean newbie, boolean noLog, boolean falls, boolean respawnable, int equippedGraphic) {
         super(type, id, name, graphic, value, forbiddenArchetypes, forbiddenRaces, newbie, noLog, falls, respawnable);
         this.equippedGraphic = equippedGraphic;
     }

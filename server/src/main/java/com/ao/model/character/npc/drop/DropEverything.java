@@ -29,7 +29,7 @@ public class DropEverything implements Drop {
     @Override
     public List<WorldObject> getDrops() throws WorldObjectFactoryException {
         List<WorldObject> items = new LinkedList<>();
-        for (final Item item : inventory)
+        for (Item item : inventory)
             if (item != null) items.add(item);
         return items;
     }

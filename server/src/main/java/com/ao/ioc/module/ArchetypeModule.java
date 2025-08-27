@@ -110,11 +110,7 @@ public class ArchetypeModule extends AbstractModule {
      */
     private Archetype getArchetype(Class<? extends Archetype> archetype) throws Exception {
         @SuppressWarnings("rawtypes")
-        Class[] args = new Class[]{
-                float.class, float.class, float.class,
-                float.class, float.class, float.class,
-                float.class
-        };
+        Class[] args = new Class[]{float.class, float.class, float.class, float.class, float.class, float.class, float.class};
 
         return archetype.getConstructor(args)
                 .newInstance(

@@ -9,13 +9,13 @@ public class MakeUserCharAction extends WorldMapAction {
     private final UserCharacter character;
     private final Position pos;
 
-    public MakeUserCharAction(final UserCharacter character, final Position pos) {
+    public MakeUserCharAction(UserCharacter character, Position pos) {
         this.character = character;
         this.pos = pos;
     }
 
     @Override
-    protected void performAction(final MapService service) {
+    protected void performAction(MapService service) {
         service.putCharacterAtPos(character, pos);
     }
 

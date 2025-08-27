@@ -10,5 +10,6 @@ public interface User {
      * @return the connection for this user
      */
     Connection getConnection();
+
 }
 

@@ -11,7 +11,7 @@ public class UserServiceImpl implements UserService {
     private final Set<ConnectedUser> connectedUsers = new HashSet<ConnectedUser>();
 
     @Override
-    public boolean isLoggedIn(final ConnectedUser user) {
+    public boolean isLoggedIn(ConnectedUser user) {
         return connectedUsers.contains(user);
     }
 

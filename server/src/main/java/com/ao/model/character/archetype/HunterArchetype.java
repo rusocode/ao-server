@@ -1,22 +1,14 @@
 package com.ao.model.character.archetype;
 
-/**
- * A hunter archetype.
- */
-
 public class HunterArchetype extends DefaultArchetype {
 
     private static final int LEVEL_MAX_HIT_INCREMENT = 35;
     private static final int MAX_HIT_INCREMENT = 3;
     private static final int MIN_HIT_INCREMENT = 2;
 
-    public HunterArchetype(float evasionModifier, float meleeAccuracyModifier,
-                           float rangedAccuracyModifier, float meleeDamageModifier,
-                           float rangedDamageModifier, float wrestlingDamageModifier,
-                           float blockPowerModifier) {
-        super(evasionModifier, meleeAccuracyModifier, rangedAccuracyModifier,
-                meleeDamageModifier, rangedDamageModifier, wrestlingDamageModifier,
-                blockPowerModifier);
+    public HunterArchetype(float evasionModifier, float meleeAccuracyModifier, float rangedAccuracyModifier, float meleeDamageModifier,
+                           float rangedDamageModifier, float wrestlingDamageModifier, float blockPowerModifier) {
+        super(evasionModifier, meleeAccuracyModifier, rangedAccuracyModifier, meleeDamageModifier, rangedDamageModifier, wrestlingDamageModifier, blockPowerModifier);
     }
 
     @Override

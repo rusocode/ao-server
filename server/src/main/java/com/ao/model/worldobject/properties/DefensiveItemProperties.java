@@ -12,10 +12,8 @@ import java.util.List;
 
 public class DefensiveItemProperties extends EquippableItemProperties {
 
-    protected int minDef;
-    protected int maxDef;
-    protected int minMagicDef;
-    protected int maxMagicDef;
+    protected int minDef, maxDef;
+    protected int minMagicDef, maxMagicDef;
 
     /**
      * Creates a new DefensiveItemProperties instance.

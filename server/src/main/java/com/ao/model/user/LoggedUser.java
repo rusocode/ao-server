@@ -10,13 +10,9 @@ import com.ao.model.map.area.AreaInfo;
 import com.ao.model.spell.Spell;
 import com.ao.model.worldobject.*;
 
-/**
- * Defines a logged user.
- */
-
 public class LoggedUser extends ConnectedUser implements UserCharacter {
+
     private final Reputation reputation;
-    // Constructor
     private final Race race;
     private final Gender gender;
     private final Archetype archetype;
@@ -64,15 +60,10 @@ public class LoggedUser extends ConnectedUser implements UserCharacter {
     private String description;
 
     // TODO Prohibit building this class without a builder (Effective Java, item 2)
-    public LoggedUser(final ConnectedUser user, final Reputation reputation,
-                      final Race race, final Gender gender, final Archetype archetype,
-                      final boolean poisoned, final boolean paralyzed,
-                      final boolean immobilized, final boolean invisible,
-                      final boolean mimetized, final boolean dumbed, final boolean hidden,
-                      final int maxMana, final int minMana, final int maxHp, final int minHp,
-                      final int maxThirstiness, final int minThirstiness,
-                      final int maxHunger, final int minHunger, final byte lvl,
-                      final String name, final String description) {
+    public LoggedUser(ConnectedUser user, Reputation reputation, Race race, Gender gender, Archetype archetype, boolean poisoned, boolean paralyzed,
+                      boolean immobilized, boolean invisible, boolean mimetized, boolean dumbed, boolean hidden, int maxMana,
+                      int minMana, int maxHp, int minHp, int maxThirstiness, int minThirstiness, int maxHunger, int minHunger, byte lvl,
+                      String name, String description) {
         super(user.getConnection());
         this.reputation = reputation;
         this.race = race;
@@ -336,7 +327,7 @@ public class LoggedUser extends ConnectedUser implements UserCharacter {
     public String getName() {
         // TODO If we shouldn't show the name (.showName is False), return an empty string
 
-        final StringBuilder builder = new StringBuilder(name);
+        StringBuilder builder = new StringBuilder(name);
 
         // TODO Translate this code from VB
 //        If .flags.EnConsulta Then

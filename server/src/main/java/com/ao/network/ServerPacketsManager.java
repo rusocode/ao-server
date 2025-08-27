@@ -24,7 +24,7 @@ public class ServerPacketsManager {
     protected static final Map<Class<? extends OutgoingPacket>, Integer> packetsMap = new HashMap<>();
 
     static {
-        for (final ServerPackets packet : packets)
+        for (ServerPackets packet : packets)
             packetsMap.put(packet.packetClass, packet.ordinal());
     }
 
@@ -34,7 +34,7 @@ public class ServerPacketsManager {
      * @param packet packet to write
      * @param buffer buffer where to write the packet
      */
-    public static void write(final OutgoingPacket packet, final DataBuffer buffer) throws UnsupportedEncodingException {
+    public static void write(OutgoingPacket packet, DataBuffer buffer) throws UnsupportedEncodingException {
         // Put the packet id before the packet itself.
         buffer.put(packetsMap.get(packet.getClass()).byteValue());
         packet.write(buffer);

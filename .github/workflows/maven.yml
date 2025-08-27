@@ -1,12 +1,11 @@
 # Este workflow de GitHub Actions automatiza el proceso de integracion continua (CI) para un proyecto Maven de Java. Se 
 # ejecuta automaticamente cada vez que se hace push o pull request a la rama main, realizando una secuencia de pasos
 # esenciales: primero obtiene el codigo fuente del repositorio, luego configura el entorno con Java 17 y cache de Maven,
-# despues crea los directorios de datos necesarios para las pruebas, compila y empaqueta el proyecto en un JAR usando
-# Maven, ejecuta todas las pruebas unitarias y genera reportes de cobertura de codigo con JaCoCo que se envian a
-# Coveralls para su visualizacion, y finalmente actualiza el grafo de dependencias en GitHub para habilitar las alertas
-# automaticas de seguridad de Dependabot. Todo esto garantiza que el codigo funcione correctamente, mantenga una buena
-# cobertura de pruebas y este protegido contra vulnerabilidades conocidas en las dependencias, proporcionando un
-# pipeline completo de calidad y seguridad del software.
+# despues compila y empaqueta el proyecto en un JAR usando Maven, ejecuta todas las pruebas unitarias y genera reportes
+# de cobertura de codigo con JaCoCo que se envian a Coveralls para su visualizacion, y finalmente actualiza el grafo de
+# dependencias en GitHub para habilitar las alertas automaticas de seguridad de Dependabot. Todo esto garantiza que el
+# codigo funcione correctamente, mantenga una buena cobertura de pruebas y este protegido contra vulnerabilidades
+# conocidas en las dependencias, proporcionando un pipeline completo de calidad y seguridad del software.
 
 # Para mas informacion: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-maven
 

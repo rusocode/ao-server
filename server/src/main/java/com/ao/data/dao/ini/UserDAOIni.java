@@ -223,10 +223,9 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
     }
 
     @Override
-    public UserCharacter create(final ConnectedUser user, final String name, final Race race, final Gender gender,
-                                final UserArchetype archetype, final int head, final City homeland, final byte strength,
-                                final byte dexterity, final byte intelligence, final byte charisma, final byte constitution,
-                                final int initialAvailableSkills, final int body)
+    public UserCharacter create(ConnectedUser user, String name, Race race, Gender gender, UserArchetype archetype, int head,
+                                City homeland, byte strength, byte dexterity, byte intelligence, byte charisma, byte constitution,
+                                int initialAvailableSkills, int body)
             throws DAOException, NameAlreadyTakenException {
 
         INIConfiguration character = new INIConfiguration();
@@ -348,7 +347,7 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
     }
 
     @Override
-    public UserCharacter load(final ConnectedUser user, final String username) throws DAOException {
+    public UserCharacter load(ConnectedUser user, String username) throws DAOException {
 
         if (username == null || username.trim().isEmpty()) throw new DAOException("Username cannot be null or empty");
 

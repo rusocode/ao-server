@@ -1,9 +1,5 @@
 package com.ao.model.character;
 
-/**
- * Defines available skills.
- */
-
 public enum Skill {
 
     LUCK,
@@ -35,4 +31,5 @@ public enum Skill {
      */
     public static final int AMOUNT = Skill.values().length;
     public static final Skill[] VALUES = Skill.values();
+
 }

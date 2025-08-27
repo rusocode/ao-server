@@ -6,32 +6,12 @@ package com.ao.model.worldobject;
 
 public interface WorldObject {
 
-    /**
-     * Retrieves the item's unique id.
-     *
-     * @return the item's unique id
-     */
     int getId();
 
-    /**
-     * Retrieves the object's graphic index.
-     *
-     * @return the object's graphic index
-     */
     int getGraphic();
 
-    /**
-     * Retrieves the object's name.
-     *
-     * @return the object's name
-     */
     String getName();
 
-    /**
-     * Retrieves the object's type.
-     *
-     * @return the object's type
-     */
     WorldObjectType getObjectType();
 
     /**

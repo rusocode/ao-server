@@ -31,95 +31,63 @@ public class AccountImpl implements Account {
         this.banned = banned;
     }
 
-    /* (non-Javadoc)
-     * @see com.ao.model.user.Account#getName()
-     */
     @Override
     public String getName() {
         return name;
     }
 
-    /* (non-Javadoc)
-     * @see com.ao.model.user.Account#getMail()
-     */
     @Override
     public String getMail() {
         return mail;
     }
 
-    /* (non-Javadoc)
-     * @see com.ao.model.user.Account#getCharacters()
-     */
     @Override
     public Set<String> getCharacters() {
         return characters;
     }
 
-    /* (non-Javadoc)
-     * @see com.ao.model.user.Account#hasCharacter(java.lang.String)
-     */
     @Override
     public boolean hasCharacter(String name) {
         String nameLower = name.toLowerCase();
         for (String character : characters)
-            if (nameLower.equals(character.toLowerCase()))
-                return true;
+            if (nameLower.equals(character.toLowerCase())) return true;
         return false;
     }
 
-    /* (non-Javadoc)
-     * @see com.ao.model.user.Account#isBanned()
-     */
     @Override
     public boolean isBanned() {
         return banned;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.ao.model.user.Account#setBanned(boolean)
-     */
     @Override
     public void setBanned(boolean banned) {
         this.banned = banned;
     }
 
-    /* (non-Javadoc)
-     * @see com.ao.model.user.Account#authenticate(java.lang.String)
-     */
     @Override
     public boolean authenticate(String password) {
         return this.password.toLowerCase().equals(password.toLowerCase());
     }
 
-    /* (non-Javadoc)
-     * @see com.ao.model.user.Account#addCharacter(java.lang.String)
-     */
     @Override
     public void addCharacter(String name) {
         characters.add(name);
     }
 
-    /* (non-Javadoc)
-     * @see java.lang.Object#hashCode()
-     */
     @Override
     public int hashCode() {
-        final int prime = 31;
+        int prime = 31;
         int result = 1;
         result = prime * result + ((name == null) ? 0 : name.hashCode());
         return result;
     }
 
-    /* (non-Javadoc)
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
     @Override
     public boolean equals(final Object obj) {
         if (this == obj) return true;
         if (obj == null) return false;
         if (getClass() != obj.getClass()) return false;
-        final AccountImpl other = (AccountImpl) obj;
+        AccountImpl other = (AccountImpl) obj;
         if (name == null) {
             if (other.name != null) return false;
         } else if (!name.equals(other.name)) return false;

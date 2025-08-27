@@ -8,11 +8,6 @@ import com.ao.model.worldobject.properties.ResourceSourceProperties;
 
 public abstract class AbstractResourceSource extends AbstractWorldObject {
 
-    /**
-     * Creates a new AbstractResourceSource instance.
-     *
-     * @param properties object's properties
-     */
     public AbstractResourceSource(ResourceSourceProperties properties) {
         super(properties);
     }

@@ -8,11 +8,6 @@ import com.ao.model.worldobject.properties.ResourceSourceProperties;
 
 public class Mine extends AbstractResourceSource {
 
-    /**
-     * Creates a new Mine instance.
-     *
-     * @param properties object's properties
-     */
     public Mine(ResourceSourceProperties properties) {
         super(properties);
     }

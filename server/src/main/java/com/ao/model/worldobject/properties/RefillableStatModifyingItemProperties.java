@@ -35,10 +35,8 @@ public class RefillableStatModifyingItemProperties extends StatModifyingItemProp
      * @param otherStateProperties object properties to be used in the other state
      */
     // @param tradeable true if it's tradeable, false otherwise
-    public RefillableStatModifyingItemProperties(WorldObjectType type, int id, String name, int graphic,
-                                                 int value, List<UserArchetype> forbiddenArchetypes,
-                                                 List<Race> forbiddenRaces, boolean newbie,
-                                                 boolean noLog, boolean falls, boolean respawnable, int minModifier, int maxModifier,
+    public RefillableStatModifyingItemProperties(WorldObjectType type, int id, String name, int graphic, int value, List<UserArchetype> forbiddenArchetypes,
+                                                 List<Race> forbiddenRaces, boolean newbie, boolean noLog, boolean falls, boolean respawnable, int minModifier, int maxModifier,
                                                  boolean filled, RefillableStatModifyingItemProperties otherStateProperties) {
         super(type, id, name, graphic, value, forbiddenArchetypes, forbiddenRaces, newbie, noLog, falls, respawnable, minModifier, maxModifier);
 
