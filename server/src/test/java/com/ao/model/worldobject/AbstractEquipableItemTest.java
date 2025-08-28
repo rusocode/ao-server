@@ -21,7 +21,7 @@ public abstract class AbstractEquipableItemTest extends AbstractItemTest {
 
     @Test
     public void testSetEquipped() {
-        final AbstractEquipableItem it = (AbstractEquipableItem) object;
+        AbstractEquipableItem it = (AbstractEquipableItem) object;
         it.setEquipped(false);
         assertThat(it.isEquipped()).isFalse();
         it.setEquipped(true);

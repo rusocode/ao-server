@@ -20,10 +20,10 @@ public class RangedWeaponTest extends AbstractEquipableItemTest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        final RangedWeaponProperties props1 = new RangedWeaponProperties(WorldObjectType.MELEE_WEAPON, 1, "Throw Knifes", 1, 1, 0, null, null, false, false, false, false, 1, true, PIERCING_DAMAGE, MIN_HIT, MAX_HIT, false);
+        RangedWeaponProperties props1 = new RangedWeaponProperties(WorldObjectType.MELEE_WEAPON, 1, "Throw Knifes", 1, 1, 0, null, null, false, false, false, false, 1, true, PIERCING_DAMAGE, MIN_HIT, MAX_HIT, false);
         weapon1 = new RangedWeapon(props1, 5);
 
-        final RangedWeaponProperties props2 = new RangedWeaponProperties(WorldObjectType.MELEE_WEAPON, 1, "Crossbow", 1, 1, 0, null, null, false, false, false, false, 1, false, PIERCING_DAMAGE, MAX_HIT, MAX_HIT, true);
+        RangedWeaponProperties props2 = new RangedWeaponProperties(WorldObjectType.MELEE_WEAPON, 1, "Crossbow", 1, 1, 0, null, null, false, false, false, false, 1, false, PIERCING_DAMAGE, MAX_HIT, MAX_HIT, true);
         weapon2 = new RangedWeapon(props2, 1);
 
         object = weapon1;
@@ -34,7 +34,7 @@ public class RangedWeaponTest extends AbstractEquipableItemTest {
 
     @Test
     public void testClone() {
-        final RangedWeapon clone = (RangedWeapon) weapon1.clone();
+        RangedWeapon clone = (RangedWeapon) weapon1.clone();
 
         // Make sure all fields match
         assertThat(clone.amount).isEqualTo(weapon1.amount);
@@ -43,7 +43,7 @@ public class RangedWeaponTest extends AbstractEquipableItemTest {
         // Make sure the object itself is different
         assertThat(clone).isNotSameAs(weapon1);
 
-        final RangedWeapon clone2 = (RangedWeapon) weapon2.clone();
+        RangedWeapon clone2 = (RangedWeapon) weapon2.clone();
 
         // Make sure all fields match
         assertThat(clone2.amount).isEqualTo(weapon2.amount);
@@ -55,7 +55,7 @@ public class RangedWeaponTest extends AbstractEquipableItemTest {
 
     @Test
     public void testUse() {
-        final Character character = mock(Character.class);
+        Character character = mock(Character.class);
 
         // nothing should happen
         weapon1.use(character);
@@ -90,7 +90,7 @@ public class RangedWeaponTest extends AbstractEquipableItemTest {
 
     @Test
     public void testGetDamage() {
-        final int damage = weapon1.getDamage();
+        int damage = weapon1.getDamage();
 
         assertThat(damage).isBetween(MIN_HIT, MAX_HIT);
         assertThat(weapon2.getDamage()).isEqualTo(MAX_HIT);

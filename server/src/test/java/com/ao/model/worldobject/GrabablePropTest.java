@@ -16,10 +16,10 @@ public class GrabablePropTest extends AbstractItemTest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        final ItemProperties props1 = new ItemProperties(WorldObjectType.GRABABLE_PROP, 1, "Black Potion", 1, 1, null, null, false, true, false, true);
+        ItemProperties props1 = new ItemProperties(WorldObjectType.GRABABLE_PROP, 1, "Black Potion", 1, 1, null, null, false, true, false, true);
         prop1 = new GrabableProp(props1, 5);
 
-        final ItemProperties props2 = new ItemProperties(WorldObjectType.GRABABLE_PROP, 1, "Black Potion", 1, 1, null, null, false, false, false, true);
+        ItemProperties props2 = new ItemProperties(WorldObjectType.GRABABLE_PROP, 1, "Black Potion", 1, 1, null, null, false, false, false, true);
         prop2 = new GrabableProp(props2, 1);
 
         object = prop2;
@@ -29,7 +29,7 @@ public class GrabablePropTest extends AbstractItemTest {
 
     @Test
     public void testUse() {
-        final Character character = mock(Character.class);
+        Character character = mock(Character.class);
 
         // nothing should happen
         prop1.use(character);
@@ -40,7 +40,7 @@ public class GrabablePropTest extends AbstractItemTest {
 
     @Test
     public void testClone() {
-        final GrabableProp clone = (GrabableProp) prop1.clone();
+        GrabableProp clone = (GrabableProp) prop1.clone();
 
         // Make sure all fields match
         assertThat(clone.amount).isEqualTo(prop1.amount);
@@ -49,7 +49,7 @@ public class GrabablePropTest extends AbstractItemTest {
         // Make sure the object itself is different
         assertThat(clone).isNotSameAs(prop1);
 
-        final GrabableProp clone2 = (GrabableProp) prop2.clone();
+        GrabableProp clone2 = (GrabableProp) prop2.clone();
 
         // Make sure all fields match
         assertThat(clone2.amount).isEqualTo(prop2.amount);

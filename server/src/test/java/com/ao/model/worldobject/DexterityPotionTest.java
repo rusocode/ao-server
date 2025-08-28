@@ -21,10 +21,10 @@ public class DexterityPotionTest extends AbstractItemTest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        final TemporalStatModifyingItemProperties props1 = new TemporalStatModifyingItemProperties(WorldObjectType.POISON_POTION, 1, "Yellow Potion", 1, 1, null, null, false, false, false, false, MIN_AGI, MAX_AGI, DURATION);
+        TemporalStatModifyingItemProperties props1 = new TemporalStatModifyingItemProperties(WorldObjectType.POISON_POTION, 1, "Yellow Potion", 1, 1, null, null, false, false, false, false, MIN_AGI, MAX_AGI, DURATION);
         potion1 = new DexterityPotion(props1, 5);
 
-        final TemporalStatModifyingItemProperties props2 = new TemporalStatModifyingItemProperties(WorldObjectType.POISON_POTION, 1, "Big Yellow Potion", 1, 1, null, null, false, false, false, false, MAX_AGI, MAX_AGI, DURATION);
+        TemporalStatModifyingItemProperties props2 = new TemporalStatModifyingItemProperties(WorldObjectType.POISON_POTION, 1, "Big Yellow Potion", 1, 1, null, null, false, false, false, false, MAX_AGI, MAX_AGI, DURATION);
         potion2 = new DexterityPotion(props2, 1);
 
         object = potion2;
@@ -34,8 +34,8 @@ public class DexterityPotionTest extends AbstractItemTest {
 
     @Test
     public void testUseWithCleanup() {
-        final Inventory inventory = mock(Inventory.class);
-        final Character character = mock(Character.class);
+        Inventory inventory = mock(Inventory.class);
+        Character character = mock(Character.class);
         when(character.getInventory()).thenReturn(inventory);
 
         potion2.use(character);
@@ -47,14 +47,14 @@ public class DexterityPotionTest extends AbstractItemTest {
 
     @Test
     public void testUseWithoutCleanup() {
-        final Inventory inventory = mock(Inventory.class);
-        final Character character = mock(Character.class);
+        Inventory inventory = mock(Inventory.class);
+        Character character = mock(Character.class);
         when(character.getInventory()).thenReturn(inventory);
 
         potion1.use(character);
 
         /// Make sure the value is in the correct range
-        final ArgumentCaptor<Integer> capture = ArgumentCaptor.forClass(Integer.class);
+        ArgumentCaptor<Integer> capture = ArgumentCaptor.forClass(Integer.class);
         verify(character).addToDexterity(capture.capture(), eq(DURATION));
         assertThat(capture.getValue()).isBetween(MIN_AGI, MAX_AGI);
     }
@@ -73,7 +73,7 @@ public class DexterityPotionTest extends AbstractItemTest {
 
     @Test
     public void testClone() {
-        final DexterityPotion clone = (DexterityPotion) potion1.clone();
+        DexterityPotion clone = (DexterityPotion) potion1.clone();
 
         // Make sure all fields match
         assertThat(clone.amount).isEqualTo(potion1.amount);
@@ -82,7 +82,7 @@ public class DexterityPotionTest extends AbstractItemTest {
         // Make sure the object itself is different
         assertThat(clone).isNotSameAs(potion1);
 
-        final DexterityPotion clone2 = (DexterityPotion) potion2.clone();
+        DexterityPotion clone2 = (DexterityPotion) potion2.clone();
 
         // Make sure all fields match
         assertThat(clone2.amount).isEqualTo(potion2.amount);

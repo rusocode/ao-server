@@ -20,10 +20,10 @@ public class WeaponTest extends AbstractEquipableItemTest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        final WeaponProperties props1 = new WeaponProperties(WorldObjectType.MELEE_WEAPON, 1, "Bastard Sword", 1, 1, 0, null, null, false, false, false, false, 1, true, PIERCING_DAMAGE, MIN_HIT, MAX_HIT);
+        WeaponProperties props1 = new WeaponProperties(WorldObjectType.MELEE_WEAPON, 1, "Bastard Sword", 1, 1, 0, null, null, false, false, false, false, 1, true, PIERCING_DAMAGE, MIN_HIT, MAX_HIT);
         weapon1 = new Weapon(props1, 5);
 
-        final WeaponProperties props2 = new WeaponProperties(WorldObjectType.MELEE_WEAPON, 1, "Halberd", 1, 1, 0, null, null, false, false, false, false, 1, false, PIERCING_DAMAGE, MAX_HIT, MAX_HIT);
+        WeaponProperties props2 = new WeaponProperties(WorldObjectType.MELEE_WEAPON, 1, "Halberd", 1, 1, 0, null, null, false, false, false, false, 1, false, PIERCING_DAMAGE, MAX_HIT, MAX_HIT);
         weapon2 = new Weapon(props2, 1);
 
         object = weapon1;
@@ -34,7 +34,7 @@ public class WeaponTest extends AbstractEquipableItemTest {
 
     @Test
     public void testClone() {
-        final Weapon clone = (Weapon) weapon1.clone();
+        Weapon clone = (Weapon) weapon1.clone();
 
         // Make sure all fields match
         assertThat(clone.amount).isEqualTo(weapon1.amount);
@@ -43,7 +43,7 @@ public class WeaponTest extends AbstractEquipableItemTest {
         // Make sure the object itself is different
         assertThat(clone).isNotSameAs(weapon1);
 
-        final Weapon clone2 = (Weapon) weapon2.clone();
+        Weapon clone2 = (Weapon) weapon2.clone();
 
         // Make sure all fields match
         assertThat(clone2.amount).isEqualTo(weapon2.amount);
@@ -55,7 +55,7 @@ public class WeaponTest extends AbstractEquipableItemTest {
 
     @Test
     public void testUse() {
-        final Character character = mock(Character.class);
+        Character character = mock(Character.class);
 
         // Nothing should happen
         weapon1.use(character);
@@ -90,7 +90,7 @@ public class WeaponTest extends AbstractEquipableItemTest {
 
     @Test
     public void testGetDamage() {
-        final int damage = weapon1.getDamage();
+        int damage = weapon1.getDamage();
         assertThat(damage).isBetween(MIN_HIT, MAX_HIT);
         assertThat(weapon2.getDamage()).isEqualTo(MAX_HIT);
     }

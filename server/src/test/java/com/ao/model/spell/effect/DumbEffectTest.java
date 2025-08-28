@@ -23,22 +23,22 @@ public class DumbEffectTest {
 
     @Test
     public void testApplyCharacterCharacter() {
-        final Character target = mock(Character.class);
-        final Character caster = mock(Character.class);
+        Character target = mock(Character.class);
+        Character caster = mock(Character.class);
 
         dumbEffect.apply(caster, target);
     }
 
     @Test
     public void testAppliesToCharacterCharacter() {
-        final Character target = mock(Character.class);
-        final Character caster = mock(Character.class);
+        Character target = mock(Character.class);
+        Character caster = mock(Character.class);
 
         assertThat(dumbEffect.appliesTo(caster, target)).isFalse();
 
-        final Character deadUserTarget = mock(UserCharacter.class);
+        Character deadUserTarget = mock(UserCharacter.class);
         when(deadUserTarget.isDead()).thenReturn(Boolean.TRUE);
-        final Character aliveUserTarget = mock(UserCharacter.class);
+        Character aliveUserTarget = mock(UserCharacter.class);
 
         assertThat(dumbEffect.appliesTo(caster, aliveUserTarget)).isTrue();
         assertThat(dumbEffect.appliesTo(caster, deadUserTarget)).isFalse();
@@ -46,16 +46,16 @@ public class DumbEffectTest {
 
     @Test
     public void testAppliesToCharacterWorldObject() {
-        final Character caster = mock(Character.class);
-        final WorldObject target = mock(WorldObject.class);
+        Character caster = mock(Character.class);
+        WorldObject target = mock(WorldObject.class);
 
         assertThat(dumbEffect.appliesTo(caster, target)).isFalse();
     }
 
     @Test
     public void testApplyCharacterWorldObject() {
-        final WorldObject obj = mock(WorldObject.class);
-        final Character caster = mock(Character.class);
+        WorldObject obj = mock(WorldObject.class);
+        Character caster = mock(Character.class);
         // Should do nothing....
         try {
             dumbEffect.apply(caster, obj);

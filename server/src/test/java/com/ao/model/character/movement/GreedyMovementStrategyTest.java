@@ -15,8 +15,8 @@ public class GreedyMovementStrategyTest {
 
     @Test
     public void testMove() {
-        final Position pos = new Position((byte) 50, (byte) 50, 1);
-        final Position target = new Position((byte) 60, (byte) 60, 1);
+        Position pos = new Position((byte) 50, (byte) 50, 1);
+        Position target = new Position((byte) 60, (byte) 60, 1);
 
         // Should go to the northeast
         moveTest(pos, target, Heading.WEST, Heading.SOUTH);
@@ -41,27 +41,27 @@ public class GreedyMovementStrategyTest {
         moveTestCharacter(pos, target, Heading.EAST, Heading.SOUTH);
     }
 
-    private void moveTest(final Position pos, final Position target, final Heading shouldnt1, final Heading shouldnt2) {
+    private void moveTest(Position pos, Position target, Heading shouldnt1, Heading shouldnt2) {
         movement.setTarget(target);
         _moveTest(pos, target, shouldnt1, shouldnt2);
     }
 
-    private void moveTestCharacter(final Position pos, final Position target, final Heading shouldnt1, final Heading shouldnt2) {
-        final Character character = mock(Character.class);
+    private void moveTestCharacter(Position pos, Position target, Heading shouldnt1, Heading shouldnt2) {
+        Character character = mock(Character.class);
         when(character.getPosition()).thenReturn(target);
         movement.setTarget(character);
         _moveTest(pos, target, shouldnt1, shouldnt2);
     }
 
-    private void _moveTest(final Position pos, final Position target, final Heading shouldnt1, final Heading shouldnt2) {
-        // Save these values because they will change, and we don't want to modify the original object.
-        final byte x = pos.getX();
-        final byte y = pos.getY();
+    private void _moveTest(Position pos, Position target, Heading shouldnt1, Heading shouldnt2) {
+        // Save these values because they will change, and we don't want to modify the original object
+        byte x = pos.getX();
+        byte y = pos.getY();
 
         int steps = pos.getDistance(target);
 
         for (int i = 0; i < steps; i++) {
-            final Heading move = movement.move(pos);
+            Heading move = movement.move(pos);
             movePosition(pos, move);
 
             assertThat(move).isNotNull();
@@ -78,7 +78,7 @@ public class GreedyMovementStrategyTest {
         pos.setY(y);
     }
 
-    private void movePosition(final Position pos, final Heading direction) {
+    private void movePosition(Position pos, Heading direction) {
         switch (direction) {
             case NORTH:
                 pos.setY((byte) (pos.getY() + 1));

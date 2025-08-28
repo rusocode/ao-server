@@ -11,15 +11,14 @@ import static org.mockito.Mockito.verifyNoInteractions;
 
 public class WoodTest extends AbstractItemTest {
 
-    private Wood wood1;
-    private Wood wood2;
+    private Wood wood1, wood2;
 
     @BeforeEach
     public void setUp() throws Exception {
-        final WoodProperties props1 = new WoodProperties(WorldObjectType.WOOD, 1, "Black Potion", 1, 1, null, null, false, false, false, false, WoodType.NORMAL);
+        WoodProperties props1 = new WoodProperties(WorldObjectType.WOOD, 1, "Black Potion", 1, 1, null, null, false, false, false, false, WoodType.NORMAL);
         wood1 = new Wood(props1, 5);
 
-        final WoodProperties props2 = new WoodProperties(WorldObjectType.WOOD, 1, "Black Potion", 1, 1, null, null, false, false, false, false, WoodType.ELVEN);
+        WoodProperties props2 = new WoodProperties(WorldObjectType.WOOD, 1, "Black Potion", 1, 1, null, null, false, false, false, false, WoodType.ELVEN);
         wood2 = new Wood(props2, 1);
 
         object = wood2;
@@ -29,7 +28,7 @@ public class WoodTest extends AbstractItemTest {
 
     @Test
     public void testUse() {
-        final Character character = mock(Character.class);
+        Character character = mock(Character.class);
 
         // Nothing should happen
         wood1.use(character);
@@ -40,7 +39,7 @@ public class WoodTest extends AbstractItemTest {
 
     @Test
     public void testClone() {
-        final Wood clone = (Wood) wood1.clone();
+        Wood clone = (Wood) wood1.clone();
 
         // Make sure all fields match
         assertThat(clone.amount).isEqualTo(wood1.amount);
@@ -49,7 +48,7 @@ public class WoodTest extends AbstractItemTest {
         // Make sure the object itself is different
         assertThat(clone).isNotSameAs(wood1);
 
-        final Wood clone2 = (Wood) wood2.clone();
+        Wood clone2 = (Wood) wood2.clone();
 
         // Make sure all fields match
         assertThat(clone2.amount).isEqualTo(wood2.amount);

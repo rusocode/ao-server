@@ -21,10 +21,10 @@ public class ArmorTest extends AbstractDefensiveItemTest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        final DefensiveItemProperties props1 = new DefensiveItemProperties(WorldObjectType.ARMOR, 1, "Leather Armor", 1, 1, 0, null, null, false, false, false, false, 1, MIN_DEF, MAX_DEF, MIN_MAGIC_DEF, MAX_MAGIC_DEF);
+        DefensiveItemProperties props1 = new DefensiveItemProperties(WorldObjectType.ARMOR, 1, "Leather Armor", 1, 1, 0, null, null, false, false, false, false, 1, MIN_DEF, MAX_DEF, MIN_MAGIC_DEF, MAX_MAGIC_DEF);
         armor1 = new Armor(props1, 5);
 
-        final DefensiveItemProperties props2 = new DefensiveItemProperties(WorldObjectType.ARMOR, 1, "Leather Armor", 1, 1, 0, null, null, false, false, false, false, 1, MAX_DEF, MAX_DEF, MAX_MAGIC_DEF, MAX_MAGIC_DEF);
+        DefensiveItemProperties props2 = new DefensiveItemProperties(WorldObjectType.ARMOR, 1, "Leather Armor", 1, 1, 0, null, null, false, false, false, false, 1, MAX_DEF, MAX_DEF, MAX_MAGIC_DEF, MAX_MAGIC_DEF);
         armor2 = new Armor(props2, 1);
 
         object = armor1;
@@ -35,7 +35,7 @@ public class ArmorTest extends AbstractDefensiveItemTest {
 
     @Test
     public void testClone() {
-        final Armor clone = (Armor) armor1.clone();
+        Armor clone = (Armor) armor1.clone();
 
         // Make sure all fields match
         assertThat(clone.amount).isEqualTo(armor1.amount);
@@ -45,7 +45,7 @@ public class ArmorTest extends AbstractDefensiveItemTest {
         assertThat(clone).isNotSameAs(armor1);
 
 
-        final Armor clone2 = (Armor) armor2.clone();
+        Armor clone2 = (Armor) armor2.clone();
 
         // Make sure all fields match
         assertThat(clone2.amount).isEqualTo(armor2.amount);
@@ -57,7 +57,7 @@ public class ArmorTest extends AbstractDefensiveItemTest {
 
     @Test
     public void testUse() {
-        final Character character = mock(Character.class);
+        Character character = mock(Character.class);
 
         // nothing should happen
         armor1.use(character);

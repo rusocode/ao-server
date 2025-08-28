@@ -21,8 +21,8 @@ public class PoisonEffectTest {
 
     @Test
     public void testApplyCharacterCharacter() {
-        final Character caster = mock(Character.class);
-        final Character target = mock(Character.class);
+        Character caster = mock(Character.class);
+        Character target = mock(Character.class);
 
         poisonEffect.apply(caster, target);
         verify(target).setPoisoned(true);
@@ -30,9 +30,9 @@ public class PoisonEffectTest {
 
     @Test
     public void testAppliesToCharacterCharacter() {
-        final Character caster = mock(Character.class);
-        final Character deadTarget = mock(Character.class);
-        final Character aliveTarget = mock(Character.class);
+        Character caster = mock(Character.class);
+        Character deadTarget = mock(Character.class);
+        Character aliveTarget = mock(Character.class);
         when(deadTarget.isDead()).thenReturn(Boolean.TRUE);
 
         // Paralyzing a dead char is invalid
@@ -44,8 +44,8 @@ public class PoisonEffectTest {
 
     @Test
     public void testAppliesToCharacterWorldObject() {
-        final WorldObject obj = mock(WorldObject.class);
-        final Character caster = mock(Character.class);
+        WorldObject obj = mock(WorldObject.class);
+        Character caster = mock(Character.class);
 
         // Should always false, no matter what
         assertThat(poisonEffect.appliesTo(caster, obj)).isFalse();
@@ -53,14 +53,14 @@ public class PoisonEffectTest {
 
     @Test
     public void testApplyCharacterWorldObject() {
-        final WorldObject obj = mock(WorldObject.class);
-        final Character caster = mock(Character.class);
+        WorldObject obj = mock(WorldObject.class);
+        Character caster = mock(Character.class);
 
         // Should do nothing....
         try {
             poisonEffect.apply(caster, obj);
             fail("Applying an effect for characters to a world object didn't fail.");
-        } catch (final InvalidTargetException e) {
+        } catch (InvalidTargetException e) {
             // This is ok
         }
     }

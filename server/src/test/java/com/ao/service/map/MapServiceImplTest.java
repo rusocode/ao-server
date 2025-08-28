@@ -15,24 +15,24 @@ public class MapServiceImplTest {
 
     @Test
     public void testLoadMaps() {
-        final WorldMapDAO dao = mock(WorldMapDAO.class);
-        final CityDAO cityDao = mock(CityDAO.class);
-        final AreaService areaService = mock(AreaService.class);
-        final MapService service = new MapServiceImpl(dao, cityDao, areaService);
+        WorldMapDAO dao = mock(WorldMapDAO.class);
+        CityDAO cityDao = mock(CityDAO.class);
+        AreaService areaService = mock(AreaService.class);
+        MapService service = new MapServiceImpl(dao, cityDao, areaService);
         service.loadMaps();
     }
 
     @Test
     public void testGetMap() {
-        final int mapId = 1;
-        final WorldMap map = new WorldMap(null, mapId, (short) 1, new Tile[]{});
-        final WorldMapDAO dao = mock(WorldMapDAO.class);
-        final CityDAO cityDao = mock(CityDAO.class);
-        final AreaService areaService = mock(AreaService.class);
+        int mapId = 1;
+        WorldMap map = new WorldMap(null, mapId, (short) 1, new Tile[]{});
+        WorldMapDAO dao = mock(WorldMapDAO.class);
+        CityDAO cityDao = mock(CityDAO.class);
+        AreaService areaService = mock(AreaService.class);
 
         when(dao.load()).thenReturn(new WorldMap[]{map});
 
-        final MapService service = new MapServiceImpl(dao, cityDao, areaService);
+        MapService service = new MapServiceImpl(dao, cityDao, areaService);
         service.loadMaps();
         assertThat(service.getMap(mapId)).isSameAs(map);
     }

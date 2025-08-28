@@ -16,7 +16,7 @@ public class GoldTest extends AbstractItemTest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        final ItemProperties props = new ItemProperties(WorldObjectType.MONEY, 13, "Monedas de oro", 1, 1, null, null, false, true, true, true);
+         ItemProperties props = new ItemProperties(WorldObjectType.MONEY, 13, "Monedas de oro", 1, 1, null, null, false, true, true, true);
         gold1 = new Gold(props, 1000);
         gold2 = new Gold(props, 2000);
 
@@ -27,8 +27,8 @@ public class GoldTest extends AbstractItemTest {
 
     @Test
     public void testUse() {
-        final Character character = mock(Character.class);
-        final Inventory inventory = mock(Inventory.class);
+         Character character = mock(Character.class);
+         Inventory inventory = mock(Inventory.class);
         when(character.getInventory()).thenReturn(inventory);
 
         gold1.use(character);
@@ -39,12 +39,12 @@ public class GoldTest extends AbstractItemTest {
 
     @Test
     public void testClone() {
-        final Gold clone = (Gold) gold1.clone();
+         Gold clone = (Gold) gold1.clone();
 
         assertThat(clone.getAmount()).isEqualTo(gold1.getAmount());
         assertThat(clone).isNotSameAs(gold1);
 
-        final Gold clone2 = (Gold) gold2.clone();
+         Gold clone2 = (Gold) gold2.clone();
 
         assertThat(clone2.getAmount()).isEqualTo(gold2.getAmount());
         assertThat(clone2).isNotSameAs(gold2);

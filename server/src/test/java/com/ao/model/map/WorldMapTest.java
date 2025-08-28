@@ -20,9 +20,9 @@ public class WorldMapTest {
 
     @Test
     public void testGetTile() {
-        final Tile t = new Tile(true, true, false, Trigger.NONE, null, null, null);
-        final Tile t2 = new Tile(false, true, false, Trigger.NONE, null, null, null);
-        final Tile t3 = new Tile(true, true, false, Trigger.NONE, null, null, null);
+        Tile t = new Tile(true, true, false, Trigger.NONE, null, null, null);
+        Tile t2 = new Tile(false, true, false, Trigger.NONE, null, null, null);
+        Tile t3 = new Tile(true, true, false, Trigger.NONE, null, null, null);
 
         map = new WorldMap("foo", 1, (short) 1, new Tile[]{t, t2, t3});
 
@@ -33,11 +33,11 @@ public class WorldMapTest {
 
     @Test
     public void testEquals() {
-        final WorldMap map2 = new WorldMap("foo", 1, (short) 1, new Tile[]{});
-        final WorldMap map3 = new WorldMap("foo", 2, (short) 1, new Tile[]{});
-        final WorldMap map4 = new WorldMap("asd", 1, (short) 1, new Tile[]{});
-        final WorldMap map5 = new WorldMap("asd", 3, (short) 1, new Tile[]{null});
-        final WorldMap map6 = new WorldMap(null, 4, (short) 1, new Tile[]{});
+        WorldMap map2 = new WorldMap("foo", 1, (short) 1, new Tile[]{});
+        WorldMap map3 = new WorldMap("foo", 2, (short) 1, new Tile[]{});
+        WorldMap map4 = new WorldMap("asd", 1, (short) 1, new Tile[]{});
+        WorldMap map5 = new WorldMap("asd", 3, (short) 1, new Tile[]{null});
+        WorldMap map6 = new WorldMap(null, 4, (short) 1, new Tile[]{});
 
         assertThat(map).isEqualTo(map);
         assertThat(map).isEqualTo(map2);
@@ -62,7 +62,7 @@ public class WorldMapTest {
 
     @Test
     public void testGetCharactersNearby() {
-        final Tile[] tiles = new Tile[2600];
+        Tile[] tiles = new Tile[2600];
         for (int i = 0; i < 2600; i++)
             tiles[i] = new Tile(true, true, false, Trigger.NONE, null, null, null);
 
@@ -73,9 +73,9 @@ public class WorldMapTest {
         map.getTile(8, 15).setCharacter(mock(Character.class));
         map.getTile(15, 15).setCharacter(mock(Character.class));
         map.getTile(5, 5).setCharacter(mock(Character.class));
-        map.getTile(25, 5).setCharacter(mock(Character.class)); // This one shouldn't be in the return.
+        map.getTile(25, 5).setCharacter(mock(Character.class)); // This one shouldn't be in the return
 
-        final List<Character> chars = map.getCharactersNearby(7, 7);
+        List<Character> chars = map.getCharactersNearby(7, 7);
 
         assertThat(chars.size()).isEqualTo(5);
         assertThat(chars).contains(map.getTile(8, 8).getCharacter());

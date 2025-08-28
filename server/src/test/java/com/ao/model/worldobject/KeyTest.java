@@ -14,7 +14,7 @@ public class KeyTest extends AbstractWorldObjectTest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        final KeyProperties props1 = new KeyProperties(WorldObjectType.KEY, 1, "Llave maestra", 1, 1, 0, null, null, false, false, false, false, CODE);
+        KeyProperties props1 = new KeyProperties(WorldObjectType.KEY, 1, "Llave maestra", 1, 1, 0, null, null, false, false, false, false, CODE);
         key1 = new Key(props1, 1);
 
         object = key1;
@@ -23,7 +23,7 @@ public class KeyTest extends AbstractWorldObjectTest {
 
     @Test
     public void testClone() {
-        final Key clone = (Key) key1.clone();
+        Key clone = (Key) key1.clone();
 
         // Make sure all fields match
         assertThat(clone.amount).isEqualTo(key1.amount);
