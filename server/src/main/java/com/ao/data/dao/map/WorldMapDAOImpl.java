@@ -44,7 +44,7 @@ public class WorldMapDAOImpl implements WorldMapDAO {
 
     @Inject
     public WorldMapDAOImpl(@Named("mapsPath") String mapsPath, @Named("mapsAmount") int mapsAmount, @Named("mapsConfigFile") String mapsConfigFile) {
-        this.mapsPath = mapsPath;
+        this.mapsPath = mapsPath; // Aqui Guice inyecta el unico valor de mapsPath
         this.mapsAmount = mapsAmount;
         loadMapsConfig(mapsConfigFile);
     }

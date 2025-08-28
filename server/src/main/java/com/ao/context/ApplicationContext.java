@@ -3,8 +3,6 @@ package com.ao.context;
 import com.ao.ioc.InjectorFactory;
 import com.google.inject.Injector;
 
-import java.util.Properties;
-
 /**
  * General Application Context. Capable of loading common application classes.
  * <p>
@@ -30,22 +28,21 @@ public class ApplicationContext {
     }
 
     /**
-     * Retrieves an instance of the requested class.
+     * Gets an instance of the specified class using dependency injection.
      *
-     * @param <T>   type of the object being requested
-     * @param clazz class of the object being requested
-     * @return an instance of the requested class
+     * @param <T>   type of the class to be retrieved
+     * @param clazz class object of the type T for which an instance is required
+     * @return an instance of the specified class
      */
     public static <T> T getInstance(Class<T> clazz) {
-        return injector.getInstance(clazz); // Guice resuelve automaticamente
+        return injector.getInstance(clazz); // Guice resolves automatically
     }
 
     /**
      * Reloads all modules and associations. BEWARE, all previously created objects are no longer attached!
      */
     public static void reload() {
-        Properties properties = ApplicationProperties.getProperties();
-        injector = InjectorFactory.get(properties);
+        injector = InjectorFactory.get(ApplicationProperties.getProperties());
     }
 
 }

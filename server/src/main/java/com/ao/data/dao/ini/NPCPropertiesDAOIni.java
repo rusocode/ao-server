@@ -116,12 +116,17 @@ public class NPCPropertiesDAOIni implements NPCCharacterPropertiesDAO {
     private final String npcsFilePath;
 
     private final WorldObjectPropertiesDAO worldObjectPropertiesDAO;
-    private final WorldObjectFactory worldObjectFactory;
+    private final WorldObjectFactory worldObjectFactory; // TODO Creo que no se esta inyectando
 
     private NPCProperties[] npcs;
 
     /**
      * Creates a new NPCDAOIni instance.
+     * <p>
+     * {@code WorldObjectPropertiesDAO} y {@code WorldObjectFactory} se inyectan por tipo. No requieren {@code @Named} porque
+     * Guice puede resolverlos directamente con el binding de su interfaz a una implementacion concreta. En el modulo
+     * ({@code DaoModule}) ya se hace {@code bind(WorldObjectPropertiesDAO.class).to(...)}. Para {@code WorldObjectFactory} debe
+     * existir un binding similar en otro modulo; si no existiera, Guice fallaria al crear el Injector.
      *
      * @param npcsFilePath             path to the file with all objects definitions
      * @param worldObjectPropertiesDAO DAO for World Object Properties

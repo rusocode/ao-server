@@ -98,7 +98,7 @@ public class Bootstrap {
         LOGGER.info("Loading application context...");
 
         LOGGER.info("Loading maps...");
-        MapService mapService = ApplicationContext.getInstance(MapService.class);
+        MapService mapService = ApplicationContext.getInstance(MapService.class); // Sin DI tendria que hardcodear la creacion del objeto -> new MapServiceImpl();
         mapService.loadMaps();
 
         LOGGER.info("Loading cities...");

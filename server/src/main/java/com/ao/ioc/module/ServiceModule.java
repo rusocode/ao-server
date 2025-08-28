@@ -19,13 +19,8 @@ import java.util.Properties;
 
 public class ServiceModule extends AbstractModule {
 
-    protected Properties properties;
+    private final Properties properties;
 
-    /**
-     * Creates a new ServiceModule.
-     *
-     * @param properties general project properties
-     */
     public ServiceModule(Properties properties) {
         this.properties = properties;
     }

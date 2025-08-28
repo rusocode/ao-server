@@ -13,13 +13,8 @@ import java.util.Properties;
 
 public class ConfigurationModule extends AbstractModule {
 
-    protected Properties properties;
+    private final Properties properties;
 
-    /**
-     * Creates a new ConfigurationModule.
-     *
-     * @param properties general project properties
-     */
     public ConfigurationModule(Properties properties) {
         this.properties = properties;
     }

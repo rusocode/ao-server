@@ -17,7 +17,7 @@ import com.google.inject.Inject;
 
 public class MapServiceImpl extends ActionExecutor<MapService> implements MapService {
 
-    private final WorldMapDAO mapsDAO;
+    private final WorldMapDAO mapsDAO; // Sin DI tendria que hardcodear el objeto -> new WorldMapDAOImpl("maps/", 1, "maps.properties");
     private final CityDAO citiesDAO;
     private final AreaService areaService;
     private WorldMap[] maps;

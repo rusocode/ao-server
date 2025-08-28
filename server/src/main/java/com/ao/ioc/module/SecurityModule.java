@@ -8,7 +8,7 @@ import java.util.Properties;
 
 public class SecurityModule extends AbstractModule {
 
-    protected Properties properties;
+    private final Properties properties;
 
     public SecurityModule(Properties properties) {
         this.properties = properties;

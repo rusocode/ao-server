@@ -9,10 +9,13 @@ import java.util.Properties;
 public class InjectorFactory {
 
     /**
-     * Retrieves a new injector with the given properties.
+     * Creates and returns an instance of Guice Injector configured with the specified properties.
+     * <p>
+     * This method combines several modules, including BootstrapModule, ConfigurationModule, DaoModule, ServiceModule, and
+     * SecurityModule, each of which is initialized with the provided properties.
      *
-     * @param properties injector properties
-     * @return the injector
+     * @param properties properties used to configure the modules in the injector
+     * @return an Injector instance configured with the specified modules
      */
     public static Injector get(Properties properties) {
         return Guice.createInjector(

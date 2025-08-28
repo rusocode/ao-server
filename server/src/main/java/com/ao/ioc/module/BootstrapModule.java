@@ -14,13 +14,8 @@ import java.util.Properties;
 
 public class BootstrapModule extends AbstractModule {
 
-    protected Properties properties;
+    private final Properties properties;
 
-    /**
-     * Creates a new BootstrapModule.
-     *
-     * @param properties general project properties
-     */
     public BootstrapModule(Properties properties) {
         this.properties = properties;
     }
@@ -28,7 +23,7 @@ public class BootstrapModule extends AbstractModule {
     @Override
     protected void configure() {
         // General server configuration
-        bind(ServerConfig.class).to(ServerConfigIni.class).in(Singleton.class); // Le dice a Guice: "Cuando alguien pida ServerConfig, dale ServerConfigIni
+        bind(ServerConfig.class).to(ServerConfigIni.class).in(Singleton.class); // Le dice a Guice: "Cuando alguien pida ServerConfig, dale ServerConfigIni"
         bind(String.class).annotatedWith(Names.named("ServerConfigIni")).toInstance(properties.getProperty("config.path.server"));
     }
 
