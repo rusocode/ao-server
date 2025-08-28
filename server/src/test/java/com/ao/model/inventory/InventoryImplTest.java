@@ -20,7 +20,7 @@ public class InventoryImplTest {
     @Test
     public void testAddItem() {
         // Try to add all the items to the inventory
-        final Item[] item = new Item[inventory.getCapacity()];
+        Item[] item = new Item[inventory.getCapacity()];
         for (int i = 0; i < inventory.getCapacity(); i++) {
             // Basic item mock
             item[i] = MockFactory.mockItem(i + 1, 1);
@@ -30,7 +30,7 @@ public class InventoryImplTest {
         // TODO Split this test into 3/4
 
         // Try to add an item when inventory is full and item not repeated
-        final Item newItem = mock(Item.class);
+        Item newItem = mock(Item.class);
         when(newItem.getAmount()).thenReturn(1);
         assertThat(inventory.addItem(newItem)).isEqualTo(1);
 
@@ -56,7 +56,7 @@ public class InventoryImplTest {
 
     @Test
     public void testGetItem() {
-        final Item item = mock(Item.class);
+        Item item = mock(Item.class);
 
         inventory.addItem(item);
         int slot = inventory.hasItem(item);
@@ -69,7 +69,7 @@ public class InventoryImplTest {
 
     @Test
     public void testHasFreeSlots() {
-        final Item[] item = new Item[inventory.getCapacity()];
+        Item[] item = new Item[inventory.getCapacity()];
         for (int i = 0; i < inventory.getCapacity(); i++) {
             item[i] = MockFactory.mockItem(i + 1, 1);
             assertThat(inventory.hasFreeSlots()).isTrue();
@@ -82,7 +82,7 @@ public class InventoryImplTest {
 
     @Test
     public void testHasItem() {
-        final Item item = mock(Item.class);
+        Item item = mock(Item.class);
         assertThat(inventory.hasItem(item)).isEqualTo(-1);
         inventory.addItem(item);
         assertThat(inventory.hasItem(item) != -1).isTrue();
@@ -90,7 +90,7 @@ public class InventoryImplTest {
 
     @Test
     public void testRemoveItemInt() {
-        final Item item = mock(Item.class);
+        Item item = mock(Item.class);
         inventory.addItem(item);
         int slot = inventory.hasItem(item);
         assertThat(inventory.removeItem(slot)).isNotNull();
@@ -102,9 +102,9 @@ public class InventoryImplTest {
 
     @Test
     public void testRemoveItemItem() {
-        final Item item = mock(Item.class);
-        final Item item2 = mock(Item.class);
-        final Item itemRemoved = mock(Item.class);
+        Item item = mock(Item.class);
+        Item item2 = mock(Item.class);
+        Item itemRemoved = mock(Item.class);
 
         when(item.getId()).thenReturn(1);
         when(item2.getId()).thenReturn(2);
@@ -129,16 +129,16 @@ public class InventoryImplTest {
 
     @Test
     public void testRemoveItemIntInt() {
-        final Item item = MockFactory.mockItem(1, 2);
+        Item item = MockFactory.mockItem(1, 2);
 
         inventory.addItem(item);
-        final int slot = inventory.hasItem(item);
+        int slot = inventory.hasItem(item);
 
-        final Item removedItem = inventory.removeItem(slot, 1);
+        Item removedItem = inventory.removeItem(slot, 1);
         assertThat(removedItem).isNotNull();
         assertThat(inventory.hasItem(item)).isNotEqualTo(-1);
 
-        final Item removedItem2 = inventory.removeItem(slot, 1);
+        Item removedItem2 = inventory.removeItem(slot, 1);
         assertThat(removedItem2).isNotNull();
         assertThat(inventory.hasItem(item)).isEqualTo(-1);
 
@@ -149,8 +149,8 @@ public class InventoryImplTest {
 
     @Test
     public void testGetItemAmount() {
-        final Item item = MockFactory.mockItem(1, 1);
-        final Item item2 = MockFactory.mockItem(1, 1000);
+        Item item = MockFactory.mockItem(1, 1);
+        Item item2 = MockFactory.mockItem(1, 1000);
 
         inventory.addItem(item);
         assertThat(inventory.getItemAmount(item)).isEqualTo(1);
@@ -162,7 +162,7 @@ public class InventoryImplTest {
 
     @Test
     public void testSetCapacity() {
-        final Item item = mock(Item.class);
+        Item item = mock(Item.class);
 
         inventory.addItem(item);
         inventory.setCapacity(1);
@@ -175,8 +175,8 @@ public class InventoryImplTest {
 
     @Test
     public void testCleanup() {
-        final Item item = MockFactory.mockItem(1, 0);
-        final Item item2 = MockFactory.mockItem(2, 1);
+        Item item = MockFactory.mockItem(1, 0);
+        Item item2 = MockFactory.mockItem(2, 1);
 
         inventory.addItem(item);
         inventory.addItem(item2);

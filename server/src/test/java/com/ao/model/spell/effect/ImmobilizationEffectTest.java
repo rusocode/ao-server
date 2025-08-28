@@ -21,18 +21,18 @@ public class ImmobilizationEffectTest {
 
     @Test
     public void testApplyCharacterCharacter() {
-        final Character caster = mock(Character.class);
-        final Character target = mock(Character.class);
+        Character caster = mock(Character.class);
+        Character target = mock(Character.class);
         immobilizationEffect.apply(caster, target);
         verify(target).setImmobilized(true);
     }
 
     @Test
     public void testAppliesToCharacterCharacter() {
-        final Character caster = mock(Character.class);
-        final Character deadTarget = mock(Character.class);
+        Character caster = mock(Character.class);
+        Character deadTarget = mock(Character.class);
         when(deadTarget.isDead()).thenReturn(Boolean.TRUE);
-        final Character aliveTarget = mock(Character.class);
+        Character aliveTarget = mock(Character.class);
         // Paralyzing a dead char is invalid
         assertThat(immobilizationEffect.appliesTo(caster, deadTarget)).isFalse();
         // Paralyzing a live char is valid
@@ -41,21 +41,21 @@ public class ImmobilizationEffectTest {
 
     @Test
     public void testAppliesToCharacterWorldObject() {
-        final WorldObject obj = mock(WorldObject.class);
-        final Character caster = mock(Character.class);
+        WorldObject obj = mock(WorldObject.class);
+        Character caster = mock(Character.class);
         // Should always false, no matter what
         assertThat(immobilizationEffect.appliesTo(caster, obj)).isFalse();
     }
 
     @Test
     public void testApplyCharacterWorldObject() {
-        final WorldObject obj = mock(WorldObject.class);
-        final Character caster = mock(Character.class);
+        WorldObject obj = mock(WorldObject.class);
+        Character caster = mock(Character.class);
         // Should do nothing....
         try {
             immobilizationEffect.apply(caster, obj);
             fail("Applying an effect for characters to a world object didn't fail.");
-        } catch (final InvalidTargetException e) {
+        } catch (InvalidTargetException e) {
             // this is ok
         }
     }

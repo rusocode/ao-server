@@ -92,9 +92,7 @@ public class LoginExistingCharacterPacketTest {
         assertThat(errPacket.getValue().getMessage()).isEqualTo(LoginServiceImpl.BANNED_CHARACTER_ERROR);
     }
 
-    private void writeLogin(final String charName, final String password,
-                            final byte major, final byte minor, final byte version,
-                            final String hash) throws Exception {
+    private void writeLogin(String charName, String password, byte major, byte minor, byte version, String hash) throws Exception {
         when(inputBuffer.getReadableBytes()).thenReturn(charName.length() + 2 + security.getPasswordHashLength() + 6 + security.getClientHashLength());
         when(inputBuffer.getASCIIString()).thenReturn(charName);
         when(inputBuffer.getASCIIStringFixed(security.getPasswordHashLength())).thenReturn(password);

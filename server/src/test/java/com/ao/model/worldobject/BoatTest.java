@@ -25,10 +25,10 @@ public class BoatTest extends AbstractDefensiveItemTest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        final BoatProperties props1 = new BoatProperties(WorldObjectType.BOAT, 1, "Small Boat", 1, 1, USAGE_DIFFICULTY, 0, null, null, false, false, false, false, 1, MIN_DEF, MAX_DEF, MIN_MAGIC_DEF, MAX_MAGIC_DEF, MIN_HIT, MAX_HIT);
+        BoatProperties props1 = new BoatProperties(WorldObjectType.BOAT, 1, "Small Boat", 1, 1, USAGE_DIFFICULTY, 0, null, null, false, false, false, false, 1, MIN_DEF, MAX_DEF, MIN_MAGIC_DEF, MAX_MAGIC_DEF, MIN_HIT, MAX_HIT);
         boat1 = new Boat(props1, 5);
 
-        final BoatProperties props2 = new BoatProperties(WorldObjectType.BOAT, 1, "Small Boat", 1, 1, USAGE_DIFFICULTY, 0, null, null, false, false, false, false, 1, MAX_DEF, MAX_DEF, MAX_MAGIC_DEF, MAX_MAGIC_DEF, MAX_HIT, MAX_HIT);
+        BoatProperties props2 = new BoatProperties(WorldObjectType.BOAT, 1, "Small Boat", 1, 1, USAGE_DIFFICULTY, 0, null, null, false, false, false, false, 1, MAX_DEF, MAX_DEF, MAX_MAGIC_DEF, MAX_MAGIC_DEF, MAX_HIT, MAX_HIT);
         boat2 = new Boat(props2, 1);
 
         object = boat1;
@@ -39,7 +39,7 @@ public class BoatTest extends AbstractDefensiveItemTest {
 
     @Test
     public void testClone() {
-        final Boat clone = (Boat) boat1.clone();
+        Boat clone = (Boat) boat1.clone();
 
         // Make sure all fields match
         assertThat(clone.amount).isEqualTo(boat1.amount);
@@ -48,7 +48,7 @@ public class BoatTest extends AbstractDefensiveItemTest {
         // Make sure the object itself is different
         assertThat(clone).isNotSameAs(boat1);
 
-        final Boat clone2 = (Boat) boat2.clone();
+        Boat clone2 = (Boat) boat2.clone();
 
         // Make sure all fields match
         assertThat(clone2.amount).isEqualTo(boat2.amount);
@@ -60,7 +60,7 @@ public class BoatTest extends AbstractDefensiveItemTest {
 
     @Test
     public void testUse() {
-        final Character character = mock(Character.class);
+        Character character = mock(Character.class);
 
         // nothing should happen
         boat1.use(character);
@@ -81,8 +81,7 @@ public class BoatTest extends AbstractDefensiveItemTest {
 
     @Test
     public void testGetDamageBonus() {
-        final int damage = boat1.getDamageBonus();
-
+        int damage = boat1.getDamageBonus();
         assertThat(damage).isBetween(MIN_HIT, MAX_HIT);
         assertThat(boat2.getDamageBonus()).isEqualTo(MAX_HIT);
     }
@@ -99,4 +98,5 @@ public class BoatTest extends AbstractDefensiveItemTest {
         assertThat(boat1.getUsageDifficulty()).isEqualTo(USAGE_DIFFICULTY);
         assertThat(boat2.getUsageDifficulty()).isEqualTo(USAGE_DIFFICULTY);
     }
+
 }

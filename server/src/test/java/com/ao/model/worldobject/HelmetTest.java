@@ -22,10 +22,10 @@ public class HelmetTest extends AbstractDefensiveItemTest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        final DefensiveItemProperties props1 = new DefensiveItemProperties(WorldObjectType.HELMET, 1, "Viking Helmet", 1, 1, 0, null, null, false, false, false, false, 1, MIN_DEF, MAX_DEF, MIN_MAGIC_DEF, MAX_MAGIC_DEF);
+        DefensiveItemProperties props1 = new DefensiveItemProperties(WorldObjectType.HELMET, 1, "Viking Helmet", 1, 1, 0, null, null, false, false, false, false, 1, MIN_DEF, MAX_DEF, MIN_MAGIC_DEF, MAX_MAGIC_DEF);
         helmet1 = new Helmet(props1, 5);
 
-        final DefensiveItemProperties props2 = new DefensiveItemProperties(WorldObjectType.HELMET, 1, "Viking Helmet", 1, 1, 0, null, null, false, false, false, false, 1, MAX_DEF, MAX_DEF, MAX_MAGIC_DEF, MAX_MAGIC_DEF);
+        DefensiveItemProperties props2 = new DefensiveItemProperties(WorldObjectType.HELMET, 1, "Viking Helmet", 1, 1, 0, null, null, false, false, false, false, 1, MAX_DEF, MAX_DEF, MAX_MAGIC_DEF, MAX_MAGIC_DEF);
         helmet2 = new Helmet(props2, 1);
 
         object = helmet1;
@@ -36,7 +36,7 @@ public class HelmetTest extends AbstractDefensiveItemTest {
 
     @Test
     public void testClone() {
-        final Helmet clone = (Helmet) helmet1.clone();
+        Helmet clone = (Helmet) helmet1.clone();
 
         // Make sure all fields match
         assertThat(clone.amount).isEqualTo(helmet1.amount);
@@ -46,7 +46,7 @@ public class HelmetTest extends AbstractDefensiveItemTest {
         assertThat(clone).isNotSameAs(helmet1);
 
 
-        final Helmet clone2 = (Helmet) helmet2.clone();
+        Helmet clone2 = (Helmet) helmet2.clone();
 
         // Make sure all fields match
         assertThat(clone2.amount).isEqualTo(helmet2.amount);
@@ -58,7 +58,7 @@ public class HelmetTest extends AbstractDefensiveItemTest {
 
     @Test
     public void testUse() {
-        final Character character = mock(Character.class);
+        Character character = mock(Character.class);
 
         // nothing should happen
         helmet1.use(character);

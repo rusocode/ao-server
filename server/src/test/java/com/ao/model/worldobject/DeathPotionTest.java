@@ -18,10 +18,10 @@ public class DeathPotionTest extends AbstractItemTest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        final ItemProperties props1 = new ItemProperties(WorldObjectType.DEATH_POTION, 1, "Black Potion", 1, 1, null, null, false, false, false, true);
+        ItemProperties props1 = new ItemProperties(WorldObjectType.DEATH_POTION, 1, "Black Potion", 1, 1, null, null, false, false, false, true);
         potion1 = new DeathPotion(props1, 5);
 
-        final ItemProperties props2 = new ItemProperties(WorldObjectType.DEATH_POTION, 1, "Black Potion", 1, 1, null, null, false, true, true, false);
+        ItemProperties props2 = new ItemProperties(WorldObjectType.DEATH_POTION, 1, "Black Potion", 1, 1, null, null, false, true, true, false);
         potion2 = new DeathPotion(props2, 1);
 
         object = potion2;
@@ -31,8 +31,8 @@ public class DeathPotionTest extends AbstractItemTest {
 
     @Test
     public void testUseWithCleanup() {
-        final Inventory inventory = mock(Inventory.class);
-        final Character character = mock(Character.class);
+        Inventory inventory = mock(Inventory.class);
+        Character character = mock(Character.class);
         when(character.getInventory()).thenReturn(inventory);
         when(character.getHitPoints()).thenReturn(USER_HP);
 
@@ -45,8 +45,8 @@ public class DeathPotionTest extends AbstractItemTest {
 
     @Test
     public void testUseWithoutCleanup() {
-        final Inventory inventory = mock(Inventory.class);
-        final Character character = mock(Character.class);
+        Inventory inventory = mock(Inventory.class);
+        Character character = mock(Character.class);
         when(character.getInventory()).thenReturn(inventory);
         when(character.getHitPoints()).thenReturn(USER_HP);
 
@@ -58,7 +58,7 @@ public class DeathPotionTest extends AbstractItemTest {
 
     @Test
     public void testClone() {
-        final DeathPotion clone = (DeathPotion) potion1.clone();
+        DeathPotion clone = (DeathPotion) potion1.clone();
 
         // Make sure all fields match
         assertThat(clone.amount).isEqualTo(potion1.amount);
@@ -68,7 +68,7 @@ public class DeathPotionTest extends AbstractItemTest {
         assertThat(clone).isNotSameAs(potion1);
 
 
-        final DeathPotion clone2 = (DeathPotion) potion2.clone();
+        DeathPotion clone2 = (DeathPotion) potion2.clone();
 
         // Make sure all fields match
         assertThat(clone2.amount).isEqualTo(potion2.amount);

@@ -11,8 +11,8 @@ public abstract class AbstractItemTest extends AbstractWorldObjectTest {
 
     @Test
     public void testAddAmount() {
-        final AbstractItem item = (AbstractItem) object;
-        final int ammount = item.getAmount();
+        AbstractItem item = (AbstractItem) object;
+        int ammount = item.getAmount();
 
         // Check adding and removing
         if (ammount < AbstractItem.MAX_STACKED_ITEMS) {
@@ -34,41 +34,41 @@ public abstract class AbstractItemTest extends AbstractWorldObjectTest {
 
     @Test
     public void testGetValue() {
-        final AbstractItem item = (AbstractItem) object;
-        final ItemProperties itemProps = (ItemProperties) objectProps;
+        AbstractItem item = (AbstractItem) object;
+        ItemProperties itemProps = (ItemProperties) objectProps;
         assertThat(item.getValue()).isEqualTo(itemProps.getValue());
     }
 
     @Test
     public void testIsNewbie() {
-        final AbstractItem item = (AbstractItem) object;
-        final ItemProperties itemProps = (ItemProperties) objectProps;
+        AbstractItem item = (AbstractItem) object;
+        ItemProperties itemProps = (ItemProperties) objectProps;
         assertThat(item.isNewbie()).isEqualTo(itemProps.isNewbie());
     }
 
     @Test
     public void testCanBeStolen() {
-        final AbstractItem item = (AbstractItem) object;
+        AbstractItem item = (AbstractItem) object;
         assertThat(item.canBeStolen()).isTrue();
     }
 
     @Test
     public void testIsNoLog() {
-        final AbstractItem item = (AbstractItem) object;
-        final ItemProperties itemProps = (ItemProperties) objectProps;
+        AbstractItem item = (AbstractItem) object;
+        ItemProperties itemProps = (ItemProperties) objectProps;
         assertThat(item.isNoLog()).isEqualTo(itemProps.isNoLog());
     }
 
     public void testIsFalls() {
-        final AbstractItem item = (AbstractItem) object;
-        final ItemProperties itemProps = (ItemProperties) objectProps;
+        AbstractItem item = (AbstractItem) object;
+        ItemProperties itemProps = (ItemProperties) objectProps;
         assertThat(item.isFalls()).isEqualTo(itemProps.isFalls());
     }
 
     @Test
     public void testIsRespawneable() {
-        final AbstractItem item = (AbstractItem) object;
-        final ItemProperties itemProps = (ItemProperties) objectProps;
+        AbstractItem item = (AbstractItem) object;
+        ItemProperties itemProps = (ItemProperties) objectProps;
         assertThat(item.isRespawnable()).isEqualTo(itemProps.isRespawnable());
     }
 

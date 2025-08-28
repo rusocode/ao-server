@@ -32,10 +32,10 @@ public class MusicalInstrumentTest extends AbstractItemTest {
         sounds2 = new LinkedList<>();
         sounds2.add(2);
 
-        final MusicalInstrumentProperties props1 = new MusicalInstrumentProperties(WorldObjectType.MUSICAL_INSTRUMENT, 1, "Horn", 1, 1, null, null, false, false, false, false, 1, sounds1);
+         MusicalInstrumentProperties props1 = new MusicalInstrumentProperties(WorldObjectType.MUSICAL_INSTRUMENT, 1, "Horn", 1, 1, null, null, false, false, false, false, 1, sounds1);
         instrument1 = new MusicalInstrument(props1, 5);
 
-        final MusicalInstrumentProperties props2 = new MusicalInstrumentProperties(WorldObjectType.MUSICAL_INSTRUMENT, 1, "Drum", 1, 1, null, null, false, false, false, false, 1, sounds2);
+         MusicalInstrumentProperties props2 = new MusicalInstrumentProperties(WorldObjectType.MUSICAL_INSTRUMENT, 1, "Drum", 1, 1, null, null, false, false, false, false, 1, sounds2);
         instrument2 = new MusicalInstrument(props2, 1);
 
         object = instrument1;
@@ -44,7 +44,7 @@ public class MusicalInstrumentTest extends AbstractItemTest {
 
     @Test
     public void testClone() {
-        final MusicalInstrument clone = (MusicalInstrument) instrument1.clone();
+         MusicalInstrument clone = (MusicalInstrument) instrument1.clone();
 
         // Make sure all fields match
         assertThat(clone.amount).isEqualTo(instrument1.amount);
@@ -53,7 +53,7 @@ public class MusicalInstrumentTest extends AbstractItemTest {
         // Make sure the object itself is different
         assertThat(clone).isNotSameAs(instrument1);
 
-        final MusicalInstrument clone2 = (MusicalInstrument) instrument2.clone();
+         MusicalInstrument clone2 = (MusicalInstrument) instrument2.clone();
 
         // Make sure all fields match
         assertThat(clone2.amount).isEqualTo(instrument2.amount);
@@ -65,7 +65,7 @@ public class MusicalInstrumentTest extends AbstractItemTest {
 
     @Test
     public void testUse() {
-        final Character character = mock(Character.class);
+         Character character = mock(Character.class);
 
         instrument1.use(character);
         instrument2.use(character);

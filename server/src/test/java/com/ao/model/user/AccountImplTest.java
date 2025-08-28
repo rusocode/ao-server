@@ -63,7 +63,7 @@ public class AccountImplTest {
 
     @Test
     public void testAddCharacter() {
-        final String charr = "foo";
+        String charr = "foo";
         account.addCharacter(charr);
         assertThat(account.characters.contains(charr)).isTrue();
     }

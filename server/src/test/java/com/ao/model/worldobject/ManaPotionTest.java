@@ -20,10 +20,10 @@ public class ManaPotionTest extends AbstractItemTest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        final StatModifyingItemProperties props1 = new StatModifyingItemProperties(WorldObjectType.MANA_POTION, 1, "Blue Potion", 1, 1, null, null, false, false, false, false, MIN_MANA, MAX_MANA);
+        StatModifyingItemProperties props1 = new StatModifyingItemProperties(WorldObjectType.MANA_POTION, 1, "Blue Potion", 1, 1, null, null, false, false, false, false, MIN_MANA, MAX_MANA);
         potion1 = new ManaPotion(props1, 5);
 
-        final StatModifyingItemProperties props2 = new StatModifyingItemProperties(WorldObjectType.MANA_POTION, 1, "Big Blue Potion", 1, 1, null, null, false, false, false, false, MAX_MANA, MAX_MANA);
+        StatModifyingItemProperties props2 = new StatModifyingItemProperties(WorldObjectType.MANA_POTION, 1, "Big Blue Potion", 1, 1, null, null, false, false, false, false, MAX_MANA, MAX_MANA);
         potion2 = new ManaPotion(props2, 1);
 
         object = potion2;
@@ -33,8 +33,8 @@ public class ManaPotionTest extends AbstractItemTest {
 
     @Test
     public void testUseWithCleanup() {
-        final Inventory inventory = mock(Inventory.class);
-        final Character character = mock(Character.class);
+        Inventory inventory = mock(Inventory.class);
+        Character character = mock(Character.class);
         when(character.getInventory()).thenReturn(inventory);
 
         potion2.use(character);
@@ -46,14 +46,14 @@ public class ManaPotionTest extends AbstractItemTest {
 
     @Test
     public void testUseWithoutCleanup() {
-        final Inventory inventory = mock(Inventory.class);
-        final Character character = mock(Character.class);
+        Inventory inventory = mock(Inventory.class);
+        Character character = mock(Character.class);
         when(character.getInventory()).thenReturn(inventory);
 
         potion1.use(character);
 
         // Consumption of potion1 requires just a call to addToMana.
-        final ArgumentCaptor<Integer> capture = ArgumentCaptor.forClass(Integer.class);
+        ArgumentCaptor<Integer> capture = ArgumentCaptor.forClass(Integer.class);
         verify(character).addToMana(capture.capture());
 
         /// Make sure the value is in the correct range
@@ -74,7 +74,7 @@ public class ManaPotionTest extends AbstractItemTest {
 
     @Test
     public void testClone() {
-        final ManaPotion clone = (ManaPotion) potion1.clone();
+        ManaPotion clone = (ManaPotion) potion1.clone();
 
         // Make sure all fields match
         assertThat(clone.amount).isEqualTo(potion1.amount);
@@ -83,7 +83,7 @@ public class ManaPotionTest extends AbstractItemTest {
         // Make sure the object itself is different
         assertThat(clone).isNotSameAs(potion1);
 
-        final ManaPotion clone2 = (ManaPotion) potion2.clone();
+        ManaPotion clone2 = (ManaPotion) potion2.clone();
 
         // Make sure all fields match
         assertThat(clone2.amount).isEqualTo(potion2.amount);

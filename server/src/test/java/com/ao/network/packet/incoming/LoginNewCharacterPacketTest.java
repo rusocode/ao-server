@@ -234,9 +234,8 @@ public class LoginNewCharacterPacketTest {
         assertThat(errPacket.getValue().getMessage()).isEqualTo(LoginServiceImpl.ONLY_ADMINS_ERROR);
     }
 
-    private void writeLogin(final String charName, final String password, final byte major,
-                            final byte minor, final byte version, final String hash, final byte race, final byte gender,
-                            final byte archetype, final byte head, final String mail, final byte homeland) throws Exception {
+    private void writeLogin(String charName, String password, byte major, byte minor, byte version, String hash, byte race, byte gender,
+                            byte archetype, byte head, String mail, byte homeland) throws Exception {
         when(inputBuffer.getReadableBytes()).thenReturn(charName.length() + 2 + security.getPasswordHashLength() + 8 + security.getClientHashLength() + mail.length() + 2);
         when(inputBuffer.getASCIIString()).thenReturn(charName).thenReturn(mail);
         when(inputBuffer.getASCIIStringFixed(security.getPasswordHashLength())).thenReturn(password);

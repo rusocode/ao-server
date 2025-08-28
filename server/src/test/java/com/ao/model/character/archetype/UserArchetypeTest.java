@@ -25,7 +25,7 @@ public class UserArchetypeTest {
 
     @Test
     public void testValueOf() {
-        final Archetype archetype = ArchetypeLocator.getArchetype(AssasinArchetype.class); // Es necesario declararlo como final?
+        Archetype archetype = ArchetypeLocator.getArchetype(AssasinArchetype.class);
         assertThat(UserArchetype.ASSASIN).isSameAs(UserArchetype.valueOf(archetype));
     }
 

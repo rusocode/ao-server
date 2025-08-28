@@ -27,10 +27,10 @@ public class HitPointsEffectTest {
 
     @Test
     public void testAppliesToCharacterCharacter() {
-        final Character deadTarget = mock(Character.class);
+        Character deadTarget = mock(Character.class);
         when(deadTarget.isDead()).thenReturn(Boolean.TRUE);
-        final Character aliveTarget = mock(Character.class);
-        final Character caster = mock(Character.class);
+        Character aliveTarget = mock(Character.class);
+        Character caster = mock(Character.class);
 
         assertThat(hpEffect1.appliesTo(caster, aliveTarget)).isTrue();
         assertThat(hpEffect2.appliesTo(caster, aliveTarget)).isTrue();
@@ -40,8 +40,8 @@ public class HitPointsEffectTest {
 
     @Test
     public void testAppliesToCharacterWorldObject() {
-        final Character caster = mock(Character.class);
-        final WorldObject target = mock(WorldObject.class);
+        Character caster = mock(Character.class);
+        WorldObject target = mock(WorldObject.class);
 
         assertThat(hpEffect1.appliesTo(caster, target)).isFalse();
         assertThat(hpEffect2.appliesTo(caster, target)).isFalse();
@@ -49,14 +49,14 @@ public class HitPointsEffectTest {
 
     @Test
     public void testApplyCharacterWorldObject() {
-        final WorldObject obj = mock(WorldObject.class);
-        final Character caster = mock(Character.class);
+        WorldObject obj = mock(WorldObject.class);
+        Character caster = mock(Character.class);
 
         // Should do nothing....
         try {
             hpEffect1.apply(caster, obj);
             fail("Applying an effect for characters to a world object didn't fail.");
-        } catch (final InvalidTargetException e) {
+        } catch (InvalidTargetException e) {
             // This is ok
         }
     }

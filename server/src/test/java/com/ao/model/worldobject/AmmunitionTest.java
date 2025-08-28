@@ -18,10 +18,10 @@ public class AmmunitionTest extends AbstractEquipableItemTest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        final AmmunitionProperties props1 = new AmmunitionProperties(WorldObjectType.AMMUNITION, 1, "Arrow", 1, 1, null, null, false, false, false, false, 1, MIN_HIT, MAX_HIT);
+        AmmunitionProperties props1 = new AmmunitionProperties(WorldObjectType.AMMUNITION, 1, "Arrow", 1, 1, null, null, false, false, false, false, 1, MIN_HIT, MAX_HIT);
         ammunition1 = new Ammunition(props1, 5);
 
-        final AmmunitionProperties props2 = new AmmunitionProperties(WorldObjectType.AMMUNITION, 1, "Fire Arrow", 1, 1, null, null, false, false, false, false, 1, MAX_HIT, MAX_HIT);
+        AmmunitionProperties props2 = new AmmunitionProperties(WorldObjectType.AMMUNITION, 1, "Fire Arrow", 1, 1, null, null, false, false, false, false, 1, MAX_HIT, MAX_HIT);
         ammunition2 = new Ammunition(props2, 1);
 
         object = ammunition1;
@@ -32,7 +32,7 @@ public class AmmunitionTest extends AbstractEquipableItemTest {
 
     @Test
     public void testClone() {
-        final Ammunition clone = (Ammunition) ammunition1.clone();
+        Ammunition clone = (Ammunition) ammunition1.clone();
 
         // Make sure all fields match
         assertThat(clone.amount).isEqualTo(ammunition1.amount); // Se asegura que el valor actual sea igual al valor esperado
@@ -41,7 +41,7 @@ public class AmmunitionTest extends AbstractEquipableItemTest {
         // Make sure the object itself is different
         assertThat(clone).isNotSameAs(ammunition1);
 
-        final Ammunition clone2 = (Ammunition) ammunition2.clone();
+        Ammunition clone2 = (Ammunition) ammunition2.clone();
 
         // Make sure all fields match
         assertThat(clone2.amount).isEqualTo(ammunition2.amount);
@@ -53,7 +53,7 @@ public class AmmunitionTest extends AbstractEquipableItemTest {
 
     @Test
     public void testUse() {
-        final Character character = mock(Character.class);
+        Character character = mock(Character.class);
         // nothing should happen
         ammunition1.use(character);
         ammunition2.use(character);
@@ -73,7 +73,7 @@ public class AmmunitionTest extends AbstractEquipableItemTest {
 
     @Test
     public void testGetDamage() {
-        final int damage = ammunition1.getDamage();
+        int damage = ammunition1.getDamage();
         assertThat(damage).isBetween(MIN_HIT, MAX_HIT);
         assertThat(ammunition2.getDamage()).isEqualTo(MAX_HIT);
     }

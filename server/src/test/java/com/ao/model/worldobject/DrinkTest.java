@@ -20,9 +20,9 @@ public class DrinkTest extends AbstractItemTest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        final StatModifyingItemProperties props1 = new StatModifyingItemProperties(WorldObjectType.FOOD, 1, "Apple Juice", 1, 1, null, null, false, false, false, false, MIN_THIRST, MAX_THIRST);
+        StatModifyingItemProperties props1 = new StatModifyingItemProperties(WorldObjectType.FOOD, 1, "Apple Juice", 1, 1, null, null, false, false, false, false, MIN_THIRST, MAX_THIRST);
         drink1 = new Drink(props1, 5);
-        final StatModifyingItemProperties props2 = new StatModifyingItemProperties(WorldObjectType.FOOD, 1, "Green Apple Juice", 1, 1, null, null, false, false, false, false, MAX_THIRST, MAX_THIRST);
+        StatModifyingItemProperties props2 = new StatModifyingItemProperties(WorldObjectType.FOOD, 1, "Green Apple Juice", 1, 1, null, null, false, false, false, false, MAX_THIRST, MAX_THIRST);
         drink2 = new Drink(props2, 1);
         object = drink2;
         ammount = 1;
@@ -31,8 +31,8 @@ public class DrinkTest extends AbstractItemTest {
 
     @Test
     public void testUseWithCleanup() {
-        final Inventory inventory = mock(Inventory.class);
-        final Character character = mock(Character.class);
+        Inventory inventory = mock(Inventory.class);
+        Character character = mock(Character.class);
         when(character.getInventory()).thenReturn(inventory);
 
         drink2.use(character);
@@ -44,14 +44,14 @@ public class DrinkTest extends AbstractItemTest {
 
     @Test
     public void testUseWithoutCleanup() {
-        final Inventory inventory = mock(Inventory.class);
-        final Character character = mock(Character.class);
+        Inventory inventory = mock(Inventory.class);
+        Character character = mock(Character.class);
         when(character.getInventory()).thenReturn(inventory);
 
         drink1.use(character);
 
         // Consumption of drink1 requires just a call to addToThirstiness
-        final ArgumentCaptor<Integer> capture = ArgumentCaptor.forClass(Integer.class);
+        ArgumentCaptor<Integer> capture = ArgumentCaptor.forClass(Integer.class);
 
         /// Make sure the value is in the correct range
         verify(character).addToThirstiness(capture.capture());
@@ -72,7 +72,7 @@ public class DrinkTest extends AbstractItemTest {
 
     @Test
     public void testClone() {
-        final Drink clone = (Drink) drink1.clone();
+        Drink clone = (Drink) drink1.clone();
 
         // Make sure all fields match
         assertThat(clone.amount).isEqualTo(drink1.amount);
@@ -81,7 +81,7 @@ public class DrinkTest extends AbstractItemTest {
         // Make sure the object itself is different
         assertThat(clone).isNotSameAs(drink1);
 
-        final Drink clone2 = (Drink) drink2.clone();
+        Drink clone2 = (Drink) drink2.clone();
 
         // Make sure all fields match
         assertThat(clone2.amount).isEqualTo(drink2.amount);

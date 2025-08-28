@@ -10,7 +10,6 @@ import com.ao.model.worldobject.Item;
 import com.ao.model.worldobject.WorldObject;
 import com.ao.network.Connection;
 import com.ao.service.timedevents.TimedEvent;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import static org.mockito.Mockito.*;
@@ -21,8 +20,8 @@ import static org.mockito.Mockito.*;
 
 public class MockFactory {
 
-    public static Item mockItem(final int id, final int initialAmount) {
-        final Item item = mock(AbstractItem.class);
+    public static Item mockItem(int id, int initialAmount) {
+        Item item = mock(AbstractItem.class);
         when(item.getId()).thenReturn(id);
         when(item.getAmount()).thenCallRealMethod();
         when(item.addAmount(anyInt())).thenCallRealMethod();
@@ -40,8 +39,8 @@ public class MockFactory {
      * @param user User object to be retrieved by getUser
      * @return the mock
      */
-    public static Connection mockConnection(final User user) {
-        final Connection conn = mock(Connection.class);
+    public static Connection mockConnection(User user) {
+        Connection conn = mock(Connection.class);
         when(conn.getUser()).thenReturn(user);
         return conn;
     }
@@ -52,8 +51,8 @@ public class MockFactory {
      * @return the mock
      */
     public static Connection mockConnection() {
-        final ConnectedUser user = mock(ConnectedUser.class);
-        final Connection connection = mockConnection(user);
+        ConnectedUser user = mock(ConnectedUser.class);
+        Connection connection = mockConnection(user);
         when(user.getConnection()).thenReturn(connection);
         return connection;
     }
@@ -65,8 +64,8 @@ public class MockFactory {
      * @param appliesToWorldObject whether the effect to be mocked should apply to world objects
      * @return the created mock
      */
-    public static Effect mockEffect(final boolean appliesToChar, final boolean appliesToWorldObject) {
-        final Effect effect = mock(Effect.class);
+    public static Effect mockEffect(boolean appliesToChar, boolean appliesToWorldObject) {
+        Effect effect = mock(Effect.class);
         when(effect.appliesTo(any(Character.class), any(Character.class))).thenReturn(appliesToChar);
         when(effect.appliesTo(any(Character.class), any(WorldObject.class))).thenReturn(appliesToWorldObject);
         if (!appliesToChar) doThrow(InvalidTargetException.class).when(effect).apply(any(Character.class), any(Character.class));
@@ -81,9 +80,8 @@ public class MockFactory {
      * @return the created mock
      */
     public static Character mockCharacter() {
-        final Character character = mock(Character.class);
         // TODO Fill this in as needed
-        return character;
+        return mock(Character.class);
     }
 
     /**
@@ -92,9 +90,8 @@ public class MockFactory {
      * @return the created mock
      */
     public static WorldObject mockWorldObject() {
-        final WorldObject worldObject = mock(WorldObject.class);
         // TODO Fill this in as needed
-        return worldObject;
+        return mock(WorldObject.class);
     }
 
     /**
@@ -103,8 +100,8 @@ public class MockFactory {
      * @param chara event's Character
      * @return the created mock
      */
-    public static TimedEvent mockTimedEvent(final Character chara) {
-        final TimedEvent event = mock(TimedEvent.class);
+    public static TimedEvent mockTimedEvent(Character chara) {
+        TimedEvent event = mock(TimedEvent.class);
         when(event.getCharacter()).thenReturn(chara);
         return event;
     }

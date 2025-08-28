@@ -21,8 +21,8 @@ public class ParalysisEffectTest {
 
     @Test
     public void testApplyCharacterCharacter() {
-        final Character caster = mock(Character.class);
-        final Character target = mock(Character.class);
+        Character caster = mock(Character.class);
+        Character target = mock(Character.class);
 
         paralysisEffect.apply(caster, target);
 
@@ -31,10 +31,10 @@ public class ParalysisEffectTest {
 
     @Test
     public void testAppliesToCharacterCharacter() {
-        final Character caster = mock(Character.class);
-        final Character deadTarget = mock(Character.class);
+        Character caster = mock(Character.class);
+        Character deadTarget = mock(Character.class);
         when(deadTarget.isDead()).thenReturn(Boolean.TRUE);
-        final Character aliveTarget = mock(Character.class);
+        Character aliveTarget = mock(Character.class);
         // Paralyzing a dead char is invalid
         assertThat(paralysisEffect.appliesTo(caster, deadTarget)).isFalse();
         // Paralyzing a live char is valid
@@ -43,21 +43,21 @@ public class ParalysisEffectTest {
 
     @Test
     public void testAppliesToCharacterWorldObject() {
-        final WorldObject obj = mock(WorldObject.class);
-        final Character caster = mock(Character.class);
+        WorldObject obj = mock(WorldObject.class);
+        Character caster = mock(Character.class);
         // Should always false, no matter what
         assertThat(paralysisEffect.appliesTo(caster, obj)).isFalse();
     }
 
     @Test
     public void testApplyCharacterWorldObject() {
-        final WorldObject obj = mock(WorldObject.class);
-        final Character caster = mock(Character.class);
+        WorldObject obj = mock(WorldObject.class);
+        Character caster = mock(Character.class);
         // Should do nothing....
         try {
             paralysisEffect.apply(caster, obj);
             fail("Applying an effect for characters to a world object didn't fail.");
-        } catch (final InvalidTargetException e) {
+        } catch (InvalidTargetException e) {
             // This is ok
         }
     }

@@ -16,10 +16,10 @@ public class MineralTest extends AbstractItemTest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        final ItemProperties props1 = new ItemProperties(WorldObjectType.MINERAL, 1, "Gold", 1, 1, null, null, false, false, false, false);
+        ItemProperties props1 = new ItemProperties(WorldObjectType.MINERAL, 1, "Gold", 1, 1, null, null, false, false, false, false);
         mineral1 = new Mineral(props1, 1);
 
-        final ItemProperties props2 = new ItemProperties(WorldObjectType.MINERAL, 1, "Cooper", 1, 1, null, null, false, false, false, false);
+        ItemProperties props2 = new ItemProperties(WorldObjectType.MINERAL, 1, "Cooper", 1, 1, null, null, false, false, false, false);
         mineral2 = new Mineral(props2, 1);
 
         object = mineral2;
@@ -29,8 +29,8 @@ public class MineralTest extends AbstractItemTest {
 
     @Test
     public void testUse() {
-        final Inventory inventory = mock(Inventory.class);
-        final Character character = mock(Character.class);
+        Inventory inventory = mock(Inventory.class);
+        Character character = mock(Character.class);
         when(character.getInventory()).thenReturn(inventory);
 
         mineral1.use(character);
@@ -42,7 +42,7 @@ public class MineralTest extends AbstractItemTest {
 
     @Test
     public void testClone() {
-        final Mineral clone = (Mineral) mineral1.clone();
+        Mineral clone = (Mineral) mineral1.clone();
 
         // Make sure all fields match
         assertThat(clone.amount).isEqualTo(mineral1.amount);
@@ -51,7 +51,7 @@ public class MineralTest extends AbstractItemTest {
         // Make sure the object itself is different
         assertThat(clone).isNotSameAs(mineral1);
 
-        final Mineral clone2 = (Mineral) mineral2.clone();
+        Mineral clone2 = (Mineral) mineral2.clone();
 
         // Make sure all fields match
         assertThat(clone2.amount).isEqualTo(mineral2.amount);

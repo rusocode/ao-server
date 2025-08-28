@@ -22,10 +22,10 @@ public class StrengthPotionTest extends AbstractItemTest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        final TemporalStatModifyingItemProperties props1 = new TemporalStatModifyingItemProperties(WorldObjectType.STRENGTH_POTION, 1, "Green Potion", 1, 1, null, null, false, false, false, false, MIN_STR, MAX_STR, DURATION);
+        TemporalStatModifyingItemProperties props1 = new TemporalStatModifyingItemProperties(WorldObjectType.STRENGTH_POTION, 1, "Green Potion", 1, 1, null, null, false, false, false, false, MIN_STR, MAX_STR, DURATION);
         potion1 = new StrengthPotion(props1, 5);
 
-        final TemporalStatModifyingItemProperties props2 = new TemporalStatModifyingItemProperties(WorldObjectType.STRENGTH_POTION, 1, "Big Green Potion", 1, 1, null, null, false, false, false, false, MAX_STR, MAX_STR, DURATION);
+        TemporalStatModifyingItemProperties props2 = new TemporalStatModifyingItemProperties(WorldObjectType.STRENGTH_POTION, 1, "Big Green Potion", 1, 1, null, null, false, false, false, false, MAX_STR, MAX_STR, DURATION);
         potion2 = new StrengthPotion(props2, 1);
 
         object = potion2;
@@ -35,8 +35,8 @@ public class StrengthPotionTest extends AbstractItemTest {
 
     @Test
     public void testUseWithCleanup() {
-        final Inventory inventory = mock(Inventory.class);
-        final Character character = mock(Character.class);
+        Inventory inventory = mock(Inventory.class);
+        Character character = mock(Character.class);
         when(character.getInventory()).thenReturn(inventory);
 
         potion2.use(character);
@@ -48,14 +48,14 @@ public class StrengthPotionTest extends AbstractItemTest {
 
     @Test
     public void testUseWithoutCleanup() {
-        final Inventory inventory = mock(Inventory.class);
-        final Character character = mock(Character.class);
+        Inventory inventory = mock(Inventory.class);
+        Character character = mock(Character.class);
         when(character.getInventory()).thenReturn(inventory);
 
         potion1.use(character);
 
         // Consumption of potion1 requires just a call to addToStrength.
-        final ArgumentCaptor<Integer> capture = ArgumentCaptor.forClass(Integer.class);
+        ArgumentCaptor<Integer> capture = ArgumentCaptor.forClass(Integer.class);
         verify(character).addToStrength(capture.capture(), eq(DURATION));
 
         /// Make sure the value is in the correct range
@@ -76,7 +76,7 @@ public class StrengthPotionTest extends AbstractItemTest {
 
     @Test
     public void testClone() {
-        final StrengthPotion clone = (StrengthPotion) potion1.clone();
+        StrengthPotion clone = (StrengthPotion) potion1.clone();
 
         // Make sure all fields match
         assertThat(clone.amount).isEqualTo(potion1.amount);
@@ -85,7 +85,7 @@ public class StrengthPotionTest extends AbstractItemTest {
         // Make sure the object itself is different
         assertThat(clone).isNotSameAs(potion1);
 
-        final StrengthPotion clone2 = (StrengthPotion) potion2.clone();
+        StrengthPotion clone2 = (StrengthPotion) potion2.clone();
 
         // Make sure all fields match
         assertThat(clone2.amount).isEqualTo(potion2.amount);

@@ -14,7 +14,7 @@ public class TeleportTest extends AbstractWorldObjectTest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        final TeleportProperties props1 = new TeleportProperties(WorldObjectType.TELEPORT, 1, "Teleport", 1, RADIUS);
+        TeleportProperties props1 = new TeleportProperties(WorldObjectType.TELEPORT, 1, "Teleport", 1, RADIUS);
         teleport1 = new Teleport(props1);
 
         object = teleport1;

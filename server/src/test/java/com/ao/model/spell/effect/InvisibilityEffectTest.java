@@ -23,19 +23,19 @@ public class InvisibilityEffectTest {
 
     @Test
     public void testApplyCharacterCharacter() {
-        final Character caster = mock(Character.class);
-        final Character target = mock(Character.class);
+        Character caster = mock(Character.class);
+        Character target = mock(Character.class);
         invisibilityEffect.apply(caster, target);
         verify(target).setInvisible(true);
     }
 
     @Test
     public void testAppliesToCharacterCharacter() {
-        final Character caster = mock(Character.class);
-        final UserCharacter deadUserTarget = mock(UserCharacter.class);
+        Character caster = mock(Character.class);
+        UserCharacter deadUserTarget = mock(UserCharacter.class);
         when(deadUserTarget.isDead()).thenReturn(Boolean.TRUE);
-        final UserCharacter aliveUserTarget = mock(UserCharacter.class);
-        final NPCCharacter target = mock(NPCCharacter.class);
+        UserCharacter aliveUserTarget = mock(UserCharacter.class);
+        NPCCharacter target = mock(NPCCharacter.class);
 
         // Test invalid target
         assertThat(invisibilityEffect.appliesTo(caster, target)).isFalse();
@@ -49,20 +49,20 @@ public class InvisibilityEffectTest {
 
     @Test
     public void testAppliesToCharacterWorldObject() {
-        final WorldObject obj = mock(WorldObject.class);
-        final Character caster = mock(Character.class);
+        WorldObject obj = mock(WorldObject.class);
+        Character caster = mock(Character.class);
         assertThat(invisibilityEffect.appliesTo(caster, obj)).isFalse();
     }
 
     @Test
     public void testApplyCharacterWorldObject() {
-        final WorldObject obj = mock(WorldObject.class);
-        final Character caster = mock(Character.class);
+        WorldObject obj = mock(WorldObject.class);
+        Character caster = mock(Character.class);
         // This should do fail
         try {
             invisibilityEffect.apply(caster, obj);
             fail("Applying an effect for characters to a world object didn't fail.");
-        } catch (final InvalidTargetException e) {
+        } catch (InvalidTargetException e) {
             // this is ok
         }
     }

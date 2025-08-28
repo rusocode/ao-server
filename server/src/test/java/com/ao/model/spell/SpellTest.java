@@ -32,19 +32,19 @@ public class SpellTest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        final Effect[] effects = new Effect[2];
+        Effect[] effects = new Effect[2];
         effects[0] = MockFactory.mockEffect(true, false);
         effects[1] = MockFactory.mockEffect(true, false);
 
         spellNoStaff = new Spell(1, effects, 0, REQUIRED_SKILL, REQUIRED_MANA, SPELL_NAME, SPELL_DESCRIPTION, IS_NEGATIVE, SPELL_FX, SPELL_SOUND, SPELL_MAGIC_WORDS);
 
-        final Effect[] effects2 = new Effect[2];
+        Effect[] effects2 = new Effect[2];
         effects2[0] = MockFactory.mockEffect(true, false);
         effects2[1] = MockFactory.mockEffect(true, false);
 
         spellWithStaff = new Spell(1, effects2, REQUIRED_STAFF_POWER, REQUIRED_SKILL, REQUIRED_MANA, SPELL_NAME, SPELL_DESCRIPTION, IS_NEGATIVE, SPELL_FX, SPELL_SOUND, SPELL_MAGIC_WORDS);
 
-        final Effect[] effects3 = new Effect[2];
+        Effect[] effects3 = new Effect[2];
         effects3[0] = MockFactory.mockEffect(false, true);
         effects3[1] = MockFactory.mockEffect(false, true);
 
@@ -81,8 +81,8 @@ public class SpellTest {
 
     @Test
     public void testAppliesToCharacterCharacter() {
-        final Character caster = MockFactory.mockCharacter();
-        final Character target = MockFactory.mockCharacter();
+        Character caster = MockFactory.mockCharacter();
+        Character target = MockFactory.mockCharacter();
 
         assertThat(spellNoStaff.appliesTo(caster, target)).isTrue();
         assertThat(spellWithStaff.appliesTo(caster, target)).isTrue();
@@ -91,8 +91,8 @@ public class SpellTest {
 
     @Test
     public void testAppliesToCharacterWorldObject() {
-        final Character caster = MockFactory.mockCharacter();
-        final WorldObject target = MockFactory.mockWorldObject();
+        Character caster = MockFactory.mockCharacter();
+        WorldObject target = MockFactory.mockWorldObject();
 
         assertThat(spellNoStaff.appliesTo(caster, target)).isFalse();
         assertThat(spellWithStaff.appliesTo(caster, target)).isFalse();
@@ -101,8 +101,8 @@ public class SpellTest {
 
     @Test
     public void testApplyCharacterCharacter() {
-        final Character caster = MockFactory.mockCharacter();
-        final Character target = MockFactory.mockCharacter();
+        Character caster = MockFactory.mockCharacter();
+        Character target = MockFactory.mockCharacter();
 
         spellNoStaff.apply(caster, target);
         spellWithStaff.apply(caster, target);
@@ -110,7 +110,7 @@ public class SpellTest {
         try {
             spellNoStaffObject.apply(caster, target);
             fail("Effect not targeting character was applied succesfully to one.");
-        } catch (final InvalidTargetException e) {
+        } catch (InvalidTargetException e) {
             // This is ok
         }
 
@@ -120,13 +120,13 @@ public class SpellTest {
 
     @Test
     public void testApplyCharacterWorldObject() {
-        final Character caster = MockFactory.mockCharacter();
-        final WorldObject target = MockFactory.mockWorldObject();
+        Character caster = MockFactory.mockCharacter();
+        WorldObject target = MockFactory.mockWorldObject();
 
         try {
             spellNoStaff.apply(caster, target);
             fail("Effect not targeting world objects was applied succesfully to one.");
-        } catch (final InvalidTargetException e) {
+        } catch (InvalidTargetException e) {
             // This is ok
         }
 

@@ -20,8 +20,8 @@ public class FilledBottleTest extends AbstractItemTest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        final RefillableStatModifyingItemProperties emptyProps = new RefillableStatModifyingItemProperties(WorldObjectType.EMPTY_BOTTLE, 1, "Water Bottle", 1, 1, null, null, false, false, false, false, 0, 0, false, null);
-        final RefillableStatModifyingItemProperties props = new RefillableStatModifyingItemProperties(WorldObjectType.FILLED_BOTTLE, 1, "Water Bottle", 1, 1, null, null, false, false, false, false, THIRST, THIRST, true, emptyProps);
+        RefillableStatModifyingItemProperties emptyProps = new RefillableStatModifyingItemProperties(WorldObjectType.EMPTY_BOTTLE, 1, "Water Bottle", 1, 1, null, null, false, false, false, false, 0, 0, false, null);
+        RefillableStatModifyingItemProperties props = new RefillableStatModifyingItemProperties(WorldObjectType.FILLED_BOTTLE, 1, "Water Bottle", 1, 1, null, null, false, false, false, false, THIRST, THIRST, true, emptyProps);
         bottle1 = new FilledBottle(props, 5);
 
         bottle2 = new FilledBottle(props, 1);
@@ -33,11 +33,11 @@ public class FilledBottleTest extends AbstractItemTest {
 
     @Test
     public void testUseWithCleanup() {
-        final Inventory inventory = mock(Inventory.class);
-        final Character character = mock(Character.class);
+        Inventory inventory = mock(Inventory.class);
+        Character character = mock(Character.class);
         when(character.getInventory()).thenReturn(inventory);
 
-        final ArgumentCaptor<Item> addedItem = ArgumentCaptor.forClass(Item.class);
+        ArgumentCaptor<Item> addedItem = ArgumentCaptor.forClass(Item.class);
         when(inventory.addItem(addedItem.capture())).thenReturn(1);
 
         bottle2.use(character);
@@ -47,17 +47,17 @@ public class FilledBottleTest extends AbstractItemTest {
         verify(character).addToThirstiness(THIRST);
 
         assertThat(addedItem.getValue()).isInstanceOf(EmptyBottle.class);
-        final EmptyBottle emptyBottle = (EmptyBottle) addedItem.getValue();
+        EmptyBottle emptyBottle = (EmptyBottle) addedItem.getValue();
         assertThat(emptyBottle.properties).isEqualTo(((RefillableStatModifyingItemProperties) bottle2.properties).getOtherStateProperties());
         assertThat(emptyBottle.amount).isEqualTo(1);
     }
 
     @Test
     public void testUseWithoutCleanup() {
-        final Inventory inventory = mock(Inventory.class);
-        final ArgumentCaptor<Item> addedItem = ArgumentCaptor.forClass(Item.class);
+        Inventory inventory = mock(Inventory.class);
+        ArgumentCaptor<Item> addedItem = ArgumentCaptor.forClass(Item.class);
         when(inventory.addItem(addedItem.capture())).thenReturn(1);
-        final Character character = mock(Character.class);
+        Character character = mock(Character.class);
         when(character.getInventory()).thenReturn(inventory);
 
         bottle1.use(character);
@@ -66,14 +66,14 @@ public class FilledBottleTest extends AbstractItemTest {
         verify(character).addToThirstiness(THIRST);
 
         assertThat(addedItem.getValue()).isInstanceOf(EmptyBottle.class);
-        final EmptyBottle emptyBottle = (EmptyBottle) addedItem.getValue();
+        EmptyBottle emptyBottle = (EmptyBottle) addedItem.getValue();
         assertThat(emptyBottle.properties).isEqualTo(((RefillableStatModifyingItemProperties) bottle1.properties).getOtherStateProperties());
         assertThat(emptyBottle.amount).isEqualTo(1);
     }
 
     @Test
     public void testClone() {
-        final FilledBottle clone = (FilledBottle) bottle1.clone();
+        FilledBottle clone = (FilledBottle) bottle1.clone();
 
         // Make sure all fields match
         assertThat(clone.amount).isEqualTo(bottle1.amount);
@@ -82,7 +82,7 @@ public class FilledBottleTest extends AbstractItemTest {
         // Make sure the object itself is different
         assertThat(clone).isNotSameAs(bottle1);
 
-        final FilledBottle clone2 = (FilledBottle) bottle2.clone();
+        FilledBottle clone2 = (FilledBottle) bottle2.clone();
 
         // Make sure all fields match
         assertThat(clone2.amount).isEqualTo(bottle2.amount);
