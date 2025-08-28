@@ -8,11 +8,6 @@ import com.ao.model.worldobject.properties.WorldObjectProperties;
 
 public class Prop extends AbstractWorldObject {
 
-    /**
-     * Creates a new Prop instance.
-     *
-     * @param properties object's properties
-     */
     public Prop(WorldObjectProperties properties) {
         super(properties);
     }

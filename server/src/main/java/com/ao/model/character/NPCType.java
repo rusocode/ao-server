@@ -1,9 +1,5 @@
 package com.ao.model.character;
 
-/**
- * List of available NPC Types.
- */
-
 public enum NPCType {
 
     MERCHANT,
@@ -19,17 +15,8 @@ public enum NPCType {
     GOVERNOR,
     DRAGON;
 
-    /**
-     * Enum values.
-     */
     private static final NPCType[] values = NPCType.values();
 
-    /**
-     * Retrieves the npc's type for the given index.
-     *
-     * @param index npc's type index
-     * @return The npc's type
-     */
     public static NPCType get(byte index) {
         return values[index];
     }

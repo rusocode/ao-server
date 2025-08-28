@@ -1,9 +1,5 @@
 package com.ao.model.character.archetype;
 
-/**
- * A bandit archetype.
- */
-
 public class BanditArchetype extends DefaultArchetype {
 
     private static final int LEVEL_MAX_HIT_INCREMENT = 35;
@@ -14,13 +10,9 @@ public class BanditArchetype extends DefaultArchetype {
     private static final int MANA_INCREMENT_MODIFIER = 10;
     private static final int MIN_MANA_INCREMENT = 4;
 
-    public BanditArchetype(float evasionModifier, float meleeAccuracyModifier,
-                           float rangedAccuracyModifier, float meleeDamageModifier,
-                           float rangedDamageModifier, float wrestlingDamageModifier,
-                           float blockPowerModifier) {
-        super(evasionModifier, meleeAccuracyModifier, rangedAccuracyModifier,
-                meleeDamageModifier, rangedDamageModifier, wrestlingDamageModifier,
-                blockPowerModifier);
+    public BanditArchetype(float evasionModifier, float meleeAccuracyModifier, float rangedAccuracyModifier, float meleeDamageModifier,
+                           float rangedDamageModifier, float wrestlingDamageModifier, float blockPowerModifier) {
+        super(evasionModifier, meleeAccuracyModifier, rangedAccuracyModifier, meleeDamageModifier, rangedDamageModifier, wrestlingDamageModifier, blockPowerModifier);
     }
 
     @Override

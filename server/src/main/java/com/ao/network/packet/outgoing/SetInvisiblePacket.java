@@ -21,13 +21,13 @@ public class SetInvisiblePacket implements OutgoingPacket {
      * @param character character being shown/hidden
      * @param invisible true if the char is invisible, false otherwise
      */
-    public SetInvisiblePacket(final Character character, final boolean invisible) {
+    public SetInvisiblePacket(Character character, boolean invisible) {
         this.character = character;
         this.invisible = invisible;
     }
 
     @Override
-    public void write(final DataBuffer buffer) throws UnsupportedEncodingException {
+    public void write(DataBuffer buffer) throws UnsupportedEncodingException {
         buffer.putShort(character.getCharIndex());
         buffer.putBoolean(invisible);
     }

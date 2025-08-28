@@ -27,15 +27,6 @@ public interface Archetype {
     boolean canCarpentry(int woodWorkSkill, Manufacturable item);
 
     /**
-     * Checks if the user has the skills needed to iron work the given item.
-     *
-     * @param ironWorkingSkill user's iron working skill
-     * @param item             item to be created
-     * @return true if the user can create the item, false otherwise
-     */
-    // boolean canIronWork(int ironWorkingSkill, Manufacturable item);
-
-    /**
      * Checks if the user has the skills needed to sail the given boat.
      *
      * @param sailingSkill user's sailing skill

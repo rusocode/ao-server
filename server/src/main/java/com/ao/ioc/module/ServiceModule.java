@@ -43,7 +43,6 @@ public class ServiceModule extends AbstractModule {
 
         bind(Integer.class).annotatedWith(Names.named("initialAvailableSkills")).toInstance(Integer.parseInt(properties.getProperty("config.loginservice.initialavailableskills")));
 
-
         // Heads ranges
         bind(new TypeLiteral<List<Integer>>() {
         }).annotatedWith(Names.named("headsDarkelfMale")).toInstance(RangeParser.parseIntegers(properties.getProperty("config.heads.darkelf.male")));

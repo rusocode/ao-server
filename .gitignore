@@ -1,8 +1,8 @@
 # Ignore the folder /target in the project root
 target
 
-# Don't ignore .gitignore itself
-!.gitignore
-
 # Ignore all the files and folders that begin with a point (hidden files)
 .*
+
+# Don't ignore .gitignore itself
+!.gitignore

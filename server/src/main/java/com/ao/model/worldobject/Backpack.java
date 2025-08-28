@@ -14,30 +14,16 @@ public class Backpack extends AbstractEquipableItem {
 
     protected Inventory inventory;
 
-    /**
-     * Creates a new backpack instance.
-     *
-     * @param properties item's properties
-     * @param amount     item's amount
-     */
     public Backpack(BackpackProperties properties, int amount) {
         super(properties, amount);
         this.inventory = new InventoryImpl(properties.getSlots());
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.ao.model.worldobject.AbstractItem#clone()
-     */
     @Override
     public Item clone() {
         return new Backpack((BackpackProperties) properties, amount);
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.ao.model.worldobject.Item#use(ao.model.character.Character)
-     */
     @Override
     public void use(Character character) {
         // Backpacks can't be used

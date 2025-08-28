@@ -15,8 +15,7 @@ public class WeaponProperties extends EquippableItemProperties {
     protected boolean stabs;
     protected int piercingDamage; // This replaces the old "Refuerzo"
 
-    protected int minHit;
-    protected int maxHit;
+    protected int minHit, maxHit;
 
     // TODO add poison modifier!
 
@@ -40,10 +39,8 @@ public class WeaponProperties extends EquippableItemProperties {
      * @param minHit              minimum hit done by this item
      * @param maxHit              maximum hit done by this item
      */
-    public WeaponProperties(WorldObjectType type, int id, String name, int graphic,
-                            int value, int manufactureDifficulty,
-                            List<UserArchetype> forbiddenArchetypes, List<Race> forbiddenRaces, boolean newbie,
-                            boolean noLog, boolean falls, boolean respawnable,
+    public WeaponProperties(WorldObjectType type, int id, String name, int graphic, int value, int manufactureDifficulty,
+                            List<UserArchetype> forbiddenArchetypes, List<Race> forbiddenRaces, boolean newbie, boolean noLog, boolean falls, boolean respawnable,
                             int equippedGraphic, boolean stabs, int piercingDamage, int minHit, int maxHit) {
         super(type, id, name, graphic, value, forbiddenArchetypes, forbiddenRaces, newbie, noLog, falls, respawnable, equippedGraphic);
         this.stabs = stabs;

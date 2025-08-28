@@ -21,7 +21,6 @@ public class ServerConfigIni implements ServerConfig {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ServerConfigIni.class);
 
-    /** This is section in an INI file. */
     private static final String INIT_HEADER = "INIT";
 
     /** INI file keys. */
@@ -37,7 +36,7 @@ public class ServerConfigIni implements ServerConfig {
     private static final String HASHES_AMOUNT_KEY = "MD5Aceptados";
     private static final String HASHES_ACCEPTED_KEY_FORMAT = "Md5Aceptado%d";
 
-    private final INIConfiguration ini;
+    private INIConfiguration ini;
 
     /**
      * Creates a new ServerConfigIni instance.
@@ -46,14 +45,14 @@ public class ServerConfigIni implements ServerConfig {
     public ServerConfigIni(@Named("ServerConfigIni") String serverConfigIni) {
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream(serverConfigIni);
         if (inputStream == null)
-            throw new IllegalArgumentException("The file " + serverConfigIni + " was not found in the classpath");
+            throw new IllegalArgumentException("The file '" + serverConfigIni + "' was not found in the classpath!");
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
             ini = new INIConfiguration();
             ini.read(reader);
-            LOGGER.info("Server configuration loaded successfully from: {}", serverConfigIni);
+            LOGGER.info("Server configuration loaded successfully!");
         } catch (IOException | ConfigurationException e) {
-            LOGGER.error("Server config loading failed for file: {}", serverConfigIni, e);
-            throw new RuntimeException("Failed to load server configuration from: " + serverConfigIni, e);
+            LOGGER.error("Error loading server configuration!", e);
+            System.exit(-1);
         }
     }
 

@@ -8,27 +8,10 @@ import com.ao.model.worldobject.Item;
 
 public interface Inventory extends Iterable<Item> {
 
-    /**
-     * Checks if the inventory has any free slots.
-     *
-     * @return true if there are any free slots
-     */
     boolean hasFreeSlots();
 
-    /**
-     * Adds an Item to the inventory.
-     *
-     * @param item references to the item to add
-     * @return 0 if the item was successfully added or the remainder amount of the item that could not be completely added
-     */
     int addItem(Item item);
 
-    /**
-     * Removes the item of the desired slot.
-     *
-     * @param slot references to the slot of the item to be removed
-     * @return the item removed
-     */
     Item removeItem(int slot);
 
     /**
@@ -48,13 +31,6 @@ public interface Inventory extends Iterable<Item> {
      */
     Item removeItem(Item item);
 
-
-    /**
-     * Gets the item of the desired slot.
-     *
-     * @param slot references to the slot of the item.
-     * @return the item at the requested slot
-     */
     Item getItem(int slot);
 
     /**
@@ -65,26 +41,10 @@ public interface Inventory extends Iterable<Item> {
      */
     int hasItem(Item item);
 
-    /**
-     * Gets the current inventory capacity.
-     *
-     * @return the number of slots in the inventory
-     */
     int getCapacity();
 
-    /**
-     * Sets the capacity of the inventory
-     *
-     * @param capacity the number of slots for the inventory.
-     */
     void setCapacity(int capacity);
 
-    /**
-     * Gets the amount of an item in the inventory.
-     *
-     * @param item to look for its amount
-     * @return the amount of the item
-     */
     int getItemAmount(Item item);
 
     /**

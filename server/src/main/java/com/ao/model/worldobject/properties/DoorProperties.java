@@ -25,8 +25,7 @@ public class DoorProperties extends WorldObjectProperties {
      * @param code                 code used to unlock this door
      * @param otherStateProperties object properties for the other state
      */
-    public DoorProperties(WorldObjectType type, int id, String name, int graphic,
-                          boolean open, boolean locked, int code, DoorProperties otherStateProperties) {
+    public DoorProperties(WorldObjectType type, int id, String name, int graphic, boolean open, boolean locked, int code, DoorProperties otherStateProperties) {
         super(type, id, name, graphic);
         this.open = open;
         this.locked = locked;

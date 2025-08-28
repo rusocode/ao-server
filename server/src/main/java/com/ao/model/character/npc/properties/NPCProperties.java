@@ -7,7 +7,7 @@ import com.ao.model.character.movement.MovementStrategy;
 import com.ao.model.map.Heading;
 
 /**
- * Defines a NPC's properties. Allows a lightweight pattern implementation.
+ * Defines a npcs properties. Allows a lightweight pattern implementation.
  */
 
 public class NPCProperties {
@@ -19,29 +19,13 @@ public class NPCProperties {
     protected short head;
     protected Heading heading;
     protected boolean respawn;
-    protected String description; // TODO Debería ser una lista? Hay tres NPCs que tienen más de una desc pero ni se usan :p
+    protected String description; // TODO Deberia ser una lista? Hay tres npcs que tienen mas de una desc pero ni se usan :p
     protected Class<? extends Behavior> behavior;
     protected Class<? extends AttackStrategy> attackStrategy;
     protected Class<? extends MovementStrategy> movementStrategy;
 
-    /**
-     * Creates a new NPCProperties instance.
-     *
-     * @param type             npc's type
-     * @param id               npc's id
-     * @param name             npc's name
-     * @param body             npc's body
-     * @param head             npc's head
-     * @param heading          npc's heading
-     * @param respawn          npc's respawn
-     * @param description      npc's description
-     * @param behavior         npc's behavior
-     * @param attackStrategy   npc's attack strategy
-     * @param movementStrategy npc's movement strategy
-     */
-    public NPCProperties(NPCType type, int id, String name, short body, short head,
-                         Heading heading, boolean respawn, String description, Class<? extends Behavior> behavior,
-                         Class<? extends AttackStrategy> attackStrategy, Class<? extends MovementStrategy> movementStrategy) {
+    public NPCProperties(NPCType type, int id, String name, short body, short head, Heading heading, boolean respawn, String description,
+                         Class<? extends Behavior> behavior, Class<? extends AttackStrategy> attackStrategy, Class<? extends MovementStrategy> movementStrategy) {
         this.id = id;
         this.name = name;
         this.type = type;

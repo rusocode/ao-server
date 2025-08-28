@@ -1,9 +1,5 @@
 package com.ao.model.character.archetype;
 
-/**
- * A fisher archetype.
- */
-
 public class FisherArchetype extends DefaultArchetype {
 
     private static final int HIT_INCREMENT = 1;
@@ -14,13 +10,9 @@ public class FisherArchetype extends DefaultArchetype {
     private static final int FISHED_MAX_AMOUNT = 4;
     private static final int FISHING_STAMINA_COST = 1;
 
-    public FisherArchetype(float evasionModifier, float meleeAccuracyModifier,
-                           float rangedAccuracyModifier, float meleeDamageModifier,
-                           float rangedDamageModifier, float wrestlingDamageModifier,
-                           float blockPowerModifier) {
-        super(evasionModifier, meleeAccuracyModifier, rangedAccuracyModifier,
-                meleeDamageModifier, rangedDamageModifier, wrestlingDamageModifier,
-                blockPowerModifier);
+    public FisherArchetype(float evasionModifier, float meleeAccuracyModifier, float rangedAccuracyModifier, float meleeDamageModifier,
+                           float rangedDamageModifier, float wrestlingDamageModifier, float blockPowerModifier) {
+        super(evasionModifier, meleeAccuracyModifier, rangedAccuracyModifier, meleeDamageModifier, rangedDamageModifier, wrestlingDamageModifier, blockPowerModifier);
     }
 
     @Override

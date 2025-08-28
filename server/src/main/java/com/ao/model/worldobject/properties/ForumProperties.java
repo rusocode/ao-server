@@ -18,8 +18,6 @@ public class ForumProperties extends WorldObjectProperties {
      * @param name    name of the item
      * @param graphic graphic for the item
      */
-    // @param bigGraphic big graphic for the item
-    // @param text text for the item
     public ForumProperties(WorldObjectType type, int id, String name, int graphic, String forumName) {
         super(type, id, name, graphic);
         this.forumName = forumName;

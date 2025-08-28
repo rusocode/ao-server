@@ -19,12 +19,12 @@ public class AreaChangedPacket implements OutgoingPacket {
      *
      * @param pos current position of the character
      */
-    public AreaChangedPacket(final Position pos) {
+    public AreaChangedPacket(Position pos) {
         this.pos = pos;
     }
 
     @Override
-    public void write(final DataBuffer buffer) throws UnsupportedEncodingException {
+    public void write(DataBuffer buffer) throws UnsupportedEncodingException {
         buffer.put(pos.getX());
         buffer.put(pos.getY());
     }

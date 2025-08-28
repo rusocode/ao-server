@@ -32,10 +32,8 @@ public class MusicalInstrumentProperties extends EquippableItemProperties {
      * @param sounds              possible sounds to be reproduced by this isntrument
      */
     // @param tradeable true if it's tradeable, false otherwise
-    public MusicalInstrumentProperties(WorldObjectType type, int id, String name, int graphic,
-                                       int value, List<UserArchetype> forbiddenArchetypes, List<Race> forbiddenRaces,
-                                       boolean newbie, boolean noLog, boolean falls, boolean respawnable,
-                                       int equippedGraphic, List<Integer> sounds) {
+    public MusicalInstrumentProperties(WorldObjectType type, int id, String name, int graphic, int value, List<UserArchetype> forbiddenArchetypes, List<Race> forbiddenRaces,
+                                       boolean newbie, boolean noLog, boolean falls, boolean respawnable, int equippedGraphic, List<Integer> sounds) {
         super(type, id, name, graphic, value, forbiddenArchetypes, forbiddenRaces, newbie, noLog, falls, respawnable, equippedGraphic);
         this.sounds = sounds;
     }

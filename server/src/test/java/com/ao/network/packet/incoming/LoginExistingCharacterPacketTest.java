@@ -29,7 +29,7 @@ public class LoginExistingCharacterPacketTest {
     private static final byte CLIENT_REVISION = 2;
 
     static {
-        ApplicationProperties.loadProperties("test.properties");
+        ApplicationProperties.loadProperties("project.properties");
         ApplicationContext.reload();
     }
 

@@ -8,47 +8,25 @@ import com.ao.model.worldobject.properties.DefensiveItemProperties;
 
 public abstract class AbstractDefensiveItem extends AbstractEquipableItem implements DefensiveItem {
 
-    /**
-     * Creates a new AbstractDefensiveItem instance.
-     *
-     * @param properties item's properties
-     * @param amount     item's amount
-     */
     public AbstractDefensiveItem(DefensiveItemProperties properties, int amount) {
         super(properties, amount);
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.ao.model.worldobject.DefensiveItem#getMaxDef()
-     */
     @Override
     public int getMaxDef() {
         return ((DefensiveItemProperties) properties).getMaxDef();
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.ao.model.worldobject.DefensiveItem#getMinDef()
-     */
     @Override
     public int getMinDef() {
         return ((DefensiveItemProperties) properties).getMinDef();
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.ao.model.worldobject.DefensiveItem#getMinMagicDef()
-     */
     @Override
     public int getMinMagicDef() {
         return ((DefensiveItemProperties) properties).getMinMagicDef();
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.ao.model.worldobject.DefensiveItem#getMaxMagicDef()
-     */
     @Override
     public int getMaxMagicDef() {
         return ((DefensiveItemProperties) properties).getMaxMagicDef();

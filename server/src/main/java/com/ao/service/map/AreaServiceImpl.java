@@ -13,9 +13,9 @@ import com.ao.model.worldobject.Door;
 import com.ao.model.worldobject.WorldObject;
 import com.ao.network.Connection;
 import com.ao.network.packet.outgoing.*;
-
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -29,25 +29,22 @@ public class AreaServiceImpl implements AreaService {
     private final List<Set<ConnectedUser>> connectionGroups;
 
     @Inject
-    public AreaServiceImpl(@Named("mapsAmount") final int mapsAmount) {
+    public AreaServiceImpl(@Named("mapsAmount") int mapsAmount) {
         connectionGroups = new ArrayList<>(mapsAmount);
         for (int i = 0; i < mapsAmount; i++)
             connectionGroups.add(new HashSet<>());
     }
 
-    /* (non-Javadoc)
-     * @see com.ao.service.map.AreaService#checkIfUserNeedsUpdate(com.ao.model.map.WorldMap, com.ao.model.character.Character, com.ao.model.map.Heading)
-     */
     @Override
-    public void checkIfUserNeedsUpdate(final WorldMap map, final Character character, final Heading heading) {
-        final AreaInfo areaInfo = character.getCurrentAreaInfo();
+    public void checkIfUserNeedsUpdate(WorldMap map, Character character, Heading heading) {
+        AreaInfo areaInfo = character.getCurrentAreaInfo();
 
         if (areaInfo.isInSameArea(character.getPosition())) return;
 
         // Compute the portion of the map that needs to be updated
-        final int maxX, maxY, minX, minY;
-        final int minVisibleX = areaInfo.getMinX();
-        final int minVisibleY = areaInfo.getMinY();
+        int maxX, maxY, minX, minY;
+        int minVisibleX = areaInfo.getMinX();
+        int minVisibleY = areaInfo.getMinY();
 
         switch (heading) {
             case NORTH:
@@ -85,26 +82,23 @@ public class AreaServiceImpl implements AreaService {
 
         // Is the one moving a user or an NPC?
         if (character instanceof LoggedUser) {
-            final LoggedUser user = (LoggedUser) character;
+            LoggedUser user = (LoggedUser) character;
             userEnteredRegion(map, minX, minY, maxX, maxY, user);
         } else npcEnteredRegion(map, minX, minY, maxX, maxY, (NPCCharacter) character);
 
     }
 
-    /* (non-Javadoc)
-     * @see com.ao.service.map.AreaService#addCharToMap(com.ao.model.map.WorldMap, com.ao.model.character.Character)
-     */
     @Override
-    public void addCharToMap(final WorldMap map, final Character character) {
-        final AreaInfo areaInfo = character.getCurrentAreaInfo();
+    public void addCharToMap(WorldMap map, Character character) {
+        AreaInfo areaInfo = character.getCurrentAreaInfo();
         areaInfo.setForPosition(character.getPosition());
 
-        final int maxX = areaInfo.getMinX() + AreaInfo.AREA_SIZE * VISIBLE_AREAS - 1;
-        final int maxY = areaInfo.getMinY() + AreaInfo.AREA_SIZE * VISIBLE_AREAS - 1;
+        int maxX = areaInfo.getMinX() + AreaInfo.AREA_SIZE * VISIBLE_AREAS - 1;
+        int maxY = areaInfo.getMinY() + AreaInfo.AREA_SIZE * VISIBLE_AREAS - 1;
 
         // Is the one moving a user or an NPC?
         if (character instanceof LoggedUser) {
-            final LoggedUser user = (LoggedUser) character;
+            LoggedUser user = (LoggedUser) character;
             connectionGroups.get(map.getId() - 1).add(user);
             // Tell the user he is in the map
             user.getConnection().send(new CharacterCreatePacket(character));
@@ -113,20 +107,16 @@ public class AreaServiceImpl implements AreaService {
 
     }
 
-    /* (non-Javadoc)
-     * @see com.ao.service.map.AreaService#removeUserFromMap(com.ao.model.map.WorldMap, com.ao.model.user.LoggedUser)
-     */
     @Override
-    public void removeUserFromMap(final WorldMap map, final LoggedUser user) {
+    public void removeUserFromMap(WorldMap map, LoggedUser user) {
         connectionGroups.get(map.getId() - 1).remove(user);
     }
 
-    private void npcEnteredRegion(final WorldMap map, final int minX, final int minY,
-                                  final int maxX, final int maxY, final NPCCharacter character) {
+    private void npcEnteredRegion(WorldMap map, int minX, int minY, int maxX, int maxY, NPCCharacter character) {
         // TODO I believe these bounds are always safe, check it
         for (int x = minX; x <= maxX; x++) {
             for (int y = minY; y <= maxY; y++) {
-                final Character tileCharacter = map.getTile(x, y).getCharacter();
+                Character tileCharacter = map.getTile(x, y).getCharacter();
                 if (tileCharacter != null && tileCharacter instanceof LoggedUser) {
                     // TODO Call MakeNPCChar(False, MapData(.Pos.Map, X, Y).UserIndex, NpcIndex, .Pos.Map, .Pos.X, .Pos.Y)
                 }
@@ -134,9 +124,8 @@ public class AreaServiceImpl implements AreaService {
         }
     }
 
-    private void userEnteredRegion(final WorldMap map, final int minX, final int minY,
-                                   final int maxX, final int maxY, final LoggedUser user) {
-        final Connection userConnection = user.getConnection();
+    private void userEnteredRegion(WorldMap map, int minX, int minY, int maxX, int maxY, LoggedUser user) {
+        Connection userConnection = user.getConnection();
 
         // Tell the user he changed areas, so he can get rid of old data
         userConnection.send(new AreaChangedPacket(user.getPosition()));
@@ -144,9 +133,9 @@ public class AreaServiceImpl implements AreaService {
         // TODO I believe these bounds are always safe, check it
         for (int x = minX; x <= maxX; x++) {
             for (int y = minY; y <= maxY; y++) {
-                final Tile tile = map.getTile(x, y);
-                final Character tileCharacter = tile.getCharacter();
-                final WorldObject worldObject = tile.getWorldObject();
+                Tile tile = map.getTile(x, y);
+                Character tileCharacter = tile.getCharacter();
+                WorldObject worldObject = tile.getWorldObject();
 
                 if (tileCharacter != null) {
                     if (tileCharacter != user) { // Same instance, we can use ==
@@ -165,7 +154,7 @@ public class AreaServiceImpl implements AreaService {
                         // If our moving user is not admin hidden, notify the other user
                         if (tileCharacter instanceof UserCharacter) {
                             if (!user.isAdminHidden()) {
-                                final Connection otherUserConnection = ((LoggedUser) tileCharacter).getConnection();
+                                Connection otherUserConnection = ((LoggedUser) tileCharacter).getConnection();
                                 otherUserConnection.send(new CharacterCreatePacket(user));
 
                                 // FIXME Move this logic away!

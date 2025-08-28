@@ -9,6 +9,6 @@ public abstract class Action<S> {
         executor.dispatch(this);
     }
 
-    protected abstract void performAction(final S service);
+    protected abstract void performAction(S service);
 
 }

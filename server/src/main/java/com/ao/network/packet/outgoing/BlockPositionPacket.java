@@ -22,14 +22,14 @@ public class BlockPositionPacket implements OutgoingPacket {
      * @param posY    y coord of the tile to block/unblock
      * @param blocked whether the tile should be blocked or not
      */
-    public BlockPositionPacket(final byte posX, final byte posY, final boolean blocked) {
+    public BlockPositionPacket(byte posX, byte posY, boolean blocked) {
         this.posX = posX;
         this.posY = posY;
         this.blocked = blocked;
     }
 
     @Override
-    public void write(final DataBuffer buffer) throws UnsupportedEncodingException {
+    public void write(DataBuffer buffer) throws UnsupportedEncodingException {
         buffer.put(posX);
         buffer.put(posY);
         buffer.putBoolean(blocked);

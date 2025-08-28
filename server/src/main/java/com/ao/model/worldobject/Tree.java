@@ -8,11 +8,6 @@ import com.ao.model.worldobject.properties.ResourceSourceProperties;
 
 public class Tree extends AbstractResourceSource {
 
-    /**
-     * Creates a new Tree instance.
-     *
-     * @param properties object's properties
-     */
     public Tree(ResourceSourceProperties properties) {
         super(properties);
     }

@@ -13,7 +13,7 @@ public class CharacterCreatePacket implements OutgoingPacket {
     /**
      * Create character packages.
      */
-    public CharacterCreatePacket(final Character character) {
+    public CharacterCreatePacket(Character character) {
         this.character = character;
     }
 

@@ -15,10 +15,6 @@ public class TimedEventsServiceImpl implements TimedEventsService {
     protected ConcurrentHashMap<Character, Map<TimedEvent, TimerTaskAdapter>> events = new ConcurrentHashMap<Character, Map<TimedEvent, TimerTaskAdapter>>();
     protected Timer timer = new Timer(true);
 
-    /*
-     * (non-Javadoc)
-     * @see com.ao.service.TimedEventsService#addEvent(ao.model.character.Character, com.ao.service.timedevents.TimedEvent, long, long, long)
-     */
     @Override
     public void addEvent(Character chara, TimedEvent event, long delay, long interval, long repeatFor) {
         Map<TimedEvent, TimerTaskAdapter> characterEvents = events.get(chara);
@@ -51,19 +47,11 @@ public class TimedEventsServiceImpl implements TimedEventsService {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.ao.service.TimedEventsService#addEvent(ao.model.character.Character, com.ao.service.timedevents.TimedEvent, long)
-     */
     @Override
     public void addEvent(Character chara, TimedEvent event, long delay) {
         addEvent(chara, event, delay, delay, delay);
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.ao.service.TimedEventsService#removeCharacterEvents(ao.model.character.Character)
-     */
     @Override
     public void removeCharacterEvents(Character chara) {
         Map<TimedEvent, TimerTaskAdapter> characterEvents = events.remove(chara);
@@ -79,10 +67,6 @@ public class TimedEventsServiceImpl implements TimedEventsService {
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * @see com.ao.service.TimedEventsService#removeEvent(ao.service.timedevents.TimedEvent)
-     */
     @Override
     public void removeEvent(TimedEvent event) {
         Map<TimedEvent, TimerTaskAdapter> characterEvents = events.get(event.getCharacter());
@@ -117,10 +101,6 @@ public class TimedEventsServiceImpl implements TimedEventsService {
             executionTimes = (int) (repeatFor / interval);
         }
 
-        /*
-         * (non-Javadoc)
-         * @see java.util.TimerTask#run()
-         */
         @Override
         public void run() {
             event.execute();
@@ -145,6 +125,7 @@ public class TimedEventsServiceImpl implements TimedEventsService {
         private TimedEventsServiceImpl getOuterType() {
             return TimedEventsServiceImpl.this;
         }
+
     }
 
 }

@@ -20,24 +20,6 @@ public class MerchantNPCProperties extends NPCProperties {
     protected boolean respawnInventory;
     protected Set<WorldObjectType> acceptedTypes;
 
-    /**
-     * Creates a new GuardNPCProperties instance.
-     *
-     * @param type             npc's type
-     * @param id               npc's id
-     * @param name             npc's name
-     * @param body             npc's body
-     * @param head             npc's head
-     * @param heading          npc's heading
-     * @param respawn          npc's respawn
-     * @param description      npc's description
-     * @param behavior         npc's behavior
-     * @param attackStrategy   npc's attack strategy
-     * @param movementStrategy
-     * @param inventory        the npc's inventory
-     * @param respawnInventory whether npc's inventory has respawned or not
-     * @param acceptedTypes    npc's items type
-     */
     public MerchantNPCProperties(NPCType type, int id, String name, short body, short head,
                                  Heading heading, boolean respawn, Class<? extends Behavior> behavior,
                                  Class<? extends AttackStrategy> attackStrategy,
@@ -53,9 +35,6 @@ public class MerchantNPCProperties extends NPCProperties {
         return inventory;
     }
 
-    /**
-     * @return true if the NPC can respawn inventory, false otherwise
-     */
     public boolean canRespawnInventory() {
         return respawnInventory;
     }

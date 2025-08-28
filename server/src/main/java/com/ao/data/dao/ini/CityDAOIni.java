@@ -2,6 +2,7 @@ package com.ao.data.dao.ini;
 
 import com.ao.data.dao.CityDAO;
 import com.ao.model.map.City;
+import com.ao.utils.IniUtils;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import org.apache.commons.configuration2.INIConfiguration;
@@ -16,6 +17,8 @@ import java.io.InputStreamReader;
 
 /**
  * Implementation of the City DAO backed by INI files.
+ * <p>
+ * TODO Podria renombrar la carpeta "dat" a "data"
  */
 
 public record CityDAOIni(String citiesFilePath) implements CityDAO {
@@ -31,19 +34,23 @@ public record CityDAOIni(String citiesFilePath) implements CityDAO {
     private static final String X_KEY = "x";
     private static final String Y_KEY = "y";
 
+    /**
+     * The value of {@code citiesFilePath} is injected using Guice's {@code @Inject} annotation from a binding defined in
+     * configuration module {@code DaoModule}.
+     */
     @Inject
     public CityDAOIni(@Named("citiesFilePath") String citiesFilePath) {
         this.citiesFilePath = citiesFilePath;
     }
 
     @Override
-    public City[] loadAll() {
+    public City[] load() {
         INIConfiguration ini = null;
-        LOGGER.info("Loading all cities from {}", citiesFilePath);
+        LOGGER.info("Loading all cities from '{}'", citiesFilePath);
         // Load from a classpath using try-with-resources for automatic resource management
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream(citiesFilePath);
         if (inputStream == null)
-            throw new IllegalArgumentException("The file " + citiesFilePath + " was not found in the classpath");
+            throw new IllegalArgumentException("The file '" + citiesFilePath + "' was not found in the classpath!");
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
             ini = new INIConfiguration();
             ini.read(reader);

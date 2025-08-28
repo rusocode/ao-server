@@ -1,9 +1,5 @@
 package com.ao.model.character.archetype;
 
-/**
- * An assasin archetype.
- */
-
 public class AssasinArchetype extends DefaultArchetype {
 
     private static final int LEVEL_MAX_HIT_INCREMENT = 35;

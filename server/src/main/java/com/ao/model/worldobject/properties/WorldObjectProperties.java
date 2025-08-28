@@ -9,18 +9,10 @@ import com.ao.model.worldobject.WorldObjectType;
 public class WorldObjectProperties {
 
     protected int id;
-    protected String name;
     protected int graphic;
+    protected String name;
     protected WorldObjectType type;
 
-    /**
-     * Creates a new WorldObjectProperties instance.
-     *
-     * @param type    type of the item
-     * @param id      id of the item
-     * @param name    name of the item
-     * @param graphic graphic for the item
-     */
     public WorldObjectProperties(WorldObjectType type, int id, String name, int graphic) {
         this.id = id;
         this.name = name;

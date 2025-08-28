@@ -15,7 +15,7 @@ public class UpdateUserStatsPacket implements OutgoingPacket {
     }
 
     @Override
-    public void write(final DataBuffer buffer) throws UnsupportedEncodingException {
+    public void write(DataBuffer buffer) throws UnsupportedEncodingException {
         buffer.putShort((short) user.getMaxHitPoints());
         buffer.putShort((short) user.getHitPoints());
         buffer.putShort((short) user.getMaxMana());

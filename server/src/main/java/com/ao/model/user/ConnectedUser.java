@@ -8,29 +8,29 @@ import java.util.Map;
 
 public class ConnectedUser implements User {
 
-    private final Connection conn;
+    private final Connection connection;
     private final Map<Attribute, Byte> attributes = new HashMap<>();
     private Account account;
 
     /**
      * Creates a new ConnectedUser.
      *
-     * @param conn channel over which to communicate with the client
+     * @param connection channel over which to communicate with the client
      */
-    public ConnectedUser(final Connection conn) {
-        this.conn = conn;
+    public ConnectedUser(Connection connection) {
+        this.connection = connection;
     }
 
     @Override
     public Connection getConnection() {
-        return conn;
+        return connection;
     }
 
     public Account getAccount() {
         return account;
     }
 
-    public void setAccount(final Account account) {
+    public void setAccount(Account account) {
         this.account = account;
     }
 
@@ -40,7 +40,7 @@ public class ConnectedUser implements User {
      * @param dice attribute
      * @return the attribute value
      */
-    public Byte getAttribute(final Attribute dice) {
+    public Byte getAttribute(Attribute dice) {
         return attributes.get(dice);
     }
 
@@ -50,30 +50,24 @@ public class ConnectedUser implements User {
      * @param dice   attribute to set
      * @param points attribute's points
      */
-    public void setAttribute(final Attribute dice, final byte points) {
+    public void setAttribute(Attribute dice, byte points) {
         attributes.put(dice, points);
     }
 
-    /* (non-Javadoc)
-     * @see java.lang.Object#hashCode()
-     */
     @Override
     public int hashCode() {
-        final int prime = 31;
+        int prime = 31;
         int result = 1;
         result = prime * result + ((account == null) ? 0 : account.hashCode());
         return result;
     }
 
-    /* (non-Javadoc)
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
     @Override
-    public boolean equals(final Object obj) {
+    public boolean equals(Object obj) {
         if (this == obj) return true;
         if (obj == null) return false;
         if (getClass() != obj.getClass()) return false;
-        final ConnectedUser other = (ConnectedUser) obj;
+        ConnectedUser other = (ConnectedUser) obj;
         if (account == null) {
             if (other.account != null) return false;
         } else if (!account.equals(other.account)) return false;

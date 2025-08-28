@@ -42,11 +42,9 @@ public interface UserCharacterDAO {
      * @param body                   character's body
      * @return the created user character
      */
-    UserCharacter create(ConnectedUser user, String name, Race race, Gender gender,
-                         UserArchetype archetype, int head, City homeland, byte strength,
-                         byte dexterity, byte intelligence, byte charisma, byte constitution,
-                         int initialAvailableSkills, int body)
-            throws DAOException, NameAlreadyTakenException;
+    UserCharacter create(ConnectedUser user, String name, Race race, Gender gender, UserArchetype archetype, int head,
+                         City homeland, byte strength, byte dexterity, byte intelligence, byte charisma, byte constitution,
+                         int initialAvailableSkills, int body) throws DAOException, NameAlreadyTakenException;
 
     /**
      * Checks if the character with the given name exists.

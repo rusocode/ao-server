@@ -38,7 +38,7 @@ public class WorldMap {
      * @param version map's version
      * @param tiles   array of tiles composing the map
      */
-    public WorldMap(final String name, final int id, final short version, final Tile[] tiles) {
+    public WorldMap(String name, int id, short version, Tile[] tiles) {
         super();
         this.name = name;
         this.id = id;
@@ -53,7 +53,7 @@ public class WorldMap {
      * @param y coordinate along the y vertex (zero is at the top)
      * @return the tile index at the given coordinates
      */
-    public static int getTileKey(final int x, final int y) {
+    public static int getTileKey(int x, int y) {
         return y * MAP_WIDTH + x;
     }
 
@@ -142,7 +142,7 @@ public class WorldMap {
      */
     @Override
     public int hashCode() {
-        final int prime = 31;
+        int prime = 31;
         int result = 1;
         result = prime * result + id;
         result = prime * result + ((name == null) ? 0 : name.hashCode());
@@ -182,12 +182,10 @@ public class WorldMap {
      * @param includeExitTiles   whether to include exit tiles in the search or not
      * @return the nearest available tile to the center of the rhomb
      */
-    public Tile getNearestAvailableTile(byte x, byte y, byte maxDistance, boolean includeGroundTiles,
-                                        boolean includeWaterTiles, boolean includeLavaTiles, boolean includeExitTiles) {
+    public Tile getNearestAvailableTile(byte x, byte y, byte maxDistance, boolean includeGroundTiles, boolean includeWaterTiles, boolean includeLavaTiles, boolean includeExitTiles) {
 
-        if (isTileAvailable(x, y, includeGroundTiles, includeWaterTiles, includeLavaTiles, includeExitTiles)) {
+        if (isTileAvailable(x, y, includeGroundTiles, includeWaterTiles, includeLavaTiles, includeExitTiles))
             return getTile(x, y);
-        }
 
         for (int currentDistance = 1; currentDistance <= maxDistance; currentDistance += 1) {
 
@@ -196,62 +194,47 @@ public class WorldMap {
 
             // Upper tiles with dx in [-1, currentDistances - 1] except dx=0 and dy=0
             for (byte dx = -1; dx <= currentDistance - 1; dx += 1) {
-
                 byte dy = (byte) (currentDistance - Math.abs(dx));
-
                 if ((dx == 0) || (dy == 0)) continue;
-
                 currentX = (byte) (x + dx);
                 currentY = (byte) (y + dy);
-
                 if (isTileAvailable(currentX, currentY, includeGroundTiles, includeWaterTiles, includeLavaTiles, includeExitTiles))
                     return getTile(currentX, currentY);
-
             }
 
-            //Lower tiles with dx in [currentDistances - 1, -(currentDistance - 1)] except dx=0 and dy=0
+            // Lower tiles with dx in [currentDistances - 1, -(currentDistance - 1)] except dx=0 and dy=0
             for (byte dx = (byte) (currentDistance - 1); dx >= -(currentDistance - 1); dx -= 1) {
-
                 byte dy = (byte) (currentDistance - Math.abs(dx));
-
                 if ((dx == 0) || (dy == 0)) continue;
-
                 currentX = (byte) (x + dx);
                 currentY = (byte) (y - dy);
-
                 if (isTileAvailable(currentX, currentY, includeGroundTiles, includeWaterTiles, includeLavaTiles, includeExitTiles))
                     return getTile(currentX, currentY);
-
             }
 
             // Upper tiles with dx in [-(currentDistance - 1), -1) except dx=0 and dy=0
             for (byte dx = (byte) -(currentDistance - 1); dx < -1; dx += 1) {
-
                 byte dy = (byte) (currentDistance - Math.abs(dx));
-
                 if ((dx == 0) || (dy == 0)) continue;
-
                 currentX = (byte) (x + dx);
                 currentY = (byte) (y + dy);
                 if (isTileAvailable(currentX, currentY, includeGroundTiles, includeWaterTiles, includeLavaTiles, includeExitTiles))
                     return getTile(currentX, currentY);
-
             }
 
-            //North
+            // North
             currentX = x;
             currentY = (byte) (y - currentDistance);
             if (isTileAvailable(currentX, currentY, includeGroundTiles, includeWaterTiles, includeLavaTiles, includeExitTiles))
                 return getTile(currentX, currentY);
 
-            //East
+            // East
             currentX = (byte) (x + currentDistance);
             currentY = y;
             if (isTileAvailable(currentX, currentY, includeGroundTiles, includeWaterTiles, includeLavaTiles, includeExitTiles))
                 return getTile(currentX, currentY);
 
-
-            //South
+            // South
             currentX = x;
             currentY = (byte) (y + currentDistance);
             if (isTileAvailable(currentX, currentY, includeGroundTiles, includeWaterTiles, includeLavaTiles, includeExitTiles))
@@ -279,8 +262,7 @@ public class WorldMap {
      * @param canBeExitTile whether the tile can be an exit tile or not
      * @return whether the tile is available or not
      */
-    public boolean isTileAvailable(byte x, byte y, boolean canBeGround, boolean canBeWater, boolean canBeLava,
-                                   boolean canBeExitTile) {
+    public boolean isTileAvailable(byte x, byte y, boolean canBeGround, boolean canBeWater, boolean canBeLava, boolean canBeExitTile) {
         if ((x < MIN_X) || (x > MAX_X)) return false;
         if ((y < MIN_Y) || (y > MAX_Y)) return false;
 
@@ -295,8 +277,8 @@ public class WorldMap {
         return true;
     }
 
-    public void moveCharacterTo(final Character character, final byte x, final byte y) {
-        final Position position = character.getPosition();
+    public void moveCharacterTo(Character character, byte x, byte y) {
+        Position position = character.getPosition();
         getTile(position.getX(), position.getY()).setCharacter(null);
         getTile(x, y).setCharacter(character);
     }

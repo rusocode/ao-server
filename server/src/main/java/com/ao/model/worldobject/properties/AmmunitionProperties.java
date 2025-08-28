@@ -12,8 +12,7 @@ import java.util.List;
 
 public class AmmunitionProperties extends EquippableItemProperties {
 
-    protected int minHit;
-    protected int maxHit;
+    protected int minHit, maxHit;
 
     // TODO add poison and paralizing modifiers!
 
@@ -36,10 +35,8 @@ public class AmmunitionProperties extends EquippableItemProperties {
      * @param maxHit              maximum hit done by this item
      */
     // @param tradeable true if it's tradeable, false otherwise
-    public AmmunitionProperties(WorldObjectType type, int id, String name, int graphic,
-                                int value, List<UserArchetype> forbiddenArchetypes, List<Race> forbiddenRaces,
-                                boolean newbie, boolean noLog, boolean falls, boolean respawnable,
-                                int equippedGraphic, int minHit, int maxHit) {
+    public AmmunitionProperties(WorldObjectType type, int id, String name, int graphic, int value, List<UserArchetype> forbiddenArchetypes, List<Race> forbiddenRaces,
+                                boolean newbie, boolean noLog, boolean falls, boolean respawnable, int equippedGraphic, int minHit, int maxHit) {
         super(type, id, name, graphic, value, forbiddenArchetypes, forbiddenRaces, newbie, noLog, falls, respawnable, equippedGraphic);
         this.maxHit = maxHit;
         this.minHit = minHit;
