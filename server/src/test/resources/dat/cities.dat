@@ -1,37 +1,37 @@
 [INIT]
-num_cities=7
+num_cities = 7
 
 [CITY1]
-map=34
-x=44
-y=88
+map = 34
+x = 44
+y = 88
 
 [CITY2]
-map=1
-x=58
-y=45
+map = 1
+x = 58
+y = 45
 
 [CITY3]
-map=59
-x=50
-y=50
+map = 59
+x = 50
+y = 50
 
 [CITY4]
-map=62
-x=72
-y=41
+map = 62
+x = 72
+y = 41
 
 [CITY5]
-map=196
-x=52
-y=75
+map = 196
+x = 52
+y = 75
 
 [CITY6]
-map=286
-x=50
-y=65
+map = 286
+x = 50
+y = 65
 
 [CITY7]
-map=151
-x=40
-y=48
+map = 151
+x = 40
+y = 48
