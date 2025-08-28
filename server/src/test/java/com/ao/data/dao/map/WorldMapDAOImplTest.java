@@ -22,7 +22,7 @@ public class WorldMapDAOImplTest {
 
     @Test
     public void testLoadMaps() {
-        WorldMap[] maps = dao.retrieveAll();
+        WorldMap[] maps = dao.load();
         final WorldMap map = maps[0];
 
         // Check for blocked/non-blocked
