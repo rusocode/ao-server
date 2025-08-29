@@ -17,6 +17,8 @@ import com.google.inject.Injector;
  * <p>
  * Ademas, permite configurar las dependencias mediante clases que extienden {@code AbstractModule}, donde defines que
  * implementaciones usar para cada interfaz.
+ * <p>
+ * <a href="https://java-design-patterns.com/patterns/dependency-injection/#when-to-use-the-dependency-injection-pattern-in-java">Dependency Injection Pattern in Java</a>
  */
 
 public class ApplicationContext {
