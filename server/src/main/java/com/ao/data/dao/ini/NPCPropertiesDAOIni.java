@@ -121,12 +121,11 @@ public class NPCPropertiesDAOIni implements NPCCharacterPropertiesDAO {
     private NPCProperties[] npcs;
 
     /**
-     * Creates a new NPCDAOIni instance.
+     * Creates a new NPCDAOIni instance using DI.
      * <p>
-     * {@code WorldObjectPropertiesDAO} y {@code WorldObjectFactory} se inyectan por tipo. No requieren {@code @Named} porque
-     * Guice puede resolverlos directamente con el binding de su interfaz a una implementacion concreta. En el modulo
-     * ({@code DaoModule}) ya se hace {@code bind(WorldObjectPropertiesDAO.class).to(...)}. Para {@code WorldObjectFactory} debe
-     * existir un binding similar en otro modulo; si no existiera, Guice fallaria al crear el Injector.
+     * In the module {@code DaoModule} we already have {@code bind(WorldObjectPropertiesDAO.class).to(...)}. For
+     * {@code WorldObjectFactory} a similar binding must exist in another module; if it didn't exist, Guice would fail when
+     * creating the Injector.
      *
      * @param npcsFilePath             path to the file with all objects definitions
      * @param worldObjectPropertiesDAO DAO for World Object Properties

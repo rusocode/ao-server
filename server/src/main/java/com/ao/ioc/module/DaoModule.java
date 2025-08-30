@@ -35,9 +35,7 @@ public class DaoModule extends AbstractModule {
         bind(String.class).annotatedWith(Names.named("objectsFilePath")).toInstance(properties.getProperty("config.path.objsdat"));
         bind(Integer.class).annotatedWith(Names.named("itemsPerRow")).toInstance(Integer.parseInt(properties.getProperty("config.inventory.itemperrow")));
 
-        // Binds CityDAO implementation to CityDAOIni as singleton (unique instance)
         bind(CityDAO.class).to(CityDAOIni.class).in(Singleton.class);
-        // Binds the string with name citiesFilePath and asigned the value of the property config.path.citiesdat
         bind(String.class).annotatedWith(Names.named("citiesFilePath")).toInstance(properties.getProperty("config.path.citiesdat"));
 
         bind(NPCCharacterPropertiesDAO.class).to(NPCPropertiesDAOIni.class).in(Singleton.class);

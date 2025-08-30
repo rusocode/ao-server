@@ -91,7 +91,6 @@ public class LoggedUser extends ConnectedUser implements UserCharacter {
 
     @Override
     public void addToSkill(Skill skill, byte points) {
-        // TODO Auto-generated method stub
     }
 
     @Override
@@ -106,26 +105,20 @@ public class LoggedUser extends ConnectedUser implements UserCharacter {
 
     @Override
     public String getGuildName() {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public void setGuildName(String name) {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
     public int getPartyId() {
-        // TODO Auto-generated method stub
         return 0;
     }
 
     @Override
     public void setPartyId(int id) {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
@@ -135,25 +128,20 @@ public class LoggedUser extends ConnectedUser implements UserCharacter {
 
     @Override
     public int getSkill(Skill skill) {
-        // TODO Auto-generated method stub
         return 0;
     }
 
     @Override
     public boolean isWorking() {
-        // TODO Auto-generated method stub
         return false;
     }
 
     @Override
     public void work() {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
     public void addToExperience(int experience) {
-        // TODO Auto-generated method stub
 
     }
 
@@ -193,128 +181,105 @@ public class LoggedUser extends ConnectedUser implements UserCharacter {
 
     @Override
     public void attack(Character character) {
-        // TODO Auto-generated method stub
     }
 
     @Override
     public boolean canWalkInEarth() {
-        // TODO Auto-generated method stub
         return false;
     }
 
     @Override
     public boolean canWalkInWater() {
-        // TODO Auto-generated method stub
         return false;
     }
 
     @Override
     public void cast(Spell spell, Character target) {
-        // TODO Auto-generated method stub
     }
 
     @Override
     public void cast(Spell spell, WorldObject object) {
-        // TODO Auto-generated method stub
     }
 
     @Override
     public void equip(EquipableItem item) {
-        // TODO Auto-generated method stub
     }
 
     @Override
     public int getAttackPower() {
-        // TODO Auto-generated method stub
         return 0;
     }
 
     @Override
     public int getBody() {
-        // TODO Auto-generated method stub
         return 0;
     }
 
     @Override
     public void setBody(int body) {
-        // TODO Auto-generated method stub
     }
 
     @Override
     public int getDefensePower() {
-        // TODO Auto-generated method stub
         return 0;
     }
 
     @Override
     public String getDescription() {
-        // TODO Auto-generated method stub
         return description;
     }
 
     @Override
     public String getDisplayName() {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public int getExperience() {
-        // TODO Auto-generated method stub
         return 0;
     }
 
     @Override
     public int getExperienceForLeveUp() {
-        // TODO Auto-generated method stub
         return 0;
     }
 
     @Override
     public int getHead() {
-        // TODO Auto-generated method stub
         return 0;
     }
 
     @Override
     public void setHead(int head) {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
     public int getHitPoints() {
-        // TODO Auto-generated method stub
         return minHp;
     }
 
     @Override
     public int getHunger() {
-        // TODO Auto-generated method stub
         return minHunger;
     }
 
     @Override
     public Inventory getInventory() {
-        // TODO Auto-generated method stub
         return inventory;
     }
 
     @Override
     public byte getLevel() {
-        // TODO Auto-generated method stub
         return level;
     }
 
     @Override
     public int getMana() {
-        // TODO Auto-generated method stub
         return minMana;
     }
 
     @Override
     public int getMaxHitPoints() {
-        // TODO Auto-generated method stub
         return maxHp;
     }
 
@@ -351,19 +316,16 @@ public class LoggedUser extends ConnectedUser implements UserCharacter {
 
     @Override
     public int getOriginalBody() {
-        // TODO Auto-generated method stub
         return 0;
     }
 
     @Override
     public int getOriginalHead() {
-        // TODO Auto-generated method stub
         return 0;
     }
 
     @Override
     public Position getPosition() {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -374,7 +336,6 @@ public class LoggedUser extends ConnectedUser implements UserCharacter {
 
     @Override
     public Spell[] getSpells() {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -390,7 +351,6 @@ public class LoggedUser extends ConnectedUser implements UserCharacter {
 
     @Override
     public void setDead(boolean dead) {
-        // TODO Auto-generated method stub
     }
 
     @Override
@@ -400,7 +360,6 @@ public class LoggedUser extends ConnectedUser implements UserCharacter {
 
     @Override
     public void setDumb(boolean dumb) {
-        // TODO Auto-generated method stub
     }
 
     @Override
@@ -466,88 +425,72 @@ public class LoggedUser extends ConnectedUser implements UserCharacter {
 
     @Override
     public void use(Item item) {
-        // TODO Auto-generated method stub
     }
 
     @Override
     public void addToDexterity(int points, int duration) {
-        // TODO Auto-generated method stub
     }
 
     @Override
     public void addToStrength(int points, int duration) {
-        // TODO Auto-generated method stub
     }
 
     @Override
     public void addSpell(Spell spell) {
-        // TODO Auto-generated method stub
     }
 
     @Override
     public void addMoney(int amount) {
-        // TODO Auto-generated method stub
     }
 
     @Override
     public int getMoney() {
-        // TODO Auto-generated method stub
         return 0;
     }
 
     @Override
     public Heading getHeading() {
-        // TODO Auto-generated method stub
         return Heading.EAST;
     }
 
     @Override
     public void setHeading(Heading heading) {
-
     }
 
     @Override
     public Privileges getPrivileges() {
-        // TODO Auto-generated method stub
         return new Privileges(1);
     }
 
     @Override
     public void setPrivileges(Privileges privileges) {
-        // TODO Auto-generated method stub
     }
 
     @Override
     public int getNickColor() {
-        // TODO Auto-generated method stub
         return 0;
     }
 
     @Override
     public void setNickColor(int colorIndex) {
-        // TODO Auto-generated method stub
     }
 
     @Override
     public Fx getFx() {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public void setFx(Fx fx) {
-        // TODO Auto-generated method stub
     }
 
     @Override
     public short getCharIndex() {
-        // TODO Auto-generated method stub
         return 0;
     }
 
     @Override
     public void setCharIndex(int index) {
-        // TODO Auto-generated method stub
     }
 
     @Override
@@ -557,7 +500,6 @@ public class LoggedUser extends ConnectedUser implements UserCharacter {
 
     @Override
     public void setWeapon(Weapon weapon) {
-        // TODO Auto-generated method stub
     }
 
     @Override
@@ -567,7 +509,6 @@ public class LoggedUser extends ConnectedUser implements UserCharacter {
 
     @Override
     public void setHelmet(Helmet helmet) {
-        // TODO Auto-generated method stub
     }
 
     @Override
@@ -577,7 +518,6 @@ public class LoggedUser extends ConnectedUser implements UserCharacter {
 
     @Override
     public void setShield(Shield shield) {
-        // TODO Auto-generated method stub
     }
 
     @Override
@@ -587,7 +527,6 @@ public class LoggedUser extends ConnectedUser implements UserCharacter {
 
     @Override
     public void setArmor(Armor armor) {
-        // TODO Auto-generated method stub
     }
 
     @Override
@@ -597,7 +536,6 @@ public class LoggedUser extends ConnectedUser implements UserCharacter {
 
     @Override
     public void setAccessory(Accessory accessory) {
-        // TODO Auto-generated method stub
     }
 
     @Override
@@ -652,12 +590,10 @@ public class LoggedUser extends ConnectedUser implements UserCharacter {
 
     @Override
     public void moveTo(Heading heading) {
-        // TODO Auto-generated method stub
     }
 
     @Override
     public boolean isEquipped(Item item) {
-        // TODO Auto-generated method stub
         return false;
     }
 

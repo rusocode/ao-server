@@ -5,24 +5,12 @@ import com.google.inject.Injector;
 
 /**
  * General Application Context. Capable of loading common application classes.
- * <p>
- * <h4>Analogia simple de Guice</h4>
- * Es como un <b>restaurant con sommelier</b>:
- * <ul>
- *  <li>Sin DI: El chef tiene que salir a comprar vino, elegir la marca, etc.
- *  <li>Con DI: El sommelier (Guice) le trae al chef exactamente el vino que necesita para cada plato
- * </ul>
- * Utiliza anotaciones como {@code @Inject} para marcar los puntos de inyeccion y {@code @Singleton} para definir el alcance de
- * los objetos.
- * <p>
- * Ademas, permite configurar las dependencias mediante clases que extienden {@code AbstractModule}, donde defines que
- * implementaciones usar para cada interfaz.
- * <p>
- * <a href="https://java-design-patterns.com/patterns/dependency-injection/#when-to-use-the-dependency-injection-pattern-in-java">Dependency Injection Pattern in Java</a>
  */
 
 public class ApplicationContext {
 
+
+    /** The basic entry point into Guice is the <i>Injector</i>. Think of Guice's {@code @Inject} as the new {@code new}. */
     private static Injector injector;
 
     static {

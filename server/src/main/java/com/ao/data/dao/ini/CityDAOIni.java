@@ -34,10 +34,6 @@ public record CityDAOIni(String citiesFilePath) implements CityDAO {
     private static final String X_KEY = "x";
     private static final String Y_KEY = "y";
 
-    /**
-     * The value of {@code citiesFilePath} is injected using Guice's {@code @Inject} annotation from a binding defined in
-     * configuration module {@code DaoModule}.
-     */
     @Inject
     public CityDAOIni(@Named("citiesFilePath") String citiesFilePath) {
         this.citiesFilePath = citiesFilePath;

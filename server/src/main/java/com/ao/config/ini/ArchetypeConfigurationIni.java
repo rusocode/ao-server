@@ -25,13 +25,6 @@ public class ArchetypeConfigurationIni implements ArchetypeConfiguration {
 
     private final INIConfiguration ini;
 
-    /**
-     * Constructor loads the configuration file.
-     * <p>
-     * Without DI (Dependency Injection), it is manual: new ArchetypeConfigurationIni("dat/balances.dat")
-     * <p>
-     * With DI, is automatic: @Inject ArchetypeConfigurationIni confi
-     */
     @Inject
     public ArchetypeConfigurationIni(@Named("ArchetypeConfigIni") String archetypeConfigIni) {
         // Load from a classpath using try-with-resources for automatic resource management

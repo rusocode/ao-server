@@ -39,7 +39,10 @@ public class ServerConfigIni implements ServerConfig {
     private INIConfiguration ini;
 
     /**
-     * Creates a new ServerConfigIni instance.
+     * The value of {@code ServerConfigIni} is injected using Guice's {@code @Inject} annotation from a binding defined in
+     * configuration module {@code BootstrapModule}.
+     * <p>
+     * We can use the optional {@code @Named} annotation as a qualifier to implement targeted injection based on the name.
      */
     @Inject
     public ServerConfigIni(@Named("ServerConfigIni") String serverConfigIni) {
@@ -97,8 +100,6 @@ public class ServerConfigIni implements ServerConfig {
     public void setRestrictedToAdmins(boolean restricted) {
         setProperty(RESTRICTED_TO_ADMINS_KEY, restricted ? "1" : "0");
     }
-
-    // =========== Helper Methods ===========
 
     /**
      * Gets a string value from a specific section and key.

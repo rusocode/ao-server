@@ -16,7 +16,6 @@ public class Key extends AbstractItem {
 
     @Override
     public void use(Character character) {
-        // TODO Auto-generated method stub
     }
 
     public int getCode() {

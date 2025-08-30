@@ -21,7 +21,6 @@ public class ConfigurationModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        // Bind game specific configuration
         bind(ArchetypeConfiguration.class).to(ArchetypeConfigurationIni.class);
         bind(String.class).annotatedWith(Names.named("ArchetypeConfigIni")).toInstance(properties.getProperty("config.path.archetype"));
     }

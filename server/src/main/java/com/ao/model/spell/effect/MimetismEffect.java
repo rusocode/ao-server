@@ -25,12 +25,10 @@ public class MimetismEffect implements Effect {
 
     @Override
     public void apply(Character caster, Character target) {
-        // TODO Auto-generated method stub
     }
 
     @Override
     public void apply(Character caster, WorldObject target) {
-        // TODO Auto-generated method stub
     }
 
 }
