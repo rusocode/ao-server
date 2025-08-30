@@ -29,7 +29,7 @@ public class WorldObjectPropertiesDAOIniTest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        worldObjectPropertiesDAOIni = new WorldObjectPropertiesDAOIni("dat/objects.dat", TEST_ITEMS_PER_ROW);
+        worldObjectPropertiesDAOIni = new WorldObjectPropertiesDAOIni("data/objects.dat", TEST_ITEMS_PER_ROW);
     }
 
     @Test

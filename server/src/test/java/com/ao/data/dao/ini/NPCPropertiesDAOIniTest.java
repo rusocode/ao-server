@@ -48,7 +48,7 @@ public class NPCPropertiesDAOIniTest {
         WorldObjectFactory woFactory = mock(WorldObjectFactory.class);
         when(woFactory.getWorldObject(eq(woProperties), anyInt())).thenReturn(item);
 
-        npcPropertiesDAOIni = new NPCPropertiesDAOIni("dat/npcs.dat", woDao, woFactory);
+        npcPropertiesDAOIni = new NPCPropertiesDAOIni("data/npcs.dat", woDao, woFactory);
     }
 
     @Test
