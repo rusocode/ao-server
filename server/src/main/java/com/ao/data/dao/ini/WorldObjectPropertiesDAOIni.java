@@ -54,9 +54,9 @@ public class WorldObjectPropertiesDAOIni implements WorldObjectPropertiesDAO {
     private static final String GRAPHIC_INDEX_KEY = "graphic_index";
     private static final String OBJECT_TYPE_ID_KEY = "object_type_id";
     private static final String VALUE_KEY = "value";
-    private static final String SMITHING_SKILL_KEY = "smithing_skill"; // Antes llamada "SkHerreria"
+    private static final String SMITHING_SKILL_KEY = "smithing_skill"; // SkHerreria
     private static final String NAVIGATION_SKILL_KEY = "navigation_skill"; // Nueva clave, antes se usaba "MinSkill" (inconsistencia)
-    private static final String CARPENTRY_SKILL_KEY = "carpentry_skill"; // Antes llamada "SkCarpinteria"
+    private static final String CARPENTRY_SKILL_KEY = "carpentry_skill"; // SkCarpinteria
     private static final String NEWBIE_KEY = "newbie";
     private static final String MIN_ARMOR_DEFENSE_KEY = "min_armor_defense";
     private static final String MAX_ARMOR_DEFENSE_KEY = "max_armor_defense";
@@ -67,14 +67,14 @@ public class WorldObjectPropertiesDAOIni implements WorldObjectPropertiesDAO {
     private static final String ELF_KEY = "elf";
     private static final String GNOME_KEY = "gnome";
     private static final String HUMAN_KEY = "human";
-    private static final String FORBIDDEN_ARCHETYPE_KEY = "forbidden_archetype"; // Antes llamada "CP" (clase prohibida)
+    private static final String FORBIDDEN_ARCHETYPE_KEY = "forbidden_archetype"; // CP (clase prohibida)
     private static final String MIN_HIT_KEY = "min_hit";
     private static final String MAX_HIT_KEY = "max_hit";
-    private static final String STABBING_KEY = "stabbing"; // Antes llamada "Apuñala"
-    private static final String PIERCING_DAMAGE_KEY = "piercing_damage"; // Antes llamada "Refuerzo"
+    private static final String STABBING_KEY = "stabbing"; // Apuñala
+    private static final String PIERCING_DAMAGE_KEY = "piercing_damage"; // Refuerzo
     private static final String MAGIC_POWER_KEY = "magic_power"; // Antes llamada "StaffPower" que tambien se usaba para determinar si el objeto era magico (inconsistencia)
     private static final String MAGICAL_WEAPON_KEY = "magical_weapon"; // Nueva clave, antes se usaba "StaffPower" (inconsistencia)
-    private static final String RANGED_WEAPON_KEY = "ranged_weapon"; // Antes llamada "Proyectil"
+    private static final String RANGED_WEAPON_KEY = "ranged_weapon"; // Proyectil
     /**
      * Puede que sea redundante especificar si el objeto arco tiene municiones, pero esta flag diferencia dos casos dentro de las
      * armas a distancia: armas que consumen municion externa (p. ej., arcos que usan flechas) y armas arrojadizas/autosuficientes
@@ -82,15 +82,15 @@ public class WorldObjectPropertiesDAOIni implements WorldObjectPropertiesDAO {
      */
     private static final String AMMO_KEY = "ammo";
     private static final String STAFF_DAMAGE_BONUS_KEY = "staff_damage_bonus";
-    private static final String HUNGER_POINTS_KEY = "hunger_points"; // Antes llamada "MinHam"
-    private static final String THIRST_POINTS_KEY = "thirst_points"; // Antes llamada "MinAgu"
-    private static final String RANGE_KEY = "range"; // Antes llamada "Radio"
+    private static final String HUNGER_POINTS_KEY = "hunger_points"; // MinHam
+    private static final String THIRST_POINTS_KEY = "thirst_points"; // MinAgu
+    private static final String RANGE_KEY = "range"; // Radio
     private static final String POTION_TYPE_KEY = "potion_type";
     private static final String MIN_MODIFIER = "min_modifier";
     private static final String MAX_MODIFIER = "max_modifier";
     private static final String EFFECT_DURATION_KEY = "effect_duration";
-    private static final String EQUIPPED_ARMOR_GRAPHIC_KEY = "equipped_armor_graphic"; // Antes llamada "NumRopaje"
-    private static final String EQUIPPED_WEAPON_GRAPHIC_KEY = "equipped_weapon_graphic"; // Antes llamada "Anim"
+    private static final String EQUIPPED_ARMOR_GRAPHIC_KEY = "equipped_armor_graphic"; // NumRopaje
+    private static final String EQUIPPED_WEAPON_GRAPHIC_KEY = "equipped_weapon_graphic"; // Anim
     private static final String SPELL_INDEX_KEY = "spell_index";
     private static final String MINERAL_INDEX_KEY = "mineral_index";
     private static final String KEY_KEY = "key";
@@ -98,13 +98,13 @@ public class WorldObjectPropertiesDAOIni implements WorldObjectPropertiesDAO {
     private static final String LOCKED_KEY = "locked";
     private static final String OPEN_INDEX_KEY = "open_index";
     private static final String CLOSED_INDEX_KEY = "closed_index";
-    private static final String PICKUPABLE_KEY = "pickupable"; // Antes llamada "Agarrable"
-    private static final String RESPAWNABLE_KEY = "respawnable"; // Antes llamada "Crucial"
-    private static final String DROPPABLE_KEY = "droppable"; // Antes llamada "NoSeCae"
-    private static final String NO_LOG_KEY = "no_log"; // TODO Para que mierda es esta clave?
-    private static final String BIG_GRAPHIC_KEY = "big_graphic"; // Antes llamada "VGrande" TODO En algunos proyectos de AO, esta propiedad suele nombrarse como "GrhSecundario", pero no entiendo para que es
+    private static final String PICKUPABLE_KEY = "pickupable"; // Agarrable
+    private static final String RESPAWNABLE_KEY = "respawnable"; // Crucial
+    private static final String DROPPABLE_KEY = "droppable"; // NoSeCae
+    private static final String NO_LOG_KEY = "no_log";
+    private static final String BIG_GRAPHIC_KEY = "big_graphic"; // VGrande TODO En algunos proyectos de AO, esta propiedad suele nombrarse como "GrhSecundario", pero no entiendo para que es
     private static final String TEXT_KEY = "text";
-    private static final String FORUM_NAME_KEY = "forum_name"; // Antes llamda "ID"
+    private static final String FORUM_NAME_KEY = "forum_name"; // ID
     private static final String BACKPACK_TYPE_KEY = "backpack_type";
     private static final String INGOT_INDEX_KEY = "ingot_index";
     private static final String WOOD_KEY = "wood";
@@ -112,7 +112,9 @@ public class WorldObjectPropertiesDAOIni implements WorldObjectPropertiesDAO {
     private static final String GOLD_INGOT_KEY = "gold_ingot";
     private static final String SILVER_INGOT_KEY = "silver_ingot";
     private static final String IRON_INGOT_KEY = "iron_ingot";
-    private static final String SOUND_PREFIX_KEY = "sound";
+
+    /** Prefix for keys. */
+    private static final String SOUND_PREFIX = "sound";
 
     /** Horrible, but it's completely hardwired in an old VB version and can't be induced from the dat. */
     private static final int WOOD_INDEX = 58;
@@ -218,7 +220,7 @@ public class WorldObjectPropertiesDAOIni implements WorldObjectPropertiesDAO {
         LegacyWorldObjectType objectType = LegacyWorldObjectType.findById(objectTypeId);
 
         if (objectType == null) {
-            LOGGER.error("Unknown object_type_id={} for OBJ{}.", objectTypeId, id);
+            LOGGER.error("Unknown object type in section [{}]", section);
             return null;
         }
 
@@ -979,9 +981,9 @@ public class WorldObjectPropertiesDAOIni implements WorldObjectPropertiesDAO {
         int maxSounds = 3;
         List<Integer> sounds = new LinkedList<>();
         for (int i = 1; i <= maxSounds; i++) {
-            String key = section + "." + SOUND_PREFIX_KEY + i;
-            if (!ini.containsKey(key)) continue; // Avoid warnings for missing items
-            int value = IniUtils.getInt(ini, key, -1); // log invalid entries; -1 = discard
+            String sound = section + "." + SOUND_PREFIX + i;
+            if (!ini.containsKey(sound)) continue; // Avoid warnings for missing keys
+            int value = IniUtils.getInt(ini, sound, -1); // log invalid entries; -1 = discard
             if (value != -1) sounds.add(value);
         }
         return sounds;

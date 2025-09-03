@@ -7,6 +7,7 @@ import com.ao.model.character.npc.properties.*;
 import com.ao.model.worldobject.AbstractItem;
 import com.ao.model.worldobject.factory.WorldObjectFactory;
 import com.ao.model.worldobject.properties.WorldObjectProperties;
+import com.ao.service.MapService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -48,7 +49,11 @@ public class NPCPropertiesDAOIniTest {
         WorldObjectFactory woFactory = mock(WorldObjectFactory.class);
         when(woFactory.getWorldObject(eq(woProperties), anyInt())).thenReturn(item);
 
-        npcPropertiesDAOIni = new NPCPropertiesDAOIni("data/npcs.dat", woDao, woFactory);
+        MapService mapService = mock(MapService.class);
+        byte b = 10;
+        when(mapService.getCity(b)).thenReturn(null);
+
+        npcPropertiesDAOIni = new NPCPropertiesDAOIni("data/npcs.dat", woDao, woFactory, mapService);
     }
 
     @Test

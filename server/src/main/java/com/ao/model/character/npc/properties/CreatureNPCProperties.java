@@ -28,7 +28,6 @@ public class CreatureNPCProperties extends NPCProperties {
     protected short dodge;
     protected List<Spell> spells;
     protected boolean canSwim;
-    protected boolean canWalk;
     protected boolean attackable;
     protected boolean poison;
     protected boolean paralyzable;
@@ -40,7 +39,7 @@ public class CreatureNPCProperties extends NPCProperties {
                                  String description, Class<? extends Behavior> behavior, Class<? extends AttackStrategy> attackStrategy,
                                  Class<? extends MovementStrategy> movementStrategy, int experience, int gold, int minHP, int maxHP,
                                  int minDamage, int maxDamage, short defense, short magicDefense, short accuracy,
-                                 short dodge, List<Spell> spells, boolean canSwim, boolean canWalk, boolean attackable,
+                                 short dodge, List<Spell> spells, boolean canSwim, boolean attackable,
                                  boolean poison, boolean paralyzable, boolean hostile, boolean tameable, Drop drop) {
         super(type, id, name, body, head, heading, respawn, description, behavior, attackStrategy, movementStrategy);
 
@@ -56,7 +55,6 @@ public class CreatureNPCProperties extends NPCProperties {
         this.dodge = dodge;
         this.spells = spells;
         this.canSwim = canSwim;
-        this.canWalk = canWalk;
         this.attackable = attackable;
         this.poison = poison;
         this.paralyzable = paralyzable;
@@ -107,10 +105,6 @@ public class CreatureNPCProperties extends NPCProperties {
 
     public boolean canSwim() {
         return canSwim;
-    }
-
-    public boolean canWalk() {
-        return canWalk;
     }
 
     public boolean isAttackable() {

@@ -55,23 +55,6 @@ public class WorldObjectFactory {
     }
 
     /**
-     * Creates a new instance of the appropriate AbstractItem given its properties.
-     *
-     * @param woProperties properties from which to create an object
-     * @param amount       amount of the given object to create
-     * @return the newly created object
-     */
-    public AbstractItem getWorldObject(WorldObjectProperties woProperties, int amount) throws WorldObjectFactoryException {
-        @SuppressWarnings("unchecked")
-        Class<? extends AbstractItem> woClass = (Class<? extends AbstractItem>) worldObjectMapper.get(woProperties.getType());
-        try {
-            return woClass.getConstructor(woProperties.getClass(), int.class).newInstance(woProperties, amount);
-        } catch (Exception e) {
-            throw new WorldObjectFactoryException(e);
-        }
-    }
-
-    /**
      * Creates a new instance of the appropriate WorldObject given its properties.
      *
      * @param woProperties properties from which to create an object
@@ -81,6 +64,23 @@ public class WorldObjectFactory {
         Class<? extends WorldObject> woClass = worldObjectMapper.get(woProperties.getType());
         try {
             return woClass.getConstructor(woProperties.getClass()).newInstance(woProperties);
+        } catch (Exception e) {
+            throw new WorldObjectFactoryException(e);
+        }
+    }
+
+    /**
+     * Creates a new instance of the appropriate AbstractItem given its properties.
+     *
+     * @param worldOjectProperties world object properties from which to create an object
+     * @param amount               amount of the given object to create
+     * @return the newly created object
+     */
+    public AbstractItem getWorldObject(WorldObjectProperties worldOjectProperties, int amount) throws WorldObjectFactoryException {
+        @SuppressWarnings("unchecked")
+        Class<? extends AbstractItem> woClass = (Class<? extends AbstractItem>) worldObjectMapper.get(worldOjectProperties.getType());
+        try {
+            return woClass.getConstructor(worldOjectProperties.getClass(), int.class).newInstance(worldOjectProperties, amount);
         } catch (Exception e) {
             throw new WorldObjectFactoryException(e);
         }

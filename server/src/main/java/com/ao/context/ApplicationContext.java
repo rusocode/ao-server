@@ -5,6 +5,8 @@ import com.google.inject.Injector;
 
 /**
  * General Application Context. Capable of loading common application classes.
+ * <p>
+ * TODO Evitar Service Locator con Injector estatico
  */
 
 public class ApplicationContext {

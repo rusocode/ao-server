@@ -13,7 +13,7 @@ public class InventoryImpl implements Inventory {
 
     private static final int DEFAULT_INVENTORY_CAPACITY = 20;
 
-    protected Item[] inventory;
+    protected Item[] inventory; // TODO Como que un inventario es un item xd?
 
     public InventoryImpl() {
         this(DEFAULT_INVENTORY_CAPACITY);

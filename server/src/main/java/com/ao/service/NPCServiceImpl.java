@@ -24,4 +24,10 @@ public class NPCServiceImpl implements NPCService {
         npcs = npcsDAO.load();
     }
 
+    @Override
+    public NPCProperties getNPCProperties(int id) {
+        // NPCProperties enumeration starts at 1, not 0
+        return npcs[id - 1];
+    }
+
 }

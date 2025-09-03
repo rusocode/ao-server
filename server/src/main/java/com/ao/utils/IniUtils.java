@@ -42,6 +42,11 @@ public final class IniUtils {
         return readInt(ini, key, defaultValue);
     }
 
+    /**
+     * Aunque casi todas las flags usan "1" para indicar true, la flag {@code temeable} seria la exepcion ya que puede tener
+     * valores distintos a 1 (que todavia no se que significan) y a 0. Por lo tanto la comprobacion {@code != 0} sigue siendo
+     * valida.
+     */
     public static boolean getBoolean(INIConfiguration ini, String key, boolean defaultValue) {
         return readInt(ini, key, defaultValue ? 1 : 0) != 0;
     }
