@@ -78,9 +78,9 @@ public enum LegacyWorldObjectType {
     }
 
     /**
-     * Finds and returns a LegacyWorldObjectType based on its unique identifier.
+     * Finds a LegacyWorldObjectType based on its unique identifier.
      *
-     * @param id unique identifier of the desired LegacyWorldObjectType
+     * @param id a unique identifier of the desired LegacyWorldObjectType
      * @return the corresponding LegacyWorldObjectType if found, or null if no such type exists
      */
     public static LegacyWorldObjectType findById(int id) {
@@ -88,7 +88,7 @@ public enum LegacyWorldObjectType {
     }
 
     /**
-     * Finds and returns a LegacyWorldObjectType corresponding to the provided WorldObjectType.
+     * Finds a LegacyWorldObjectType corresponding to the provided WorldObjectType.
      *
      * @param objectType the WorldObjectType to look for
      * @return the associated LegacyWorldObjectType if found, or null if no match exists

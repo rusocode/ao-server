@@ -45,11 +45,11 @@ import java.util.stream.IntStream;
  * Ini-backed implementation of the World Object DAO.
  * <p>
  * Most flags in {@code npcs.dat} like <b>merchant</b>, accept values 0 (false) and 1 (true). Some flags like
- * <b>tameable</b> accept other values, but there are few of them.
+ * <b>tameable</b> accept other values.
  * <p>
- * It is not necessary to specify numeric keys with value 0, since if this key is not found, then value 0 is used by default. For
- * example, if the Goblin (section [NPC196]) has no defense, then it is redundant to specify {@code defense = 0} in the file.
- * However, if necessary, specify the flags (0 or 1) in the sections that require them.
+ * Numeric keys with value 0 needn't have value 0. Missing keys default to 0. For example, if the Duende (section [NPC196]) has no
+ * defense, then it is redundant to specify {@code defense = 0} in the file. However, if necessary, specify the flags (0 or 1) in
+ * the sections that require them.
  * <p>
  * The sentinel value for keys not found or invalid values is {@code -1}.
  * <p>
@@ -68,7 +68,7 @@ public record NPCPropertiesDAOIni(String npcsFilePath,
 
     // TODO Podria mover la declaracion de las keys en una clase aparte
 
-    /** Prefixs for keys. */
+    /** Prefixs keys. */
     private static final String NPC_SECTION_PREFIX = "NPC";
     private static final String DROP_PREFIX = "drop";
     private static final String OBJECT_INVENTORY_PREFIX = "object"; // obj
@@ -77,39 +77,39 @@ public record NPCPropertiesDAOIni(String npcsFilePath,
     private static final String CREATURE_ID_PREFIX = "creature_id"; // CI
     private static final String CREATURE_NAME_PREFIX = "creature_name"; // CN
 
-    /** Keys for the ini file. */
+    /** Ini file keys. */
     private static final String NAME_KEY = "name";
     private static final String NPC_TYPE_KEY = "npc_type"; // NpcType
     private static final String DESCRIPTION_KEY = "description";
     private static final String HEAD_KEY = "head";
-    private static final String BODY_KEY = "body";
     private static final String HEADING_KEY = "heading";
+    private static final String BODY_KEY = "body";
     private static final String AI_TYPE_KEY = "ai_type"; // Movement
-    private static final String ATTACKABLE_KEY = "attackable";
-    private static final String RESPAWNABLE_KEY = "respawnable"; // ReSpawn
-    private static final String HOSTILE_KEY = "hostile";
-    private static final String TAMEABLE_KEY = "temeable"; // Domable
-    private static final String ALIGNMENT_KEY = "alignment";
-    private static final String MERCHANT_KEY = "merchant"; // Comercia
-    private static final String OBJECT_TYPE_KEY = "object_type"; // TipoItems
     private static final String CITY_KEY = "city";
+    private static final String CREATURE_COUNT_KEY = "creature_count"; // NroCriaturas
+    private static final String ALIGNMENT_KEY = "alignment";
+    private static final String AQUATIC_KEY = "aquatic"; // AguaValida
+    private static final String MERCHANT_KEY = "merchant"; // Comercia
+    private static final String ATTACKABLE_KEY = "attackable";
+    private static final String HOSTILE_KEY = "hostile";
+    private static final String UNPARALYZABLE_KEY = "unparalyzable"; // AfectaParalisis
+    private static final String RESPAWNABLE_KEY = "respawnable"; // ReSpawn
+    private static final String TAMEABLE_KEY = "temeable"; // Domable
     private static final String EXPERIENCE_KEY = "experience"; // GiveEXP
     private static final String GOLD_KEY = "gold"; // GiveGLD
-    private static final String RESTOCKABLE_KEY = "restockable"; // InvReSpawn
-    private static final String MAX_HP_KEY = "max_hp";
     private static final String MIN_HP_KEY = "min_hp";
+    private static final String MAX_HP_KEY = "max_hp";
     private static final String MAX_HIT_KEY = "max_hit";
     private static final String MIN_HIT_KEY = "min_hit";
     private static final String DEFENSE_KEY = "defense"; // Def
     private static final String MAGIC_DEFENSE_KEY = "magic_defense"; // DefM
-    private static final String OBJECT_COUNT_KEY = "object_count"; // NROITEMS
-    private static final String SPELL_COUNT_KEY = "spell_count"; // LanzaSpells
-    private static final String CREATURE_COUNT_KEY = "creature_count"; // NroCriaturas
     private static final String ATTACK_KEY = "attack";
     private static final String EVASION_KEY = "evasion"; // PoderEvasion
-    private static final String AQUATIC_KEY = "aquatic"; // AguaValida
+    private static final String SPELL_COUNT_KEY = "spell_count"; // LanzaSpells
+    private static final String OBJECT_TYPE_KEY = "object_type"; // TipoItems
+    private static final String OBJECT_COUNT_KEY = "object_count"; // NROITEMS
+    private static final String RESTOCKABLE_KEY = "restockable"; // InvReSpawn
     private static final String POISONOUS_KEY = "poisonous"; // Veneno
-    private static final String UNPARALYZABLE_KEY = "unparalyzable"; // AfectaParalisis
     private static final String RETURNING_KEY = "returning"; // PosOrig
 
     private static final Map<LegacyNPCType, NPCType> npcTypeMapper;
@@ -117,7 +117,7 @@ public record NPCPropertiesDAOIni(String npcsFilePath,
     static {
         // TODO Populate mappings from old object types to new ones
         npcTypeMapper = new HashMap<>();
-        // Notice COMMON is not listed since it may be a merchant or a hostile npc
+        // Note that COMMON doesn't appear on the list, as it may be a merchant or a hostile NPC
         npcTypeMapper.put(LegacyNPCType.DRAGON, NPCType.DRAGON);
         npcTypeMapper.put(LegacyNPCType.TRAINER, NPCType.TRAINER);
         npcTypeMapper.put(LegacyNPCType.GOVERNOR, NPCType.GOVERNOR);
@@ -188,66 +188,45 @@ public record NPCPropertiesDAOIni(String npcsFilePath,
         String section = NPC_SECTION_PREFIX + id;
 
         String name = IniUtils.getString(ini, section + "." + NAME_KEY, "");
-        int npcTypeId = IniUtils.getInt(ini, section + "." + NPC_TYPE_KEY, -1);
-
+        String description = IniUtils.getString(ini, section + "." + DESCRIPTION_KEY, "");
         short head = (short) IniUtils.getInt(ini, section + "." + HEAD_KEY, 0);
-        short body = (short) IniUtils.getInt(ini, section + "." + BODY_KEY, 0);
-
         Heading heading = Heading.get((byte) (IniUtils.getInt(ini, section + "." + HEADING_KEY, 1) - 1));
-        boolean respawnable = canRespawn(ini, section);
-        String description = getDescription(ini, section);
-
+        short body = (short) IniUtils.getInt(ini, section + "." + BODY_KEY, 0);
+        boolean respawnable = IniUtils.getBoolean(ini, section + "." + RESPAWNABLE_KEY, true);
         Class<? extends Behavior> behavior = getBehavior(ini, section);
         Class<? extends AttackStrategy> attackStrategy = getAttackStrategy(ini, section);
         Class<? extends MovementStrategy> movementStrategy = getMovementStrategy(ini, section);
 
-        LegacyNPCType npcType = LegacyNPCType.findById(npcTypeId);
+        LegacyNPCType legacyNPCType = LegacyNPCType.findById(IniUtils.getInt(ini, section + "." + NPC_TYPE_KEY, -1));
 
-        if (npcType == null) {
-            LOGGER.error("Unknown npc type in section [{}]", section);
+        if (legacyNPCType == null) {
+            LOGGER.error("Unknown npc npcType in section [{}]", section);
             return null;
         }
 
-        NPCProperties npc = null;
+        NPCType npcType = npcTypeMapper.get(legacyNPCType);
 
-        // TODO Se podria reemplazar?
-        // NPCType type = npcTypeMapper.get(npcType);
-
-        switch (npcType) {
-            case COMMON:
+        return switch (legacyNPCType) {
+            case COMMON -> {
                 if (isMerchant(ini, section))
-                    npc = loadMerchant(NPCType.MERCHANT, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, ini, section);
+                    yield loadMerchant(NPCType.MERCHANT, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, ini, section);
                 else
-                    npc = loadCreature(NPCType.COMMON, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, ini, section);
-                break;
-            case DRAGON:
-            case PRETORIAN:
-                npc = loadCreature(npcTypeMapper.get(npcType), id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, ini, section);
-                break;
-            case TRAINER:
-                npc = loadTrainer(npcTypeMapper.get(npcType), id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, ini, section);
-                break;
-            case GOVERNOR:
-                npc = loadGovernor(npcTypeMapper.get(npcType), id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, ini, section);
-                break;
-            case ROYAL_GUARD:
-            case CHAOS_GUARD:
-                npc = loadGuard(npcTypeMapper.get(npcType), id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, ini, section);
-                break;
-            case NOBLE:
-                npc = loadNoble(npcTypeMapper.get(npcType), id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, ini, section);
-                break;
-            case NEWBIE_RESUCITATOR:
-            case RESUCITATOR:
-            case GAMBLER:
-            case BANKER:
-                npc = loadBasicNpc(npcTypeMapper.get(npcType), id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy);
-                break;
-            default: // TODO Es necesario este default?
-                LOGGER.error("Unknown npc type '{}' in section [{}]!", npcType, section);
-        }
+                    yield loadCreature(NPCType.COMMON, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, ini, section);
+            }
+            case DRAGON, PRETORIAN ->
+                    loadCreature(npcType, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, ini, section);
+            case TRAINER ->
+                    loadTrainer(npcType, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, ini, section);
+            case GOVERNOR ->
+                    loadGovernor(npcType, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, ini, section);
+            case ROYAL_GUARD, CHAOS_GUARD ->
+                    loadGuard(npcType, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, ini, section);
+            case NOBLE ->
+                    loadNoble(npcType, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, ini, section);
+            case NEWBIE_RESUCITATOR, RESUCITATOR, GAMBLER, BANKER ->
+                    loadBasicNpc(npcType, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy);
+        };
 
-        return npc;
     }
 
     private NPCProperties loadNoble(NPCType type, int id, String name, short body, short head, Heading heading, boolean respawnable,
@@ -315,7 +294,7 @@ public record NPCPropertiesDAOIni(String npcsFilePath,
      *
      * @param ini     ini configuration
      * @param section section from which to read the value
-     * @return the npc's spells or null if none were found
+     * @return the npc's spells; null if none exists
      */
     private List<Spell> getSpells(INIConfiguration ini, String section) {
         int spellCount = IniUtils.getInt(ini, section + "." + SPELL_COUNT_KEY, 0);
@@ -339,7 +318,7 @@ public record NPCPropertiesDAOIni(String npcsFilePath,
      *
      * @param ini     ini configuration
      * @param section section from which to read the value
-     * @return the npc's drops or null if none were found
+     * @return the npc's drops; null if none exists
      */
     private Drop getDrops(INIConfiguration ini, String section) {
         int objectCount = IniUtils.getInt(ini, section + "." + OBJECT_COUNT_KEY, -1);
@@ -352,23 +331,20 @@ public record NPCPropertiesDAOIni(String npcsFilePath,
             return null;
         }
 
-        // Pretorian npc drop everything... a little bit hardcoded, but we want to be compatible with old AO
         AIType aiType = AIType.findById(aiTypeId);
         if (aiType == null) {
             LOGGER.warn("The AI type id {} does not exist!", aiTypeId);
             return null;
         }
 
+        // Pretorian NPCs drop all their items when killed, a little bit hardcoded, but want to be compatible with old AO
         if (aiType.isPretorian()) return new DropEverything(getInventory(ini, section));
 
         List<Dropable> dropables = new LinkedList<>();
 
-        /*
-         * In Argentum, there is a 10% chance of dropping nothing; the other 90% is split among the count object in such a way that
-         * each has 10% the chance of the previous one. In other words, the first object is more likely to drop, the second less
-         * likely, and so on.
-         */
-        float chance = 0.9f; // 90% for the first object, 10% for the second, etc.
+        /* In Argentum Online, a 10% chance exists for dropping nothing. The remaining 90% splits among the counted objects so
+         * that each has 10% the chance of the previous one. In other words, the first object is more likely than the second. */
+        float chance = 0.9f; // 90% for the first object, 10% for the second, and 10% for the third, and so
         for (int i = 1; i <= objectCount; i++) {
             /* El slot contiene el id y la cantidad del objeto dropeable, por ejemplo para el objeto [NPC503] la clave drop1
              * contiene el valor "12-8", en donde el 12 es el id del objeto a dropear y el 8 la cantidad, y el simbolo '-' es un
@@ -397,7 +373,7 @@ public record NPCPropertiesDAOIni(String npcsFilePath,
      *
      * @param ini     ini configuration
      * @param section section from which to read the value
-     * @return the inventory from the npc or null if none were found
+     * @return the inventory from the npc; null if none exists
      */
     private Inventory getInventory(INIConfiguration ini, String section) {
         int objectCount = IniUtils.getInt(ini, section + "." + OBJECT_COUNT_KEY, -1);
@@ -415,14 +391,11 @@ public record NPCPropertiesDAOIni(String npcsFilePath,
                 Item worldObject;
                 try {
                     worldObject = worldObjectFactory.getWorldObject(worldObjectProperties, amount);
+                    if (worldObject != null) inventory.addItem(worldObject);
+                    else LOGGER.error("Npc has object id '{}' in inventory but it's not an item", objId);
                 } catch (WorldObjectFactoryException e) {
-                    LOGGER.warn("An NPC has an item in it's inventory that can't be created. Object id: {}. Ignoring it...", objId, e);
-                    continue;
+                    LOGGER.warn("Npc with item id '{}' cannot be created", objId);
                 }
-                // Agrega el objecto al inventario
-                if (worldObject != null) inventory.addItem(worldObject);
-                else
-                    LOGGER.error("An NPC has the object with id {} in it's inventory, but the object is not an item. Ignoring it...", objId);
             }
         }
 
@@ -434,7 +407,7 @@ public record NPCPropertiesDAOIni(String npcsFilePath,
      *
      * @param ini     ini configuration
      * @param section section from which to read the value
-     * @return the list of sounds from the npc or empty list if none were found
+     * @return the list of sounds from the npc; empty list if none exists
      */
     private List<Integer> getSounds(INIConfiguration ini, String section) {
         int soundCount = 3;
@@ -450,7 +423,7 @@ public record NPCPropertiesDAOIni(String npcsFilePath,
      *
      * @param ini     ini configuration
      * @param section section from which to read the value
-     * @return the creatures the npc can summon or null if none were found
+     * @return the creatures the npc can summon; null if none exists
      */
     private Map<Integer, String> getCreatures(INIConfiguration ini, String section) {
         int creatureCount = IniUtils.getInt(ini, section + "." + CREATURE_COUNT_KEY, -1);
@@ -502,7 +475,7 @@ public record NPCPropertiesDAOIni(String npcsFilePath,
      *
      * @param ini     ini configuration
      * @param section section from which to read the value
-     * @return the npc's city; null if the key {@code CITY_KEY} is missing or has an invalid value, or if the city does not
+     * @return the npc's city; null if the key {@code CITY_KEY} is missing or has an invalid value, or if the city doesn't exist
      */
     private City getCity(INIConfiguration ini, String section) {
         int cityId = IniUtils.getInt(ini, section + "." + CITY_KEY, -1);
@@ -564,7 +537,7 @@ public record NPCPropertiesDAOIni(String npcsFilePath,
      *
      * @param ini     ini configuration
      * @param section section from which to read the value
-     * @return the AI type; null if the key {@code AI_TYPE_KEY} is missing or has an invalid value, or if the AI type does not
+     * @return the AI type; null if the key {@code AI_TYPE_KEY} is missing or has an invalid value, or if the AI type doesn't
      * exist
      */
     private AIType getAIType(INIConfiguration ini, String section) {
@@ -579,17 +552,6 @@ public record NPCPropertiesDAOIni(String npcsFilePath,
             return null;
         }
         return aiType;
-    }
-
-    /**
-     * Gets npc description.
-     *
-     * @param ini     ini configuration
-     * @param section section from which to read the value
-     * @return the npc description, or empty string if the key {@code DESCRIPTION_KEY} is missing or has an invalid value
-     */
-    private String getDescription(INIConfiguration ini, String section) {
-        return IniUtils.getString(ini, section + "." + DESCRIPTION_KEY, "");
     }
 
     /**
@@ -619,7 +581,7 @@ public record NPCPropertiesDAOIni(String npcsFilePath,
      *
      * @param ini     ini configuration
      * @param section section from which to read the value
-     * @return the npc's min hp, or 0 if the key {@code MIN_HP_KEY} is missing or has an invalid value
+     * @return the npc's a min hp, or 0 if the key {@code MIN_HP_KEY} is missing or has an invalid value
      */
     private int getMinHP(INIConfiguration ini, String section) {
         return IniUtils.getInt(ini, section + "." + MIN_HP_KEY, 0);
@@ -701,21 +663,6 @@ public record NPCPropertiesDAOIni(String npcsFilePath,
      */
     private short getEvasion(INIConfiguration ini, String section) {
         return (short) IniUtils.getInt(ini, section + "." + EVASION_KEY, 0);
-    }
-
-    /**
-     * Checks if the npc can respawn.
-     * <p>
-     * TODO Se supone que casi todas las entidades pasivas/neutrales/hostiles son respawnables, por lo tanto solo seria necesario
-     * especificar la clave {@code RESPAWNABLE_KEY} con valor "0" para las entidades que no son respawnables.
-     *
-     * @param ini     ini configuration
-     * @param section section from which to read the value
-     * @return true if the npc can respaw, or false if the key {@code RESPAWNABLE_KEY} exists in the configuration and its value
-     * is 0. If the key is missing or invalid, the npc can respaw by default.
-     */
-    private boolean canRespawn(INIConfiguration ini, String section) {
-        return IniUtils.getBoolean(ini, section + "." + RESPAWNABLE_KEY, true);
     }
 
     /**
@@ -856,7 +803,7 @@ public record NPCPropertiesDAOIni(String npcsFilePath,
     }
 
     /**
-     * Enum with legacy AITypes, which are now useless.
+     * Enum with a legacy AITypes, which are now useless.
      */
     private enum AIType {
         // TODO Complete this as we code the behaviors!
