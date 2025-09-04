@@ -85,6 +85,7 @@ public record NPCPropertiesDAOIni(String npcsFilePath,
     private static final String HEADING_KEY = "heading";
     private static final String BODY_KEY = "body";
     private static final String AI_TYPE_KEY = "ai_type"; // Movement
+    private static final String RETURNING_KEY = "returning"; // PosOrig
     private static final String CITY_KEY = "city";
     private static final String CREATURE_COUNT_KEY = "creature_count"; // NroCriaturas
     private static final String ALIGNMENT_KEY = "alignment";
@@ -92,6 +93,7 @@ public record NPCPropertiesDAOIni(String npcsFilePath,
     private static final String MERCHANT_KEY = "merchant"; // Comercia
     private static final String ATTACKABLE_KEY = "attackable";
     private static final String HOSTILE_KEY = "hostile";
+    private static final String POISONOUS_KEY = "poisonous"; // Veneno
     private static final String UNPARALYZABLE_KEY = "unparalyzable"; // AfectaParalisis
     private static final String RESPAWNABLE_KEY = "respawnable"; // ReSpawn
     private static final String TAMEABLE_KEY = "temeable"; // Domable
@@ -109,26 +111,6 @@ public record NPCPropertiesDAOIni(String npcsFilePath,
     private static final String OBJECT_TYPE_KEY = "object_type"; // TipoItems
     private static final String OBJECT_COUNT_KEY = "object_count"; // NROITEMS
     private static final String RESTOCKABLE_KEY = "restockable"; // InvReSpawn
-    private static final String POISONOUS_KEY = "poisonous"; // Veneno
-    private static final String RETURNING_KEY = "returning"; // PosOrig
-
-    private static final Map<LegacyNPCType, NPCType> npcTypeMapper;
-
-    static {
-        // TODO Populate mappings from old object types to new ones
-        npcTypeMapper = new HashMap<>();
-        // Note that COMMON doesn't appear on the list, as it may be a merchant or a hostile NPC
-        npcTypeMapper.put(LegacyNPCType.DRAGON, NPCType.DRAGON);
-        npcTypeMapper.put(LegacyNPCType.TRAINER, NPCType.TRAINER);
-        npcTypeMapper.put(LegacyNPCType.GOVERNOR, NPCType.GOVERNOR);
-        npcTypeMapper.put(LegacyNPCType.CHAOS_GUARD, NPCType.CHAOS_GUARD);
-        npcTypeMapper.put(LegacyNPCType.ROYAL_GUARD, NPCType.ROYAL_GUARD);
-        npcTypeMapper.put(LegacyNPCType.NOBLE, NPCType.NOBLE);
-        npcTypeMapper.put(LegacyNPCType.NEWBIE_RESUCITATOR, NPCType.NEWBIE_RESUCITATOR);
-        npcTypeMapper.put(LegacyNPCType.RESUCITATOR, NPCType.RESUCITATOR);
-        npcTypeMapper.put(LegacyNPCType.GAMBLER, NPCType.GAMBLER);
-        npcTypeMapper.put(LegacyNPCType.BANKER, NPCType.BANKER);
-    }
 
     /**
      * Creates a new NPCDAOIni instance using DI.
@@ -197,16 +179,14 @@ public record NPCPropertiesDAOIni(String npcsFilePath,
         Class<? extends AttackStrategy> attackStrategy = getAttackStrategy(ini, section);
         Class<? extends MovementStrategy> movementStrategy = getMovementStrategy(ini, section);
 
-        LegacyNPCType legacyNPCType = LegacyNPCType.findById(IniUtils.getInt(ini, section + "." + NPC_TYPE_KEY, -1));
+        NPCType npcType = NPCType.findById(IniUtils.getInt(ini, section + "." + NPC_TYPE_KEY, -1));
 
-        if (legacyNPCType == null) {
-            LOGGER.error("Unknown npc npcType in section [{}]", section);
+        if (npcType == null) {
+            LOGGER.error("Unknown npc type in section [{}]", section);
             return null;
         }
 
-        NPCType npcType = npcTypeMapper.get(legacyNPCType);
-
-        return switch (legacyNPCType) {
+        return switch (npcType) {
             case COMMON -> {
                 if (isMerchant(ini, section))
                     yield loadMerchant(NPCType.MERCHANT, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, ini, section);
@@ -225,6 +205,8 @@ public record NPCPropertiesDAOIni(String npcsFilePath,
                     loadNoble(npcType, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, ini, section);
             case NEWBIE_RESUCITATOR, RESUCITATOR, GAMBLER, BANKER ->
                     loadBasicNpc(npcType, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy);
+            // Aunque nunca se llega a ejecutar ya que no hay un npc de tipo MERCHANT, es decir npc_type = 12
+            case MERCHANT -> null;
         };
 
     }
@@ -768,38 +750,6 @@ public record NPCPropertiesDAOIni(String npcsFilePath,
 
     private void logKeyNotFoundOrInvalid(String key, String section) {
         LOGGER.warn("The key '{}' was not found in section [{}] or its value is invalid!", key, section);
-    }
-
-    /**
-     * NPC Type enumeration, as it was known in the old days of Visual Basic.
-     */
-    private enum LegacyNPCType {
-
-        COMMON(0), // TODO No deberia empezar en 1?
-        RESUCITATOR(1),
-        ROYAL_GUARD(2),
-        TRAINER(3),
-        BANKER(4),
-        NOBLE(5),
-        DRAGON(6),
-        GAMBLER(7),
-        CHAOS_GUARD(8),
-        NEWBIE_RESUCITATOR(9),
-        PRETORIAN(10),
-        GOVERNOR(11);
-
-        private final int id;
-
-        LegacyNPCType(int id) {
-            this.id = id;
-        }
-
-        public static LegacyNPCType findById(int id) {
-            for (LegacyNPCType type : LegacyNPCType.values())
-                if (type.id == id) return type;
-            return null;
-        }
-
     }
 
     /**

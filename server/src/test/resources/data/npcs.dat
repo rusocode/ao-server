@@ -1,17 +1,19 @@
 ## npc_type
-# 0: Npcs comunes
-# 1: Puede resucitar
-# 2: Guardia
-# 3: Puede entrenar
-# 4: Banqueros
-# 5: Nobles
-# 6: Dragones
-# 7: Timberos
-# 8: Guardias del caos
-# 9: Puede resucitar solamente a los newbies
+# 0: Comun - Los npcs comunes pueden ser comerciantes y hostiles
+# 1: Sacerdote
+# 2: Imperial
+# 3: Entrenador
+# 4: Banquero
+# 5: Noble
+# 6: Dragon
+# 7: Timbero
+# 8: Guardia del caos
+# 9: Sacerdote de newbies
+# 10: Pretoriano
+# 11: Gobernador
 
 ## Orden
-# Vende casas
+# Vende Casas
 # Resucitadores
 # Enlistadores
 # Entrenadores
@@ -32,10 +34,6 @@
 # Hostiles
 # Pretorianos
 
-## Observaciones
-# Algunas claves de object_count no coinciden con la cantidad de objectos
-# Claves no especificadas en el codigo: backup, GuardiaPersigue, Faccion, AtacaDoble
-
 # sound
 # sound1 = Golpe de la criatura
 # sound2 = Golpe a la criatura
@@ -47,8 +45,16 @@
 # 3 = Sur
 # 4 = Oeste
 
+# TODO Algunas claves de object_count no coinciden con la cantidad de objectos
+# TODO Claves no especificadas en el codigo: backup, GuardiaPersigue, Faccion, AtacaDoble, GolpeExacto
+# TODO Agregar el tipo de npc para comerciantes npc_type = 12
+# TODO No se en que momento elimine 5 npcs que eran 4 guardias imperiales y una arquera real, todos pertenecientes a la seccion "Guardias Armada". Ver el archivo NPCs.dat original para mas informacion.
+# TODO No se de donde salio el [NPC308]
+
 [INIT]
 npc_count = 332
+
+#################### Vende Casas ####################
 
 [NPC1]
 name = Cullighan
@@ -166,10 +172,12 @@ object8 = 611-0
 restockable = 1
 backup = 1
 
+#################### Resucitadores ####################
+
 [NPC6]
 name = Sacerdote
 npc_type = 1
-description = Hola, hijo mio! Soy el Sacerdote de estas tierras. Si quieres que te resucite escribe /RESUCITAR, o haz doble click sobre mi.
+description = Hola, hijo mio! Soy el sacerdote de estas tierras. Si quieres que te resucite escribe /resucitar, o haz doble click sobre mi.
 head = 3
 heading = 3
 body = 49
@@ -178,16 +186,18 @@ ai_type = 1
 [NPC7]
 name = Sacerdote
 npc_type = 9
-description = Hola, hijo mio! Soy el sacerdote de estas tierras. Si eres newbie te podra resucitar, solo necesitas tipear /RESUCITAR o hacer doble click sobre mi cabeza.
+description = Hola, hijo mio! Soy el sacerdote de estas tierras. Si eres newbie te podra resucitar, solo necesitas tipear /resucitar o hacer doble click sobre mi cabeza.
 head = 3
 heading = 3
 body = 49
 ai_type = 1
 
+#################### Enlistadores ####################
+
 [NPC8]
 name = Tancredo de Hauteville, soberano de Banderbill
 npc_type = 5
-description = Saludos ciudadano, soy Tancredo de Hauteville, nuevo soberano de Banderbill. Mi deber es mantener el nuevo orden del Imperio. Si deseas unirte a mis filas y ayudarme di /ENLISTAR.
+description = Saludos ciudadano, soy Tancredo de Hauteville, nuevo soberano de Banderbill. Mi deber es mantener el nuevo orden del Imperio. Si deseas unirte a mis filas y ayudarme di /enlistar.
 head = 510
 heading = 3
 body = 409
@@ -197,7 +207,7 @@ alignment = 1
 [NPC9]
 name = Demonio Legionario
 npc_type = 5
-description = Si deseas unirte a la Legion Oscura escribe /ENLISTAR.
+description = Si deseas unirte a la Legion Oscura escribe /enlistar.
 head = 0
 heading = 3
 body = 405
@@ -205,9 +215,11 @@ ai_type = 1
 alignment = 1
 Faccion = 1
 
+#################### Entrenadores ####################
+
 [NPC10]
-name = O
-description = Hola amigo! Soy el Maestro de armas de la Milicia de Banderbill, si deseas que traiga una criatura solo debes pedirmelo escribiendo /ENTRENAR.
+name = O'Riley de Banderbill
+description = Hola amigo! Soy el maestro de armas de la milicia de Banderbill, si deseas que traiga una criatura solo debes pedirmelo escribiendo /entrenar.
 npc_type = 3
 head = 6
 heading = 3
@@ -224,9 +236,9 @@ creature_name3 = Escorpion
 creature_name4 = Goblin
 
 [NPC11]
-name = O
+name = O'Riley de Arkhein
 npc_type = 3
-description = Hola amigo! Escribe /ENTRENAR para divertirte con estas almas malvadas que hemos domado para tu diversion en estos festejos.
+description = Hola amigo! Escribe /entrenar para divertirte con estas almas malvadas que hemos domado para tu diversion en estos festejos.
 head = 6
 heading = 3
 body = 57
@@ -242,6 +254,8 @@ creature_name2 = Tortuga gigante
 creature_name3 = Ogro
 creature_name4 = Liche
 creature_name5 = Duende Magico
+
+#################### Varios ####################
 
 [NPC12]
 name = Centinela
@@ -264,16 +278,18 @@ ai_type = 1
 [NPC14]
 name = Timbero
 npc_type = 7
-description = Hola joven! Si deseas apostar escribe /APOSTAR X.
+description = Hola joven! Si deseas apostar escribe /apostar x.
 head = 9
 heading = 3
 body = 47
 ai_type = 1
 
+#################### Comerciantes ####################
+
 [NPC15]
 name = Lilith
 npc_type = 0
-description = Hola, tengo las mejores Pociones de la Alquimia.
+description = Hola, tengo las mejores pociones de la alquimia.
 head = 77
 heading = 3
 body = 200
@@ -292,7 +308,7 @@ backup = 1
 [NPC16]
 name = Leñador
 npc_type = 0
-description = Hola muchacho! Si deseas vender o comprar madera escribe /COMERCIAR.
+description = Hola muchacho! Si deseas vender o comprar madera escribe /comerciar.
 head = 4
 heading = 3
 body = 1
@@ -416,9 +432,9 @@ object6 = 43-1000
 backup = 1
 
 [NPC24]
-name = SR
+name = Sastreria Real
 npc_type = 0
-description = Bienvenido a la Sastreria Real.
+description = Bienvenido a la sastreria real.
 head = 171
 heading = 3
 body = 174
@@ -442,9 +458,9 @@ object13 = 1038-1000
 backup = 1
 
 [NPC25]
-name = SR
+name = Sastreria Real
 npc_type = 0
-description = Bienvenido a la Sastreria Real.
+description = Bienvenido a la sastreria real.
 head = 309
 heading = 3
 body = 175
@@ -563,7 +579,7 @@ backup = 1
 [NPC30]
 name = Nelvi
 npc_type = 0
-description = Poseo una gran cantidad de ropajes para los astutos gnomos, ¿Deseas algo en particular?
+description = Poseo una gran cantidad de ropajes para los astutos gnomos, ¿deseas algo en particular?
 head = 403
 heading = 3
 body = 294
@@ -701,10 +717,12 @@ object8 = 984-1000
 object9 = 985-1000
 backup = 1
 
+#################### Decorativos ####################
+
 [NPC35]
 name = Astor
 npc_type = 0
-description = orcoszhh zson todsh orcshhh..hip..
+description = orcoszhh zson todsh orcshhh... hip...
 head = 2140
 body = 285
 heading = 3
@@ -742,10 +760,10 @@ name = Gobernador
 npc_type = 11
 description = Hola, soy el gobernador de Ullathorpe. Bienvenido a nuestra pequeña aldea! Escribe /hogar para obtener la ciudadania.
 head = 0
-city = 1
 heading = 3
 body = 4
 ai_type = 1
+city = 1
 
 [NPC40]
 name = Alarnick, antiguo soberano de Banderbill
@@ -786,7 +804,7 @@ ai_type = 1
 [NPC44]
 name = Linderoth
 npc_type = 0
-description = Hey tu, ¿que me andas mirando? He matado Medusas en peligrosos Dungeons desde que era un niño...
+description = Hey tu, ¿que me andas mirando? He matado medusas en peligrosos dungeons desde que era un niño...
 head = 2280
 body = 285
 heading = 3
@@ -813,7 +831,7 @@ ai_type = 1
 [NPC47]
 name = Vuragon
 npc_type = 0
-description = Estoy hasta la coronilla de que se escape mi vaca! ya recibira su merecido cuando la encuentre.
+description = Estoy hasta la coronilla de que se escape mi vaca! Ya recibira su merecido cuando la encuentre.
 head = 60
 body = 501
 heading = 3
@@ -921,7 +939,7 @@ ai_type = 1
 [NPC59]
 name = Unurbar Gorog
 npc_type = 0
-description = Hola! Poseo las mejores y mas extrañas bebidas de estas tierras, ¿Que desea que le sirva?
+description = Hola! Poseo las mejores y mas extrañas bebidas de estas tierras, ¿que desea que le sirva?
 head = 304
 heading = 3
 body = 372
@@ -942,12 +960,14 @@ backup = 1
 [NPC60]
 name = Dugh Dhail
 npc_type = 0
-description = Hola forastero! Pronto se celebrara un nuevo aniversario de la creacion de la Cerveza. ¿Acudiras a los festejos?
+description = Hola forastero! Pronto se celebrara un nuevo aniversario de la creacion de la cerveza. Acudiras a los festejos?
 head = 0
 heading = 3
 body = 410
 ai_type = 1
 backup = 1
+
+#################### Ullathorpe ####################
 
 [NPC61]
 name = Thorkis
@@ -970,7 +990,7 @@ backup = 1
 [NPC62]
 name = Herrero
 npc_type = 0
-description = Bienvenido, rata de alcantarilla, soy el Herrero de Ullathorpe... tengo algunas armas que pueden ayudarte en tus viajes.
+description = Bienvenido, rata de alcantarilla, soy el herrero de Ullathorpe... tengo algunas armas que pueden ayudarte en tus viajes.
 head = 505
 heading = 3
 body = 199
@@ -1013,7 +1033,7 @@ backup = 1
 [NPC64]
 name = Sastre
 npc_type = 0
-description = Hola forastero! Soy el Sastre de Ullathorpe, Bienvenido!
+description = Hola forastero! Soy el sastre de Ullathorpe, bienvenido!
 head = 9
 heading = 3
 body = 50
@@ -1035,7 +1055,7 @@ backup = 1
 [NPC65]
 name = Sastre
 npc_type = 0
-description = Bienvenida Viajera! Tengo hermosas vestimentas para ofrecerte...
+description = Bienvenida viajera! Tengo hermosas vestimentas para ofrecerte...
 head = 70
 heading = 3
 body = 80
@@ -1087,6 +1107,8 @@ object4 = 1001-1000
 object5 = 1002-1000
 backup = 1
 
+#################### Nix ####################
+
 [NPC68]
 name = Thorkis
 npc_type = 0
@@ -1107,7 +1129,7 @@ backup = 1
 [NPC69]
 name = Herrero
 npc_type = 0
-description = Bienvenido, rata de alcantarilla, soy el Herrero de Nix, tengo algunas armas que pueden ayudarte en tus viajes.
+description = Bienvenido, rata de alcantarilla, soy el herrero de Nix, tengo algunas armas que pueden ayudarte en tus viajes.
 head = 505
 heading = 3
 body = 199
@@ -1153,7 +1175,7 @@ backup = 1
 [NPC71]
 name = Sastre
 npc_type = 0
-description = Hola forastero! Soy el Sastre de Nix, Bienvenido!
+description = Hola forastero! Soy el sastre de Nix, bienvenido!
 head = 7
 heading = 3
 body = 50
@@ -1176,7 +1198,7 @@ backup = 1
 [NPC72]
 name = Sastre
 npc_type = 0
-description = Bienvenida Viajera! Entra a mi tienda, Tengo las mejores prendas de Nix!
+description = Bienvenida viajera! Entra a mi tienda, tengo las mejores prendas de Nix!
 head = 71
 heading = 3
 body = 80
@@ -1231,10 +1253,12 @@ object7 = 1001-1000
 object8 = 1002-1000
 backup = 1
 
+#################### Banderbill ####################
+
 [NPC75]
 name = Tellez
 npc_type = 0
-description = Hola! Bienvenido al "Meson Hostigado", ¿Que desea que le sirva?
+description = Hola! Bienvenido al Meson Hostigado ¿Que desea que le sirva?
 head = 505
 heading = 3
 body = 202
@@ -1279,7 +1303,7 @@ backup = 1
 [NPC77]
 name = Mago
 npc_type = 0
-description = Bienvenido a mi pequeña Tienda de Banderbill... Tengo algunos hechizos que podrian interesarte.
+description = Bienvenido a mi pequeña tienda de Banderbill... Tengo algunos hechizos que podrian interesarte.
 head = 110
 heading = 3
 body = 46
@@ -1307,7 +1331,7 @@ backup = 1
 [NPC78]
 name = Sastre
 npc_type = 0
-description = Bienvenido a la Sastreria de Banderbill! ¿En que lo puedo ayudar?
+description = Bienvenido a la sastreria de Banderbill! En que lo puedo ayudar?
 head = 7
 heading = 3
 body = 56
@@ -1384,10 +1408,12 @@ object5 = 648-1000
 object6 = 1003-1000
 backup = 1
 
+#################### Lindos ####################
+
 [NPC82]
 name = Sorks
 npc_type = 0
-description = ¿Estais sediento y hambriento!?
+description = ¿Estas sediento y hambriento?
 head = 505
 heading = 3
 body = 202
@@ -1497,7 +1523,7 @@ backup = 1
 [NPC87]
 name = Sastre
 npc_type = 0
-description = Hola forastero! confeccionamos las mejores ropas de la zona.
+description = Hola forastero! Confeccionamos las mejores ropas de la zona.
 head = 304
 heading = 3
 body = 135
@@ -1534,6 +1560,8 @@ object6 = 484-1000
 object7 = 1004-1000
 backup = 1
 
+#################### Arghal ####################
+
 [NPC89]
 name = Carahuel
 npc_type = 0
@@ -1554,7 +1582,7 @@ backup = 1
 [NPC90]
 name = Bhoemond
 npc_type = 0
-description = Sea bienvenido a la famosa Taberna de Arghal!, Aqui podra saciarse con la mejor comida y la mejor bebida de toda la zona.
+description = Sea bienvenido a la famosa taberna de Arghal! Aqui podra saciarse con la mejor comida y la mejor bebida de toda la zona.
 head = 17
 heading = 3
 body = 100
@@ -1598,7 +1626,7 @@ backup = 1
 [NPC92]
 name = Mago
 npc_type = 0
-description = Bienvenido, neofito a esta, a mi pequeña escuela de Magia, ubicada en el corazon mismo de la ciudad de Arghal.
+description = Bienvenido a mi pequeña escuela de magia, ubicada en el corazon mismo de la ciudad de Arghal.
 head = 20
 heading = 3
 body = 34
@@ -1659,7 +1687,7 @@ backup = 1
 [NPC95]
 name = Odkon
 npc_type = 0
-description = Acerquese pequeño vistante de Arghal... Tengo prendas a su medida.
+description = Acerquese pequeño visitante de Arghal... Tengo prendas a su medida.
 head = 404
 heading = 3
 body = 371
@@ -1692,10 +1720,12 @@ object2 = 529-1000
 object3 = 668-1000
 backup = 1
 
+#################### Arkhein ####################
+
 [NPC97]
 name = Tolloz
 npc_type = 0
-description = Hola! Bienvenido a la Taberna de Arkhein, ¿Que desea que le sirva?
+description = Hola! Bienvenido a la taberna de Arkhein, ¿que desea que le sirva?
 head = 505
 heading = 3
 body = 202
@@ -1769,7 +1799,7 @@ backup = 1
 [NPC100]
 name = Sastre
 npc_type = 0
-description = Entrad Valiente Viajero! En la Sastreria de Arkhein estan las mejores ropas del continente.
+description = Entrad valiente viajero! En la sastreria de Arkhein estan las mejores ropas del continente.
 head = 15
 heading = 3
 body = 56
@@ -1848,6 +1878,8 @@ object5 = 648-1000
 object6 = 1003-1000
 backup = 1
 
+#################### Nueva Esperanza ####################
+
 [NPC104]
 name = Roksar
 npc_type = 0
@@ -1868,6 +1900,8 @@ object6 = 42-1000
 object7 = 161-1000
 object8 = 533-1000
 backup = 1
+
+#################### Ciudad Perdida ####################
 
 [NPC105]
 name = Herrero
@@ -1913,7 +1947,7 @@ backup = 1
 [NPC107]
 name = Sastre
 npc_type = 0
-description = Bienvenidos a la Gran Sastreria de la Ciudad Perdida! Aqui encontraran las ropas mas exoticas del mundo...
+description = Bienvenidos a la gran sastreria de la Ciudad Perdida! Aqui encontraran las ropas mas exoticas del mundo...
 head = 406
 heading = 3
 body = 130
@@ -1994,6 +2028,8 @@ object9 = 195-1000
 object10 = 243-1000
 object11 = 1004-1000
 backup = 1
+
+#################### Guardias Armada ####################
 
 [NPC111]
 name = Sacerdote Imperial
@@ -2103,7 +2139,7 @@ spell2 = 23
 [NPC116]
 name = Mago Imperial
 npc_type = 2
-description = Ohhh hijo mio! que la llama de la virtud arda en tu corazon!
+description = Ohhh hijo mio! Que la llama de la virtud arda en tu corazon!
 head = 6
 heading = 3
 body = 130
@@ -2124,7 +2160,7 @@ spell2 = 23
 [NPC117]
 name = Mago Imperial
 npc_type = 2
-description = Ohhh hijo mio! que la llama de la virtud arda en tu corazon!
+description = Ohhh hijo mio! Que la llama de la virtud arda en tu corazon!
 head = 6
 heading = 3
 body = 128
@@ -2144,8 +2180,8 @@ spell2 = 23
 
 [NPC118]
 name = Guardia Imperial
-npc_type = 0
-description = Atencion! Si eres criminal e ingresas aqui seras atacado por los guardias reales.
+npc_type = 2
+description = Dare carcel a todos los criminales!
 head = 0
 heading = 3
 body = 15
@@ -2160,7 +2196,7 @@ evasion = 190
 [NPC119]
 name = Gobernador
 npc_type = 11
-description = Hola, soy el gobernador de Nix Bienvenido a nuestra pequeña aldea! Escribe /Hogar para obtener la ciudadania.
+description = Hola, soy el gobernador de Nix. Bienvenido a nuestra pequeña aldea! Escribe /hogar para obtener la ciudadania.
 head = 0
 heading = 3
 body = 4
@@ -2170,7 +2206,7 @@ city = 2
 [NPC120]
 name = Gobernador
 npc_type = 11
-description = Hola, soy el gobernador de Banderbill Bienvenido a nuestra pequeña aldea! Escribe /Hogar para obtener la ciudadania.
+description = Hola, soy el gobernador de Banderbill. Bienvenido a nuestra pequeña aldea! Escribe /hogar para obtener la ciudadania.
 head = 0
 heading = 3
 body = 4
@@ -2180,7 +2216,7 @@ city = 3
 [NPC121]
 name = Gobernador
 npc_type = 11
-description = Hola, soy el gobernador de Lindos Bienvenido a nuestra pequeña aldea! Escribe /Hogar para obtener la ciudadania.
+description = Hola, soy el gobernador de Lindos. Bienvenido a nuestra pequeña aldea! Escribe /hogar para obtener la ciudadania.
 head = 0
 heading = 3
 body = 4
@@ -2190,7 +2226,7 @@ city = 4
 [NPC122]
 name = Gobernador
 npc_type = 11
-description = Hola, soy el gobernador de Arghal. Bienvenido a nuestra pequeña aldea! Escribe /Hogar para obtener la ciudadania.
+description = Hola, soy el gobernador de Arghal. Bienvenido a nuestra pequeña aldea! Escribe /hogar para obtener la ciudadania.
 head = 0
 heading = 3
 body = 4
@@ -2200,12 +2236,14 @@ city = 5
 [NPC123]
 name = Gobernador
 npc_type = 11
-description = Hola, soy el gobernador de Arkhein. Bienvenido a nuestra pequeña aldea! Escribe /Hogar para obtener la ciudadania.
+description = Hola, soy el gobernador de Arkhein. Bienvenido a nuestra pequeña aldea! Escribe /hogar para obtener la ciudadania.
 head = 0
 heading = 3
 body = 4
 ai_type = 1
 city = 6
+
+#################### Guardias Legion ####################
 
 [NPC124]
 name = Guardia Infernal
@@ -2286,7 +2324,7 @@ evasion = 190
 [NPC128]
 name = Lilith
 npc_type = 0
-description = Hola, tengo las mejores Pociones de la Alquimia para principiantes.
+description = Hola, tengo las mejores pociones de la alquimia para principiantes.
 head = 77
 heading = 3
 body = 200
@@ -2366,6 +2404,8 @@ object10 = 862-1000
 object11 = 863-1000
 object12 = 864-1000
 backup = 1
+
+#################### No Hostiles ####################
 
 [NPC132]
 name = Gallo
@@ -2653,7 +2693,7 @@ spell1 = 24
 spell2 = 23
 
 [NPC149]
-name = Gran aguila
+name = Gran Aguila
 npc_type = 0
 head = 0
 heading = 3
@@ -2770,6 +2810,8 @@ min_hit = 3
 attack = 10
 evasion = 10
 sound3 = 96
+
+#################### Hostiles ####################
 
 [NPC156]
 name = Murcielago
@@ -3024,6 +3066,7 @@ body = 42
 ai_type = 3
 attackable = 1
 hostile = 1
+poisonous = 1
 experience = 1450
 min_hp = 1000
 max_hp = 1000
@@ -3031,7 +3074,6 @@ max_hit = 100
 min_hit = 75
 attack = 150
 evasion = 70
-poisonous = 1
 object_count = 5
 drop1 = 12-175
 drop2 = 38-30
@@ -3064,6 +3106,7 @@ drop2 = 37-55
 drop3 = 401-1
 drop5 = 697-1
 
+# Repetio
 [NPC168]
 name = Lobo
 npc_type = 0
@@ -3241,6 +3284,7 @@ body = 216
 ai_type = 3
 attackable = 1
 hostile = 1
+poisonous = 1
 experience = 1450
 min_hp = 1000
 max_hp = 1000
@@ -3248,7 +3292,6 @@ max_hit = 100
 min_hit = 75
 attack = 150
 evasion = 70
-poisonous = 1
 object_count = 5
 drop1 = 12-175
 drop2 = 38-30
@@ -3295,6 +3338,7 @@ drop3 = 27-23
 drop4 = 30-1
 drop5 = 1004-1
 
+# Repetido
 [NPC178]
 name = Orco
 npc_type = 0
@@ -3369,7 +3413,7 @@ drop4 = 183-1
 drop5 = 183-1
 
 [NPC181]
-name = aguila
+name = Aguila
 npc_type = 0
 head = 0
 heading = 3
@@ -3399,6 +3443,7 @@ body = 42
 ai_type = 3
 attackable = 1
 hostile = 1
+poisonous = 1
 experience = 1450
 min_hp = 3000
 max_hp = 3000
@@ -3407,7 +3452,6 @@ min_hit = 75
 defense = 10
 attack = 200
 evasion = 150
-poisonous = 1
 object_count = 5
 drop1 = 174-1
 drop2 = 174-1
@@ -3469,8 +3513,8 @@ body = 51
 ai_type = 3
 attackable = 1
 hostile = 1
+poisonous = 1
 temeable = 600
-
 experience = 32
 min_hp = 32
 max_hp = 32
@@ -3479,7 +3523,6 @@ min_hit = 1
 magic_defense = 3
 attack = 30
 evasion = 10
-poisonous = 1
 object_count = 5
 drop1 = 12-2
 drop3 = 12-30
@@ -3564,7 +3607,6 @@ ai_type = 3
 attackable = 1
 hostile = 1
 temeable = 1100
-
 experience = 41
 min_hp = 50
 max_hp = 50
@@ -3591,7 +3633,6 @@ ai_type = 3
 attackable = 1
 hostile = 1
 temeable = 2010
-
 experience = 500
 min_hp = 400
 max_hp = 400
@@ -3617,7 +3658,6 @@ ai_type = 3
 attackable = 1
 hostile = 1
 temeable = 425
-
 experience = 5
 min_hp = 5
 max_hp = 5
@@ -3640,7 +3680,6 @@ ai_type = 3
 attackable = 1
 hostile = 1
 temeable = 700
-
 experience = 16
 min_hp = 15
 max_hp = 15
@@ -3689,7 +3728,6 @@ ai_type = 3
 attackable = 1
 hostile = 1
 temeable = 2010
-
 experience = 850
 min_hp = 600
 max_hp = 600
@@ -3714,7 +3752,6 @@ ai_type = 3
 attackable = 1
 hostile = 1
 temeable = 2010
-
 experience = 500
 min_hp = 550
 max_hp = 550
@@ -3738,7 +3775,6 @@ ai_type = 3
 attackable = 1
 hostile = 1
 temeable = 1700
-
 experience = 245
 min_hp = 210
 max_hp = 210
@@ -3855,8 +3891,9 @@ drop3 = 12-150
 drop4 = 37-50
 drop5 = 12-5000
 
+# Repetido
 [NPC201]
-name = Licontropo
+name = Licantropo
 npc_type = 0
 head = 0
 heading = 3
@@ -3878,6 +3915,7 @@ drop3 = 414-30
 drop4 = 1002-1
 drop5 = 394-1
 
+# Repetido
 [NPC202]
 name = Zombie
 npc_type = 0
@@ -3905,6 +3943,7 @@ body = 36
 ai_type = 3
 attackable = 1
 hostile = 1
+poisonous = 1
 experience = 1450
 min_hp = 1000
 max_hp = 1000
@@ -3912,7 +3951,6 @@ max_hit = 100
 min_hit = 75
 attack = 150
 evasion = 70
-poisonous = 1
 object_count = 5
 drop1 = 12-175
 drop2 = 38-25
@@ -3955,7 +3993,6 @@ ai_type = 3
 attackable = 1
 hostile = 1
 temeable = 2250
-
 experience = 2810
 min_hp = 1900
 max_hp = 1900
@@ -4146,7 +4183,6 @@ ai_type = 3
 attackable = 1
 hostile = 1
 temeable = 800
-
 experience = 25
 min_hp = 50
 max_hp = 50
@@ -4172,7 +4208,6 @@ ai_type = 2
 attackable = 1
 hostile = 1
 temeable = 2010
-
 experience = 340
 min_hp = 515
 max_hp = 515
@@ -4262,6 +4297,7 @@ defense = 10
 attack = 350
 evasion = 300
 
+# Quien fue el HPD xd?
 [NPC218]
 name = Dark Jennifer
 npc_type = 0
@@ -4290,6 +4326,7 @@ body = 51
 ai_type = 3
 attackable = 1
 hostile = 1
+poisonous = 1
 experience = 32
 min_hp = 32
 max_hp = 32
@@ -4297,7 +4334,6 @@ max_hit = 3
 min_hit = 1
 attack = 30
 evasion = 10
-poisonous = 1
 
 [NPC220]
 name = Serpiente
@@ -4415,6 +4451,7 @@ body = 25
 ai_type = 2
 attackable = 1
 hostile = 1
+poisonous = 1
 experience = 100
 min_hp = 10
 max_hp = 10
@@ -4422,7 +4459,6 @@ max_hit = 2
 min_hit = 1
 attack = 500
 evasion = 10
-poisonous = 1
 object_count = 5
 drop2 = 58-15
 
@@ -4435,6 +4471,7 @@ body = 25
 ai_type = 3
 attackable = 1
 hostile = 1
+poisonous = 1
 experience = 900
 min_hp = 1500
 max_hp = 1500
@@ -4444,7 +4481,6 @@ attack = 100
 evasion = 100
 sound1 = 13
 sound2 = 13
-poisonous = 1
 object_count = 5
 drop1 = 58-50
 drop2 = 58-100
@@ -4461,6 +4497,7 @@ body = 25
 ai_type = 2
 attackable = 1
 hostile = 1
+poisonous = 1
 experience = 100
 min_hp = 1500
 max_hp = 1500
@@ -4470,7 +4507,6 @@ attack = 100
 evasion = 100
 sound1 = 13
 sound2 = 13
-poisonous = 1
 object_count = 5
 drop1 = 58-10
 drop2 = 208-1
@@ -4485,6 +4521,7 @@ body = 25
 ai_type = 1
 attackable = 1
 hostile = 1
+poisonous = 1
 experience = 100
 min_hp = 10
 max_hp = 10
@@ -4492,14 +4529,13 @@ max_hit = 2
 min_hit = 1
 attack = 500
 evasion = 10
-poisonous = 1
 object_count = 5
 drop2 = 58-15
 
 [NPC229]
 name = Alma Putrefacta
 npc_type = 0
-description = Soy un esclavo del mi señor del mal
+description = Soy un esclavo del señor del mal
 head = 514
 heading = 3
 body = 145
@@ -4532,7 +4568,6 @@ ai_type = 3
 attackable = 1
 hostile = 1
 temeable = 500
-
 experience = 15
 min_hp = 35
 max_hp = 35
@@ -4555,7 +4590,6 @@ ai_type = 3
 attackable = 1
 hostile = 1
 temeable = 810
-
 experience = 25
 min_hp = 65
 max_hp = 65
@@ -4916,7 +4950,7 @@ drop2 = 12-140
 drop3 = 12-200
 
 [NPC246]
-name = Espiritu chocarrero
+name = Espiritu Chocarrero
 npc_type = 0
 head = 0
 heading = 3
@@ -4938,7 +4972,7 @@ drop1 = 12-50
 drop2 = 38-10
 
 [NPC247]
-name = Protector de los muertos
+name = Protector de los Muertos
 npc_type = 0
 head = 0
 heading = 3
@@ -4983,7 +5017,7 @@ drop4 = 697-2
 drop5 = 513-1
 
 [NPC249]
-name = Engendro de las profundidades
+name = Engendro de las Profundidades
 npc_type = 0
 head = 0
 heading = 3
@@ -5006,7 +5040,7 @@ drop3 = 398-4
 drop4 = 30-1
 
 [NPC250]
-name = Ave de las profundidades
+name = Ave de las Profundidades
 npc_type = 0
 head = 0
 heading = 3
@@ -5028,7 +5062,7 @@ drop2 = 551-50
 drop3 = 552-50
 
 [NPC251]
-name = Licontropo
+name = Licantropo
 npc_type = 0
 head = 0
 heading = 3
@@ -5379,7 +5413,7 @@ drop4 = 551-200
 drop5 = 665-6
 
 [NPC265]
-name = Arbol capturador de almas
+name = Arbol Capturador de Almas
 npc_type = 0
 head = 0
 heading = 3
@@ -5416,7 +5450,6 @@ ai_type = 3
 attackable = 1
 hostile = 1
 temeable = 900
-
 experience = 60
 min_hp = 35
 max_hp = 35
@@ -5673,7 +5706,7 @@ drop3 = 480-10
 drop4 = 479-1
 
 [NPC277]
-name = Protector de almas
+name = Protector de Almas
 npc_type = 0
 head = 0
 heading = 3
@@ -5706,6 +5739,7 @@ body = 538
 ai_type = 3
 attackable = 1
 hostile = 1
+poisonous = 1
 experience = 95
 min_hp = 95
 max_hp = 95
@@ -5714,7 +5748,6 @@ min_hit = 6
 defense = 2
 attack = 63
 evasion = 32
-poisonous = 1
 object_count = 5
 drop1 = 166-5
 drop3 = 201-1
@@ -6010,6 +6043,8 @@ drop2 = 400-1
 drop3 = 400-1
 drop4 = 400-1
 drop5 = 400-1
+
+#################### Pretorianos ####################
 
 [NPC309]
 name = Rey Pretoriano

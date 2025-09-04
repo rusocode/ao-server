@@ -1,17 +1,19 @@
 ## npc_type
-# 0: Npcs comunes
-# 1: Puede resucitar
-# 2: Guardia
-# 3: Puede entrenar
-# 4: Banqueros
-# 5: Nobles
-# 6: Dragones
-# 7: Timberos
-# 8: Guardias del caos
-# 9: Puede resucitar solamente a los newbies
+# 0: Comun - Los npcs comunes pueden ser comerciantes y hostiles
+# 1: Sacerdote
+# 2: Imperial
+# 3: Entrenador
+# 4: Banquero
+# 5: Noble
+# 6: Dragon
+# 7: Timbero
+# 8: Guardia del caos
+# 9: Sacerdote de newbies
+# 10: Pretoriano
+# 11: Gobernador
 
 ## Orden
-# Vende casas
+# Vende Casas
 # Resucitadores
 # Enlistadores
 # Entrenadores
@@ -32,10 +34,6 @@
 # Hostiles
 # Pretorianos
 
-## Observaciones
-# Algunas claves de object_count no coinciden con la cantidad de objectos
-# Claves no especificadas en el codigo: backup, GuardiaPersigue, Faccion, AtacaDoble, GolpeExacto
-
 # sound
 # sound1 = Golpe de la criatura
 # sound2 = Golpe a la criatura
@@ -47,8 +45,16 @@
 # 3 = Sur
 # 4 = Oeste
 
+# TODO Algunas claves de object_count no coinciden con la cantidad de objectos
+# TODO Claves no especificadas en el codigo: backup, GuardiaPersigue, Faccion, AtacaDoble, GolpeExacto
+# TODO Agregar el tipo de npc para comerciantes npc_type = 12
+# TODO No se en que momento elimine 5 npcs que eran 4 guardias imperiales y una arquera real, todos pertenecientes a la seccion "Guardias Armada". Ver el archivo NPCs.dat original para mas informacion.
+# TODO No se de donde salio el [NPC308]
+
 [INIT]
 npc_count = 332
+
+#################### Vende Casas ####################
 
 [NPC1]
 name = Cullighan
@@ -166,6 +172,8 @@ object8 = 611-0
 restockable = 1
 backup = 1
 
+#################### Resucitadores ####################
+
 [NPC6]
 name = Sacerdote
 npc_type = 1
@@ -183,6 +191,8 @@ head = 3
 heading = 3
 body = 49
 ai_type = 1
+
+#################### Enlistadores ####################
 
 [NPC8]
 name = Tancredo de Hauteville, soberano de Banderbill
@@ -205,8 +215,10 @@ ai_type = 1
 alignment = 1
 Faccion = 1
 
+#################### Entrenadores ####################
+
 [NPC10]
-name = O
+name = O'Riley de Banderbill
 description = Hola amigo! Soy el maestro de armas de la milicia de Banderbill, si deseas que traiga una criatura solo debes pedirmelo escribiendo /entrenar.
 npc_type = 3
 head = 6
@@ -224,7 +236,7 @@ creature_name3 = Escorpion
 creature_name4 = Goblin
 
 [NPC11]
-name = O
+name = O'Riley de Arkhein
 npc_type = 3
 description = Hola amigo! Escribe /entrenar para divertirte con estas almas malvadas que hemos domado para tu diversion en estos festejos.
 head = 6
@@ -242,6 +254,8 @@ creature_name2 = Tortuga gigante
 creature_name3 = Ogro
 creature_name4 = Liche
 creature_name5 = Duende Magico
+
+#################### Varios ####################
 
 [NPC12]
 name = Centinela
@@ -269,6 +283,8 @@ head = 9
 heading = 3
 body = 47
 ai_type = 1
+
+#################### Comerciantes ####################
 
 [NPC15]
 name = Lilith
@@ -701,6 +717,8 @@ object8 = 984-1000
 object9 = 985-1000
 backup = 1
 
+#################### Decorativos ####################
+
 [NPC35]
 name = Astor
 npc_type = 0
@@ -949,6 +967,8 @@ body = 410
 ai_type = 1
 backup = 1
 
+#################### Ullathorpe ####################
+
 [NPC61]
 name = Thorkis
 npc_type = 0
@@ -1086,6 +1106,8 @@ object3 = 668-1000
 object4 = 1001-1000
 object5 = 1002-1000
 backup = 1
+
+#################### Nix ####################
 
 [NPC68]
 name = Thorkis
@@ -1231,10 +1253,12 @@ object7 = 1001-1000
 object8 = 1002-1000
 backup = 1
 
+#################### Banderbill ####################
+
 [NPC75]
 name = Tellez
 npc_type = 0
-description = Hola! Bienvenido al Meson Hostigado, ¿que desea que le sirva?
+description = Hola! Bienvenido al Meson Hostigado ¿Que desea que le sirva?
 head = 505
 heading = 3
 body = 202
@@ -1383,6 +1407,8 @@ object4 = 360-1000
 object5 = 648-1000
 object6 = 1003-1000
 backup = 1
+
+#################### Lindos ####################
 
 [NPC82]
 name = Sorks
@@ -1533,6 +1559,8 @@ object5 = 648-1000
 object6 = 484-1000
 object7 = 1004-1000
 backup = 1
+
+#################### Arghal ####################
 
 [NPC89]
 name = Carahuel
@@ -1692,6 +1720,8 @@ object2 = 529-1000
 object3 = 668-1000
 backup = 1
 
+#################### Arkhein ####################
+
 [NPC97]
 name = Tolloz
 npc_type = 0
@@ -1848,6 +1878,8 @@ object5 = 648-1000
 object6 = 1003-1000
 backup = 1
 
+#################### Nueva Esperanza ####################
+
 [NPC104]
 name = Roksar
 npc_type = 0
@@ -1868,6 +1900,8 @@ object6 = 42-1000
 object7 = 161-1000
 object8 = 533-1000
 backup = 1
+
+#################### Ciudad Perdida ####################
 
 [NPC105]
 name = Herrero
@@ -1994,6 +2028,8 @@ object9 = 195-1000
 object10 = 243-1000
 object11 = 1004-1000
 backup = 1
+
+#################### Guardias Armada ####################
 
 [NPC111]
 name = Sacerdote Imperial
@@ -2144,8 +2180,8 @@ spell2 = 23
 
 [NPC118]
 name = Guardia Imperial
-npc_type = 0
-description = Atencion! Si eres criminal e ingresas aqui seras atacado por los guardias reales.
+npc_type = 2
+description = Dare carcel a todos los criminales!
 head = 0
 heading = 3
 body = 15
@@ -2206,6 +2242,8 @@ heading = 3
 body = 4
 ai_type = 1
 city = 6
+
+#################### Guardias Legion ####################
 
 [NPC124]
 name = Guardia Infernal
@@ -2366,6 +2404,8 @@ object10 = 862-1000
 object11 = 863-1000
 object12 = 864-1000
 backup = 1
+
+#################### No Hostiles ####################
 
 [NPC132]
 name = Gallo
@@ -2770,6 +2810,8 @@ min_hit = 3
 attack = 10
 evasion = 10
 sound3 = 96
+
+#################### Hostiles ####################
 
 [NPC156]
 name = Murcielago
@@ -6001,6 +6043,8 @@ drop2 = 400-1
 drop3 = 400-1
 drop4 = 400-1
 drop5 = 400-1
+
+#################### Pretorianos ####################
 
 [NPC309]
 name = Rey Pretoriano

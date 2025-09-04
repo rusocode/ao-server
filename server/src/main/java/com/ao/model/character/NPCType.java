@@ -2,23 +2,30 @@ package com.ao.model.character;
 
 public enum NPCType {
 
-    MERCHANT,
-    COMMON,
-    RESUCITATOR,
-    ROYAL_GUARD,
-    TRAINER,
-    BANKER,
-    NOBLE,
-    GAMBLER,
-    CHAOS_GUARD,
-    NEWBIE_RESUCITATOR,
-    GOVERNOR,
-    DRAGON;
+    COMMON(0),
+    RESUCITATOR(1),
+    ROYAL_GUARD(2),
+    TRAINER(3),
+    BANKER(4),
+    NOBLE(5),
+    DRAGON(6),
+    GAMBLER(7),
+    CHAOS_GUARD(8),
+    NEWBIE_RESUCITATOR(9),
+    PRETORIAN(10),
+    GOVERNOR(11),
+    MERCHANT(12);
 
-    private static final NPCType[] values = NPCType.values();
+    private final int id;
 
-    public static NPCType get(byte index) {
-        return values[index];
+    NPCType(int id) {
+        this.id = id;
+    }
+
+    public static NPCType findById(int id) {
+        for (NPCType type : values())
+            if (type.id == id) return type;
+        return null;
     }
 
 }
