@@ -1,6 +1,6 @@
 package com.ao.model.character;
 
-public interface NPCCharacter extends Character {
+public interface NpcCharacter extends Character {
 
     int getId();
 
@@ -10,7 +10,7 @@ public interface NPCCharacter extends Character {
 
     Character getMaster();
 
-    NPCType getNPCType();
+    NpcType getNPCType();
 
     boolean isTameable();
 

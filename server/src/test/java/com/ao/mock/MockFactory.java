@@ -7,7 +7,7 @@ import com.ao.model.user.ConnectedUser;
 import com.ao.model.user.User;
 import com.ao.model.worldobject.AbstractItem;
 import com.ao.model.worldobject.Item;
-import com.ao.model.worldobject.WorldObject;
+import com.ao.model.worldobject.Object;
 import com.ao.network.Connection;
 import com.ao.service.timedevents.TimedEvent;
 import org.mockito.stubbing.Answer;
@@ -67,10 +67,10 @@ public class MockFactory {
     public static Effect mockEffect(boolean appliesToChar, boolean appliesToWorldObject) {
         Effect effect = mock(Effect.class);
         when(effect.appliesTo(any(Character.class), any(Character.class))).thenReturn(appliesToChar);
-        when(effect.appliesTo(any(Character.class), any(WorldObject.class))).thenReturn(appliesToWorldObject);
+        when(effect.appliesTo(any(Character.class), any(Object.class))).thenReturn(appliesToWorldObject);
         if (!appliesToChar) doThrow(InvalidTargetException.class).when(effect).apply(any(Character.class), any(Character.class));
         if (!appliesToWorldObject)
-            doThrow(InvalidTargetException.class).when(effect).apply(any(Character.class), any(WorldObject.class));
+            doThrow(InvalidTargetException.class).when(effect).apply(any(Character.class), any(Object.class));
         return effect;
     }
 
@@ -89,9 +89,9 @@ public class MockFactory {
      *
      * @return the created mock
      */
-    public static WorldObject mockWorldObject() {
+    public static Object mockWorldObject() {
         // TODO Fill this in as needed
-        return mock(WorldObject.class);
+        return mock(Object.class);
     }
 
     /**

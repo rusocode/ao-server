@@ -1,7 +1,7 @@
 package com.ao.model.spell.effect;
 
 import com.ao.model.character.Character;
-import com.ao.model.worldobject.WorldObject;
+import com.ao.model.worldobject.Object;
 
 public interface Effect {
 
@@ -19,7 +19,7 @@ public interface Effect {
      * @param caster character casting the spell with the effect
      * @param target world object on which to apply the effect
      */
-    void apply(Character caster, WorldObject target);
+    void apply(Character caster, Object target);
 
     /**
      * Checks whether the effect can be applied to the given character or not.
@@ -37,6 +37,6 @@ public interface Effect {
      * @param worldobject target object
      * @return true if the effect can be applied, false otherwise
      */
-    boolean appliesTo(Character caster, WorldObject worldobject);
+    boolean appliesTo(Character caster, Object worldobject);
 
 }

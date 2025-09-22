@@ -3,7 +3,7 @@ package com.ao.model.spell.effect;
 import com.ao.exception.InvalidTargetException;
 import com.ao.model.character.Character;
 import com.ao.model.character.UserCharacter;
-import com.ao.model.worldobject.WorldObject;
+import com.ao.model.worldobject.Object;
 
 public class InvisibilityEffect implements Effect {
 
@@ -19,12 +19,12 @@ public class InvisibilityEffect implements Effect {
     }
 
     @Override
-    public boolean appliesTo(Character caster, WorldObject worldobject) {
+    public boolean appliesTo(Character caster, Object worldobject) {
         return false;
     }
 
     @Override
-    public void apply(Character caster, WorldObject target) {
+    public void apply(Character caster, Object target) {
         throw new InvalidTargetException();
     }
 

@@ -1,12 +1,12 @@
 package com.ao.model.worldobject.properties;
 
-import com.ao.model.worldobject.WorldObjectType;
+import com.ao.model.worldobject.ObjectType;
 
 /**
  * Defines a Teleport's properties. Allows a lightweight pattern implementation.
  */
 
-public class ForumProperties extends WorldObjectProperties {
+public class ForumProperties extends ObjectProperties {
 
     protected String forumName;
 
@@ -18,7 +18,7 @@ public class ForumProperties extends WorldObjectProperties {
      * @param name    name of the item
      * @param graphic graphic for the item
      */
-    public ForumProperties(WorldObjectType type, int id, String name, int graphic, String forumName) {
+    public ForumProperties(ObjectType type, int id, String name, int graphic, String forumName) {
         super(type, id, name, graphic);
         this.forumName = forumName;
     }

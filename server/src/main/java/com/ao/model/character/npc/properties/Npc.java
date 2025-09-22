@@ -1,20 +1,22 @@
 package com.ao.model.character.npc.properties;
 
-import com.ao.model.character.NPCType;
+import com.ao.model.character.NpcType;
 import com.ao.model.character.attack.AttackStrategy;
 import com.ao.model.character.behavior.Behavior;
 import com.ao.model.character.movement.MovementStrategy;
 import com.ao.model.map.Heading;
 
 /**
- * Defines a npcs properties. Allows a lightweight pattern implementation.
+ * Define the properties of the npc.
+ * <p>
+ * Allows a lightweight pattern implementation.
  */
 
-public class NPCProperties {
+public class Npc {
 
     protected int id;
     protected String name;
-    protected NPCType type;
+    protected NpcType type;
     protected short body;
     protected short head;
     protected Heading heading;
@@ -24,8 +26,8 @@ public class NPCProperties {
     protected Class<? extends AttackStrategy> attackStrategy;
     protected Class<? extends MovementStrategy> movementStrategy;
 
-    public NPCProperties(NPCType type, int id, String name, short body, short head, Heading heading, boolean respawn, String description,
-                         Class<? extends Behavior> behavior, Class<? extends AttackStrategy> attackStrategy, Class<? extends MovementStrategy> movementStrategy) {
+    public Npc(NpcType type, int id, String name, short body, short head, Heading heading, boolean respawn, String description,
+               Class<? extends Behavior> behavior, Class<? extends AttackStrategy> attackStrategy, Class<? extends MovementStrategy> movementStrategy) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -51,7 +53,7 @@ public class NPCProperties {
         return body;
     }
 
-    public NPCType getType() {
+    public NpcType getType() {
         return type;
     }
 

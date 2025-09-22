@@ -6,6 +6,7 @@ import com.ao.model.map.Position;
 import com.ao.model.map.area.AreaInfo;
 import com.ao.model.spell.Spell;
 import com.ao.model.worldobject.*;
+import com.ao.model.worldobject.Object;
 
 public interface Character {
 
@@ -173,7 +174,7 @@ public interface Character {
      * @param spell  spell to cast.
      * @param object object on which to cast the spell
      */
-    void cast(Spell spell, WorldObject object);
+    void cast(Spell spell, Object object);
 
     Spell[] getSpells();
 

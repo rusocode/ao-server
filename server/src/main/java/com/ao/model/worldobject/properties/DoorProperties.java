@@ -1,12 +1,12 @@
 package com.ao.model.worldobject.properties;
 
-import com.ao.model.worldobject.WorldObjectType;
+import com.ao.model.worldobject.ObjectType;
 
 /**
  * Defines a door's properties. Allows a lightweight pattern implementation.
  */
 
-public class DoorProperties extends WorldObjectProperties {
+public class DoorProperties extends ObjectProperties {
 
     protected boolean open;
     protected boolean locked;
@@ -25,7 +25,7 @@ public class DoorProperties extends WorldObjectProperties {
      * @param code                 code used to unlock this door
      * @param otherStateProperties object properties for the other state
      */
-    public DoorProperties(WorldObjectType type, int id, String name, int graphic, boolean open, boolean locked, int code, DoorProperties otherStateProperties) {
+    public DoorProperties(ObjectType type, int id, String name, int graphic, boolean open, boolean locked, int code, DoorProperties otherStateProperties) {
         super(type, id, name, graphic);
         this.open = open;
         this.locked = locked;

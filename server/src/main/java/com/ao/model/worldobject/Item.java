@@ -6,7 +6,7 @@ import com.ao.model.character.Race;
 import com.ao.model.character.Reputation;
 import com.ao.model.character.archetype.UserArchetype;
 
-public interface Item extends WorldObject, Cloneable {
+public interface Item extends Object, Cloneable {
 
     /**
      * Retrieves the item's amount.

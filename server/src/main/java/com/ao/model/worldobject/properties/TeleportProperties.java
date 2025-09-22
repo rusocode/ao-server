@@ -1,12 +1,12 @@
 package com.ao.model.worldobject.properties;
 
-import com.ao.model.worldobject.WorldObjectType;
+import com.ao.model.worldobject.ObjectType;
 
 /**
  * Defines a Teleport's properties. Allows a lightweight pattern implementation.
  */
 
-public class TeleportProperties extends WorldObjectProperties {
+public class TeleportProperties extends ObjectProperties {
 
     protected int radius;
 
@@ -19,7 +19,7 @@ public class TeleportProperties extends WorldObjectProperties {
      * @param graphic graphic for the item
      * @param radius  radius of the teleport
      */
-    public TeleportProperties(WorldObjectType type, int id, String name, int graphic, int radius) {
+    public TeleportProperties(ObjectType type, int id, String name, int graphic, int radius) {
         super(type, id, name, graphic);
         this.radius = radius;
     }

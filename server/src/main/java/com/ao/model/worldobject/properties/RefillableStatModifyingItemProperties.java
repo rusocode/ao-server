@@ -2,7 +2,7 @@ package com.ao.model.worldobject.properties;
 
 import com.ao.model.character.Race;
 import com.ao.model.character.archetype.UserArchetype;
-import com.ao.model.worldobject.WorldObjectType;
+import com.ao.model.worldobject.ObjectType;
 
 import java.util.List;
 
@@ -28,14 +28,14 @@ public class RefillableStatModifyingItemProperties extends StatModifyingItemProp
      * @param newbie               whether the item is newbie or not
      * @param noLog                whether this item should be logged or not
      * @param falls                whether this item falls or not
-     * @param respawnable          whether this item respawns or not when in a merchant NPC's inventory
+     * @param respawnable          whether this item respawns or not when in a merchant npc inventory
      * @param minModifier          minimum amount by which the stats is to be modified
      * @param maxModifier          maximum amount by which the stats is to be modified
      * @param filled               true if the object is filled, false if empty
      * @param otherStateProperties object properties to be used in the other state
      */
     // @param tradeable true if it's tradeable, false otherwise
-    public RefillableStatModifyingItemProperties(WorldObjectType type, int id, String name, int graphic, int value, List<UserArchetype> forbiddenArchetypes,
+    public RefillableStatModifyingItemProperties(ObjectType type, int id, String name, int graphic, int value, List<UserArchetype> forbiddenArchetypes,
                                                  List<Race> forbiddenRaces, boolean newbie, boolean noLog, boolean falls, boolean respawnable, int minModifier, int maxModifier,
                                                  boolean filled, RefillableStatModifyingItemProperties otherStateProperties) {
         super(type, id, name, graphic, value, forbiddenArchetypes, forbiddenRaces, newbie, noLog, falls, respawnable, minModifier, maxModifier);

@@ -1,14 +1,14 @@
 package com.ao.model.worldobject;
 
-import com.ao.model.worldobject.properties.WorldObjectProperties;
+import com.ao.model.worldobject.properties.ObjectProperties;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public abstract class AbstractWorldObjectTest {
+public abstract class AbstractObjectTest {
 
-    protected AbstractWorldObject object;
-    protected WorldObjectProperties objectProps;
+    protected AbstractObject object;
+    protected ObjectProperties objectProps;
 
     @Test
     public void testGetId() {

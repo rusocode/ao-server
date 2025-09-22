@@ -1,19 +1,15 @@
 package com.ao.model.worldobject.properties;
 
-import com.ao.model.worldobject.WorldObjectType;
+import com.ao.model.worldobject.ObjectType;
 
-/**
- * Defines a WorldObject's properties. Allows a lightweight pattern implementation.
- */
-
-public class WorldObjectProperties {
+public class ObjectProperties {
 
     protected int id;
     protected int graphic;
     protected String name;
-    protected WorldObjectType type;
+    protected ObjectType type;
 
-    public WorldObjectProperties(WorldObjectType type, int id, String name, int graphic) {
+    public ObjectProperties(ObjectType type, int id, String name, int graphic) {
         this.id = id;
         this.name = name;
         this.graphic = graphic;
@@ -32,7 +28,7 @@ public class WorldObjectProperties {
         return graphic;
     }
 
-    public WorldObjectType getType() {
+    public ObjectType getType() {
         return type;
     }
 

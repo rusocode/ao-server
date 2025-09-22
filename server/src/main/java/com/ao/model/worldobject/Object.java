@@ -4,7 +4,7 @@ package com.ao.model.worldobject;
  * An object within the world.
  */
 
-public interface WorldObject {
+public interface Object {
 
     int getId();
 
@@ -12,7 +12,7 @@ public interface WorldObject {
 
     String getName();
 
-    WorldObjectType getObjectType();
+    ObjectType getObjectType();
 
     /**
      * Checks whether the object is fixed in the map or not.

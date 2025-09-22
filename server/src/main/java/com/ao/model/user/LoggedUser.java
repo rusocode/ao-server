@@ -9,6 +9,7 @@ import com.ao.model.map.Position;
 import com.ao.model.map.area.AreaInfo;
 import com.ao.model.spell.Spell;
 import com.ao.model.worldobject.*;
+import com.ao.model.worldobject.Object;
 
 public class LoggedUser extends ConnectedUser implements UserCharacter {
 
@@ -198,7 +199,7 @@ public class LoggedUser extends ConnectedUser implements UserCharacter {
     }
 
     @Override
-    public void cast(Spell spell, WorldObject object) {
+    public void cast(Spell spell, Object object) {
     }
 
     @Override

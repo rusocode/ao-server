@@ -4,7 +4,7 @@ import com.ao.exception.InvalidTargetException;
 import com.ao.mock.MockFactory;
 import com.ao.model.character.Character;
 import com.ao.model.spell.effect.Effect;
-import com.ao.model.worldobject.WorldObject;
+import com.ao.model.worldobject.Object;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -92,7 +92,7 @@ public class SpellTest {
     @Test
     public void testAppliesToCharacterWorldObject() {
         Character caster = MockFactory.mockCharacter();
-        WorldObject target = MockFactory.mockWorldObject();
+        Object target = MockFactory.mockWorldObject();
 
         assertThat(spellNoStaff.appliesTo(caster, target)).isFalse();
         assertThat(spellWithStaff.appliesTo(caster, target)).isFalse();
@@ -121,7 +121,7 @@ public class SpellTest {
     @Test
     public void testApplyCharacterWorldObject() {
         Character caster = MockFactory.mockCharacter();
-        WorldObject target = MockFactory.mockWorldObject();
+        Object target = MockFactory.mockWorldObject();
 
         try {
             spellNoStaff.apply(caster, target);

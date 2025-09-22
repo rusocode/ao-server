@@ -20,9 +20,9 @@ public class DrinkTest extends AbstractItemTest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        StatModifyingItemProperties props1 = new StatModifyingItemProperties(WorldObjectType.FOOD, 1, "Apple Juice", 1, 1, null, null, false, false, false, false, MIN_THIRST, MAX_THIRST);
+        StatModifyingItemProperties props1 = new StatModifyingItemProperties(ObjectType.FOOD, 1, "Apple Juice", 1, 1, null, null, false, false, false, false, MIN_THIRST, MAX_THIRST);
         drink1 = new Drink(props1, 5);
-        StatModifyingItemProperties props2 = new StatModifyingItemProperties(WorldObjectType.FOOD, 1, "Green Apple Juice", 1, 1, null, null, false, false, false, false, MAX_THIRST, MAX_THIRST);
+        StatModifyingItemProperties props2 = new StatModifyingItemProperties(ObjectType.FOOD, 1, "Green Apple Juice", 1, 1, null, null, false, false, false, false, MAX_THIRST, MAX_THIRST);
         drink2 = new Drink(props2, 1);
         object = drink2;
         ammount = 1;

@@ -15,7 +15,7 @@ public abstract class ConsumableItem extends AbstractItem {
 
     @Override
     public void use(Character character) {
-        // Discount element being used.
+        // Discount element being used
         if (--this.amount == 0) character.getInventory().cleanup(); // Clean the inventory
     }
 

@@ -1,16 +1,16 @@
 package com.ao.model.worldobject;
 
-import com.ao.model.worldobject.properties.WorldObjectProperties;
+import com.ao.model.worldobject.properties.ObjectProperties;
 
 /**
- * Abstract implementation of world object, provides most functionality.
+ * Abstract implementation of an object provides most functionality.
  */
 
-public abstract class AbstractWorldObject implements WorldObject {
+public abstract class AbstractObject implements Object {
 
-    protected WorldObjectProperties properties;
+    protected ObjectProperties properties;
 
-    public AbstractWorldObject(WorldObjectProperties properties) {
+    public AbstractObject(ObjectProperties properties) {
         this.properties = properties;
     }
 
@@ -30,7 +30,7 @@ public abstract class AbstractWorldObject implements WorldObject {
     }
 
     @Override
-    public WorldObjectType getObjectType() {
+    public ObjectType getObjectType() {
         return properties.getType();
     }
 

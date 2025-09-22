@@ -1,12 +1,11 @@
 package com.ao;
 
 import com.ao.config.ServerConfig;
-import com.ao.config.ini.ServerConfigIni;
 import com.ao.context.ApplicationContext;
 import com.ao.data.dao.exception.DAOException;
 import com.ao.service.MapService;
-import com.ao.service.NPCService;
-import com.ao.service.WorldObjectService;
+import com.ao.service.NpcService;
+import com.ao.service.ObjectService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -106,11 +105,11 @@ public class Bootstrap {
         mapService.loadCities();
 
         LOGGER.info("Loading objects...");
-        WorldObjectService objectService = ApplicationContext.getInstance(WorldObjectService.class);
+        ObjectService objectService = ApplicationContext.getInstance(ObjectService.class);
         objectService.loadObjects();
 
         LOGGER.info("Loading npcs...");
-        NPCService npcService = ApplicationContext.getInstance(NPCService.class);
+        NpcService npcService = ApplicationContext.getInstance(NpcService.class);
         npcService.loadNpcs();
 
         // TODO Load other services and classes from application context

@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class DoorTest extends AbstractWorldObjectTest {
+public class DoorTest extends AbstractObjectTest {
 
     private static final boolean OPEN = true;
     private static final boolean LOCKED = false;
@@ -17,7 +17,7 @@ public class DoorTest extends AbstractWorldObjectTest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        DoorProperties props1 = new DoorProperties(WorldObjectType.DOOR, 1, "Puerta abierta", 1, OPEN, LOCKED, CODE, OTHER_PROPERTIES);
+        DoorProperties props1 = new DoorProperties(ObjectType.DOOR, 1, "Puerta abierta", 1, OPEN, LOCKED, CODE, OTHER_PROPERTIES);
         door1 = new Door(props1);
         object = door1;
         objectProps = props1;

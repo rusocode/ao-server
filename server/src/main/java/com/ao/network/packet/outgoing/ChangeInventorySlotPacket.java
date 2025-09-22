@@ -1,6 +1,6 @@
 package com.ao.network.packet.outgoing;
 
-import com.ao.data.dao.ini.LegacyWorldObjectType;
+import com.ao.data.dao.ini.LegacyObjectType;
 import com.ao.model.character.UserCharacter;
 import com.ao.model.inventory.Inventory;
 import com.ao.model.worldobject.DefensiveItem;
@@ -33,7 +33,7 @@ public class ChangeInventorySlotPacket implements OutgoingPacket {
         buffer.putBoolean(userCharacter.isEquipped(item));
         buffer.putShort((short) item.getGraphic());
 
-        buffer.putShort((short) LegacyWorldObjectType.findByType(item.getObjectType()).getId());
+        buffer.putShort((short) LegacyObjectType.findByType(item.getObjectType()).getId());
 
         if (item instanceof Weapon) {
             buffer.putShort((short) ((Weapon) item).getMaxHit());

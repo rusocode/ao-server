@@ -1,6 +1,6 @@
 package com.ao.model.character.npc.properties;
 
-import com.ao.model.character.NPCType;
+import com.ao.model.character.NpcType;
 import com.ao.model.character.attack.AttackStrategy;
 import com.ao.model.character.behavior.Behavior;
 import com.ao.model.character.movement.MovementStrategy;
@@ -10,11 +10,7 @@ import com.ao.model.spell.Spell;
 
 import java.util.List;
 
-/**
- * Defines a NPC's properties. Allows a lightweight pattern implementation.
- */
-
-public class CreatureNPCProperties extends NPCProperties {
+public class CreatureNpc extends Npc {
 
     protected int experience;
     protected int gold;
@@ -35,12 +31,12 @@ public class CreatureNPCProperties extends NPCProperties {
     protected boolean tameable;
     protected Drop drop;
 
-    public CreatureNPCProperties(NPCType type, int id, String name, short body, short head, Heading heading, boolean respawn,
-                                 String description, Class<? extends Behavior> behavior, Class<? extends AttackStrategy> attackStrategy,
-                                 Class<? extends MovementStrategy> movementStrategy, int experience, int gold, int minHP, int maxHP,
-                                 int minDamage, int maxDamage, short defense, short magicDefense, short accuracy,
-                                 short dodge, List<Spell> spells, boolean canSwim, boolean attackable,
-                                 boolean poison, boolean paralyzable, boolean hostile, boolean tameable, Drop drop) {
+    public CreatureNpc(NpcType type, int id, String name, short body, short head, Heading heading, boolean respawn,
+                       String description, Class<? extends Behavior> behavior, Class<? extends AttackStrategy> attackStrategy,
+                       Class<? extends MovementStrategy> movementStrategy, int experience, int gold, int minHP, int maxHP,
+                       int minDamage, int maxDamage, short defense, short magicDefense, short accuracy,
+                       short dodge, List<Spell> spells, boolean canSwim, boolean attackable,
+                       boolean poison, boolean paralyzable, boolean hostile, boolean tameable, Drop drop) {
         super(type, id, name, body, head, heading, respawn, description, behavior, attackStrategy, movementStrategy);
 
         this.experience = experience;

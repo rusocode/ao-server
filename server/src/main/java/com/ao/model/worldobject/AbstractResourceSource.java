@@ -6,7 +6,7 @@ import com.ao.model.worldobject.properties.ResourceSourceProperties;
  * An AbstractResourceSource. Does nothing, just sits around.
  */
 
-public abstract class AbstractResourceSource extends AbstractWorldObject {
+public abstract class AbstractResourceSource extends AbstractObject {
 
     public AbstractResourceSource(ResourceSourceProperties properties) {
         super(properties);

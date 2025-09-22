@@ -9,7 +9,7 @@ public class TreeTest extends AbstractResourceSourceTest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        ResourceSourceProperties props1 = new ResourceSourceProperties(WorldObjectType.TREE, 1, "Elven Tree", 1, 5, resourceSourceType);
+        ResourceSourceProperties props1 = new ResourceSourceProperties(ObjectType.TREE, 1, "Elven Tree", 1, 5, resourceSourceType);
         object = new Tree(props1);
         objectProps = props1;
     }

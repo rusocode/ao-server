@@ -7,7 +7,7 @@ import com.ao.service.map.AreaServiceImpl;
 import com.ao.service.map.MapServiceImpl;
 import com.ao.service.timedevents.TimedEventsServiceImpl;
 import com.ao.service.user.UserServiceImpl;
-import com.ao.service.worldobject.WorldObjectServiceImpl;
+import com.ao.service.worldobject.ObjectServiceImpl;
 import com.ao.utils.RangeParser;
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
@@ -31,10 +31,10 @@ public class ServiceModule extends AbstractModule {
         bind(AreaService.class).to(AreaServiceImpl.class).in(Singleton.class);
         bind(MapService.class).to(MapServiceImpl.class).in(Singleton.class);
         bind(TimedEventsService.class).to(TimedEventsServiceImpl.class).in(Singleton.class);
-        bind(WorldObjectService.class).to(WorldObjectServiceImpl.class).in(Singleton.class);
+        bind(ObjectService.class).to(ObjectServiceImpl.class).in(Singleton.class);
         bind(UserService.class).to(UserServiceImpl.class).in(Singleton.class);
         bind(CharacterBodyService.class).to(CharacterBodyServiceImpl.class).in(Singleton.class);
-        bind(NPCService.class).to(NPCServiceImpl.class).in(Singleton.class);
+        bind(NpcService.class).to(NpcServiceImpl.class).in(Singleton.class);
 
         bind(Integer.class).annotatedWith(Names.named("initialAvailableSkills")).toInstance(Integer.parseInt(properties.getProperty("config.loginservice.initialavailableskills")));
 

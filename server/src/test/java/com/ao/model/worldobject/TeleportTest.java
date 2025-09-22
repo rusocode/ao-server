@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class TeleportTest extends AbstractWorldObjectTest {
+public class TeleportTest extends AbstractObjectTest {
 
     private static final int RADIUS = 4;
 
@@ -14,7 +14,7 @@ public class TeleportTest extends AbstractWorldObjectTest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        TeleportProperties props1 = new TeleportProperties(WorldObjectType.TELEPORT, 1, "Teleport", 1, RADIUS);
+        TeleportProperties props1 = new TeleportProperties(ObjectType.TELEPORT, 1, "Teleport", 1, RADIUS);
         teleport1 = new Teleport(props1);
 
         object = teleport1;

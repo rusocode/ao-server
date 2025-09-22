@@ -4,8 +4,8 @@ import com.ao.model.spell.Spell;
 import com.ao.model.worldobject.Boat;
 import com.ao.model.worldobject.EquipableItem;
 import com.ao.model.worldobject.Weapon;
-import com.ao.model.worldobject.properties.manufacture.Manufacturable;
-import com.ao.model.worldobject.properties.manufacture.ManufactureType;
+import com.ao.model.worldobject.properties.crafting.Craftable;
+import com.ao.model.worldobject.properties.crafting.CraftingSkill;
 
 /**
  * Implements Archetype setting default values.
@@ -51,8 +51,7 @@ public abstract class DefaultArchetype implements Archetype {
     /**
      * Creates a new default archetype.
      */
-    public DefaultArchetype(float evasionModifier, float meleeAccuracyModifier, float rangedAccuracyModifier,
-                            float meleeDamageModifier, float rangedDamageModifier, float wrestlingDamageModifier, float blockPowerModifier) {
+    public DefaultArchetype(float evasionModifier, float meleeAccuracyModifier, float rangedAccuracyModifier, float meleeDamageModifier, float rangedDamageModifier, float wrestlingDamageModifier, float blockPowerModifier) {
         this.evasionModifier = evasionModifier;
         this.meleeAccuracyModifier = meleeAccuracyModifier;
         this.rangedAccuracyModifier = rangedAccuracyModifier;
@@ -68,8 +67,8 @@ public abstract class DefaultArchetype implements Archetype {
     }
 
     @Override
-    public boolean canSmithing(int smithingSkill, Manufacturable item) {
-        return item.getManufactureType() == ManufactureType.SMITHING && smithingSkill / SMITHING_MODIFIER >= item.getManufactureDifficulty();
+    public boolean canSmithing(int smithingSkill, Craftable item) {
+        return item.getCraftingSkill() == CraftingSkill.SMITHING && smithingSkill / SMITHING_MODIFIER >= item.getCraftingSkillPoints();
     }
 
     @Override
@@ -113,8 +112,8 @@ public abstract class DefaultArchetype implements Archetype {
     }
 
     @Override
-    public boolean canCarpentry(int carpentrySkill, Manufacturable item) {
-        return item.getManufactureType() == ManufactureType.CARPENTRY && carpentrySkill / CARPENTRY_MODIFIER >= item.getManufactureDifficulty();
+    public boolean canCarpentry(int carpentrySkill, Craftable item) {
+        return item.getCraftingSkill() == CraftingSkill.CARPENTRY && carpentrySkill / CARPENTRY_MODIFIER >= item.getCraftingSkillPoints();
     }
 
     @Override

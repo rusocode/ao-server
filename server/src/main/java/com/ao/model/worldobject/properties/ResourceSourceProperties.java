@@ -1,13 +1,13 @@
 package com.ao.model.worldobject.properties;
 
 import com.ao.model.worldobject.ResourceSourceType;
-import com.ao.model.worldobject.WorldObjectType;
+import com.ao.model.worldobject.ObjectType;
 
 /**
  * Defines a ResourceSourceProperties property. Allows a lightweight pattern implementation.
  */
 
-public class ResourceSourceProperties extends WorldObjectProperties {
+public class ResourceSourceProperties extends ObjectProperties {
 
     protected int resourceWorldObjctId;
     protected ResourceSourceType resourceSourceType;
@@ -22,7 +22,7 @@ public class ResourceSourceProperties extends WorldObjectProperties {
      * @param resourceWorldObjctId id of the world object being produced by this resource source
      * @param resourceSourceType   the resource source type
      */
-    public ResourceSourceProperties(WorldObjectType type, int id, String name, int graphic, int resourceWorldObjctId, ResourceSourceType resourceSourceType) {
+    public ResourceSourceProperties(ObjectType type, int id, String name, int graphic, int resourceWorldObjctId, ResourceSourceType resourceSourceType) {
         super(type, id, name, graphic);
         this.resourceWorldObjctId = resourceWorldObjctId;
         this.resourceSourceType = resourceSourceType;

@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class KeyTest extends AbstractWorldObjectTest {
+public class KeyTest extends AbstractObjectTest {
 
     private static final int CODE = 123;
 
@@ -14,7 +14,7 @@ public class KeyTest extends AbstractWorldObjectTest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        KeyProperties props1 = new KeyProperties(WorldObjectType.KEY, 1, "Llave maestra", 1, 1, 0, null, null, false, false, false, false, CODE);
+        KeyProperties props1 = new KeyProperties(ObjectType.KEY, 1, "Llave maestra", 1, 1, 0, null, null, false, false, false, false, CODE);
         key1 = new Key(props1, 1);
 
         object = key1;

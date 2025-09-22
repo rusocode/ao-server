@@ -1,5 +1,5 @@
 ## npc_type
-# 0: Comun - Los npcs comunes pueden ser comerciantes y hostiles
+# 0: Comun - Los npcs comunes abarcan las secciones varios/decorativos/Guardias Legion/No Hostiles/Hostiles (separar)
 # 1: Sacerdote
 # 2: Imperial
 # 3: Entrenador
@@ -11,6 +11,7 @@
 # 9: Sacerdote de newbies
 # 10: Pretoriano
 # 11: Gobernador
+# 12: Comerciante
 
 ## Orden
 # Vende Casas
@@ -47,7 +48,6 @@
 
 # TODO Algunas claves de object_count no coinciden con la cantidad de objectos
 # TODO Claves no especificadas en el codigo: backup, GuardiaPersigue, Faccion, AtacaDoble, GolpeExacto
-# TODO Agregar el tipo de npc para comerciantes npc_type = 12
 # TODO No se en que momento elimine 5 npcs que eran 4 guardias imperiales y una arquera real, todos pertenecientes a la seccion "Guardias Armada". Ver el archivo NPCs.dat original para mas informacion.
 # TODO No se de donde salio el [NPC308]
 
@@ -58,13 +58,12 @@ npc_count = 332
 
 [NPC1]
 name = Cullighan
-npc_type = 0
+npc_type = 12
 description = Usted sabe que no hay persona noble o respetable en estas tierras que no tenga su propia vivienda. Acerquese y sea dueño de una de las exclusivas casas de Ullathorpe. Sera admirado por toda la poblacion!
 head = 33
 heading = 3
 body = 240
 ai_type = 1
-merchant = 1
 object_type = 9
 object_count = 4
 object1 = 54-0
@@ -76,13 +75,12 @@ backup = 1
 
 [NPC2]
 name = Moraday
-npc_type = 0
+npc_type = 12
 description = ¿Ha descubierto que la ciudad de Nix es la mas hermosa de todo Argentum, verdad? Pues que mejor que ser un terrateniente de este paraiso! Acercate que haremos negocios!
 head = 35
 heading = 3
 body = 239
 ai_type = 1
-merchant = 1
 object_type = 9
 object_count = 10
 object1 = 87-0
@@ -100,13 +98,12 @@ backup = 1
 
 [NPC3]
 name = Rantarisk
-npc_type = 0
+npc_type = 12
 description = De lejos pude ver vuestro blazon, seguro busca una de las moradas mas lujosas de todo el Argentum. En la ciudad real de Banderbill es donde deben habitar la flor y la nata de la nobleza. Venga y hagamos negocios!
 head = 32
 heading = 3
 body = 241
 ai_type = 1
-merchant = 1
 object_type = 9
 object_count = 18
 object1 = 266-0
@@ -132,13 +129,12 @@ backup = 1
 
 [NPC4]
 name = Guldorf
-npc_type = 0
+npc_type = 12
 description = Si esta buscando la paz y la tranquilidad en estas tierras ha llegado al lugar indicado... adquiera una de nuestras exclusivas residencias, y cambie su vida para siempre.
 head = 36
 body = 234
 heading = 3
 ai_type = 1
-merchant = 1
 object_type = 9
 object_count = 6
 object1 = 420-0
@@ -152,13 +148,12 @@ backup = 1
 
 [NPC5]
 name = Vendedor de propiedades
-npc_type = 0
+npc_type = 12
 description = En estas tierras demoniacas estan las mejores residencias para los miembros de la Legion Oscura... Si no eres legionario puedes tambien vivir aca, pero os aseguro que los augura un infierno! jajaja!
 head = 34
 body = 170
 heading = 3
 ai_type = 1
-merchant = 1
 object_type = 9
 object_count = 8
 object1 = 583-0
@@ -226,10 +221,10 @@ heading = 3
 body = 57
 ai_type = 1
 creature_count = 4
-creature_id1 = 566
-creature_id2 = 565
-creature_id3 = 564
-creature_id4 = 516
+creature_id1 = 156
+creature_id2 = 160
+creature_id3 = 185
+creature_id4 = 161
 creature_name1 = Murcielago
 creature_name2 = Serpiente
 creature_name3 = Escorpion
@@ -244,11 +239,11 @@ heading = 3
 body = 57
 ai_type = 1
 creature_count = 5
-creature_id1 = 534
-creature_id2 = 539
-creature_id3 = 541
-creature_id4 = 554
-creature_id5 = 567
+creature_id1 = 190
+creature_id2 = 195
+creature_id3 = 197
+creature_id4 = 210
+creature_id5 = 222
 creature_name1 = Hormiga gigante
 creature_name2 = Tortuga gigante
 creature_name3 = Ogro
@@ -288,13 +283,12 @@ ai_type = 1
 
 [NPC15]
 name = Lilith
-npc_type = 0
+npc_type = 12
 description = Hola, tengo las mejores pociones de la alquimia.
 head = 77
 heading = 3
 body = 200
 ai_type = 1
-merchant = 1
 object_type = 11
 object_count = 6
 object1 = 36-1000
@@ -307,13 +301,12 @@ backup = 1
 
 [NPC16]
 name = Leñador
-npc_type = 0
+npc_type = 12
 description = Hola muchacho! Si deseas vender o comprar madera escribe /comerciar.
 head = 4
 heading = 3
 body = 1
 ai_type = 1
-merchant = 1
 object_type = 14
 object_count = 2
 object1 = 127-1000
@@ -322,13 +315,12 @@ backup = 1
 
 [NPC17]
 name = Carpintero
-npc_type = 0
+npc_type = 12
 description = Hola muchacho! Bienvenido a mi humilde carpinteria.
 head = 2
 heading = 3
 body = 1
 ai_type = 1
-merchant = 1
 object_type = 20
 object_count = 5
 object1 = 163-1000
@@ -340,13 +332,12 @@ backup = 1
 
 [NPC18]
 name = Pescador
-npc_type = 0
+npc_type = 12
 description = Bienvenido al gremio de pescadores!
 head = 2
 heading = 3
 body = 3
 ai_type = 1
-merchant = 1
 object_type = 1
 object_count = 2
 object1 = 138-1000
@@ -355,13 +346,12 @@ backup = 1
 
 [NPC19]
 name = Pescador
-npc_type = 0
+npc_type = 12
 description = Bienvenido al gremio de pescadores!
 head = 101
 heading = 3
 body = 3
 ai_type = 2
-merchant = 1
 object_type = 1
 object_count = 2
 object1 = 138-1000
@@ -370,13 +360,12 @@ backup = 1
 
 [NPC20]
 name = Minero
-npc_type = 0
+npc_type = 12
 description = Tengo los mejores utensillos para mineros de todo Argentum.
 head = 2
 heading = 3
 body = 1
 ai_type = 1
-merchant = 1
 object_type = 23
 object_count = 1
 object1 = 187-1000
@@ -384,13 +373,12 @@ backup = 1
 
 [NPC21]
 name = Mercader
-npc_type = 0
+npc_type = 12
 description = Hola buen amigo, compro y vendo todo tipo de mercancias!
 head = 2
 heading = 3
 body = 3
 ai_type = 1
-merchant = 1
 object_type = 1000
 object_count = 1
 object1 = 534-1000
@@ -398,13 +386,12 @@ backup = 1
 
 [NPC22]
 name = Ralph
-npc_type = 0
+npc_type = 12
 description = Hola, pequeño aventurero, tengo aqui unas mercaderias para saciar tu hambre y sed!
 head = 504
 heading = 3
 body = 202
 ai_type = 1
-merchant = 1
 object_type = 1
 object_count = 3
 object1 = 1-1000
@@ -414,13 +401,12 @@ backup = 1
 
 [NPC23]
 name = Antogne
-npc_type = 0
+npc_type = 12
 description = Hola aventurero! Si estais hambriento habeis venido al lugar apropiador, tengo todo tipo de frutas.
 head = 505
 heading = 3
 body = 202
 ai_type = 1
-merchant = 1
 object_type = 1
 object_count = 6
 object1 = 1-1000
@@ -433,13 +419,12 @@ backup = 1
 
 [NPC24]
 name = Sastreria Real
-npc_type = 0
+npc_type = 12
 description = Bienvenido a la sastreria real.
 head = 171
 heading = 3
 body = 174
 ai_type = 1
-merchant = 1
 object_type = 3
 object_count = 13
 object1 = 675-1000
@@ -459,13 +444,12 @@ backup = 1
 
 [NPC25]
 name = Sastreria Real
-npc_type = 0
+npc_type = 12
 description = Bienvenido a la sastreria real.
 head = 309
 heading = 3
 body = 175
 ai_type = 1
-merchant = 1
 object_type = 3
 object_count = 10
 object1 = 676-1000
@@ -482,13 +466,12 @@ backup = 1
 
 [NPC26]
 name = SC
-npc_type = 0
+npc_type = 12
 description = Aqui obtendras tu armadura legionaria!
 head = 0
 heading = 3
 body = 69
 ai_type = 1
-merchant = 1
 object_type = 3
 object_count = 12
 object1 = 677-1000
@@ -507,13 +490,12 @@ backup = 1
 
 [NPC27]
 name = SC
-npc_type = 0
+npc_type = 12
 description = Aqui obtendras tu armadura legionaria!
 head = 318
 heading = 3
 body = 177
 ai_type = 1
-merchant = 1
 object_type = 3
 object_count = 10
 object1 = 678-1000
@@ -530,13 +512,12 @@ backup = 1
 
 [NPC28]
 name = Ireth
-npc_type = 0
+npc_type = 12
 description = Bienvenido amigo, vendo ropajes para mujeres humanas.
 head = 71
 heading = 3
 body = 254
 ai_type = 1
-merchant = 1
 object_type = 3
 object_count = 15
 object1 = 879-1000
@@ -558,13 +539,12 @@ backup = 1
 
 [NPC29]
 name = Isaac
-npc_type = 0
+npc_type = 12
 description = Buscas ropas para hombres humanos? Entonces has hecho bien en acudir a mi.
 head = 7
 heading = 3
 body = 240
 ai_type = 1
-merchant = 1
 object_type = 3
 object_count = 7
 object1 = 882-1000
@@ -578,13 +558,12 @@ backup = 1
 
 [NPC30]
 name = Nelvi
-npc_type = 0
+npc_type = 12
 description = Poseo una gran cantidad de ropajes para los astutos gnomos, ¿deseas algo en particular?
 head = 403
 heading = 3
 body = 294
 ai_type = 1
-merchant = 1
 object_type = 3
 object_count = 20
 object1 = 908-1000
@@ -611,13 +590,12 @@ backup = 1
 
 [NPC31]
 name = Aile
-npc_type = 0
+npc_type = 12
 description = Bienvenido, vendo ropas para los hermosos gnomos de estas tierras.
 head = 473
 heading = 3
 body = 288
 ai_type = 1
-merchant = 1
 object_type = 3
 object_count = 15
 object1 = 909-1000
@@ -639,13 +617,12 @@ backup = 1
 
 [NPC32]
 name = Varinya
-npc_type = 0
+npc_type = 12
 description = Tengo para ofrecerte los mejores ropajes para elfos.
 head = 172
 heading = 3
 body = 234
 ai_type = 1
-merchant = 1
 object_type = 3
 object_count = 14
 object1 = 943-1000
@@ -666,13 +643,12 @@ backup = 1
 
 [NPC33]
 name = Torke
-npc_type = 0
+npc_type = 12
 description = Solo tengo ropajes para enanos, si no las puedes usar, vete de aqui!
 head = 371
 heading = 3
 body = 306
 ai_type = 1
-merchant = 1
 object_type = 3
 object_count = 18
 object1 = 957-1000
@@ -697,13 +673,12 @@ backup = 1
 
 [NPC34]
 name = Gourk
-npc_type = 0
+npc_type = 12
 description = Vendo ropas para elfos drows, de hermosas telas y refinados detalles.
 head = 203
 heading = 3
 body = 264
 ai_type = 1
-merchant = 1
 object_type = 3
 object_count = 9
 object1 = 977-1000
@@ -938,13 +913,12 @@ ai_type = 1
 
 [NPC59]
 name = Unurbar Gorog
-npc_type = 0
+npc_type = 12
 description = Hola! Poseo las mejores y mas extrañas bebidas de estas tierras, ¿que desea que le sirva?
 head = 304
 heading = 3
 body = 372
 ai_type = 1
-merchant = 1
 object_type = 13
 object_count = 8
 object1 = 498-1000
@@ -960,7 +934,7 @@ backup = 1
 [NPC60]
 name = Dugh Dhail
 npc_type = 0
-description = Hola forastero! Pronto se celebrara un nuevo aniversario de la creacion de la cerveza. Acudiras a los festejos?
+description = Hola forastero! Pronto se celebrara un nuevo aniversario de la creacion de la cerveza ¿Acudiras a los festejos?
 head = 0
 heading = 3
 body = 410
@@ -971,13 +945,12 @@ backup = 1
 
 [NPC61]
 name = Thorkis
-npc_type = 0
+npc_type = 12
 description = Hooooola jovencito, tengo las mejores provisiones de Ullathorpe!
 head = 504
 heading = 3
 body = 202
 ai_type = 1
-merchant = 1
 object_type = 1
 object_count = 5
 object1 = 1-10000
@@ -989,13 +962,12 @@ backup = 1
 
 [NPC62]
 name = Herrero
-npc_type = 0
+npc_type = 12
 description = Bienvenido, rata de alcantarilla, soy el herrero de Ullathorpe... tengo algunas armas que pueden ayudarte en tus viajes.
 head = 505
 heading = 3
 body = 199
 ai_type = 1
-merchant = 1
 object_type = 2
 object_count = 9
 object1 = 15-1000
@@ -1011,13 +983,12 @@ backup = 1
 
 [NPC63]
 name = Mago
-npc_type = 0
+npc_type = 12
 description = Bienvenido a mi pequeña tienda de Ullathorpe... Tengo algunos hechizos que podrian interesarte.
 head = 110
 heading = 3
 body = 46
 ai_type = 1
-merchant = 1
 object_type = 24
 object_count = 8
 object1 = 363-1000
@@ -1032,13 +1003,12 @@ backup = 1
 
 [NPC64]
 name = Sastre
-npc_type = 0
+npc_type = 12
 description = Hola forastero! Soy el sastre de Ullathorpe, bienvenido!
 head = 9
 heading = 3
 body = 50
 ai_type = 1
-merchant = 1
 object_type = 3
 object_count = 9
 object1 = 31-1000
@@ -1054,13 +1024,12 @@ backup = 1
 
 [NPC65]
 name = Sastre
-npc_type = 0
+npc_type = 12
 description = Bienvenida viajera! Tengo hermosas vestimentas para ofrecerte...
 head = 70
 heading = 3
 body = 80
 ai_type = 1
-merchant = 1
 object_type = 3
 object_count = 5
 object1 = 170-1000
@@ -1072,13 +1041,12 @@ backup = 1
 
 [NPC66]
 name = Sastre
-npc_type = 0
+npc_type = 12
 description = Acerquese! Tengo pequeñas prendas que seran de su agrado...
 head = 303
 heading = 3
 body = 180
 ai_type = 1
-merchant = 1
 object_type = 3
 object_count = 6
 object1 = 240-1000
@@ -1091,13 +1059,12 @@ backup = 1
 
 [NPC67]
 name = Armaduras
-npc_type = 0
+npc_type = 12
 description = Acercate, tengo algunas armaduras que podrian protegerte.
 head = 6
 body = 93
 heading = 4
 ai_type = 1
-merchant = 1
 object_type = 3
 object_count = 5
 object1 = 30-1000
@@ -1111,13 +1078,12 @@ backup = 1
 
 [NPC68]
 name = Thorkis
-npc_type = 0
+npc_type = 12
 description = Que tal amigo! Entra, pues tengo las mejores provisiones de Nix!
 head = 504
 heading = 3
 body = 202
 ai_type = 1
-merchant = 1
 object_type = 1
 object_count = 4
 object1 = 139-1000
@@ -1128,13 +1094,12 @@ backup = 1
 
 [NPC69]
 name = Herrero
-npc_type = 0
+npc_type = 12
 description = Bienvenido, rata de alcantarilla, soy el herrero de Nix, tengo algunas armas que pueden ayudarte en tus viajes.
 head = 505
 heading = 3
 body = 199
 ai_type = 1
-merchant = 1
 object_type = 2
 object_count = 9
 object1 = 15-1000
@@ -1150,13 +1115,12 @@ backup = 1
 
 [NPC70]
 name = Mago
-npc_type = 0
+npc_type = 12
 description = Bienvenido a mi pequeña tienda de Nix... Tengo algunos hechizos que podrian interesarte.
 head = 110
 heading = 3
 body = 46
 ai_type = 1
-merchant = 1
 object_type = 24
 object_count = 11
 object1 = 201-1000
@@ -1174,13 +1138,12 @@ backup = 1
 
 [NPC71]
 name = Sastre
-npc_type = 0
+npc_type = 12
 description = Hola forastero! Soy el sastre de Nix, bienvenido!
 head = 7
 heading = 3
 body = 50
 ai_type = 1
-merchant = 1
 object_type = 3
 object_count = 10
 object1 = 31-1000
@@ -1197,13 +1160,12 @@ backup = 1
 
 [NPC72]
 name = Sastre
-npc_type = 0
+npc_type = 12
 description = Bienvenida viajera! Entra a mi tienda, tengo las mejores prendas de Nix!
 head = 71
 heading = 3
 body = 80
 ai_type = 1
-merchant = 1
 object_type = 3
 object_count = 5
 object1 = 170-1000
@@ -1215,13 +1177,12 @@ backup = 1
 
 [NPC73]
 name = Sastre
-npc_type = 0
+npc_type = 12
 description = Acerquese! Tengo pequeñas prendas que seran de su agrado...
 head = 404
 heading = 3
 body = 180
 ai_type = 1
-merchant = 1
 object_type = 3
 object_count = 6
 object1 = 240-1000
@@ -1234,13 +1195,12 @@ backup = 1
 
 [NPC74]
 name = Armaduras
-npc_type = 0
+npc_type = 12
 description = Acercate, tengo algunas armaduras que podrian protegerte.
 head = 6
 body = 93
 heading = 4
 ai_type = 1
-merchant = 1
 object_type = 3
 object_count = 8
 object1 = 30-1000
@@ -1257,13 +1217,12 @@ backup = 1
 
 [NPC75]
 name = Tellez
-npc_type = 0
+npc_type = 12
 description = Hola! Bienvenido al Meson Hostigado ¿Que desea que le sirva?
 head = 505
 heading = 3
 body = 202
 ai_type = 1
-merchant = 1
 object_type = 13
 object_count = 10
 object1 = 21-1000
@@ -1280,13 +1239,12 @@ backup = 1
 
 [NPC76]
 name = Herrero
-npc_type = 0
+npc_type = 12
 description = Ven, pasa, que he fabricado las mas poderosas armas de Banderbill para ti!
 head = 505
 heading = 3
 body = 199
 ai_type = 1
-merchant = 1
 object_type = 2
 object_count = 9
 object1 = 164-1000
@@ -1302,13 +1260,12 @@ backup = 1
 
 [NPC77]
 name = Mago
-npc_type = 0
+npc_type = 12
 description = Bienvenido a mi pequeña tienda de Banderbill... Tengo algunos hechizos que podrian interesarte.
 head = 110
 heading = 3
 body = 46
 ai_type = 1
-merchant = 1
 object_type = 24
 object_count = 15
 object1 = 394-1000
@@ -1330,13 +1287,12 @@ backup = 1
 
 [NPC78]
 name = Sastre
-npc_type = 0
+npc_type = 12
 description = Bienvenido a la sastreria de Banderbill! En que lo puedo ayudar?
 head = 7
 heading = 3
 body = 56
 ai_type = 1
-merchant = 1
 object_type = 3
 object_count = 11
 object1 = 501-1000
@@ -1354,13 +1310,12 @@ backup = 1
 
 [NPC79]
 name = Sastre
-npc_type = 0
+npc_type = 12
 description = Adelante hermosa niña! En mi tienda encontraras vestidos hechos para ti!
 head = 173
 heading = 3
 body = 121
 ai_type = 1
-merchant = 1
 object_type = 3
 object_count = 5
 object1 = 504-1000
@@ -1372,13 +1327,12 @@ backup = 1
 
 [NPC80]
 name = Sastre
-npc_type = 0
+npc_type = 12
 description = Ven y mira estas prendas que he confeccionado para nuestra raza!
 head = 305
 heading = 3
 body = 159
 ai_type = 1
-merchant = 1
 object_type = 3
 object_count = 6
 object1 = 486-1000
@@ -1391,13 +1345,12 @@ backup = 1
 
 [NPC81]
 name = Armaduras
-npc_type = 0
+npc_type = 12
 description = Ven, tengo resistentes armaduras para ofrecerte.
 head = 6
 body = 93
 heading = 4
 ai_type = 1
-merchant = 1
 object_type = 3
 object_count = 6
 object1 = 359-1000
@@ -1412,13 +1365,12 @@ backup = 1
 
 [NPC82]
 name = Sorks
-npc_type = 0
+npc_type = 12
 description = ¿Estas sediento y hambriento?
 head = 505
 heading = 3
 body = 202
 ai_type = 1
-merchant = 1
 object_type = 13
 object_count = 4
 object1 = 139-1000
@@ -1429,13 +1381,12 @@ backup = 1
 
 [NPC83]
 name = Herrero
-npc_type = 0
+npc_type = 12
 description = Ven, pasa, que he fabricado, aqui en Lindos, poderosas armas para ti!
 head = 505
 heading = 3
 body = 199
 ai_type = 1
-merchant = 1
 object_type = 2
 object_count = 8
 object1 = 2-1000
@@ -1450,13 +1401,12 @@ backup = 1
 
 [NPC84]
 name = Mago
-npc_type = 0
+npc_type = 12
 description = Ven por aqui joven, las artes magicas superiores te estan llamando...
 head = 110
 heading = 3
 body = 46
 ai_type = 1
-merchant = 1
 object_type = 24
 object_count = 17
 object1 = 530-1000
@@ -1480,13 +1430,12 @@ backup = 1
 
 [NPC85]
 name = Sastre
-npc_type = 0
+npc_type = 12
 description = Ven aqui! Te puedo ofrecer las mejores ropas de la isla...
 head = 7
 heading = 3
 body = 46
 ai_type = 1
-merchant = 1
 object_type = 3
 object_count = 11
 object1 = 31-1000
@@ -1504,13 +1453,12 @@ backup = 1
 
 [NPC86]
 name = Sastre
-npc_type = 0
+npc_type = 12
 description = Ven y mira estas vestimentas, seguro te encantaran!
 head = 75
 heading = 3
 body = 118
 ai_type = 1
-merchant = 1
 object_type = 3
 object_count = 5
 object1 = 170-1000
@@ -1522,13 +1470,12 @@ backup = 1
 
 [NPC87]
 name = Sastre
-npc_type = 0
+npc_type = 12
 description = Hola forastero! Confeccionamos las mejores ropas de la zona.
 head = 304
 heading = 3
 body = 135
 ai_type = 1
-merchant = 1
 object_type = 3
 object_count = 7
 object1 = 507-1000
@@ -1542,13 +1489,12 @@ backup = 1
 
 [NPC88]
 name = Armaduras
-npc_type = 0
+npc_type = 12
 description = Tengo a la venta las mejores armaduras de la isla!
 head = 6
 body = 93
 heading = 4
 ai_type = 1
-merchant = 1
 object_type = 3
 object_count = 7
 object1 = 359-1000
@@ -1564,13 +1510,12 @@ backup = 1
 
 [NPC89]
 name = Carahuel
-npc_type = 0
+npc_type = 12
 description = Hola, pequeño amigo! ¿Estas buscando algo para llenar tu estomago? Creo que puedo ayudarte...
 head = 474
 heading = 3
 body = 309
 ai_type = 1
-merchant = 1
 object_type = 13
 object_count = 4
 object1 = 1-1000
@@ -1581,13 +1526,12 @@ backup = 1
 
 [NPC90]
 name = Bhoemond
-npc_type = 0
+npc_type = 12
 description = Sea bienvenido a la famosa taberna de Arghal! Aqui podra saciarse con la mejor comida y la mejor bebida de toda la zona.
 head = 17
 heading = 3
 body = 100
 ai_type = 1
-merchant = 1
 object_type = 13
 object_count = 10
 object1 = 21-1000
@@ -1604,13 +1548,12 @@ backup = 1
 
 [NPC91]
 name = Herrero
-npc_type = 0
+npc_type = 12
 description = Con estas manos he construido algunas armas que te podran servir en tus aventuras... Paga por ellas y seran tuyas!
 head = 16
 heading = 3
 body = 199
 ai_type = 1
-merchant = 1
 object_type = 2
 object_count = 8
 object1 = 15-1000
@@ -1625,13 +1568,12 @@ backup = 1
 
 [NPC92]
 name = Mago
-npc_type = 0
+npc_type = 12
 description = Bienvenido a mi pequeña escuela de magia, ubicada en el corazon mismo de la ciudad de Arghal.
 head = 20
 heading = 3
 body = 34
 ai_type = 1
-merchant = 1
 object_type = 24
 object_count = 7
 object1 = 199-1000
@@ -1645,13 +1587,12 @@ backup = 1
 
 [NPC93]
 name = Steve
-npc_type = 0
+npc_type = 12
 description = Ven, acercate, que tengo para ofrecerte las mejores prendas masculinas de todo Arghal...
 head = 22
 heading = 3
 body = 342
 ai_type = 1
-merchant = 1
 object_type = 3
 object_count = 10
 object1 = 31-1000
@@ -1668,13 +1609,12 @@ backup = 1
 
 [NPC94]
 name = Virgin
-npc_type = 0
+npc_type = 12
 description = Bienvenida jovencita! Soy quien hace los mejores atuendos femeninos de todo Arghal, ven y prueba mi mercaderia.
 head = 70
 heading = 3
 body = 80
 ai_type = 1
-merchant = 1
 object_type = 3
 object_count = 5
 object1 = 170-1000
@@ -1686,13 +1626,12 @@ backup = 1
 
 [NPC95]
 name = Odkon
-npc_type = 0
+npc_type = 12
 description = Acerquese pequeño visitante de Arghal... Tengo prendas a su medida.
 head = 404
 heading = 3
 body = 371
 ai_type = 1
-merchant = 1
 object_type = 3
 object_count = 7
 object1 = 240-1000
@@ -1706,13 +1645,12 @@ backup = 1
 
 [NPC96]
 name = Armaduras
-npc_type = 0
+npc_type = 12
 description = Si tienes agallas como para abandonar la ciudad y enfrentar el peligro de los bosques, deberias comprar una de las armaduras que he fabricado.
 head = 39
 body = 93
 heading = 3
 ai_type = 1
-merchant = 1
 object_type = 3
 object_count = 3
 object1 = 30-1000
@@ -1724,13 +1662,12 @@ backup = 1
 
 [NPC97]
 name = Tolloz
-npc_type = 0
+npc_type = 12
 description = Hola! Bienvenido a la taberna de Arkhein, ¿que desea que le sirva?
 head = 505
 heading = 3
 body = 202
 ai_type = 1
-merchant = 1
 object_type = 13
 object_count = 10
 object1 = 21-1000
@@ -1747,13 +1684,12 @@ backup = 1
 
 [NPC98]
 name = Herrero
-npc_type = 0
+npc_type = 12
 description = Ven, pasa, que he fabricado las mas poderosas armas de Arkhein para ti!
 head = 505
 heading = 3
 body = 199
 ai_type = 1
-merchant = 1
 object_type = 2
 object_count = 9
 object1 = 164-1000
@@ -1769,13 +1705,12 @@ backup = 1
 
 [NPC99]
 name = Mago
-npc_type = 0
+npc_type = 12
 description = Bienvenido a mi pequeña tienda de Arkhein... Tengo algunos hechizos que podrian interesarte.
 head = 110
 heading = 3
 body = 46
 ai_type = 1
-merchant = 1
 object_type = 24
 object_count = 16
 object1 = 395-1000
@@ -1798,13 +1733,12 @@ backup = 1
 
 [NPC100]
 name = Sastre
-npc_type = 0
+npc_type = 12
 description = Entrad valiente viajero! En la sastreria de Arkhein estan las mejores ropas del continente.
 head = 15
 heading = 3
 body = 56
 ai_type = 1
-merchant = 1
 object_type = 3
 object_count = 14
 object1 = 45-1000
@@ -1825,13 +1759,12 @@ backup = 1
 
 [NPC101]
 name = Sastre
-npc_type = 0
+npc_type = 12
 description = Ven y mira estas vestimentas, seguro te encantaran!
 head = 173
 heading = 3
 body = 80
 ai_type = 1
-merchant = 1
 object_type = 3
 object_count = 4
 object1 = 504-1000
@@ -1842,13 +1775,12 @@ backup = 1
 
 [NPC102]
 name = Sastre
-npc_type = 0
+npc_type = 12
 description = Aqui encontraras las mejores prendas para enanos y a muy buen precio!
 head = 404
 heading = 3
 body = 159
 ai_type = 1
-merchant = 1
 object_type = 3
 object_count = 6
 object1 = 486-1000
@@ -1861,13 +1793,12 @@ backup = 1
 
 [NPC103]
 name = Armaduras
-npc_type = 0
+npc_type = 12
 description = Ven, tengo resistentes armaduras para ofrecerte.
 head = 6
 body = 93
 heading = 4
 ai_type = 1
-merchant = 1
 object_type = 3
 object_count = 6
 object1 = 359-1000
@@ -1882,13 +1813,12 @@ backup = 1
 
 [NPC104]
 name = Roksar
-npc_type = 0
+npc_type = 12
 description = Hola, buen viajero! Dispongo de todo tipo de provisiones... ¿Que deseas?
 head = 505
 heading = 3
 body = 202
 ai_type = 1
-merchant = 1
 object_type = 1
 object_count = 8
 object1 = 28-1000
@@ -1905,13 +1835,12 @@ backup = 1
 
 [NPC105]
 name = Herrero
-npc_type = 0
+npc_type = 12
 description = Tened aqui las armas mas poderosas de estas tierras... Pasad y ved!
 head = 505
 heading = 3
 body = 199
 ai_type = 1
-merchant = 1
 object_type = 2
 object_count = 9
 object1 = 164-1000
@@ -1927,13 +1856,12 @@ backup = 1
 
 [NPC106]
 name = Mago
-npc_type = 0
+npc_type = 12
 description = ¿Estas buscando los hechizos mas poderosos? A buen puerto has llegado...
 head = 110
 heading = 3
 body = 46
 ai_type = 1
-merchant = 1
 object_type = 24
 object_count = 6
 object1 = 542-1000
@@ -1946,13 +1874,12 @@ backup = 1
 
 [NPC107]
 name = Sastre
-npc_type = 0
+npc_type = 12
 description = Bienvenidos a la gran sastreria de la Ciudad Perdida! Aqui encontraran las ropas mas exoticas del mundo...
 head = 406
 heading = 3
 body = 130
 ai_type = 1
-merchant = 1
 object_type = 3
 object_count = 10
 object1 = 515-1000
@@ -1969,13 +1896,12 @@ backup = 1
 
 [NPC108]
 name = Sastre
-npc_type = 0
+npc_type = 12
 description = Entra! Jamas veras prendas mas bellas que las que tengo para ofrecerte...
 head = 474
 heading = 3
 body = 124
 ai_type = 1
-merchant = 1
 object_type = 3
 object_count = 6
 object1 = 511-1000
@@ -1988,13 +1914,12 @@ backup = 1
 
 [NPC109]
 name = Sastre
-npc_type = 0
+npc_type = 12
 description = Aqui en la Ciudad Perdida encontraran las mejores ropas pequeñas de todo el mundo!
 head = 402
 heading = 3
 body = 136
 ai_type = 1
-merchant = 1
 object_type = 3
 object_count = 6
 object1 = 671-1000
@@ -2007,13 +1932,12 @@ backup = 1
 
 [NPC110]
 name = Armaduras
-npc_type = 0
+npc_type = 12
 description = Si estas buscando las mejores armaduras de estas tierras, has llegado al lugar correcto...
 head = 6
 body = 93
 heading = 4
 ai_type = 1
-merchant = 1
 object_type = 3
 object_count = 11
 object1 = 672-1000
@@ -2323,13 +2247,12 @@ evasion = 190
 
 [NPC128]
 name = Lilith
-npc_type = 0
+npc_type = 12
 description = Hola, tengo las mejores pociones de la alquimia para principiantes.
 head = 77
 heading = 3
 body = 200
 ai_type = 1
-merchant = 1
 object_type = 11
 object_count = 5
 object1 = 855-1000
@@ -2341,13 +2264,12 @@ backup = 1
 
 [NPC129]
 name = Armaduras Newbie
-npc_type = 0
+npc_type = 12
 description = Si estas buscando tonicas y armaduras para principiantes, has llegado al lugar indicado.
 head = 6
 heading = 3
 body = 93
 ai_type = 1
-merchant = 1
 object_type = 3
 object_count = 7
 object1 = 1044-1000
@@ -2361,13 +2283,12 @@ backup = 1
 
 [NPC130]
 name = Armas Newbie
-npc_type = 0
+npc_type = 12
 description = Hola novato, tengo algunas armas que pueden ayudarte en tus aventuras.
 head = 505
 heading = 3
 body = 199
 ai_type = 1
-merchant = 1
 object_type = 2
 object_count = 8
 object1 = 861-1000
@@ -2382,13 +2303,12 @@ backup = 1
 
 [NPC131]
 name = Magia Newbie
-npc_type = 0
+npc_type = 12
 description = Bienvenido a mi pequeña tienda. Tengo algunos hechizos que podrian interesarte.
 head = 110
 heading = 3
 body = 46
 ai_type = 1
-merchant = 1
 object_type = 24
 object_count = 12
 object1 = 199-1000

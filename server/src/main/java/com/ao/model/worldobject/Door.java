@@ -1,11 +1,11 @@
 package com.ao.model.worldobject;
 
 import com.ao.model.worldobject.properties.DoorProperties;
-import com.ao.model.worldobject.properties.WorldObjectProperties;
+import com.ao.model.worldobject.properties.ObjectProperties;
 
-public class Door extends AbstractWorldObject {
+public class Door extends AbstractObject {
 
-    public Door(WorldObjectProperties properties) {
+    public Door(ObjectProperties properties) {
         super(properties);
     }
 

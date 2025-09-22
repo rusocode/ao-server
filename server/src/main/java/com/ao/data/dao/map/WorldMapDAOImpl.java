@@ -192,9 +192,9 @@ public class WorldMapDAOImpl implements WorldMapDAO {
                 }
 
                 if ((flag & BITFLAG_NPC) == BITFLAG_NPC) {
-                    // The NPC number.
+                    // The Npc number
                     infBuffer.getShort();
-                    // TODO instantiate the NPCCharacter object.
+                    // TODO instantiate the NpcCharacter object.
                 }
 
                 if ((flag & BITFLAG_OBJECT) == BITFLAG_OBJECT) {
@@ -207,7 +207,7 @@ public class WorldMapDAOImpl implements WorldMapDAO {
                     // TODO instantiate the WorldObject object
                 }
 
-                // TODO Replace the nulls with the NPCCharacter and WorldObject objects
+                // TODO Replace the nulls with the NpcCharacter and WorldObject objects
                 tiles[WorldMap.getTileKey(x, y)] = new Tile(blocked, isWater, isLava, trigger, tileExit, null, null);
             }
         }

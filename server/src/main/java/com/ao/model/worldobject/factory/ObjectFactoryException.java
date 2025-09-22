@@ -3,10 +3,10 @@ package com.ao.model.worldobject.factory;
 import java.io.Serial;
 
 /**
- * Exception for errors while building WorldObjects.
+ * Exception for errors while building Objects.
  */
 
-public class WorldObjectFactoryException extends Exception {
+public class ObjectFactoryException extends Exception {
 
     @Serial
     private static final long serialVersionUID = -8073725671591764207L;
@@ -16,7 +16,7 @@ public class WorldObjectFactoryException extends Exception {
      *
      * @param e the cause of the exception
      */
-    public WorldObjectFactoryException(Throwable e) {
+    public ObjectFactoryException(Throwable e) {
         super(e);
     }
 

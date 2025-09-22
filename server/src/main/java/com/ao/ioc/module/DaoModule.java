@@ -2,9 +2,9 @@ package com.ao.ioc.module;
 
 import com.ao.data.dao.*;
 import com.ao.data.dao.ini.CityDAOIni;
-import com.ao.data.dao.ini.NPCPropertiesDAOIni;
+import com.ao.data.dao.ini.NpcDAOIni;
 import com.ao.data.dao.ini.UserDAOIni;
-import com.ao.data.dao.ini.WorldObjectPropertiesDAOIni;
+import com.ao.data.dao.ini.ObjectDAOIni;
 import com.ao.data.dao.map.WorldMapDAOImpl;
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
@@ -31,14 +31,14 @@ public class DaoModule extends AbstractModule {
         bind(UserCharacterDAO.class).to(UserDAOIni.class).in(Singleton.class);
         bind(String.class).annotatedWith(Names.named("CharfilesPath")).toInstance(properties.getProperty("config.path.charfiles"));
 
-        bind(WorldObjectPropertiesDAO.class).to(WorldObjectPropertiesDAOIni.class).in(Singleton.class);
+        bind(ObjectDAO.class).to(ObjectDAOIni.class).in(Singleton.class);
         bind(String.class).annotatedWith(Names.named("objectsFilePath")).toInstance(properties.getProperty("config.path.objsdat"));
         bind(Integer.class).annotatedWith(Names.named("itemsPerRow")).toInstance(Integer.parseInt(properties.getProperty("config.inventory.itemperrow")));
 
         bind(CityDAO.class).to(CityDAOIni.class).in(Singleton.class);
         bind(String.class).annotatedWith(Names.named("citiesFilePath")).toInstance(properties.getProperty("config.path.citiesdat"));
 
-        bind(NPCCharacterPropertiesDAO.class).to(NPCPropertiesDAOIni.class).in(Singleton.class);
+        bind(NpcCharacterDAO.class).to(NpcDAOIni.class).in(Singleton.class);
         bind(String.class).annotatedWith(Names.named("npcsFilePath")).toInstance(properties.getProperty("config.path.npcsdat"));
     }
 

@@ -3,7 +3,7 @@ package com.ao.model.spell.effect;
 import com.ao.exception.InvalidTargetException;
 import com.ao.model.character.Character;
 import com.ao.model.character.UserCharacter;
-import com.ao.model.worldobject.WorldObject;
+import com.ao.model.worldobject.Object;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -47,14 +47,14 @@ public class DumbEffectTest {
     @Test
     public void testAppliesToCharacterWorldObject() {
         Character caster = mock(Character.class);
-        WorldObject target = mock(WorldObject.class);
+        Object target = mock(Object.class);
 
         assertThat(dumbEffect.appliesTo(caster, target)).isFalse();
     }
 
     @Test
     public void testApplyCharacterWorldObject() {
-        WorldObject obj = mock(WorldObject.class);
+        Object obj = mock(Object.class);
         Character caster = mock(Character.class);
         // Should do nothing....
         try {

@@ -2,7 +2,7 @@ package com.ao.model.worldobject;
 
 import com.ao.model.worldobject.properties.SignProperties;
 
-public class Sign extends AbstractWorldObject {
+public class Sign extends AbstractObject {
 
     public Sign(SignProperties properties) {
         super(properties);

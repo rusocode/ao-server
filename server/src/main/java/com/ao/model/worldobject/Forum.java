@@ -2,7 +2,7 @@ package com.ao.model.worldobject;
 
 import com.ao.model.worldobject.properties.ForumProperties;
 
-public class Forum extends AbstractWorldObject {
+public class Forum extends AbstractObject {
 
     public Forum(ForumProperties properties) {
         super(properties);

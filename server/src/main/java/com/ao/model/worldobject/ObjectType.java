@@ -1,10 +1,6 @@
 package com.ao.model.worldobject;
 
-/**
- * World Object Type enumeration.
- */
-
-public enum WorldObjectType {
+public enum ObjectType {
 
     FOOD,
     MELEE_WEAPON,

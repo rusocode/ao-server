@@ -2,7 +2,7 @@ package com.ao.model.spell.effect;
 
 import com.ao.exception.InvalidTargetException;
 import com.ao.model.character.Character;
-import com.ao.model.worldobject.WorldObject;
+import com.ao.model.worldobject.Object;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -41,7 +41,7 @@ public class ImmobilizationEffectTest {
 
     @Test
     public void testAppliesToCharacterWorldObject() {
-        WorldObject obj = mock(WorldObject.class);
+        Object obj = mock(Object.class);
         Character caster = mock(Character.class);
         // Should always false, no matter what
         assertThat(immobilizationEffect.appliesTo(caster, obj)).isFalse();
@@ -49,7 +49,7 @@ public class ImmobilizationEffectTest {
 
     @Test
     public void testApplyCharacterWorldObject() {
-        WorldObject obj = mock(WorldObject.class);
+        Object obj = mock(Object.class);
         Character caster = mock(Character.class);
         // Should do nothing....
         try {

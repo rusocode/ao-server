@@ -20,8 +20,8 @@ public class FilledBottleTest extends AbstractItemTest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        RefillableStatModifyingItemProperties emptyProps = new RefillableStatModifyingItemProperties(WorldObjectType.EMPTY_BOTTLE, 1, "Water Bottle", 1, 1, null, null, false, false, false, false, 0, 0, false, null);
-        RefillableStatModifyingItemProperties props = new RefillableStatModifyingItemProperties(WorldObjectType.FILLED_BOTTLE, 1, "Water Bottle", 1, 1, null, null, false, false, false, false, THIRST, THIRST, true, emptyProps);
+        RefillableStatModifyingItemProperties emptyProps = new RefillableStatModifyingItemProperties(ObjectType.EMPTY_BOTTLE, 1, "Water Bottle", 1, 1, null, null, false, false, false, false, 0, 0, false, null);
+        RefillableStatModifyingItemProperties props = new RefillableStatModifyingItemProperties(ObjectType.FILLED_BOTTLE, 1, "Water Bottle", 1, 1, null, null, false, false, false, false, THIRST, THIRST, true, emptyProps);
         bottle1 = new FilledBottle(props, 5);
 
         bottle2 = new FilledBottle(props, 1);

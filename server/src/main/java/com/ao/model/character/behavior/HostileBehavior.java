@@ -38,7 +38,7 @@ public class HostileBehavior implements Behavior {
     public void takeAction() {
         // TODO This has to be rewritten as a WorldMapAction
 //		for (final Character chara : character.getPosition().getCharactersNearby()) {
-//			if (chara != character && (chara instanceof UserCharacter || ((NPCCharacter) chara).getMaster() != null)) {
+//			if (chara != character && (chara instanceof UserCharacter || ((NpcCharacter) chara).getMaster() != null)) {
 //
 //				// Is it the same as last target?
 //				if (target != chara) {

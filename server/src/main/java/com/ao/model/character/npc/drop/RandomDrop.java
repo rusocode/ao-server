@@ -2,9 +2,9 @@ package com.ao.model.character.npc.drop;
 
 import com.ao.context.ApplicationContext;
 import com.ao.model.character.npc.Drop;
-import com.ao.model.worldobject.WorldObject;
-import com.ao.model.worldobject.factory.WorldObjectFactoryException;
-import com.ao.service.WorldObjectService;
+import com.ao.model.worldobject.Object;
+import com.ao.model.worldobject.factory.ObjectFactoryException;
+import com.ao.service.ObjectService;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -15,7 +15,7 @@ import java.util.List;
 
 public class RandomDrop implements Drop {
 
-    private final WorldObjectService woService = ApplicationContext.getInstance(WorldObjectService.class);
+    private final ObjectService woService = ApplicationContext.getInstance(ObjectService.class);
 
     protected List<Dropable> dropables;
 
@@ -29,12 +29,12 @@ public class RandomDrop implements Drop {
     }
 
     @Override
-    public List<WorldObject> getDrops() throws WorldObjectFactoryException {
-        List<WorldObject> items = new LinkedList<>();
+    public List<Object> getDrops() throws ObjectFactoryException {
+        List<Object> items = new LinkedList<>();
         double chance = Math.random();
         for (Dropable dropable : dropables) {
             if (dropable.chance < chance) {
-                WorldObject item = woService.createWorldObject(dropable.objId, dropable.amount);
+                Object item = woService.createObject(dropable.objId, dropable.amount);
                 items.add(item);
                 break;
             }

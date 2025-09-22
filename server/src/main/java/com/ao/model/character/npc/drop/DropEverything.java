@@ -3,14 +3,14 @@ package com.ao.model.character.npc.drop;
 import com.ao.model.character.npc.Drop;
 import com.ao.model.inventory.Inventory;
 import com.ao.model.worldobject.Item;
-import com.ao.model.worldobject.WorldObject;
-import com.ao.model.worldobject.factory.WorldObjectFactoryException;
+import com.ao.model.worldobject.Object;
+import com.ao.model.worldobject.factory.ObjectFactoryException;
 
 import java.util.LinkedList;
 import java.util.List;
 
 /**
- * A Drop strategy that simply drops everything the NPC holds.
+ * A Drop strategy that simply drops everything the npc holds.
  */
 
 public class DropEverything implements Drop {
@@ -27,8 +27,8 @@ public class DropEverything implements Drop {
     }
 
     @Override
-    public List<WorldObject> getDrops() throws WorldObjectFactoryException {
-        List<WorldObject> items = new LinkedList<>();
+    public List<Object> getDrops() throws ObjectFactoryException {
+        List<Object> items = new LinkedList<>();
         for (Item item : inventory)
             if (item != null) items.add(item);
         return items;

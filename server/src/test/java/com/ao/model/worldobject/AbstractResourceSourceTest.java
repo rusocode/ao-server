@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public abstract class AbstractResourceSourceTest extends AbstractWorldObjectTest {
+public abstract class AbstractResourceSourceTest extends AbstractObjectTest {
 
     @Test
     public void testResourceWorldObjctId() {

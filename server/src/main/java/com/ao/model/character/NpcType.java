@@ -1,6 +1,6 @@
 package com.ao.model.character;
 
-public enum NPCType {
+public enum NpcType {
 
     COMMON(0),
     RESUCITATOR(1),
@@ -18,12 +18,12 @@ public enum NPCType {
 
     private final int id;
 
-    NPCType(int id) {
+    NpcType(int id) {
         this.id = id;
     }
 
-    public static NPCType findById(int id) {
-        for (NPCType type : values())
+    public static NpcType findById(int id) {
+        for (NpcType type : values())
             if (type.id == id) return type;
         return null;
     }

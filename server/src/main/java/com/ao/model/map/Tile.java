@@ -1,7 +1,7 @@
 package com.ao.model.map;
 
 import com.ao.model.character.Character;
-import com.ao.model.worldobject.WorldObject;
+import com.ao.model.worldobject.Object;
 
 public class Tile {
 
@@ -11,7 +11,7 @@ public class Tile {
     private final boolean isLava;
     private final Position tileExit;
     private Character character;
-    private WorldObject worldObject;
+    private Object object;
 
     /**
      * Creates a new tile.
@@ -22,15 +22,15 @@ public class Tile {
      * @param trigger     trigger ruling over this tile
      * @param tileExit    Position to which this tile leads, if any
      * @param character   character currently standing in this position, if any
-     * @param worldObject object laying in this position, if any
+     * @param object object laying in this position, if any
      */
-    public Tile(boolean blocked, boolean isWater, boolean isLava, Trigger trigger, Position tileExit, Character character, WorldObject worldObject) {
+    public Tile(boolean blocked, boolean isWater, boolean isLava, Trigger trigger, Position tileExit, Character character, Object object) {
         this.blocked = blocked;
         this.isWater = isWater;
         this.isLava = isLava;
         this.trigger = trigger;
         this.tileExit = tileExit;
-        this.worldObject = worldObject;
+        this.object = object;
         this.character = character;
     }
 
@@ -75,17 +75,17 @@ public class Tile {
      *
      * @return the world object at the tile
      */
-    public WorldObject getWorldObject() {
-        return worldObject;
+    public Object getWorldObject() {
+        return object;
     }
 
     /**
      * Sets the world object at the tile.
      *
-     * @param worldObject worldObject to set at the tile
+     * @param object worldObject to set at the tile
      */
-    void setWorldObject(final WorldObject worldObject) {
-        this.worldObject = worldObject;
+    void setWorldObject(final Object object) {
+        this.object = object;
     }
 
     /**
@@ -135,7 +135,7 @@ public class Tile {
 
     @Override
     public String toString() {
-        return "Tile [character=" + character + ", worldObject=" + worldObject
+        return "Tile [character=" + character + ", worldObject=" + object
                 + ", trigger=" + trigger + ", blocked=" + blocked
                 + ", isWater=" + isWater + ", isLava=" + isLava + ", tileExit="
                 + tileExit + "]";

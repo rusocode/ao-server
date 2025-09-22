@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public abstract class AbstractItemTest extends AbstractWorldObjectTest {
+public abstract class AbstractItemTest extends AbstractObjectTest {
 
     protected int ammount;
 

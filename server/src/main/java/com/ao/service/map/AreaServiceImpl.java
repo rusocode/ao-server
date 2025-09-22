@@ -1,7 +1,7 @@
 package com.ao.service.map;
 
 import com.ao.model.character.Character;
-import com.ao.model.character.NPCCharacter;
+import com.ao.model.character.NpcCharacter;
 import com.ao.model.character.UserCharacter;
 import com.ao.model.map.Heading;
 import com.ao.model.map.Tile;
@@ -10,7 +10,7 @@ import com.ao.model.map.area.AreaInfo;
 import com.ao.model.user.ConnectedUser;
 import com.ao.model.user.LoggedUser;
 import com.ao.model.worldobject.Door;
-import com.ao.model.worldobject.WorldObject;
+import com.ao.model.worldobject.Object;
 import com.ao.network.Connection;
 import com.ao.network.packet.outgoing.*;
 import com.google.inject.Inject;
@@ -80,11 +80,11 @@ public class AreaServiceImpl implements AreaService {
         // Update the user's area
         character.getCurrentAreaInfo().changeCurrentAreTowards(heading);
 
-        // Is the one moving a user or an NPC?
+        // Is the one moving a user or a npc?
         if (character instanceof LoggedUser) {
             LoggedUser user = (LoggedUser) character;
             userEnteredRegion(map, minX, minY, maxX, maxY, user);
-        } else npcEnteredRegion(map, minX, minY, maxX, maxY, (NPCCharacter) character);
+        } else npcEnteredRegion(map, minX, minY, maxX, maxY, (NpcCharacter) character);
 
     }
 
@@ -96,14 +96,14 @@ public class AreaServiceImpl implements AreaService {
         int maxX = areaInfo.getMinX() + AreaInfo.AREA_SIZE * VISIBLE_AREAS - 1;
         int maxY = areaInfo.getMinY() + AreaInfo.AREA_SIZE * VISIBLE_AREAS - 1;
 
-        // Is the one moving a user or an NPC?
+        // Is the one moving a user or a npc?
         if (character instanceof LoggedUser) {
             LoggedUser user = (LoggedUser) character;
             connectionGroups.get(map.getId() - 1).add(user);
             // Tell the user he is in the map
             user.getConnection().send(new CharacterCreatePacket(character));
             userEnteredRegion(map, areaInfo.getMinX(), areaInfo.getMinY(), maxX, maxY, user);
-        } else npcEnteredRegion(map, areaInfo.getMinX(), areaInfo.getMinY(), maxX, maxY, (NPCCharacter) character);
+        } else npcEnteredRegion(map, areaInfo.getMinX(), areaInfo.getMinY(), maxX, maxY, (NpcCharacter) character);
 
     }
 
@@ -112,13 +112,13 @@ public class AreaServiceImpl implements AreaService {
         connectionGroups.get(map.getId() - 1).remove(user);
     }
 
-    private void npcEnteredRegion(WorldMap map, int minX, int minY, int maxX, int maxY, NPCCharacter character) {
+    private void npcEnteredRegion(WorldMap map, int minX, int minY, int maxX, int maxY, NpcCharacter character) {
         // TODO I believe these bounds are always safe, check it
         for (int x = minX; x <= maxX; x++) {
             for (int y = minY; y <= maxY; y++) {
                 Character tileCharacter = map.getTile(x, y).getCharacter();
                 if (tileCharacter != null && tileCharacter instanceof LoggedUser) {
-                    // TODO Call MakeNPCChar(False, MapData(.Pos.Map, X, Y).UserIndex, NpcIndex, .Pos.Map, .Pos.X, .Pos.Y)
+                    // TODO Call MakeNpcChar(False, MapData(.Pos.Map, X, Y).UserIndex, NpcIndex, .Pos.Map, .Pos.X, .Pos.Y)
                 }
             }
         }
@@ -135,7 +135,7 @@ public class AreaServiceImpl implements AreaService {
             for (int y = minY; y <= maxY; y++) {
                 Tile tile = map.getTile(x, y);
                 Character tileCharacter = tile.getCharacter();
-                WorldObject worldObject = tile.getWorldObject();
+                Object object = tile.getWorldObject();
 
                 if (tileCharacter != null) {
                     if (tileCharacter != user) { // Same instance, we can use ==
@@ -168,12 +168,12 @@ public class AreaServiceImpl implements AreaService {
                     }
                 }
 
-                if (worldObject != null) {
-                    if (!worldObject.isFixed()) {
-                        userConnection.send(new ObjectCreatePacket(worldObject, (byte) x, (byte) y));
+                if (object != null) {
+                    if (!object.isFixed()) {
+                        userConnection.send(new ObjectCreatePacket(object, (byte) x, (byte) y));
 
                         // TODO Do we really need to send it every time? Can't the client default to closed / blocked, and just send data when it's not?
-                        if (worldObject instanceof Door) {
+                        if (object instanceof Door) {
                             userConnection.send(new BlockPositionPacket((byte) x, (byte) y, tile.isBlocked()));
                             userConnection.send(new BlockPositionPacket((byte) (x - 1), (byte) y, map.getTile(x - 1, y).isBlocked()));
                         }

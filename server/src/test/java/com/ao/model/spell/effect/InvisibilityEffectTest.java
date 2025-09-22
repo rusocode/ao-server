@@ -2,9 +2,9 @@ package com.ao.model.spell.effect;
 
 import com.ao.exception.InvalidTargetException;
 import com.ao.model.character.Character;
-import com.ao.model.character.NPCCharacter;
+import com.ao.model.character.NpcCharacter;
 import com.ao.model.character.UserCharacter;
-import com.ao.model.worldobject.WorldObject;
+import com.ao.model.worldobject.Object;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -35,7 +35,7 @@ public class InvisibilityEffectTest {
         UserCharacter deadUserTarget = mock(UserCharacter.class);
         when(deadUserTarget.isDead()).thenReturn(Boolean.TRUE);
         UserCharacter aliveUserTarget = mock(UserCharacter.class);
-        NPCCharacter target = mock(NPCCharacter.class);
+        NpcCharacter target = mock(NpcCharacter.class);
 
         // Test invalid target
         assertThat(invisibilityEffect.appliesTo(caster, target)).isFalse();
@@ -49,14 +49,14 @@ public class InvisibilityEffectTest {
 
     @Test
     public void testAppliesToCharacterWorldObject() {
-        WorldObject obj = mock(WorldObject.class);
+        Object obj = mock(Object.class);
         Character caster = mock(Character.class);
         assertThat(invisibilityEffect.appliesTo(caster, obj)).isFalse();
     }
 
     @Test
     public void testApplyCharacterWorldObject() {
-        WorldObject obj = mock(WorldObject.class);
+        Object obj = mock(Object.class);
         Character caster = mock(Character.class);
         // This should do fail
         try {

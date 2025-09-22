@@ -2,7 +2,7 @@ package com.ao.model.spell;
 
 import com.ao.model.character.Character;
 import com.ao.model.spell.effect.Effect;
-import com.ao.model.worldobject.WorldObject;
+import com.ao.model.worldobject.Object;
 
 public class Spell {
 
@@ -83,7 +83,7 @@ public class Spell {
      * @param target spell's target
      * @return true if the spell applies to the target and caster, false otherwise
      */
-    public boolean appliesTo(Character caster, WorldObject target) {
+    public boolean appliesTo(Character caster, Object target) {
         for (int i = 0; i < effects.length; i++)
             if (!effects[i].appliesTo(caster, target))
                 return false;
@@ -108,7 +108,7 @@ public class Spell {
      * @param caster spell's caster
      * @param target target to apply the spell
      */
-    public void apply(Character caster, WorldObject target) {
+    public void apply(Character caster, Object target) {
         for (int i = 0; i < effects.length; i++)
             effects[i].apply(caster, target);
         caster.addToMana(-requiredMana);

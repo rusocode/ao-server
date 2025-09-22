@@ -1,7 +1,7 @@
 package com.ao.model.character.npc;
 
-import com.ao.model.worldobject.WorldObject;
-import com.ao.model.worldobject.factory.WorldObjectFactoryException;
+import com.ao.model.worldobject.Object;
+import com.ao.model.worldobject.factory.ObjectFactoryException;
 
 import java.util.List;
 
@@ -16,6 +16,6 @@ public interface Drop {
      *
      * @return a list with the drops
      */
-    List<WorldObject> getDrops() throws WorldObjectFactoryException;
+    List<Object> getDrops() throws ObjectFactoryException;
 
 }

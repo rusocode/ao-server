@@ -12,7 +12,7 @@ import java.util.List;
  * Abstract implementation of an item provides most functionality.
  */
 
-public abstract class AbstractItem extends AbstractWorldObject implements Item {
+public abstract class AbstractItem extends AbstractObject implements Item {
 
     protected static final int MAX_STACKED_ITEMS = 10000;
 
@@ -43,6 +43,7 @@ public abstract class AbstractItem extends AbstractWorldObject implements Item {
         // Check if the race can use this item
         List<Race> forbiddenRaces = ((ItemProperties) properties).getForbiddenRaces();
 
+        // TODO Aunque mejor seria verificar si la lista de razas prohibidas esta vacia y no si es distinta a null
         if (forbiddenRaces != null && forbiddenRaces.contains(race)) return false;
 
         // TODO Check by gender and reputation

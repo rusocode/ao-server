@@ -1,12 +1,12 @@
 package com.ao.model.worldobject.properties;
 
-import com.ao.model.worldobject.WorldObjectType;
+import com.ao.model.worldobject.ObjectType;
 
 /**
  * Defines a Teleport's properties. Allows a lightweight pattern implementation.
  */
 
-public class SignProperties extends WorldObjectProperties {
+public class SignProperties extends ObjectProperties {
 
     protected int bigGraphic;
     protected String text;
@@ -21,7 +21,7 @@ public class SignProperties extends WorldObjectProperties {
      * @param bigGraphic big graphic for the item
      * @param text       text for the item
      */
-    public SignProperties(WorldObjectType type, int id, String name, int graphic, int bigGraphic, String text) {
+    public SignProperties(ObjectType type, int id, String name, int graphic, int bigGraphic, String text) {
         super(type, id, name, graphic);
         this.bigGraphic = bigGraphic;
         this.text = text;

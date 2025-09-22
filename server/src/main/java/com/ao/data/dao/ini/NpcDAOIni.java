@@ -1,15 +1,14 @@
 package com.ao.data.dao.ini;
 
-import com.ao.data.dao.NPCCharacterPropertiesDAO;
-import com.ao.data.dao.WorldObjectPropertiesDAO;
+import com.ao.data.dao.NpcCharacterDAO;
+import com.ao.data.dao.ObjectDAO;
 import com.ao.data.dao.exception.DAOException;
+import com.ao.model.character.AIType;
 import com.ao.model.character.Alignment;
-import com.ao.model.character.NPCType;
+import com.ao.model.character.NpcType;
 import com.ao.model.character.attack.AttackStrategy;
 import com.ao.model.character.behavior.Behavior;
-import com.ao.model.character.behavior.NullBehavior;
 import com.ao.model.character.movement.MovementStrategy;
-import com.ao.model.character.movement.QuietMovementStrategy;
 import com.ao.model.character.npc.Drop;
 import com.ao.model.character.npc.drop.DropEverything;
 import com.ao.model.character.npc.drop.Dropable;
@@ -21,10 +20,10 @@ import com.ao.model.map.City;
 import com.ao.model.map.Heading;
 import com.ao.model.spell.Spell;
 import com.ao.model.worldobject.Item;
-import com.ao.model.worldobject.WorldObjectType;
-import com.ao.model.worldobject.factory.WorldObjectFactory;
-import com.ao.model.worldobject.factory.WorldObjectFactoryException;
-import com.ao.model.worldobject.properties.WorldObjectProperties;
+import com.ao.model.worldobject.ObjectType;
+import com.ao.model.worldobject.factory.ObjectFactory;
+import com.ao.model.worldobject.factory.ObjectFactoryException;
+import com.ao.model.worldobject.properties.ObjectProperties;
 import com.ao.service.MapService;
 import com.ao.utils.IniUtils;
 import com.google.inject.Inject;
@@ -42,26 +41,25 @@ import java.util.*;
 import java.util.stream.IntStream;
 
 /**
- * Ini-backed implementation of the World Object DAO.
+ * Implementation of the npc DAO backed by INI files.
  * <p>
- * Most flags in {@code npcs.dat} like <b>merchant</b>, accept values 0 (false) and 1 (true). Some flags like
- * <b>tameable</b> accept other values.
+ * Most flags in {@code npcs.dat} like <b>poisonous</b>, accept values 0 (false) and 1 (true). Some flags like <b>tameable</b>
+ * accept other values.
  * <p>
  * Numeric keys with value 0 needn't have value 0. Missing keys default to 0. For example, if the Duende (section [NPC196]) has no
- * defense, then it is redundant to specify {@code defense = 0} in the file. However, if necessary, specify the flags (0 or 1) in
- * the sections that require them.
+ * defense, then it is redundant to specify {@code defense = 0} in the file.
  * <p>
  * The sentinel value for keys not found or invalid values is {@code -1}.
  * <p>
  * TODO Creo que no se esta inyectando WorldObjectFactory
  */
 
-public record NPCPropertiesDAOIni(String npcsFilePath,
-                                  WorldObjectPropertiesDAO worldObjectPropertiesDAO,
-                                  WorldObjectFactory worldObjectFactory,
-                                  MapService mapService) implements NPCCharacterPropertiesDAO {
+public record NpcDAOIni(String npcsFilePath,
+                        ObjectDAO objectDAO,
+                        ObjectFactory objectFactory,
+                        MapService mapService) implements NpcCharacterDAO {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(NPCPropertiesDAOIni.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(NpcDAOIni.class);
 
     private static final String INIT_HEADER = "INIT";
     private static final String NPC_COUNT_KEY = "npc_count";
@@ -69,7 +67,7 @@ public record NPCPropertiesDAOIni(String npcsFilePath,
     // TODO Podria mover la declaracion de las keys en una clase aparte
 
     /** Prefixs keys. */
-    private static final String NPC_SECTION_PREFIX = "NPC";
+    private static final String NPC_PREFIX = "NPC";
     private static final String DROP_PREFIX = "drop";
     private static final String OBJECT_INVENTORY_PREFIX = "object"; // obj
     private static final String SPELL_PREFIX = "spell"; // Sp
@@ -113,27 +111,27 @@ public record NPCPropertiesDAOIni(String npcsFilePath,
     private static final String RESTOCKABLE_KEY = "restockable"; // InvReSpawn
 
     /**
-     * Creates a new NPCDAOIni instance using DI.
+     * Creates a new NpcDAOIni instance using DI.
      * <p>
      * In the module {@code DaoModule} we already have {@code bind(WorldObjectPropertiesDAO.class).to(...)}. For
      * {@code WorldObjectFactory} a similar binding must exist in another module; if it didn't exist, Guice would fail when
      * creating the Injector.
      *
-     * @param npcsFilePath             path to the file with all objects definitions
-     * @param worldObjectPropertiesDAO DAO for World Object Properties
-     * @param worldObjectFactory       factory to create world object instances
-     * @param mapService               map service
+     * @param npcsFilePath  path to the file with all objects definitions
+     * @param objectDAO     DAO for World Object Properties
+     * @param objectFactory factory to create world object instances
+     * @param mapService    map service
      */
     @Inject
-    public NPCPropertiesDAOIni(@Named("npcsFilePath") String npcsFilePath, WorldObjectPropertiesDAO worldObjectPropertiesDAO, WorldObjectFactory worldObjectFactory, MapService mapService) {
+    public NpcDAOIni(@Named("npcsFilePath") String npcsFilePath, ObjectDAO objectDAO, ObjectFactory objectFactory, MapService mapService) {
         this.npcsFilePath = npcsFilePath;
-        this.worldObjectPropertiesDAO = worldObjectPropertiesDAO;
-        this.worldObjectFactory = worldObjectFactory;
+        this.objectDAO = objectDAO;
+        this.objectFactory = objectFactory;
         this.mapService = mapService;
     }
 
     @Override
-    public NPCProperties[] load() throws DAOException {
+    public Npc[] load() throws DAOException {
         INIConfiguration ini = null;
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream(npcsFilePath);
         if (inputStream == null)
@@ -150,12 +148,12 @@ public record NPCPropertiesDAOIni(String npcsFilePath,
         // Required key
         int npcCount = IniUtils.getRequiredInt(ini, INIT_HEADER + "." + NPC_COUNT_KEY);
 
-        NPCProperties[] npcProperties = new NPCProperties[npcCount];
+        Npc[] npcs = new Npc[npcCount];
 
         for (int i = 1; i <= npcCount; i++)
-            npcProperties[i - 1] = loadNpc(i, ini);
+            npcs[i - 1] = loadNpc(i, ini);
 
-        return npcProperties;
+        return npcs;
     }
 
     /**
@@ -165,9 +163,9 @@ public record NPCPropertiesDAOIni(String npcsFilePath,
      * @param ini ini configuration
      * @return new npc
      */
-    private NPCProperties loadNpc(int id, INIConfiguration ini) {
+    private Npc loadNpc(int id, INIConfiguration ini) {
 
-        String section = NPC_SECTION_PREFIX + id;
+        String section = NPC_PREFIX + id;
 
         String name = IniUtils.getString(ini, section + "." + NAME_KEY, "");
         String description = IniUtils.getString(ini, section + "." + DESCRIPTION_KEY, "");
@@ -179,7 +177,7 @@ public record NPCPropertiesDAOIni(String npcsFilePath,
         Class<? extends AttackStrategy> attackStrategy = getAttackStrategy(ini, section);
         Class<? extends MovementStrategy> movementStrategy = getMovementStrategy(ini, section);
 
-        NPCType npcType = NPCType.findById(IniUtils.getInt(ini, section + "." + NPC_TYPE_KEY, -1));
+        NpcType npcType = NpcType.findById(IniUtils.getInt(ini, section + "." + NPC_TYPE_KEY, -1));
 
         if (npcType == null) {
             LOGGER.error("Unknown npc type in section [{}]", section);
@@ -187,12 +185,8 @@ public record NPCPropertiesDAOIni(String npcsFilePath,
         }
 
         return switch (npcType) {
-            case COMMON -> {
-                if (isMerchant(ini, section))
-                    yield loadMerchant(NPCType.MERCHANT, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, ini, section);
-                else
-                    yield loadCreature(NPCType.COMMON, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, ini, section);
-            }
+            case COMMON ->
+                    loadCreature(NpcType.COMMON, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, ini, section);
             case DRAGON, PRETORIAN ->
                     loadCreature(npcType, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, ini, section);
             case TRAINER ->
@@ -205,64 +199,65 @@ public record NPCPropertiesDAOIni(String npcsFilePath,
                     loadNoble(npcType, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, ini, section);
             case NEWBIE_RESUCITATOR, RESUCITATOR, GAMBLER, BANKER ->
                     loadBasicNpc(npcType, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy);
-            // Aunque nunca se llega a ejecutar ya que no hay un npc de tipo MERCHANT, es decir npc_type = 12
-            case MERCHANT -> null;
+            case MERCHANT ->
+                    loadMerchant(npcType, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, ini, section);
         };
 
     }
 
-    private NPCProperties loadNoble(NPCType type, int id, String name, short body, short head, Heading heading, boolean respawnable,
-                                    String description, Class<? extends Behavior> behavior, Class<? extends AttackStrategy> attackStrategy,
-                                    Class<? extends MovementStrategy> movementStrategy, INIConfiguration ini, String section) {
+    private Npc loadNoble(NpcType type, int id, String name, short body, short head, Heading heading, boolean respawnable,
+                          String description, Class<? extends Behavior> behavior, Class<? extends AttackStrategy> attackStrategy,
+                          Class<? extends MovementStrategy> movementStrategy, INIConfiguration ini, String section) {
 
-        return new NobleNPCProperties(type, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, getAlignment(ini, section));
+        return new NobleNpc(type, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, getAlignment(ini, section));
     }
 
-    private NPCProperties loadBasicNpc(NPCType type, int id, String name, short body, short head, Heading heading, boolean respawnable,
-                                       String description, Class<? extends Behavior> behavior, Class<? extends AttackStrategy> attackStrategy,
-                                       Class<? extends MovementStrategy> movementStrategy) {
+    private Npc loadBasicNpc(NpcType type, int id, String name, short body, short head, Heading heading, boolean respawnable,
+                             String description, Class<? extends Behavior> behavior, Class<? extends AttackStrategy> attackStrategy,
+                             Class<? extends MovementStrategy> movementStrategy) {
 
-        return new NPCProperties(type, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy);
+        return new Npc(type, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy);
     }
 
-    private NPCProperties loadGovernor(NPCType type, int id, String name, short body, short head, Heading heading, boolean respawnable,
-                                       String description, Class<? extends Behavior> behavior, Class<? extends AttackStrategy> attackStrategy,
-                                       Class<? extends MovementStrategy> movementStrategy, INIConfiguration ini, String section) {
+    private Npc loadGovernor(NpcType type, int id, String name, short body, short head, Heading heading, boolean respawnable,
+                             String description, Class<? extends Behavior> behavior, Class<? extends AttackStrategy> attackStrategy,
+                             Class<? extends MovementStrategy> movementStrategy, INIConfiguration ini, String section) {
 
-        return new GovernorNPCProperties(type, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, getCity(ini, section));
+        return new GovernorNpc(type, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, getCity(ini, section));
     }
 
-    private NPCProperties loadMerchant(NPCType type, int id, String name, short body, short head, Heading heading, boolean respawnable,
-                                       String description, Class<? extends Behavior> behavior, Class<? extends AttackStrategy> attackStrategy,
-                                       Class<? extends MovementStrategy> movementStrategy, INIConfiguration ini, String section) {
+    private Npc loadMerchant(NpcType type, int id, String name, short body, short head, Heading heading, boolean respawnable,
+                             String description, Class<? extends Behavior> behavior, Class<? extends AttackStrategy> attackStrategy,
+                             Class<? extends MovementStrategy> movementStrategy, INIConfiguration ini, String section) {
 
-        return new MerchantNPCProperties(type, id, name, body, head, heading, respawnable, behavior, attackStrategy, movementStrategy,
+        return new MerchantNpc(type, id, name, body, head, heading, respawnable, behavior, attackStrategy, movementStrategy,
                 description, getInventory(ini, section), isRestockable(ini, section), getAcceptedObjectTypes(ini, section));
     }
 
-    private NPCProperties loadTrainer(NPCType type, int id, String name, short body, short head, Heading heading, boolean respawnable,
-                                      String description, Class<? extends Behavior> behavior, Class<? extends AttackStrategy> attackStrategy,
-                                      Class<? extends MovementStrategy> movementStrategy, INIConfiguration ini, String section) {
+    private Npc loadTrainer(NpcType type, int id, String name, short body, short head, Heading heading, boolean respawnable,
+                            String description, Class<? extends Behavior> behavior, Class<? extends AttackStrategy> attackStrategy,
+                            Class<? extends MovementStrategy> movementStrategy, INIConfiguration ini, String section) {
 
-        return new TrainerNPCProperties(type, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, getCreatures(ini, section));
+        return new TrainerNpc(type, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, getCreatures(ini, section));
     }
 
-    private NPCProperties loadCreature(NPCType type, int id, String name, short body, short head, Heading heading, boolean respawnable,
-                                       String description, Class<? extends Behavior> behavior, Class<? extends AttackStrategy> attackStrategy,
-                                       Class<? extends MovementStrategy> movementStrategy, INIConfiguration ini, String section) {
+    // TODO Separar metodo para npc hostiles y varios/decorativos o cambiar nombre de CreatureNpc a algun nombre mas generico
+    private Npc loadCreature(NpcType type, int id, String name, short body, short head, Heading heading, boolean respawnable,
+                             String description, Class<? extends Behavior> behavior, Class<? extends AttackStrategy> attackStrategy,
+                             Class<? extends MovementStrategy> movementStrategy, INIConfiguration ini, String section) {
 
-        return new CreatureNPCProperties(type, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy,
+        return new CreatureNpc(type, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy,
                 getExperience(ini, section), getGold(ini, section), getMinHP(ini, section), getMaxHP(ini, section),
                 getMinHit(ini, section), getMaxHit(ini, section), getDefense(ini, section), getMagicDefense(ini, section), getAttack(ini, section),
                 getEvasion(ini, section), getSpells(ini, section), isAquatic(ini, section), isAttackable(ini, section),
                 isPoisonous(ini, section), isUnparalyzable(ini, section), isHostile(ini, section), isTameable(ini, section), getDrops(ini, section));
     }
 
-    private NPCProperties loadGuard(NPCType type, int id, String name, short body, short head, Heading heading, boolean respawnable,
-                                    String description, Class<? extends Behavior> behavior, Class<? extends AttackStrategy> attackStrategy,
-                                    Class<? extends MovementStrategy> movementStrategy, INIConfiguration ini, String section) {
+    private Npc loadGuard(NpcType type, int id, String name, short body, short head, Heading heading, boolean respawnable,
+                          String description, Class<? extends Behavior> behavior, Class<? extends AttackStrategy> attackStrategy,
+                          Class<? extends MovementStrategy> movementStrategy, INIConfiguration ini, String section) {
 
-        return new GuardNPCProperties(type, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy,
+        return new GuardNpc(type, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy,
                 getExperience(ini, section), getGold(ini, section), getMinHP(ini, section), getMaxHP(ini, section), getMinHit(ini, section),
                 getMaxHit(ini, section), getDefense(ini, section), getMagicDefense(ini, section), getAttack(ini, section), getEvasion(ini, section),
                 getSpells(ini, section), isAquatic(ini, section), isAttackable(ini, section), isPoisonous(ini, section),
@@ -319,7 +314,7 @@ public record NPCPropertiesDAOIni(String npcsFilePath,
             return null;
         }
 
-        // Pretorian NPCs drop all their items when killed, a little bit hardcoded, but want to be compatible with old AO
+        // Pretorian Npcs drop all their items when killed, a little bit hardcoded, but want to be compatible with old AO
         if (aiType.isPretorian()) return new DropEverything(getInventory(ini, section));
 
         List<Dropable> dropables = new LinkedList<>();
@@ -328,7 +323,7 @@ public record NPCPropertiesDAOIni(String npcsFilePath,
          * that each has 10% the chance of the previous one. In other words, the first object is more likely than the second. */
         float chance = 0.9f; // 90% for the first object, 10% for the second, and 10% for the third, and so
         for (int i = 1; i <= objectCount; i++) {
-            /* El slot contiene el id y la cantidad del objeto dropeable, por ejemplo para el objeto [NPC503] la clave drop1
+            /* El slot contiene el id y la cantidad del objeto dropeable, por ejemplo para el objeto [NPC159] la clave drop1
              * contiene el valor "12-8", en donde el 12 es el id del objeto a dropear y el 8 la cantidad, y el simbolo '-' es un
              * separador. En este caso, el id 12 serian monedas de oro ([OBJ12] en objects.dat). El ultimo drop (drop5),
              * representa el objeto [OBJ197] y es el que menos probabilidades tiene de dropear. */
@@ -369,13 +364,13 @@ public record NPCPropertiesDAOIni(String npcsFilePath,
                 String[] slotInfo = slot.split("-");
                 int objId = Integer.parseInt(slotInfo[0]);
                 int amount = Integer.parseInt(slotInfo[1]);
-                WorldObjectProperties worldObjectProperties = worldObjectPropertiesDAO.getWorldObjectProperties(objId);
-                Item worldObject;
+                ObjectProperties objectProperties = objectDAO.getObjectProperties(objId);
+                Item item;
                 try {
-                    worldObject = worldObjectFactory.getWorldObject(worldObjectProperties, amount);
-                    if (worldObject != null) inventory.addItem(worldObject);
+                    item = objectFactory.getObject(objectProperties, amount);
+                    if (item != null) inventory.addItem(item);
                     else LOGGER.error("Npc has object id '{}' in inventory but it's not an item", objId);
-                } catch (WorldObjectFactoryException e) {
+                } catch (ObjectFactoryException e) {
                     LOGGER.warn("Npc with item id '{}' cannot be created", objId);
                 }
             }
@@ -389,7 +384,7 @@ public record NPCPropertiesDAOIni(String npcsFilePath,
      *
      * @param ini     ini configuration
      * @param section section from which to read the value
-     * @return the list of sounds from the npc; empty list if none exists
+     * @return the list of sounds from the npc or empty list if none exists
      */
     private List<Integer> getSounds(INIConfiguration ini, String section) {
         int soundCount = 3;
@@ -442,14 +437,14 @@ public record NPCPropertiesDAOIni(String npcsFilePath,
      * @param section section from which to read the value
      * @return the types of the object to be accepted in commerce
      */
-    private Set<WorldObjectType> getAcceptedObjectTypes(INIConfiguration ini, String section) {
+    private Set<ObjectType> getAcceptedObjectTypes(INIConfiguration ini, String section) {
         int objectTypeId = IniUtils.getInt(ini, section + "." + OBJECT_TYPE_KEY, -1);
         if (objectTypeId == -1) {
             logKeyNotFoundOrInvalid(OBJECT_TYPE_KEY, section);
             return null;
         }
-        LegacyWorldObjectType objectType = LegacyWorldObjectType.findById(objectTypeId);
-        return objectType == null ? EnumSet.allOf(WorldObjectType.class) : objectType.getMappedTypes();
+        LegacyObjectType objectType = LegacyObjectType.findById(objectTypeId);
+        return objectType == null ? EnumSet.allOf(ObjectType.class) : objectType.getMappedTypes();
     }
 
     /**
@@ -750,63 +745,6 @@ public record NPCPropertiesDAOIni(String npcsFilePath,
 
     private void logKeyNotFoundOrInvalid(String key, String section) {
         LOGGER.warn("The key '{}' was not found in section [{}] or its value is invalid!", key, section);
-    }
-
-    /**
-     * Enum with a legacy AITypes, which are now useless.
-     */
-    private enum AIType {
-        // TODO Complete this as we code the behaviors!
-        STATIC(1, NullBehavior.class, null, QuietMovementStrategy.class),
-        RANDOM(2, null, null, null),
-        BAD_ATTACKS_GOOD(3, null, null, null),
-        DEFENSIVE(4, null, null, null),
-        GUARD_ATTACK_CRIMINALS(5, null, null, null),
-        NPC_OBJECT(6, null, null, QuietMovementStrategy.class),
-        FOLLW_MASTER(8, null, null, null),
-        ATTACK_NPC(9, null, null, null),
-        PATHFINDING(10, null, null, null),
-        PRETORIAN_PRIEST(20, null, null, null),
-        PRETORIAN_WARRIOR(21, null, null, null),
-        PRETORIAN_MAGE(22, null, null, null),
-        PRETORIAN_HUNTER(23, null, null, null),
-        PRETORIAN_KING(24, null, null, null);
-
-        private final int id;
-        private final Class<? extends Behavior> behavior;
-        private final Class<? extends AttackStrategy> attackStrategy;
-        private final Class<? extends MovementStrategy> movementStrategy;
-
-        AIType(int id, Class<? extends Behavior> behavior, Class<? extends AttackStrategy> attackStrategy, Class<? extends MovementStrategy> movementStrategy) {
-            this.id = id;
-            this.behavior = behavior;
-            this.attackStrategy = attackStrategy;
-            this.movementStrategy = movementStrategy;
-        }
-
-        // @Nullable TODO Tendria que ir esta anotacion?
-        public static AIType findById(int id) {
-            for (AIType aiType : AIType.values())
-                if (aiType.id == id) return aiType;
-            return null;
-        }
-
-        public Class<? extends Behavior> getBehavior() {
-            return behavior;
-        }
-
-        public Class<? extends AttackStrategy> getAttackStrategy() {
-            return attackStrategy;
-        }
-
-        public Class<? extends MovementStrategy> getMovementStrategy() {
-            return movementStrategy;
-        }
-
-        public boolean isPretorian() {
-            return this == PRETORIAN_HUNTER || this == PRETORIAN_KING || this == PRETORIAN_MAGE || this == PRETORIAN_PRIEST || this == PRETORIAN_WARRIOR;
-        }
-
     }
 
 }

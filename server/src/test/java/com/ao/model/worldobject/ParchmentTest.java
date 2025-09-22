@@ -21,11 +21,11 @@ public class ParchmentTest extends AbstractItemTest {
     @BeforeEach
     public void setUp() throws Exception {
         spell1 = new Spell(1, new Effect[]{}, 0, 0, 0, "foo", "foo", false, 1, 2, "OHL VOR PEK");
-        ParchmentProperties props1 = new ParchmentProperties(WorldObjectType.PARCHMENT, 1, "Dardo Mágico", 1, 300, null, null, false, false, false, false, spell1);
+        ParchmentProperties props1 = new ParchmentProperties(ObjectType.PARCHMENT, 1, "Dardo Mágico", 1, 300, null, null, false, false, false, false, spell1);
         parchment1 = new Parchment(props1, 1);
 
         spell2 = new Spell(2, new Effect[]{}, 0, 0, 0, "foo", "foo", false, 1, 2, "Rahma Nañarak O'al");
-        ParchmentProperties props2 = new ParchmentProperties(WorldObjectType.PARCHMENT, 1, "Terrible hambre de Igor", 100, 200, null, null, false, false, false, false, spell2);
+        ParchmentProperties props2 = new ParchmentProperties(ObjectType.PARCHMENT, 1, "Terrible hambre de Igor", 100, 200, null, null, false, false, false, false, spell2);
         parchment2 = new Parchment(props2, 5);
 
         object = parchment1;

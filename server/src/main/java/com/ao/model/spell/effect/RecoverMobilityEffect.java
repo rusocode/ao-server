@@ -2,7 +2,7 @@ package com.ao.model.spell.effect;
 
 import com.ao.exception.InvalidTargetException;
 import com.ao.model.character.Character;
-import com.ao.model.worldobject.WorldObject;
+import com.ao.model.worldobject.Object;
 
 /**
  * An effects that recovers a character's mobility (counters palaysis and immobility).
@@ -24,13 +24,13 @@ public class RecoverMobilityEffect implements Effect {
     }
 
     @Override
-    public boolean appliesTo(Character caster, WorldObject worldobject) {
+    public boolean appliesTo(Character caster, Object worldobject) {
         return false;
     }
 
 
     @Override
-    public void apply(Character caster, WorldObject target) {
+    public void apply(Character caster, Object target) {
         throw new InvalidTargetException();
     }
 

@@ -16,10 +16,10 @@ public class EmptyBottleTest extends AbstractItemTest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        RefillableStatModifyingItemProperties props1 = new RefillableStatModifyingItemProperties(WorldObjectType.EMPTY_BOTTLE, 1, "Empty Bottle", 1, 1, null, null, false, false, false, false, 0, 0, false, null);
+        RefillableStatModifyingItemProperties props1 = new RefillableStatModifyingItemProperties(ObjectType.EMPTY_BOTTLE, 1, "Empty Bottle", 1, 1, null, null, false, false, false, false, 0, 0, false, null);
         bottle1 = new EmptyBottle(props1, 1);
 
-        RefillableStatModifyingItemProperties props2 = new RefillableStatModifyingItemProperties(WorldObjectType.EMPTY_BOTTLE, 1, "Empty Bottle", 1, 1, null, null, false, false, false, false, 0, 0, false, null);
+        RefillableStatModifyingItemProperties props2 = new RefillableStatModifyingItemProperties(ObjectType.EMPTY_BOTTLE, 1, "Empty Bottle", 1, 1, null, null, false, false, false, false, 0, 0, false, null);
         bottle2 = new EmptyBottle(props2, 1);
 
         object = bottle2;

@@ -21,10 +21,10 @@ public class DexterityPotionTest extends AbstractItemTest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        TemporalStatModifyingItemProperties props1 = new TemporalStatModifyingItemProperties(WorldObjectType.POISON_POTION, 1, "Yellow Potion", 1, 1, null, null, false, false, false, false, MIN_AGI, MAX_AGI, DURATION);
+        TemporalStatModifyingItemProperties props1 = new TemporalStatModifyingItemProperties(ObjectType.POISON_POTION, 1, "Yellow Potion", 1, 1, null, null, false, false, false, false, MIN_AGI, MAX_AGI, DURATION);
         potion1 = new DexterityPotion(props1, 5);
 
-        TemporalStatModifyingItemProperties props2 = new TemporalStatModifyingItemProperties(WorldObjectType.POISON_POTION, 1, "Big Yellow Potion", 1, 1, null, null, false, false, false, false, MAX_AGI, MAX_AGI, DURATION);
+        TemporalStatModifyingItemProperties props2 = new TemporalStatModifyingItemProperties(ObjectType.POISON_POTION, 1, "Big Yellow Potion", 1, 1, null, null, false, false, false, false, MAX_AGI, MAX_AGI, DURATION);
         potion2 = new DexterityPotion(props2, 1);
 
         object = potion2;

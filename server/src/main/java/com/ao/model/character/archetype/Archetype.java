@@ -4,7 +4,7 @@ import com.ao.model.spell.Spell;
 import com.ao.model.worldobject.Boat;
 import com.ao.model.worldobject.EquipableItem;
 import com.ao.model.worldobject.Weapon;
-import com.ao.model.worldobject.properties.manufacture.Manufacturable;
+import com.ao.model.worldobject.properties.crafting.Craftable;
 
 public interface Archetype {
 
@@ -15,7 +15,7 @@ public interface Archetype {
      * @param item          item to be created
      * @return true if the user can create the item, false otherwise
      */
-    boolean canSmithing(int smithingSkill, Manufacturable item);
+    boolean canSmithing(int smithingSkill, Craftable item);
 
     /**
      * Checks if the user has the skills needed to create the given item.
@@ -24,7 +24,7 @@ public interface Archetype {
      * @param item          item to be created
      * @return true if the user can create the item, false otherwise
      */
-    boolean canCarpentry(int woodWorkSkill, Manufacturable item);
+    boolean canCarpentry(int woodWorkSkill, Craftable item);
 
     /**
      * Checks if the user has the skills needed to sail the given boat.
