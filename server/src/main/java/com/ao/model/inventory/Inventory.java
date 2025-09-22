@@ -1,6 +1,6 @@
 package com.ao.model.inventory;
 
-import com.ao.model.worldobject.Item;
+import com.ao.model.object.Item;
 
 /**
  * Character inventory.

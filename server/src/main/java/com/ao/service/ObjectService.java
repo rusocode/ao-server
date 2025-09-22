@@ -1,8 +1,8 @@
 package com.ao.service;
 
 import com.ao.data.dao.exception.DAOException;
-import com.ao.model.worldobject.Object;
-import com.ao.model.worldobject.factory.ObjectFactoryException;
+import com.ao.model.object.Object;
+import com.ao.model.object.factory.ObjectFactoryException;
 
 public interface ObjectService {
 

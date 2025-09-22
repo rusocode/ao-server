@@ -5,8 +5,8 @@ import com.ao.model.map.Heading;
 import com.ao.model.map.Position;
 import com.ao.model.map.area.AreaInfo;
 import com.ao.model.spell.Spell;
-import com.ao.model.worldobject.*;
-import com.ao.model.worldobject.Object;
+import com.ao.model.object.*;
+import com.ao.model.object.Object;
 
 public interface Character {
 

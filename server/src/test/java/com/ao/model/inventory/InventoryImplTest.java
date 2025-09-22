@@ -1,7 +1,7 @@
 package com.ao.model.inventory;
 
 import com.ao.mock.MockFactory;
-import com.ao.model.worldobject.Item;
+import com.ao.model.object.Item;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

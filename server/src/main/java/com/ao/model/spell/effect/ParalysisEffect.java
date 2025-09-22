@@ -2,7 +2,7 @@ package com.ao.model.spell.effect;
 
 import com.ao.exception.InvalidTargetException;
 import com.ao.model.character.Character;
-import com.ao.model.worldobject.Object;
+import com.ao.model.object.Object;
 
 public class ParalysisEffect implements Effect {
 

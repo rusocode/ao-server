@@ -1,8 +1,8 @@
 package com.ao.data.dao.ini;
 
 import com.ao.data.dao.exception.DAOException;
-import com.ao.model.worldobject.ObjectType;
-import com.ao.model.worldobject.properties.*;
+import com.ao.model.object.ObjectType;
+import com.ao.model.object.properties.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

@@ -14,18 +14,13 @@ import java.util.Map;
 public class ServerPacketsManager {
 
     /**
-     * Maps packet ids to their classes.
-     */
-    protected static final ServerPackets[] packets = ServerPackets.values();
-
-    /**
      * Maps packets classes to their ids.
      */
-    protected static final Map<Class<? extends OutgoingPacket>, Integer> packetsMap = new HashMap<>();
+    protected static final Map<Class<? extends OutgoingPacket>, Integer> packets = new HashMap<>();
 
     static {
-        for (ServerPackets packet : packets)
-            packetsMap.put(packet.packetClass, packet.ordinal());
+        for (ServerPackets packet : ServerPackets.values())
+            packets.put(packet.packetClass, packet.ordinal());
     }
 
     /**
@@ -35,8 +30,8 @@ public class ServerPacketsManager {
      * @param buffer buffer where to write the packet
      */
     public static void write(OutgoingPacket packet, DataBuffer buffer) throws UnsupportedEncodingException {
-        // Put the packet id before the packet itself.
-        buffer.put(packetsMap.get(packet.getClass()).byteValue());
+        // Put the packet id before the packet itself
+        buffer.put(packets.get(packet.getClass()).byteValue());
         packet.write(buffer);
     }
 

@@ -1,8 +1,8 @@
 package com.ao.data.dao;
 
 import com.ao.data.dao.exception.DAOException;
-import com.ao.model.worldobject.properties.ObjectProperties;
-import com.ao.model.worldobject.properties.crafting.Craftable;
+import com.ao.model.object.properties.ObjectProperties;
+import com.ao.model.object.properties.crafting.Craftable;
 
 import java.util.Map;
 

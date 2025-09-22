@@ -9,8 +9,8 @@ import com.ao.model.map.WorldMap;
 import com.ao.model.map.area.AreaInfo;
 import com.ao.model.user.ConnectedUser;
 import com.ao.model.user.LoggedUser;
-import com.ao.model.worldobject.Door;
-import com.ao.model.worldobject.Object;
+import com.ao.model.object.Door;
+import com.ao.model.object.Object;
 import com.ao.network.Connection;
 import com.ao.network.packet.outgoing.*;
 import com.google.inject.Inject;
@@ -135,7 +135,7 @@ public class AreaServiceImpl implements AreaService {
             for (int y = minY; y <= maxY; y++) {
                 Tile tile = map.getTile(x, y);
                 Character tileCharacter = tile.getCharacter();
-                Object object = tile.getWorldObject();
+                Object object = tile.getObject();
 
                 if (tileCharacter != null) {
                     if (tileCharacter != user) { // Same instance, we can use ==

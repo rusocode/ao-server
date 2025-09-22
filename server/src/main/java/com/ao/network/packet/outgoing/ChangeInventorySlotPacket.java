@@ -3,9 +3,9 @@ package com.ao.network.packet.outgoing;
 import com.ao.data.dao.ini.LegacyObjectType;
 import com.ao.model.character.UserCharacter;
 import com.ao.model.inventory.Inventory;
-import com.ao.model.worldobject.DefensiveItem;
-import com.ao.model.worldobject.Item;
-import com.ao.model.worldobject.Weapon;
+import com.ao.model.object.DefensiveItem;
+import com.ao.model.object.Item;
+import com.ao.model.object.Weapon;
 import com.ao.network.DataBuffer;
 import com.ao.network.packet.OutgoingPacket;
 

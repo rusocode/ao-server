@@ -2,8 +2,8 @@ package com.ao.model.character.npc.drop;
 
 import com.ao.context.ApplicationContext;
 import com.ao.model.character.npc.Drop;
-import com.ao.model.worldobject.Object;
-import com.ao.model.worldobject.factory.ObjectFactoryException;
+import com.ao.model.object.Object;
+import com.ao.model.object.factory.ObjectFactoryException;
 import com.ao.service.ObjectService;
 
 import java.util.LinkedList;

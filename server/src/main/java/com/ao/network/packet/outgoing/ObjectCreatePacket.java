@@ -1,6 +1,6 @@
 package com.ao.network.packet.outgoing;
 
-import com.ao.model.worldobject.Object;
+import com.ao.model.object.Object;
 import com.ao.network.DataBuffer;
 import com.ao.network.packet.OutgoingPacket;
 

@@ -1,0 +1,25 @@
+package com.ao.model.object;
+
+import com.ao.model.character.Character;
+import com.ao.model.object.properties.KeyProperties;
+
+public class Key extends AbstractItem {
+
+    public Key(KeyProperties properties, int amount) {
+        super(properties, amount);
+    }
+
+    @Override
+    public Item clone() {
+        return new Key((KeyProperties) properties, amount);
+    }
+
+    @Override
+    public void use(Character character) {
+    }
+
+    public int getCode() {
+        return ((KeyProperties) properties).getCode();
+    }
+
+}

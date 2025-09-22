@@ -2,9 +2,9 @@ package com.ao.service.worldobject;
 
 import com.ao.data.dao.ObjectDAO;
 import com.ao.data.dao.exception.DAOException;
-import com.ao.model.worldobject.Object;
-import com.ao.model.worldobject.factory.ObjectFactory;
-import com.ao.model.worldobject.factory.ObjectFactoryException;
+import com.ao.model.object.Object;
+import com.ao.model.object.factory.ObjectFactory;
+import com.ao.model.object.factory.ObjectFactoryException;
 import com.ao.service.ObjectService;
 import com.google.inject.Inject;
 

@@ -15,11 +15,6 @@ import java.io.UnsupportedEncodingException;
 public class ClientPacketsManager {
 
     /**
-     * Maps packet ids to their classes.
-     */
-    protected static final ClientPackets[] packets = ClientPackets.values();
-
-    /**
      * Handles new data in the connection's incoming buffer.
      *
      * @param connection connection's container
@@ -27,7 +22,7 @@ public class ClientPacketsManager {
      * @return true if a packet could be processed, false otherwise
      */
     public static boolean handle(DataBuffer buffer, Connection connection) throws UnsupportedEncodingException, ArrayIndexOutOfBoundsException {
-        return packets[buffer.get()].handler.handle(buffer, connection);
+        return ClientPackets.values()[buffer.get()].handler.handle(buffer, connection);
     }
 
     /**

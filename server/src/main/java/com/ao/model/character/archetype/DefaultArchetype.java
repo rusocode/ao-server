@@ -1,11 +1,11 @@
 package com.ao.model.character.archetype;
 
 import com.ao.model.spell.Spell;
-import com.ao.model.worldobject.Boat;
-import com.ao.model.worldobject.EquipableItem;
-import com.ao.model.worldobject.Weapon;
-import com.ao.model.worldobject.properties.crafting.Craftable;
-import com.ao.model.worldobject.properties.crafting.CraftingSkill;
+import com.ao.model.object.Boat;
+import com.ao.model.object.EquipableItem;
+import com.ao.model.object.Weapon;
+import com.ao.model.object.properties.crafting.Craftable;
+import com.ao.model.object.properties.crafting.CraftingSkill;
 
 /**
  * Implements Archetype setting default values.

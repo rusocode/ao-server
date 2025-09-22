@@ -7,7 +7,7 @@ import com.google.inject.Injector;
 import java.util.Properties;
 
 /**
- * Think of Guice as an intelligent butler in a mansion. Just as you tell your butler "I need breakfast" and he appears with
+ * Think of Guice as an intelligent butler in a mansion. Just as you tell your butler "I need breakfast", and he appears with
  * everything perfectly prepared without you worrying about finding ingredients, Guice works similarly with dependencies. When
  * your class declares it needs services through constructor injection, Guice acts as the butler who knows exactly what you need
  * and how to provide it. Configuration modules serve as the butler's instruction manual, defining your preferences like "use

@@ -3,7 +3,7 @@ package com.ao.model.spell.effect;
 import com.ao.model.character.Character;
 import com.ao.model.character.UserCharacter;
 import com.ao.model.character.archetype.UserArchetype;
-import com.ao.model.worldobject.Object;
+import com.ao.model.object.Object;
 
 public class MimetismEffect implements Effect {
 

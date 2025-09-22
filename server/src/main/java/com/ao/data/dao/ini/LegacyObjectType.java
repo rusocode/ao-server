@@ -1,6 +1,6 @@
 package com.ao.data.dao.ini;
 
-import com.ao.model.worldobject.ObjectType;
+import com.ao.model.object.ObjectType;
 
 import java.util.Arrays;
 import java.util.EnumSet;

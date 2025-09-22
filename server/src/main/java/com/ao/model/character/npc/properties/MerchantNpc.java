@@ -6,7 +6,7 @@ import com.ao.model.character.behavior.Behavior;
 import com.ao.model.character.movement.MovementStrategy;
 import com.ao.model.inventory.Inventory;
 import com.ao.model.map.Heading;
-import com.ao.model.worldobject.ObjectType;
+import com.ao.model.object.ObjectType;
 
 import java.util.Set;
 

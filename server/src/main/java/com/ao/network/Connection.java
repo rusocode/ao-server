@@ -14,37 +14,19 @@ public class Connection {
     private final Channel socket;
     private User user;
 
-    /**
-     * Creates a new Connection.
-     *
-     * @param socket channel over which to communicate with the client
-     */
     public Connection(Channel socket) {
         this.socket = socket;
         user = new ConnectedUser(this);
     }
 
-    /**
-     * Retrieves the user.
-     *
-     * @return the user
-     */
     public User getUser() {
         return user;
     }
 
-    /**
-     * Closes the connection.
-     */
     public void disconnect() {
         socket.close();
     }
 
-    /**
-     * Sends the given packet to the client.
-     *
-     * @param packet packet being sent
-     */
     public void send(OutgoingPacket packet) {
         socket.writeAndFlush(packet);
     }

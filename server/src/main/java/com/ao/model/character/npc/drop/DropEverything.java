@@ -2,9 +2,9 @@ package com.ao.model.character.npc.drop;
 
 import com.ao.model.character.npc.Drop;
 import com.ao.model.inventory.Inventory;
-import com.ao.model.worldobject.Item;
-import com.ao.model.worldobject.Object;
-import com.ao.model.worldobject.factory.ObjectFactoryException;
+import com.ao.model.object.Item;
+import com.ao.model.object.Object;
+import com.ao.model.object.factory.ObjectFactoryException;
 
 import java.util.LinkedList;
 import java.util.List;

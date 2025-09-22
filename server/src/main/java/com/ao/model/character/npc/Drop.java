@@ -1,7 +1,7 @@
 package com.ao.model.character.npc;
 
-import com.ao.model.worldobject.Object;
-import com.ao.model.worldobject.factory.ObjectFactoryException;
+import com.ao.model.object.Object;
+import com.ao.model.object.factory.ObjectFactoryException;
 
 import java.util.List;
 

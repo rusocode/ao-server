@@ -1,9 +1,9 @@
 package com.ao.model.character.archetype;
 
 import com.ao.model.spell.Spell;
-import com.ao.model.worldobject.EquipableItem;
-import com.ao.model.worldobject.Staff;
-import com.ao.model.worldobject.Weapon;
+import com.ao.model.object.EquipableItem;
+import com.ao.model.object.Staff;
+import com.ao.model.object.Weapon;
 
 public class MageArchetype extends DefaultArchetype {
 

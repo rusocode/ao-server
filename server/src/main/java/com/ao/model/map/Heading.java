@@ -11,10 +11,8 @@ public enum Heading {
     SOUTH,
     WEST;
 
-    private static final Heading[] values = Heading.values();
-
     public static Heading get(byte index) {
-        return values[index];
+        return Heading.values()[index];
     }
 
 }
