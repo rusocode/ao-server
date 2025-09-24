@@ -22,14 +22,6 @@ public enum Skill {
     TAME,
     PROJECTILES,
     WRESTLING,
-    SAILING;
-
-    /**
-     * The amount of existing skills.
-     * <p>
-     * TODO I don't really like this...any better alternative?
-     */
-    public static final int AMOUNT = Skill.values().length;
-    public static final Skill[] VALUES = Skill.values();
+    SAILING
 
 }

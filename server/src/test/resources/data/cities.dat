@@ -1,5 +1,5 @@
 [INIT]
-num_cities = 7
+citie_count = 7
 
 [CITY1]
 map = 34

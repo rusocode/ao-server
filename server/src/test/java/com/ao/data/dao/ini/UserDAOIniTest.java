@@ -15,14 +15,17 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Path;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
 public class UserDAOIniTest {
 
-    private static final String CHARACTER_NICK = "test";
-    private static final String NEW_CHARACTER_NICK = "newchartest";
+    private static final String CHARACTER_NICK = "test"; // TODO No seria mejor CHARACTER_NAME O CHARACTER_USERNAME o USERNAME?
+    private static final String NEW_CHARACTER_NICK = "newtest";
     private static final String CHARACTER_MAIL = "test@test.com";
     private static final String CHARACTER_PASSWORD = "testpass";
     private UserDAOIni userDAOIni;
@@ -33,18 +36,22 @@ public class UserDAOIniTest {
         userDAOIni = new UserDAOIni(charfilesPath);
     }
 
+    // Be sure the file is not there before the next test
     @AfterEach
     public void tearDown() throws Exception {
-        // Be really sure the file is not there before the next test
-        File file = new File(userDAOIni.getCharFilePath(NEW_CHARACTER_NICK));
-        file.delete(); // Delete the file after testing
+        Path path = Path.of(userDAOIni.getCharFilePath(NEW_CHARACTER_NICK));
+        try {
+            // Delete the file after testing
+            Files.delete(path);
+        } catch (NoSuchFileException ignored) {
+        }
     }
 
     @Test
-    public void testRetrieve() throws DAOException {
-        Account account = userDAOIni.retrieve(CHARACTER_NICK);
+    public void testGet() throws DAOException {
+        Account account = userDAOIni.get(CHARACTER_NICK);
         assertThat(account).isNotNull();
-        // Ensure we get the requested character and not another one
+        // Ensure the correct character is retrieved
         assertThat(account.getName()).isEqualTo(CHARACTER_NICK);
     }
 
@@ -61,8 +68,6 @@ public class UserDAOIniTest {
 
         assertThat(file.exists()).isTrue();
 
-        // Don't leave the file there!
-        // file.delete();
     }
 
     @Test
@@ -80,9 +85,9 @@ public class UserDAOIniTest {
     @Test
     public void testCreateCharacter() throws DAOException {
 
-        byte[] skills = new byte[Skill.AMOUNT];
+        byte[] skills = new byte[Skill.values().length];
 
-        for (int i = 0; i < Skill.AMOUNT; i++) {
+        for (int i = 0; i < skills.length; i++) {
             if (i == 1) skills[i] = 10;
             else skills[i] = 0;
         }
@@ -90,23 +95,20 @@ public class UserDAOIniTest {
         City city = mock(City.class);
 
         // TODO Use constants!!
-        UserCharacter chara = userDAOIni.create(mock(ConnectedUser.class), NEW_CHARACTER_NICK, Race.HUMAN, Gender.FEMALE,
-                UserArchetype.ASSASIN, 75, city, (byte) 18, (byte) 18,
-                (byte) 18, (byte) 18, (byte) 18, 10, 1);
+        UserCharacter userCharacter = userDAOIni.create(mock(ConnectedUser.class), NEW_CHARACTER_NICK, Race.HUMAN, Gender.FEMALE, UserArchetype.ASSASIN,
+                75, city, (byte) 18, (byte) 18, (byte) 18, (byte) 18, (byte) 18, 10, 1);
 
         File file = new File(userDAOIni.getCharFilePath(NEW_CHARACTER_NICK));
 
         assertThat(file.exists()).isTrue();
 
-        assertThat(chara.getName()).isEqualTo(NEW_CHARACTER_NICK);
-        assertThat(chara.getArchetype()).isEqualTo(UserArchetype.ASSASIN.getArchetype());
-        assertThat(chara.getGender()).isEqualTo(Gender.FEMALE);
-        assertThat(chara.getRace()).isEqualTo(Race.HUMAN);
-        assertThat(chara.getLevel()).isEqualTo((byte) 1);
+        assertThat(userCharacter.getName()).isEqualTo(NEW_CHARACTER_NICK);
+        assertThat(userCharacter.getArchetype()).isEqualTo(UserArchetype.ASSASIN.getArchetype());
+        assertThat(userCharacter.getGender()).isEqualTo(Gender.FEMALE);
+        assertThat(userCharacter.getRace()).isEqualTo(Race.HUMAN);
+        assertThat(userCharacter.getLevel()).isEqualTo((byte) 1);
 
         // TODO To be continued... :P
-
-        file.delete();
 
     }
 

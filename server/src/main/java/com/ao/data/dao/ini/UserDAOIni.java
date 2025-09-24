@@ -23,155 +23,199 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ *
+ * TODO Username o charfile?
+ *
+ */
+
 public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharacterDAO {
 
-    public static final String FILE_EXTENSION = ".chr";
-    static final String RACE_KEY = "Raza";
-    static final String HOMELAND_KEY = "Hogar";
-    static final String ARCHETYPE_KEY = "Clase";
-    static final String HEADING_KEY = "Heading";
-    static final String HEAD_KEY = "Head";
-    static final String BODY_KEY = "Body";
-    static final String WEAPON_KEY = "Arma";
-    static final String SHIELD_KEY = "Escudo";
-    static final String HELMET_KEY = "Casco";
-    static final String UPTIME_KEY = "UpTime";
-    static final String POSITION_KEY = "Position";
-    static final String LOGGED_KEY = "Logged";
-    static final String LAST_IP_FORMAT = "LastIP%d";
-    static final byte LOGGED_IPS_AMOUNT = 5;
-    static final String FLAGS_HEADER = "FLAGS";
-    static final String BANNED_KEY = "Ban";
-    static final String DEAD_KEY = "Muerto";
-    static final String HIDDEN_KEY = "Escondido";
-    static final String THIRSTY_KEY = "Sed";
-    static final String HUNGRY_KEY = "Hambre";
-    static final String SAILING_KEY = "Navegando";
-    static final String POISONED_KEY = "Envenenado";
-    static final String PARALYZED_KEY = "Paralizado";
-    static final String COUNCIL_HEADER = "CONSEJO";
-    static final String BELONGS_KEY = "PERTENECE";
-    static final String BELONGS_TO_CHAOS_COUNCIL_KEY = "PERTENECECAOS";
-    static final String COUNTERS_HEADER = "COUNTERS";
-    static final String LEFT_TIME_IN_JAIL_KEY = "Pena";
-    static final String FACTIONS_HEADER = "FACCIONES";
-    static final String BELONGS_TO_ARMY_KEY = "EjercitoReal";
-    static final String BELONGS_TO_CHAOS_KEY = "EjercitoCaos";
-    static final String CITIZENS_KILLED_KEY = "CiudMatados";
-    static final String CRIMINALS_KILLED_KEY = "CrimMatados";
-    static final String CHAOS_ARMOR_RECEIVED_KEY = "rArCaos";
-    static final String ARMY_ARMOR_RECEIVED_KEY = "rArReal";
-    static final String CHAOS_EXPERIENCE_RECEIVED_KEY = "rExCaos";
-    static final String ARMY_EXPERIENCE_RECEIVED_KEY = "rExReal";
-    static final String CHAOS_GRADE_KEY = "recCaos";
-    static final String ARMY_GRADE_KEY = "recReal";
-    static final String REENLISTMENTS_KEY = "Reenlistadas";
-    static final String ENLISTMENT_LEVEL_KEY = "NivelIngreso";
-    static final String ENLISTMENT_DATE_KEY = "FechaIngreso";
-    static final String ENLISTMENT_KILLS_KEY = "MatadosIngreso";
-    static final String NEXT_REWARD_KEY = "NextRecompensa";
-    static final String ATTRIBUTES_HEADER = "ATRIBUTOS";
-    static final String ATTRIBUTE_FORMAT_KEY = "AT%d";
-    static final String SKILLS_HEADER = "SKILLS";
-    static final String SKILL_KEY_FORMAT = "SK%d";
-    static final String CONTACT_HEADER = "CONTACTO";
-    static final String MAIL_KEY = "Email";
-    static final String STATS_HEADER = "STATS";
-    static final String GOLD_KEY = "GLD";
-    static final String DEPOSITED_GOLD_KEY = "BANCO";
-    static final String MAX_HP_KEY = "MaxHP";
-    static final String MIN_HP_KEY = "MinHP";
-    static final String MAX_STAMINA_KEY = "MaxSTA";
-    static final String MIN_STAMINA_KEY = "MinSTA";
-    static final String MAX_MANA_KEY = "MaxMAN";
-    static final String MIN_MANA_KEY = "MinMAN";
-    static final String MAX_HIT_KEY = "MaxHIT";
-    static final String MIN_HIT_KEY = "MinHIT";
-    static final String MAX_THIRSTINESS_KEY = "MaxAGU";
-    static final String MIN_THIRSTINESS_KEY = "MinAGU";
-    static final String MAX_HUNGER_KEY = "MaxHAM";
-    static final String MIN_HUNGER_KEY = "MinHAM";
-    static final String FREE_SKILL_POINTS_KEY = "SkillPtsLibres";
-    static final String EXPERIENCE_KEY = "EXP";
-    static final String LEVEL_KEY = "ELV";
-    static final String EXPERIENCE_TO_LEVEL_UP_KEY = "ELU";
-    static final String KILLS_HEADER = "MUERTES";
-    static final String KILLED_USERS_KEY = "UserMuertes";
-    static final String KILLED_NPCS_KEY = "NpcsMuertes";
-    static final String BANK_INVENTORY_HEADER = "BancoInventory";
-    static final String ITEMS_AMOUNT_KEY = "CantidadItems";
-    static final String ITEM_KEY_FORMAT = "Obj%d";
-    static final String INVENTORY_HEADER = "Inventory";
-    static final String EQUIPPED_WEAPON_SLOT_KEY = "WeaponEqpSlot";
-    static final String EQUIPPED_ARMOUR_SLOT_KEY = "ArmourEqpSlot";
-    static final String EQUIPPED_HELMET_SLOT_KEY = "CascoEqpSlot";
-    static final String EQUIPPED_BOAT_SLOT_KEY = "BarconEqpSlot";
-    static final String MUNITION_SLOT_KEY = "MunicionSlot";
-    static final String RING_SLOT_KEY = "AnilloSlot";
-    static final String REPUTATION_HEADER = "REP";
-    static final String ASSASSIN_POINTS_KEY = "Asesino";
-    static final String BANDIT_POINTS_KEY = "Bandido";
-    static final String BOURGEOIS_POINTS_KEY = "Burguesia";
-    static final String THIEF_POINTS_KEY = "Ladrones";
-    static final String NOBLE_POINTS_KEY = "Nobles";
-    static final String SPELLS_HEADER = "HECHIZOS";
-    static final String SPELL_KEY_FORMAT = "H%d";
-    // TODO This shouldn't be here
-    static final byte MAX_SPELLS_AMOUNT = 35;
-    static final String PETS_HEADER = "MASCOTAS";
-    static final String PET_KEY_FORMAT = "MAS%d";
-    // TODO This shouldn't be here
-    static final byte MAX_PETS_AMOUNT = 3;
-    static final String RESEARCH_HEADER = "RESEARCH";
-    static final String TRAINING_TIME_KEY = "TrainingTime";
-    static final String GUILD_HEADER = "GUILD";
-    static final String GUILD_INDEX_KEY = "GUILDINDEX";
-    static final String APPLICANT_TO_KEY = "AspiranteA";
-    static final String CRIMINAL_RECORD_HEADER = "PENAS";
-    static final String RECORDS_AMOUNT_KEY = "Cant";
-    static final String RECORD_KEY_FORMAT = "P%d";
-    static final byte NO_SHIELD = 2;
-    static final byte NO_WEAPON = 2;
-    static final byte NO_HELMET = 2;
-    // TODO This shouldn't be here
-    static final String NO_ENLISTMENT_KEY_MESSAGE = "No ingresó a ninguna facción";
-    static final int INITIAL_NOBLE_POINTS = 1000;
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserDAOIni.class);
+
+    private static final String FILE_EXTENSION = ".chr";
+
     private static final String INIT_HEADER = "INIT";
     private static final String PASSWORD_KEY = "Password";
     private static final String GENDER_KEY = "Genero";
-    private static final Logger LOGGER = LoggerFactory.getLogger(UserDAOIni.class);
+    private static final String RACE_KEY = "Raza";
+    private static final String HOMELAND_KEY = "Hogar";
+    private static final String ARCHETYPE_KEY = "Clase";
+    private static final String HEADING_KEY = "Heading";
+    private static final String WEAPON_KEY = "Arma";
+    private static final String SHIELD_KEY = "Escudo";
+    private static final String HELMET_KEY = "Casco";
+    private static final String UPTIME_KEY = "UpTime";
+    private static final String HEAD_KEY = "Head";
+    private static final String BODY_KEY = "Body";
+    private static final String POSITION_KEY = "Position";
+    private static final String LOGGED_KEY = "Logged";
+    private static final String LAST_IP_FORMAT = "LastIP%d";
+    private static final byte LOGGED_IPS_AMOUNT = 5;
+
+    private static final String FLAGS_HEADER = "FLAGS";
+    private static final String DEAD_KEY = "Muerto";
+    private static final String HIDDEN_KEY = "Escondido";
+    private static final String HUNGRY_KEY = "Hambre";
+    private static final String THIRSTY_KEY = "Sed";
+    // TODO Y desnudo?
+    private static final String BANNED_KEY = "Ban";
+    private static final String SAILING_KEY = "Navegando";
+    private static final String POISONED_KEY = "Envenenado";
+    private static final String PARALYZED_KEY = "Paralizado";
+
+    private static final String COUNCIL_HEADER = "CONSEJO";
+    private static final String BELONGS_KEY = "PERTENECE";
+    private static final String BELONGS_TO_CHAOS_COUNCIL_KEY = "PERTENECECAOS";
+
+    private static final String COUNTERS_HEADER = "COUNTERS";
+    private static final String LEFT_TIME_IN_JAIL_KEY = "Pena";
+
+    private static final String FACTIONS_HEADER = "FACCIONES";
+    private static final String BELONGS_TO_ARMY_KEY = "EjercitoReal";
+    private static final String BELONGS_TO_CHAOS_KEY = "EjercitoCaos";
+    private static final String CRIMINALS_KILLED_KEY = "CrimMatados";
+    private static final String CITIZENS_KILLED_KEY = "CiudMatados"; // TODO No esta en test.chr
+    private static final String CHAOS_ARMOR_RECEIVED_KEY = "rArCaos";
+    private static final String ARMY_ARMOR_RECEIVED_KEY = "rArReal";
+    private static final String CHAOS_EXPERIENCE_RECEIVED_KEY = "rExCaos";
+    private static final String ARMY_EXPERIENCE_RECEIVED_KEY = "rExReal";
+    private static final String CHAOS_GRADE_KEY = "recCaos";
+    private static final String ARMY_GRADE_KEY = "recReal";
+    private static final String REENLISTMENTS_KEY = "Reenlistadas";
+    private static final String ENLISTMENT_LEVEL_KEY = "NivelIngreso";
+    private static final String ENLISTMENT_DATE_KEY = "FechaIngreso";
+    private static final String ENLISTMENT_KILLS_KEY = "MatadosIngreso";
+    private static final String NEXT_REWARD_KEY = "NextRecompensa";
+
+    private static final String ATTRIBUTES_HEADER = "ATRIBUTOS";
+    private static final String ATTRIBUTE_FORMAT_KEY = "AT%d";
+
+    private static final String SKILLS_HEADER = "SKILLS";
+    private static final String SKILL_KEY_FORMAT = "SK%d";
+
+    private static final String CONTACT_HEADER = "CONTACTO";
+    private static final String MAIL_KEY = "Email";
+
+    private static final String STATS_HEADER = "STATS";
+    private static final String GOLD_KEY = "GLD";
+    private static final String DEPOSITED_GOLD_KEY = "BANCO";
+    private static final String MAX_HP_KEY = "MaxHP";
+    private static final String MIN_HP_KEY = "MinHP";
+    private static final String MAX_STAMINA_KEY = "MaxSTA";
+    private static final String MIN_STAMINA_KEY = "MinSTA";
+    private static final String MAX_MANA_KEY = "MaxMAN";
+    private static final String MIN_MANA_KEY = "MinMAN";
+    private static final String MAX_HIT_KEY = "MaxHIT";
+    private static final String MIN_HIT_KEY = "MinHIT";
+    private static final String MAX_THIRSTINESS_KEY = "MaxAGU";
+    private static final String MIN_THIRSTINESS_KEY = "MinAGU";
+    private static final String MAX_HUNGER_KEY = "MaxHAM";
+    private static final String MIN_HUNGER_KEY = "MinHAM";
+    private static final String FREE_SKILL_POINTS_KEY = "SkillPtsLibres";
+    private static final String EXPERIENCE_KEY = "EXP";
+    private static final String LEVEL_KEY = "ELV";
+    private static final String EXPERIENCE_TO_LEVEL_UP_KEY = "ELU";
+
+    private static final String KILLS_HEADER = "MUERTES";
+    private static final String KILLED_USERS_KEY = "UserMuertes";
+    private static final String KILLED_NPCS_KEY = "NpcsMuertes";
+
+    private static final String BANK_INVENTORY_HEADER = "BancoInventory";
+    private static final String ITEMS_AMOUNT_KEY = "CantidadItems"; // Tambien forma parte de la seccion [Inventory]
+    private static final String ITEM_KEY_FORMAT = "Obj%d";
+
+    private static final String INVENTORY_HEADER = "Inventory";
+    private static final String EQUIPPED_WEAPON_SLOT_KEY = "WeaponEqpSlot";
+    private static final String EQUIPPED_ARMOUR_SLOT_KEY = "ArmourEqpSlot";
+    private static final String EQUIPPED_HELMET_SLOT_KEY = "CascoEqpSlot";
+    private static final String EQUIPPED_BOAT_SLOT_KEY = "BarconEqpSlot";
+    private static final String MUNITION_SLOT_KEY = "MunicionSlot";
+    private static final String RING_SLOT_KEY = "AnilloSlot";
+
+    private static final String REPUTATION_HEADER = "REP";
+    private static final String ASSASSIN_POINTS_KEY = "Asesino";
+    private static final String BANDIT_POINTS_KEY = "Bandido";
+    private static final String BOURGEOIS_POINTS_KEY = "Burguesia";
+    private static final String THIEF_POINTS_KEY = "Ladrones";
+    private static final String NOBLE_POINTS_KEY = "Nobles";
+
+    private static final String SPELLS_HEADER = "HECHIZOS";
+    private static final String SPELL_KEY_FORMAT = "H%d";
+    // TODO This shouldn't be here
+    private static final byte MAX_SPELLS_AMOUNT = 35;
+
+    private static final String PETS_HEADER = "MASCOTAS";
+    private static final String PET_KEY_FORMAT = "MAS%d";
+    // TODO This shouldn't be here
+    private static final byte MAX_PETS_AMOUNT = 3;
+
+    private static final String RESEARCH_HEADER = "RESEARCH";
+    private static final String TRAINING_TIME_KEY = "TrainingTime";
+
+    private static final String GUILD_HEADER = "GUILD";
+    private static final String GUILD_INDEX_KEY = "GUILDINDEX";
+    private static final String APPLICANT_TO_KEY = "AspiranteA";
+
+    private static final String CRIMINAL_RECORD_HEADER = "PENAS";
+    private static final String RECORDS_AMOUNT_KEY = "Cant";
+    private static final String RECORD_KEY_FORMAT = "P%d";
+
+    private static final byte NO_SHIELD = 2;
+    private static final byte NO_WEAPON = 2;
+    private static final byte NO_HELMET = 2;
+    // TODO This shouldn't be here
+    private static final String NO_ENLISTMENT_KEY_MESSAGE = "No ingreso a ninguna faccion";
+    private static final int INITIAL_NOBLE_POINTS = 1000;
 
     @Inject
     public UserDAOIni(@Named("CharfilesPath") String charfilesPath) {
-        this.charfilesPath = charfilesPath;
+        // Crea un Path a partir del string configurado (puede ser relativo o absoluto)
+        Path path = Paths.get(charfilesPath);
+        // Si la ruta es relativa, la convierte respecto a la raiz del proyecto
+        if (!path.isAbsolute()) {
+            // Obtiene el directorio actual absoluto (en este caso, el del modulo "server")
+            Path moduleDir = Paths.get("").toAbsolutePath().normalize(); // .../ao-server/server
+            // Sube un nivel al padre (la raiz del proyecto "ao-server")
+            Path projectRoot = moduleDir.getParent();                    // .../ao-server
+            // Combina la raiz del proyecto con la ruta relativa configurada (p. ej. "charfiles" → "ao-server/charfiles")
+            if (projectRoot != null) path = projectRoot.resolve(path);
+        }
+        // Convierte el Path resultante a una ruta absoluta normalizada y la guarda en el campo
+        this.charfilesPath = path.toAbsolutePath().normalize().toString();
+        LOGGER.info("Charfiles path: {}", this.charfilesPath);
+
+        /* Si charfilesPath es relativo, se reinterpreta contra la raiz del proyecto (no contra el working dir del modulo), y
+         * luego se guarda como ruta absoluta normalizada; si ya era absoluto, se respeta y solo se normaliza. */
     }
 
     @Override
-    public Account retrieve(String username) throws DAOException {
+    public Account get(String username) throws DAOException {
 
-        if (username == null || username.trim().isEmpty()) throw new DAOException("Username cannot be null or empty");
+        if (username == null || username.isBlank()) throw new DAOException("Username cannot be null or blank.");
 
         INIConfiguration ini = readCharFile(username);
 
         if (ini == null) {
-            LOGGER.debug("Character '{}' not found", username);
+            LOGGER.debug("Character '{}' not found!", username);
             return null;
         }
 
         try {
 
-            // Get values
-            String password = ini.getString(INIT_HEADER + "." + PASSWORD_KEY);
-            String mail = ini.getString(CONTACT_HEADER + "." + MAIL_KEY);
-            String banned = ini.getString(FLAGS_HEADER + "." + BANNED_KEY);
+            // Required keys
+            String password = IniUtils.getString(ini, INIT_HEADER + "." + PASSWORD_KEY, "");
+            String mail = IniUtils.getString(ini, CONTACT_HEADER + "." + MAIL_KEY, "");
+            String banned = IniUtils.getString(ini, FLAGS_HEADER + "." + BANNED_KEY, "");
 
-            if (password == null || mail == null || banned == null) {
-                LOGGER.warn("Missing required fields for character '{}': password={}, mail={}, banned={}", username, password, mail, banned);
-                throw new DAOException("Character file is missing required data");
+            if (password.isBlank() || mail.isBlank() || banned.isBlank()) {
+                LOGGER.warn("Missing required fields for '{}': password={}, mail={}, banned={}", username, password, mail, banned);
+                throw new DAOException("Character file is missing required data.");
             }
 
             // Add the single character's name
@@ -184,17 +228,17 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
             return new AccountImpl(username, password, mail, characters, isBanned);
 
         } catch (Exception e) {
-            LOGGER.error("Error retrieving charfile (account data) for character '{}'", username, e);
-            throw new DAOException("Failed to retrieve account: " + e.getMessage());
+            LOGGER.error("Error geting charfile (account data) for username '{}'.", username, e);
+            throw new DAOException("Failed to geting account: " + e.getMessage());
         }
 
     }
 
     @Override
-    public Account create(String name, String password, String mail) throws DAOException, NameAlreadyTakenException {
+    public Account create(String username, String password, String mail) throws DAOException, NameAlreadyTakenException {
 
-        // If it is not created, then create it
-        if (exists(name)) throw new NameAlreadyTakenException();
+        // Throws exception if the username already exists
+        if (exists(username)) throw new NameAlreadyTakenException();
 
         INIConfiguration ini = new INIConfiguration();
 
@@ -202,24 +246,25 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
         ini.setProperty(CONTACT_HEADER + "." + MAIL_KEY, mail);
         ini.setProperty(FLAGS_HEADER + "." + BANNED_KEY, "0");
 
-        String filePath = getCharFilePath(name);
+        String filePath = getCharFilePath(username);
 
         try (Writer writer = new BufferedWriter(new FileWriter(filePath))) {
             ini.write(writer);
+            LOGGER.debug("Charfile '{}' created successfully!", username);
         } catch (IOException | ConfigurationException e) {
             LOGGER.error("Error creating charfile! {}", e.getMessage());
             throw new DAOException(e);
         }
 
-        return new AccountImpl(name, password, mail, new HashSet<>(), false);
+        return new AccountImpl(username, password, mail, new HashSet<>(), false);
     }
 
     @Override
-    public void delete(String name) {
-        File charfile = new File(getCharFilePath(name));
+    public void delete(String username) {
+        File charfile = new File(getCharFilePath(username));
         if (!charfile.exists()) return;
         boolean success = charfile.delete();
-        if (!success) LOGGER.error("Character ({}) deletion failed", name);
+        if (!success) LOGGER.error("{} deletion failed.", username);
     }
 
     @Override
@@ -282,7 +327,7 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
         character.setProperty(ATTRIBUTES_HEADER + "." + String.format(ATTRIBUTE_FORMAT_KEY, Attribute.CONSTITUTION.ordinal() + 1), constitution);
         character.setProperty(ATTRIBUTES_HEADER + "." + String.format(ATTRIBUTE_FORMAT_KEY, Attribute.INTELLIGENCE.ordinal() + 1), intelligence);
 
-        for (byte i = 1; i < Skill.AMOUNT; i++)
+        for (byte i = 1; i < Skill.values().length; i++)
             character.setProperty(SKILLS_HEADER + "." + String.format(SKILL_KEY_FORMAT, i + 1), 0);
 
         character.setProperty(STATS_HEADER + "." + FREE_SKILL_POINTS_KEY, initialAvailableSkills);
@@ -342,14 +387,14 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
     }
 
     @Override
-    public boolean exists(String name) {
-        return (new File(getCharFilePath(name))).exists();
+    public boolean exists(String username) {
+        return (new File(getCharFilePath(username))).exists();
     }
 
     @Override
     public UserCharacter load(ConnectedUser user, String username) throws DAOException {
 
-        if (username == null || username.trim().isEmpty()) throw new DAOException("Username cannot be null or empty");
+        if (username == null || username.isBlank()) throw new DAOException("Username cannot be null or empty");
 
         INIConfiguration ini = readCharFile(username);
 
@@ -363,8 +408,7 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
         int bourgeoisPoints = IniUtils.getInt(ini, REPUTATION_HEADER + "." + BOURGEOIS_POINTS_KEY, 0);
         int thiefPoints = IniUtils.getInt(ini, REPUTATION_HEADER + "." + THIEF_POINTS_KEY, 0);
         int noblePoints = IniUtils.getInt(ini, REPUTATION_HEADER + "." + NOBLE_POINTS_KEY, 0);
-        boolean belongsToFaction = IniUtils.getInt(ini, FACTIONS_HEADER + "." + BELONGS_TO_CHAOS_KEY, 0) == 1
-                || IniUtils.getInt(ini, FACTIONS_HEADER + "." + BELONGS_TO_ARMY_KEY, 0) == 1;
+        boolean belongsToFaction = IniUtils.getInt(ini, FACTIONS_HEADER + "." + BELONGS_TO_CHAOS_KEY, 0) == 1 || IniUtils.getInt(ini, FACTIONS_HEADER + "." + BELONGS_TO_ARMY_KEY, 0) == 1;
 
         Reputation reputation = new ReputationImpl(assassinPoints, banditPoints, bourgeoisPoints, thiefPoints, noblePoints, belongsToFaction);
 
@@ -375,7 +419,7 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
         boolean poisoned = IniUtils.getInt(ini, FLAGS_HEADER + "." + POISONED_KEY, 0) == 1;
         boolean paralyzed = IniUtils.getInt(ini, FLAGS_HEADER + "." + PARALYZED_KEY, 0) == 1;
 
-        // TODO Check what to do, immobilized state isn't saved in charfile
+        // TODO Check what to do, immobilized/invisible/mimetized/dumbed state isn't saved in charfile
         boolean immobilized = false;
         boolean invisible = false;
         boolean mimetized = false;
@@ -397,19 +441,13 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
         String description = "";
 
         // TODO Validate character
-        UserCharacter userCharacter = new LoggedUser(user, reputation, race, gender, archetype, poisoned, paralyzed, immobilized, invisible, mimetized, dumbed, hidden, maxMana, mana, maxHitPoints, hitpoints, maxThirstiness, thirstiness, maxHunger, hunger, lvl, username, description);
-
-        return userCharacter;
+        return new LoggedUser(user, reputation, race, gender, archetype, poisoned, paralyzed, immobilized,
+                invisible, mimetized, dumbed, hidden, maxMana, mana, maxHitPoints, hitpoints, maxThirstiness, thirstiness, maxHunger,
+                hunger, lvl, username, description);
     }
 
-    /**
-     * Gets the full file path of the character based on the provided name.
-     *
-     * @param name the name of the character for which the file path is being generated
-     * @return the full file path of the character based on the provided name
-     */
-    String getCharFilePath(String name) {
-        return Paths.get(charfilesPath).resolve(name + FILE_EXTENSION).toString();
+    String getCharFilePath(String username) {
+        return Paths.get(charfilesPath).resolve(username + FILE_EXTENSION).toString();
     }
 
     private INIConfiguration readCharFile(String username) throws DAOException {
@@ -418,8 +456,7 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
 
         // If the file does exist in the dynamic directory, try searching for it in the classpath (for test files)
         if (!file.exists()) {
-            // TODO No se podria reemplazar por file.getPath()?
-            InputStream inputStream = getClass().getClassLoader().getResourceAsStream("charfiles/" + username.toUpperCase() + FILE_EXTENSION);
+            InputStream inputStream = getClass().getClassLoader().getResourceAsStream("charfiles/" + username/* .toUpperCase() */ + FILE_EXTENSION);
 
             // The file does exist in the file system and classpath
             if (inputStream == null) return null;
@@ -427,16 +464,17 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
                 ini = new INIConfiguration();
                 ini.read(reader);
-                LOGGER.info("Charfile loaded from classpath: {}", username);
+                LOGGER.info("Charfile loaded successfully from classpath!");
             } catch (IOException | ConfigurationException e) {
                 LOGGER.error("Charfile loading from classpath failed!", e);
-                throw new DAOException(e);
+                throw new DAOException(e); // TODO O sys.ext?
             }
         } else {
             // Read from the file system
             try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
                 ini = new INIConfiguration();
                 ini.read(reader);
+                LOGGER.info("Charfile loaded successfully from filesystem!");
             } catch (IOException | ConfigurationException e) {
                 LOGGER.error("Charfile loading from filesystem failed!", e);
                 throw new DAOException(e);

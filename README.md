@@ -1,4 +1,5 @@
-# AO-Server
+# AO-Server ![](logo.PNG)
+
 ![Maven Build](https://github.com/rusocode/ao-server/actions/workflows/maven.yml/badge.svg)
 [![Coverage Status](https://coveralls.io/repos/github/rusocode/ao-server/badge.svg?branch=main)](https://coveralls.io/github/rusocode/ao-server?branch=main)
 

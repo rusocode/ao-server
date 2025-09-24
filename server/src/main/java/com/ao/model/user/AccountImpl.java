@@ -8,21 +8,10 @@ import java.util.Set;
 
 public class AccountImpl implements Account {
 
-    private final String name;
-    private final String password;
-    private final String mail;
+    private final String name, password, mail;
     protected Set<String> characters;
     private boolean banned;
 
-    /**
-     * Creates a new account instance.
-     *
-     * @param name       name of the account
-     * @param password   account's password
-     * @param mail       account's email
-     * @param characters account's characters
-     * @param banned     whether the account is banned or not
-     */
     public AccountImpl(String name, String password, String mail, Set<String> characters, boolean banned) {
         this.name = name;
         this.password = password;

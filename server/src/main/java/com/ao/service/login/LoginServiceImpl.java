@@ -60,7 +60,6 @@ public class LoginServiceImpl implements LoginService {
     private String[] clientHashes;
     private String currentClientVersion;
 
-
     @Inject
     public LoginServiceImpl(AccountDAO accDAO, UserCharacterDAO charDAO, ServerConfig config, UserService userService,
                             CharacterBodyService characterBodyService, MapService mapService,
@@ -171,7 +170,7 @@ public class LoginServiceImpl implements LoginService {
         Account account;
 
         try {
-            account = accDAO.retrieve(username);
+            account = accDAO.get(username);
         } catch (DAOException e) {
             throw new LoginErrorException(DAO_ERROR);
         }

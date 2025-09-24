@@ -8,10 +8,8 @@ public enum Race {
     GNOME,
     HUMAN;
 
-    private static final Race[] values = Race.values();
-
     public static Race get(byte index) {
-        return values[index];
+        return Race.values()[index];
     }
 
 }

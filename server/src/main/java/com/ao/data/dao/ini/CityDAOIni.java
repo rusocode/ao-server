@@ -73,7 +73,6 @@ public record CityDAOIni(String citiesFilePath) implements CityDAO {
      * @return new city
      */
     private City loadCity(int id, INIConfiguration ini) {
-
         String section = CITY_PREFIX + id;
 
         int map = IniUtils.getInt(ini, section + "." + MAP_KEY, -1);
@@ -81,7 +80,6 @@ public record CityDAOIni(String citiesFilePath) implements CityDAO {
         byte y = (byte) IniUtils.getInt(ini, section + "." + Y_KEY, -1);
 
         return new City(map, x, y);
-
     }
 
 }

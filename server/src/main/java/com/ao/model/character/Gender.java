@@ -5,10 +5,8 @@ public enum Gender {
     FEMALE,
     MALE;
 
-    private static final Gender[] values = Gender.values();
-
     public static Gender get(byte index) {
-        return values[index];
+        return Gender.values()[index];
     }
 
 }

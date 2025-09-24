@@ -172,7 +172,7 @@ public class UserCharacterBuilder implements Builder<UserCharacter> {
     }
 
     public UserCharacterBuilder withSkills(Map<Skill, Byte> skills) throws InvalidAttributeValueException {
-        for (Skill skill : Skill.VALUES) {
+        for (Skill skill : Skill.values()) {
             if (skills.containsKey(skill)) Objects.requireNonNull(skills.get(skill));
             else throw new InvalidAttributeValueException();
         }

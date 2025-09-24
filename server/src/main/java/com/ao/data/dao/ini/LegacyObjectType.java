@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 /**
  * World Object Type enumeration, as it was known in the old days of Visual Basic.
  * <p>
- * TODO Rename
  * TODO Unir con ObjectType
  */
 
