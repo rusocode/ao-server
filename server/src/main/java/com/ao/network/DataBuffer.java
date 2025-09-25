@@ -6,7 +6,7 @@ import java.nio.charset.StandardCharsets;
 
 public class DataBuffer {
 
-    protected ByteBuf buffer; // ChannelBuffer -> ByteBuf
+    protected ByteBuf buffer;
 
     public DataBuffer(ByteBuf buffer) { // ChannelBuffer -> ByteBuf
         this.buffer = buffer;

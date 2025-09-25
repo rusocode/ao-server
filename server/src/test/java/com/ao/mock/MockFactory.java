@@ -40,9 +40,9 @@ public class MockFactory {
      * @return the mock
      */
     public static Connection mockConnection(User user) {
-        Connection conn = mock(Connection.class);
-        when(conn.getUser()).thenReturn(user);
-        return conn;
+        Connection connection = mock(Connection.class);
+        when(connection.getUser()).thenReturn(user);
+        return connection;
     }
 
     /**

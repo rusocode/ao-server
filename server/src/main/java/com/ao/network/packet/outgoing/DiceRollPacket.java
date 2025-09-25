@@ -5,22 +5,8 @@ import com.ao.network.packet.OutgoingPacket;
 
 import java.io.UnsupportedEncodingException;
 
-public class DiceRollPacket implements OutgoingPacket {
-
-    private final byte strength;
-    private final byte dexterity;
-    private final byte intelligence;
-    private final byte charisma;
-    private final byte constitution;
-
-
-    public DiceRollPacket(byte strength, byte dexterity, byte intelligence, byte charisma, byte constitution) {
-        this.strength = strength;
-        this.dexterity = dexterity;
-        this.intelligence = intelligence;
-        this.charisma = charisma;
-        this.constitution = constitution;
-    }
+public record DiceRollPacket(byte strength, byte dexterity, byte intelligence, byte charisma,
+                             byte constitution) implements OutgoingPacket {
 
     @Override
     public void write(DataBuffer buffer) throws UnsupportedEncodingException {

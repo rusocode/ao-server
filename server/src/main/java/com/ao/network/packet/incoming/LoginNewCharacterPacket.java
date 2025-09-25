@@ -18,19 +18,38 @@ public class LoginNewCharacterPacket implements IncomingPacket {
     private static final SecurityManager security = ApplicationContext.getInstance(SecurityManager.class);
 
     @Override
-    public boolean handle(DataBuffer buffer, Connection connection) throws ArrayIndexOutOfBoundsException,
-            UnsupportedEncodingException {
-        // Check if there is enough data to attempt to read...
-        if (buffer.getReadableBytes() < 12 + security.getPasswordHashLength() + security.getClientHashLength())
+    public boolean handle(DataBuffer buffer, Connection connection) throws ArrayIndexOutOfBoundsException, UnsupportedEncodingException {
+
+        int incomingBytes = buffer.getReadableBytes();
+        int requiredBytes = 12 + security.getPasswordHashLength() + security.getClientHashLength(); // TODO Que es 12?
+
+        System.err.println("Incoming bytes: " + incomingBytes);
+        System.err.println("Required bytes: " + requiredBytes);
+
+        // Ensure enough data is available to read
+        if (incomingBytes < requiredBytes) {
+            System.err.println("Not enough data to read!");
             return false;
+        }
+
+        System.err.println("Processing new character login...");
 
         String nick = buffer.getASCIIString();
+
+        System.out.println("nick: " + nick);
+
         String password = buffer.getASCIIStringFixed(security.getPasswordHashLength());
 
-        // FIXME On the login these are shorts...
+        System.out.println("password: " + password);
+
+        // FIXME On the login these are shorts
         String version = buffer.get() + "." + buffer.get() + "." + buffer.get();
+
+        System.out.println("version: " + version);
+
         String clientHash = buffer.getASCIIStringFixed(security.getClientHashLength());
 
+        System.out.println("clientHash: " + clientHash);
 
         byte race = buffer.get();
         byte gender = buffer.get();
@@ -39,9 +58,10 @@ public class LoginNewCharacterPacket implements IncomingPacket {
         String mail = buffer.getASCIIString();
         byte homeland = buffer.get();
 
+        System.out.println("race:" + race + " gender:" + gender + " archetype:" + archetype + " head:" + head + " mail:" + mail + " homeland:" + homeland);
+
         try {
             service.connectNewCharacter((ConnectedUser) connection.getUser(), nick, password, race, gender, archetype, head, mail, homeland, clientHash, version);
-
         } catch (LoginErrorException e) {
             loginError(connection, e.getMessage());
         }

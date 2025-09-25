@@ -29,9 +29,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- *
  * TODO Username o charfile?
- *
  */
 
 public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharacterDAO {
@@ -63,7 +61,7 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
     private static final String HIDDEN_KEY = "Escondido";
     private static final String HUNGRY_KEY = "Hambre";
     private static final String THIRSTY_KEY = "Sed";
-    // TODO Y desnudo?
+    // TODO Missing "desnudo"
     private static final String BANNED_KEY = "Ban";
     private static final String SAILING_KEY = "Navegando";
     private static final String POISONED_KEY = "Envenenado";
@@ -387,11 +385,6 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
     }
 
     @Override
-    public boolean exists(String username) {
-        return (new File(getCharFilePath(username))).exists();
-    }
-
-    @Override
     public UserCharacter load(ConnectedUser user, String username) throws DAOException {
 
         if (username == null || username.isBlank()) throw new DAOException("Username cannot be null or empty");
@@ -444,6 +437,11 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
         return new LoggedUser(user, reputation, race, gender, archetype, poisoned, paralyzed, immobilized,
                 invisible, mimetized, dumbed, hidden, maxMana, mana, maxHitPoints, hitpoints, maxThirstiness, thirstiness, maxHunger,
                 hunger, lvl, username, description);
+    }
+
+    @Override
+    public boolean exists(String username) {
+        return (new File(getCharFilePath(username))).exists();
     }
 
     String getCharFilePath(String username) {

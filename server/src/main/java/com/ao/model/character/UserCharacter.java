@@ -2,6 +2,10 @@ package com.ao.model.character;
 
 import com.ao.model.character.archetype.Archetype;
 
+/**
+ * <b>Model/entity interface</b> where it is defined <b>WHAT</b> a user character <b>IS</b>.
+ */
+
 public interface UserCharacter extends Character {
 
     int getSkill(Skill skill);

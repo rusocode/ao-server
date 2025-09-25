@@ -20,6 +20,7 @@ import com.ao.security.SecurityManager;
 import com.ao.service.LoginService;
 import com.ao.service.MapService;
 import com.ao.service.login.LoginServiceImpl;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -55,7 +56,6 @@ public class LoginNewCharacterPacketTest {
     private ArgumentCaptor<ErrorMessagePacket> errPacket;
     private ServerConfig config;
     private SecurityManager security;
-    private MapService mapService;
 
     @BeforeEach
     public void setUp() throws Exception {
@@ -68,7 +68,7 @@ public class LoginNewCharacterPacketTest {
         config = ApplicationContext.getInstance(ServerConfig.class);
         security = ApplicationContext.getInstance(SecurityManager.class);
 
-        mapService = ApplicationContext.getInstance(MapService.class);
+        MapService mapService = ApplicationContext.getInstance(MapService.class);
         mapService.loadCities();
 
         config.setRestrictedToAdmins(false);
@@ -76,7 +76,7 @@ public class LoginNewCharacterPacketTest {
 
     }
 
-    // @AfterEach
+    @AfterEach
     public void tearDown() {
         ApplicationContext.getInstance(AccountDAO.class).delete(CHARACTER_NAME);
         ApplicationContext.getInstance(AccountDAO.class).delete(INVALID_CHARACTER_NAME);
@@ -234,14 +234,11 @@ public class LoginNewCharacterPacketTest {
         assertThat(errPacket.getValue().getMessage()).isEqualTo(LoginServiceImpl.ONLY_ADMINS_ERROR);
     }
 
-    private void writeLogin(String charName, String password, byte major, byte minor, byte version, String hash, byte race, byte gender,
-                            byte archetype, byte head, String mail, byte homeland) throws Exception {
+    private void writeLogin(String charName, String password, byte major, byte minor, byte version, String hash, byte race, byte gender, byte archetype, byte head, String mail, byte homeland) throws Exception {
         when(inputBuffer.getReadableBytes()).thenReturn(charName.length() + 2 + security.getPasswordHashLength() + 8 + security.getClientHashLength() + mail.length() + 2);
         when(inputBuffer.getASCIIString()).thenReturn(charName).thenReturn(mail);
         when(inputBuffer.getASCIIStringFixed(security.getPasswordHashLength())).thenReturn(password);
-        when(inputBuffer.get()).thenReturn(major).thenReturn(minor)
-                .thenReturn(version).thenReturn(race).thenReturn(gender)
-                .thenReturn(archetype).thenReturn(head).thenReturn(homeland);
+        when(inputBuffer.get()).thenReturn(major).thenReturn(minor).thenReturn(version).thenReturn(race).thenReturn(gender).thenReturn(archetype).thenReturn(head).thenReturn(homeland);
         when(inputBuffer.getASCIIStringFixed(security.getClientHashLength())).thenReturn(hash);
     }
 

@@ -27,7 +27,7 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
 /**
- * Default implementation of the login service. An account is the exact same as a character.
+ * Default implementation of the login service. <b>An account is the same as a character.</b>
  */
 
 public class LoginServiceImpl implements LoginService {

@@ -4,13 +4,13 @@ import com.ao.model.inventory.Inventory;
 import com.ao.model.map.Heading;
 import com.ao.model.map.Position;
 import com.ao.model.map.area.AreaInfo;
-import com.ao.model.spell.Spell;
 import com.ao.model.object.*;
 import com.ao.model.object.Object;
+import com.ao.model.spell.Spell;
 
 public interface Character {
 
-    // FIXME I fon't like these being here...
+    // FIXME I don't like these being here...
     int MAX_THIRSTINESS = 100;
     int MAX_HUNGER = 100;
 

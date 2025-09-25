@@ -48,14 +48,6 @@ public class UserDAOIniTest {
     }
 
     @Test
-    public void testGet() throws DAOException {
-        Account account = userDAOIni.get(CHARACTER_NICK);
-        assertThat(account).isNotNull();
-        // Ensure the correct character is retrieved
-        assertThat(account.getName()).isEqualTo(CHARACTER_NICK);
-    }
-
-    @Test
     public void testCreateAccount() throws DAOException {
         Account account = userDAOIni.create(NEW_CHARACTER_NICK, CHARACTER_PASSWORD, CHARACTER_MAIL);
 
@@ -68,6 +60,14 @@ public class UserDAOIniTest {
 
         assertThat(file.exists()).isTrue();
 
+    }
+
+    @Test
+    public void testGet() throws DAOException {
+        Account account = userDAOIni.get(CHARACTER_NICK);
+        assertThat(account).isNotNull();
+        // Ensure the correct character is retrieved
+        assertThat(account.getName()).isEqualTo(CHARACTER_NICK);
     }
 
     @Test

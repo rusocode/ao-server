@@ -36,7 +36,6 @@ public class BootstrapModule extends AbstractModule {
         bind(ServerConfig.class).to(ServerConfigIni.class).in(Singleton.class);
         // Another incarnation of this mechanism is the named binding that binds the string with the name ServerConfigIni and asigned the value of the property config.path.server
         bind(String.class).annotatedWith(Names.named("ServerConfigIni")).toInstance(properties.getProperty("config.path.server"));
-
     }
 
 }

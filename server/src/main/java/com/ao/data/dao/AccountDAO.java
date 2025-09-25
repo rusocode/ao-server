@@ -4,6 +4,10 @@ import com.ao.data.dao.exception.DAOException;
 import com.ao.data.dao.exception.NameAlreadyTakenException;
 import com.ao.model.user.Account;
 
+/**
+ * A DAO for accounts.
+ */
+
 public interface AccountDAO {
 
     Account get(String username) throws DAOException;

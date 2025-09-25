@@ -10,7 +10,9 @@ import com.ao.model.map.City;
 import com.ao.model.user.ConnectedUser;
 
 /**
- * A DAO for user characters.
+ * <b>Data Access Interface</b> that defines <b>HOW</b> a user character is <b>PERSISTED</b>.
+ * <p>
+ * In an analogy, this class would be like the "garaje" and the connection {@code UserCharacter} is the "car".
  */
 
 public interface UserCharacterDAO {
