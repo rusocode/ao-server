@@ -23,7 +23,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.Set;
@@ -384,14 +383,14 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
     }
 
     @Override
-    public UserCharacter load(ConnectedUser user, String username) throws DAOException {
+    public UserCharacter load(ConnectedUser user, String nick) throws DAOException {
 
-        if (username == null || username.isBlank()) throw new DAOException("Username cannot be null or empty");
+        if (nick == null || nick.isBlank()) throw new DAOException("Nick cannot be null or empty.");
 
-        INIConfiguration ini = readCharFile(username);
+        INIConfiguration ini = readCharFile(nick);
 
         if (ini == null) {
-            LOGGER.debug("Character '{}' not found", username);
+            LOGGER.debug("Character '{}' not found", nick);
             return null;
         }
 
@@ -435,7 +434,7 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
         // TODO Validate character
         return new LoggedUser(user, reputation, race, gender, archetype, poisoned, paralyzed, immobilized,
                 invisible, mimetized, dumbed, hidden, maxMana, mana, maxHitPoints, hitpoints, maxThirstiness, thirstiness, maxHunger,
-                hunger, lvl, username, description);
+                hunger, lvl, nick, description);
     }
 
     @Override
