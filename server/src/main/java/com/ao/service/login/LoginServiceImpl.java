@@ -75,10 +75,12 @@ public class LoginServiceImpl implements LoginService {
     }
 
     @Override
-    public void connectNewCharacter(ConnectedUser user, String username, String password, byte bRace, byte bGender, byte bArchetype,
+    public void connectNewCharacter(ConnectedUser user, String nick, String password, Race race, Gender gender, byte bArchetype,
                                     int head, String mail, byte bHomeland, String clientHash, String version) throws LoginErrorException {
+
         checkClient(clientHash, version);
 
+        // Validaciones del servidor
         if (!config.isCharacterCreationEnabled()) throw new LoginErrorException(CHARACTER_CREATION_DISABLED_ERROR);
         if (config.isRestrictedToAdmins()) throw new LoginErrorException(ONLY_ADMINS_ERROR);
 
@@ -88,26 +90,14 @@ public class LoginServiceImpl implements LoginService {
 
         UserCharacterBuilder userCharacterBuilder = new UserCharacterBuilder();
 
-        Race race;
-        try {
-            race = Race.get(bRace);
-        } catch (ArrayIndexOutOfBoundsException e) {
-            throw new LoginErrorException(INVALID_RACE_ERROR);
-        }
-
-        Gender gender;
-        try {
-            gender = Gender.get(bGender);
-        } catch (ArrayIndexOutOfBoundsException e) {
-            throw new LoginErrorException(INVALID_GENDER_ERROR);
-        }
-
+        // Validar homeland
         City homeland = mapService.getCity(bHomeland);
         if (homeland == null) throw new LoginErrorException(INVALID_HOMELAND_ERROR);
 
+        // Validar archetype
         UserArchetype archetype;
         try {
-            archetype = UserArchetype.get(bArchetype);
+            archetype = UserArchetype.get(bArchetype); // Solo archetype sigue siendo byte
         } catch (ArrayIndexOutOfBoundsException e) {
             throw new LoginErrorException(INVALID_ARCHETYPE_ERROR);
         }
@@ -115,31 +105,37 @@ public class LoginServiceImpl implements LoginService {
         if (!characterBodyService.isValidHead(head, race, gender)) throw new LoginErrorException(INVALID_HEAD_ERROR);
 
         // Get default body
-        int body = characterBodyService.getBody(race, gender);
-
+        int body = characterBodyService.getBody(race, gender); // Usar directamente
         if (body == 0) throw new LoginErrorException(INVALID_BODY_ERROR);
 
+        // Build character
         try {
-            userCharacterBuilder.withName(username).withEmail(mail).withGender(gender).withCity(homeland).withRace(race).withArchetype(archetype).withHead(head).withBody(body);
+            userCharacterBuilder.withName(nick)
+                    .withEmail(mail)
+                    .withGender(gender) // Usar directamente
+                    .withCity(homeland)
+                    .withRace(race) // Usar directamente
+                    .withArchetype(archetype)
+                    .withHead(head)
+                    .withBody(body);
         } catch (Exception e) {
             throw new LoginErrorException(e.getMessage());
         }
 
-        // First, we have to create the new account.
+        // Create an account
         Account account;
-
         try {
-            account = accDAO.create(username, password, mail);
+            account = accDAO.create(nick, password, mail);
         } catch (NameAlreadyTakenException e) {
             throw new LoginErrorException(ACCOUNT_NAME_TAKEN_ERROR);
         } catch (DAOException e) {
-            accDAO.delete(username);
+            accDAO.delete(nick);
             throw new LoginErrorException(DAO_ERROR);
         }
 
-        // Once we have the account, let's create the character itself!
+        // Create character
         try {
-            UserCharacter chara = charDAO.create(user, username, race, gender,
+            UserCharacter chara = charDAO.create(user, nick, race, gender, // Usar directamente
                     archetype, head, homeland,
                     user.getAttribute(Attribute.STRENGTH),
                     user.getAttribute(Attribute.DEXTERITY),
@@ -148,12 +144,12 @@ public class LoginServiceImpl implements LoginService {
                     user.getAttribute(Attribute.CONSTITUTION),
                     initialAvailableSkills, body);
         } catch (DAOException e) {
-            accDAO.delete(username);
+            accDAO.delete(nick);
             throw new LoginErrorException(e.getMessage());
         }
 
-        // Everything is okay, associate the character with the account and the account with the user
-        account.addCharacter(username);
+        // Associate character with account and user
+        account.addCharacter(nick);
         user.setAccount(account);
 
         // TODO Put it in the world!

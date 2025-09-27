@@ -82,15 +82,41 @@ public class DataBuffer {
     }
 
     /**
-     * Reads a Unicode string from the buffer.
+     * Reads a UTF8 string from the buffer.
      *
-     * @return the Unicode String
+     * @return the UTF8 String
      */
-    public String getUnicodeString() {
-        byte[] bytes = new byte[buffer.readShort()];
+    public String getUTF8String() {
+        short length = buffer.readShort(); // BIG_ENDIAN por defecto en Netty
+        byte[] bytes = new byte[length];
         buffer.readBytes(bytes);
         return new String(bytes, StandardCharsets.UTF_8);
     }
+
+    /**
+     * Lee una cadena UTF-8 de longitud fija del buffer.
+     *
+     * @param fixedLength longitud fija a leer en bytes
+     * @return cadena UTF-8 sin padding de bytes nulos
+     */
+    public String getUTF8StringFixed(int fixedLength) {
+        byte[] stringBytes = new byte[fixedLength];
+        buffer.readBytes(stringBytes);
+
+        // Encontrar el final real de la cadena (quitar padding de zeros)
+        int actualLength = fixedLength;
+        for (int i = fixedLength - 1; i >= 0; i--) {
+            if (stringBytes[i] != 0) {
+                actualLength = i + 1;
+                break;
+            }
+        }
+
+        if (actualLength == 0) return "";
+
+        return new String(stringBytes, 0, actualLength, StandardCharsets.UTF_8);
+    }
+
 
     /**
      * Gets the amount readable bytes in the buffer.

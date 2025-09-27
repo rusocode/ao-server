@@ -186,8 +186,6 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
         }
         // Convierte el Path resultante a una ruta absoluta normalizada y la guarda en el campo
         this.charfilesPath = path.toAbsolutePath().normalize().toString();
-        LOGGER.info("Charfiles path: {}", this.charfilesPath);
-
         /* Si charfilesPath es relativo, se reinterpreta contra la raiz del proyecto (no contra el working dir del modulo), y
          * luego se guarda como ruta absoluta normalizada; si ya era absoluto, se respeta y solo se normaliza. */
     }

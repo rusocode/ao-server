@@ -2,34 +2,18 @@ package com.ao.service;
 
 import com.ao.model.character.Gender;
 import com.ao.model.character.Race;
-
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+
 import java.util.List;
 
-public class CharacterBodyServiceImpl implements CharacterBodyService {
-
-    private final int darkElfMaleBody;
-    private final int darkElfFemaleBody;
-    private final int dwarfMaleBody;
-    private final int dwarfFemaleBody;
-    private final int elfMaleBody;
-    private final int elfFemaleBody;
-    private final int gnomeMaleBody;
-    private final int gnomeFemaleBody;
-    private final int humanMaleBody;
-    private final int humanFemaleBody;
-
-    private final List<Integer> headsDarkelfMale;
-    private final List<Integer> headsDarkelfFemale;
-    private final List<Integer> headsDwarfMale;
-    private final List<Integer> headsDwarfFemale;
-    private final List<Integer> headsElfMale;
-    private final List<Integer> headsElfFemale;
-    private final List<Integer> headsGnomeMale;
-    private final List<Integer> headsGnomeFemale;
-    private final List<Integer> headsHumanMale;
-    private final List<Integer> headsHumanFemale;
+public record CharacterBodyServiceImpl(List<Integer> headsDarkelfMale, List<Integer> headsDarkelfFemale,
+                                       List<Integer> headsDwarfMale, List<Integer> headsDwarfFemale, List<Integer> headsElfMale,
+                                       List<Integer> headsElfFemale, List<Integer> headsGnomeMale, List<Integer> headsGnomeFemale,
+                                       List<Integer> headsHumanMale, List<Integer> headsHumanFemale, int darkElfMaleBody,
+                                       int darkElfFemaleBody, int dwarfMaleBody, int dwarfFemaleBody, int elfMaleBody,
+                                       int elfFemaleBody, int gnomeMaleBody, int gnomeFemaleBody, int humanMaleBody,
+                                       int humanFemaleBody) implements CharacterBodyService {
 
     @Inject
     public CharacterBodyServiceImpl(@Named("headsDarkelfMale") List<Integer> headsDarkelfMale,
@@ -52,7 +36,6 @@ public class CharacterBodyServiceImpl implements CharacterBodyService {
                                     @Named("gnomeFemaleBody") int gnomeFemaleBody,
                                     @Named("humanMaleBody") int humanMaleBody,
                                     @Named("humanFemaleBody") int humanFemaleBody) {
-        super();
         this.headsDarkelfMale = headsDarkelfMale;
         this.headsDarkelfFemale = headsDarkelfFemale;
         this.headsDwarfMale = headsDwarfMale;
@@ -77,9 +60,6 @@ public class CharacterBodyServiceImpl implements CharacterBodyService {
 
     }
 
-    /* (non-Javadoc)
-     * @see com.ao.service.CharacterBodyService#isValidHead(int, com.ao.model.character.Race, com.ao.model.character.Gender)
-     */
     @Override
     public boolean isValidHead(int head, Race race, Gender gender) {
         switch (race) {

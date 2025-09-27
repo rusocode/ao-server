@@ -14,7 +14,7 @@
     <!-- The WARN logs must be in yellow -->
 
     <!-- Netty logger -->
-    <logger name="io.netty" level="DEBUG"/> <!-- Use INFO level for a cleaner log or DEBUG for more details -->
+    <logger name="io.netty" level="INFO"/> <!-- Use INFO level for a cleaner log or DEBUG for more details -->
 
     <root level="DEBUG"> <!-- Use INFO level for a cleaner log or DEBUG for more details  -->
         <appender-ref ref="STDOUT"/>
