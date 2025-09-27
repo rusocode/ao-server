@@ -173,6 +173,8 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
 
     @Inject
     public UserDAOIni(@Named("CharfilesPath") String charfilesPath) {
+        this.charfilesPath = charfilesPath;
+        /*
         // Crea un Path a partir del string configurado (puede ser relativo o absoluto)
         Path path = Paths.get(charfilesPath);
         // Si la ruta es relativa, la convierte respecto a la raiz del proyecto
@@ -237,7 +239,6 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
         if (exists(username)) throw new NameAlreadyTakenException();
 
         INIConfiguration ini = new INIConfiguration();
-
         ini.setProperty(INIT_HEADER + "." + PASSWORD_KEY, password);
         ini.setProperty(CONTACT_HEADER + "." + MAIL_KEY, mail);
         ini.setProperty(FLAGS_HEADER + "." + BANNED_KEY, "0");
