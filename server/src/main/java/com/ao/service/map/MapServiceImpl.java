@@ -56,7 +56,7 @@ public class MapServiceImpl extends ActionExecutor<MapService> implements MapSer
 
     @Override
     public void putCharacterAtPos(Character chara, Position pos) {
-        final WorldMap map = getMap(pos.getMap());
+        WorldMap map = getMap(pos.getMap());
         map.putCharacterAtPos(chara, pos.getX(), pos.getY());
         areaService.addCharToMap(map, chara);
     }

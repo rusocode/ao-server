@@ -12,8 +12,6 @@ import com.ao.model.character.*;
 import com.ao.model.character.Character;
 import com.ao.model.character.archetype.UserArchetype;
 import com.ao.model.map.City;
-import com.ao.model.map.Position;
-import com.ao.model.map.WorldMap;
 import com.ao.model.spell.Spell;
 import com.ao.model.user.Account;
 import com.ao.model.user.ConnectedUser;
@@ -138,12 +136,10 @@ public class LoginServiceImpl implements LoginService {
             throw new LoginErrorException(DAO_ERROR);
         }
 
-        // Create a character file and load the complete character
+        // Once we have the account, let's create the character itself
         UserCharacter character;
         try {
-            // Crear el archivo del personaje
-            charDAO.create(user, nick, race, gender,
-                    archetype, head, homeland,
+            character = charDAO.create(user, nick, race, gender, archetype, head, homeland,
                     user.getAttribute(Attribute.STRENGTH),
                     user.getAttribute(Attribute.DEXTERITY),
                     user.getAttribute(Attribute.INTELLIGENCE),
@@ -151,12 +147,6 @@ public class LoginServiceImpl implements LoginService {
                     user.getAttribute(Attribute.CONSTITUTION),
                     initialAvailableSkills, body);
 
-            // Cargar el personaje completo (con inventario, spells, etc.)
-            character = charDAO.load(user, nick);
-            if (character == null) {
-                accDAO.delete(nick);
-                throw new LoginErrorException("Error al cargar el personaje recién creado.");
-            }
             LOGGER.info("charIndex={}, name={}, body={}, head={}", character.getCharIndex(), character.getName(), character.getBody(), character.getHead());
 
         } catch (DAOException e) {
@@ -168,60 +158,8 @@ public class LoginServiceImpl implements LoginService {
         account.addCharacter(nick);
         user.setAccount(account);
 
-        // Put it in the world!
-        try {
-            // Send initial state to a client
-            sendInitialStateForNewCharacter(user, character);
+        // TODO: Put it in the world!
 
-            // Upgrade the user to a logged user
-            user.getConnection().changeUser((User) character);
-
-            Position position = character.getPosition();
-
-            LOGGER.info(position.toString());
-
-            // Para personajes nuevos, usa directamente el mapa sin AreaService ya que el AreaInfo no esta inicializado para personajes recien creados
-            WorldMap map = mapService.getMap(position.getMap());
-            if (map == null) {
-                accDAO.delete(nick);
-                throw new LoginErrorException("Invalid source map.");
-            }
-
-            Connection connection = user.getConnection();
-
-            // Le indica al cliente que cargue el mapa correcto
-            connection.send(new ChangeMapPacket(map));
-
-            // Verifica si la posicion esta disponible, si no, busca una libre cerca
-            if (!map.isTileAvailable(position.getX(), position.getY(), true, false, true, true)) {
-                Position freePosition = findFreePosition(map, position, 3);
-                if (freePosition != null) position = freePosition;
-                else {
-                    accDAO.delete(nick);
-                    throw new LoginErrorException("No hay posiciones disponibles en la ciudad de origen.");
-                }
-            }
-
-            // Coloca el personaje directamente en el mapa sin usar AreaService para evitar el problema con AreaInfo null en personajes nuevos
-            map.putCharacterAtPos(character, position.getX(), position.getY());
-
-            // Crea el personaje visual en el cliente
-            connection.send(new CharacterCreatePacket(character));
-
-            // Le dice al cliente que cambio de area
-            connection.send(new AreaChangedPacket(position));
-
-            // Marcar el usuario como conectado
-            userService.logIn(user);
-
-        } catch (LoginErrorException e) {
-            // Re-lanza errores de login
-            throw e;
-        } catch (Exception e) {
-            // Si algo falla, limpia la cuenta creada
-            accDAO.delete(nick);
-            throw new LoginErrorException("Error al colocar el personaje en el mundo: " + e.getMessage());
-        }
     }
 
     @Override
@@ -286,60 +224,8 @@ public class LoginServiceImpl implements LoginService {
         currentClientVersion = version;
     }
 
-    private void sendInitialStateForNewCharacter(ConnectedUser user, UserCharacter character) {
-        Connection connection = user.getConnection();
-
-        // inventory - manejar el caso donde el inventario es null para personajes nuevos
-        if (character.getInventory() != null) {
-            for (int i = 0; i < character.getInventory().getCapacity(); i++)
-                connection.send(new ChangeInventorySlotPacket(character, (byte) i));
-        }
-        // Si el inventario es null, simplemente no enviamos nada (inventario vacío)
-
-        // spells - manejar el caso donde los spells son null para personajes nuevos
-        Spell[] spells = character.getSpells();
-        if (spells != null) {
-            for (int i = 0; i < spells.length; i++)
-                connection.send(new ChangeSpellSlotPacket(spells[i], (byte) i));
-        }
-        // Si los spells son null, simplemente no enviamos nada (spells vacío)
-
-        if (character.isParalyzed()) connection.send(new ParalizedPacket());
-
-        // TODO Check if map pos is valid, or disconnect user if invalid map
-        // TODO If position taken, find a suitable position
-        // TODO Set sailing and use boat if in water (and has a boat)
-        // TODO Send user index in server?
-    }
-
-    private Position findFreePosition(WorldMap map, Position centerPos, int radius) {
-        // Busca en un patron en espiral desde el centro
-        for (int distance = 1; distance <= radius; distance++) {
-            for (int dx = -distance; dx <= distance; dx++) {
-                for (int dy = -distance; dy <= distance; dy++) {
-                    // Solo verifica el borde del cuadrado actual
-                    if (Math.abs(dx) != distance && Math.abs(dy) != distance) continue;
-
-                    byte newX = (byte) (centerPos.getX() + dx);
-                    byte newY = (byte) (centerPos.getY() + dy);
-
-                    // Verifica limites del mapa
-                    if (newX < WorldMap.MIN_X || newX > WorldMap.MAX_X || newY < WorldMap.MIN_Y || newY > WorldMap.MAX_Y)
-                        continue;
-
-                    // Verifica si la posicion esta disponible
-                    if (map.isTileAvailable(newX, newY, true, false, true, true))
-                        return new Position(newX, newY, centerPos.getMap());
-
-                }
-            }
-        }
-        return null; // No se encontro posicion libre
-    }
-
     private void sendInitialState(ConnectedUser user, UserCharacter character) {
         Connection connection = user.getConnection();
-
 
         // inventory
         int invCapacity = character.getInventory().getCapacity();
@@ -347,10 +233,9 @@ public class LoginServiceImpl implements LoginService {
             connection.send(new ChangeInventorySlotPacket(character, (byte) i));
 
         // spellbook
-        Spell[] spellbook = character.getSpells();
-        int spells = spellbook.length;
-        for (int i = 0; i < spells; i++)
-            connection.send(new ChangeSpellSlotPacket(spellbook[i], (byte) i));
+        Spell[] spells = character.getSpells();
+        for (int i = 0; i < spells.length; i++)
+            connection.send(new ChangeSpellSlotPacket(spells[i], (byte) i));
 
         if (character.isParalyzed()) connection.send(new ParalizedPacket());
 
