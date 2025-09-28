@@ -27,6 +27,8 @@ import com.ao.service.MapService;
 import com.ao.service.UserService;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Default implementation of the login service. <b>An account is the same as a character.</b>
@@ -52,6 +54,7 @@ public class LoginServiceImpl implements LoginService {
     public static final String INVALID_HEAD_ERROR = "La cabeza seleccionada no es valida.";
     public static final String INVALID_BODY_ERROR = "No existe un cuerpo para la combinacion seleccionada.";
     public static final String INVALID_HOMELAND_ERROR = "El hogar seleccionado no es valido.";
+    private final Logger LOGGER = LoggerFactory.getLogger(LoginServiceImpl.class);
     private final AccountDAO accDAO;
     private final UserCharacterDAO charDAO;
     private final ServerConfig config;
@@ -92,29 +95,11 @@ public class LoginServiceImpl implements LoginService {
 
         UserCharacterBuilder userCharacterBuilder = new UserCharacterBuilder();
 
-        // Validar homeland con protección extra
-        if (bHomeland < 1 || bHomeland > 7) {
-            System.err.println("ERROR: Homeland ID inválido: " + bHomeland + ". Usando Ullathorpe por defecto.");
-            bHomeland = 2; // CITY2 = Ullathorpe
-        }
-
-        // Validar homeland
+        // Valida homeland
         City homeland = mapService.getCity(bHomeland);
         if (homeland == null) throw new LoginErrorException(INVALID_HOMELAND_ERROR);
 
-        // DEBUG: Mostrar información de la ciudad seleccionada
-        System.out.println("DEBUG - Ciudad seleccionada:");
-        System.out.println("- bHomeland (ID recibido del cliente): " + bHomeland);
-        System.out.println("- homeland obtenido: " + homeland);
-
-        // DEBUG: Mostrar todas las ciudades válidas
-        System.out.println("DEBUG - Ciudades válidas:");
-        for (byte i = 1; i <= 7; i++) {
-            City city = mapService.getCity(i);
-            System.out.println("- CITY" + i + ": " + city);
-        }
-
-        // Validar archetype
+        // Valida archetype
         UserArchetype archetype;
         try {
             archetype = UserArchetype.get(bArchetype); // Solo archetype sigue siendo byte
@@ -153,8 +138,8 @@ public class LoginServiceImpl implements LoginService {
             throw new LoginErrorException(DAO_ERROR);
         }
 
-        // Create character file and load complete character
-        UserCharacter chara;
+        // Create a character file and load the complete character
+        UserCharacter character;
         try {
             // Crear el archivo del personaje
             charDAO.create(user, nick, race, gender,
@@ -167,11 +152,13 @@ public class LoginServiceImpl implements LoginService {
                     initialAvailableSkills, body);
 
             // Cargar el personaje completo (con inventario, spells, etc.)
-            chara = charDAO.load(user, nick);
-            if (chara == null) {
+            character = charDAO.load(user, nick);
+            if (character == null) {
                 accDAO.delete(nick);
                 throw new LoginErrorException("Error al cargar el personaje recién creado.");
             }
+            LOGGER.info("charIndex={}, name={}, body={}, head={}", character.getCharIndex(), character.getName(), character.getBody(), character.getHead());
+
         } catch (DAOException e) {
             accDAO.delete(nick);
             throw new LoginErrorException(e.getMessage());
@@ -183,89 +170,55 @@ public class LoginServiceImpl implements LoginService {
 
         // Put it in the world!
         try {
-            // Send initial state to client (adaptado para nuevos personajes)
-            sendInitialStateForNewCharacter(user, chara);
+            // Send initial state to a client
+            sendInitialStateForNewCharacter(user, character);
 
             // Upgrade the user to a logged user
-            user.getConnection().changeUser((User) chara);
+            user.getConnection().changeUser((User) character);
 
-            // Obtener la posición desde el personaje (el DAO ya la estableció)
-            Position characterPosition = chara.getPosition();
+            Position position = character.getPosition();
 
-            // DEBUG: Mostrar información para diagnosticar el problema
-            System.out.println("DEBUG - Información de posición:");
-            System.out.println("- chara.getPosition(): " + characterPosition);
-            System.out.println("- homeland.map(): " + homeland.map());
-            System.out.println("- homeland.x(): " + homeland.x());
-            System.out.println("- homeland.y(): " + homeland.y());
+            LOGGER.info(position.toString());
 
-            if (characterPosition == null) {
-                // Fallback: crear posición basada en homeland si por alguna razón no está establecida
-                characterPosition = new Position(homeland.x(), homeland.y(), homeland.map());
-                System.out.println("- Usando fallback position: " + characterPosition);
-            }
-
-            // VALIDACIÓN: Verificar que el mapa sea válido (1-300)
-            if (characterPosition.getMap() < 1 || characterPosition.getMap() > 300) {
-                System.err.println("ERROR: Mapa inválido " + characterPosition.getMap() +
-                        ". Usando Ullathorpe como ciudad por defecto.");
-                // Usar ciudad por defecto: CITY2 = Ullathorpe (map=1, x=58, y=45)
-                characterPosition = new Position((byte) 58, (byte) 45, 1);
-            }
-
-            // Para personajes nuevos, usar directamente el mapa sin AreaService ya que el AreaInfo no está inicializado para personajes recién creados
-            WorldMap spawnMap = mapService.getMap(characterPosition.getMap());
-            if (spawnMap == null) {
+            // Para personajes nuevos, usa directamente el mapa sin AreaService ya que el AreaInfo no esta inicializado para personajes recien creados
+            WorldMap map = mapService.getMap(position.getMap());
+            if (map == null) {
                 accDAO.delete(nick);
-                throw new LoginErrorException("Mapa de origen no válido.");
+                throw new LoginErrorException("Invalid source map.");
             }
 
             Connection connection = user.getConnection();
 
-            // 1. Decirle al cliente que cargue el mapa correcto
-            System.out.println("DEBUG - Enviando ChangeMapPacket:");
-            System.out.println("- spawnMap.getId(): " + spawnMap.getId());
-            System.out.println("- spawnMap.getVersion(): " + spawnMap.getVersion());
-            System.out.println("- spawnMap info: " + spawnMap);
+            // Le indica al cliente que cargue el mapa correcto
+            connection.send(new ChangeMapPacket(map));
 
-            // TEMPORAL: Comentar ChangeMapPacket hasta resolver el problema del ID incorrecto
-            connection.send(new ChangeMapPacket(spawnMap));
-            System.out.println("DEBUG - ChangeMapPacket comentado temporalmente para evitar crash");
-
-            // ALTERNATIVA: Usar mapa 1 (Ullathorpe) que sabemos que es seguro
-            WorldMap safeMap = mapService.getMap(1);
-            if (safeMap != null) {
-                System.out.println("DEBUG - Alternativa con mapa seguro:");
-                System.out.println("- safeMap.getId(): " + safeMap.getId());
-                System.out.println("- safeMap.getVersion(): " + safeMap.getVersion());
-                // connection.send(new ChangeMapPacket(safeMap)); // También comentado por ahora
-            }
-
-            // 2. Crear el personaje visual en el cliente
-            connection.send(new CharacterCreatePacket(chara));
-
-            // Verificar si la posición está disponible, si no, buscar una libre cerca
-            if (!spawnMap.isTileAvailable(characterPosition.getX(), characterPosition.getY(), true, false, true, true)) {
-                Position freePosition = findFreePosition(spawnMap, characterPosition, 3);
-                if (freePosition != null) {
-                    characterPosition = freePosition;
-                } else {
+            // Verifica si la posicion esta disponible, si no, busca una libre cerca
+            if (!map.isTileAvailable(position.getX(), position.getY(), true, false, true, true)) {
+                Position freePosition = findFreePosition(map, position, 3);
+                if (freePosition != null) position = freePosition;
+                else {
                     accDAO.delete(nick);
                     throw new LoginErrorException("No hay posiciones disponibles en la ciudad de origen.");
                 }
             }
 
-            // Colocar el personaje directamente en el mapa sin usar AreaService para evitar el problema con AreaInfo null en personajes nuevos
-            spawnMap.putCharacterAtPos(chara, characterPosition.getX(), characterPosition.getY());
+            // Coloca el personaje directamente en el mapa sin usar AreaService para evitar el problema con AreaInfo null en personajes nuevos
+            map.putCharacterAtPos(character, position.getX(), position.getY());
+
+            // Crea el personaje visual en el cliente
+            connection.send(new CharacterCreatePacket(character));
+
+            // Le dice al cliente que cambio de area
+            connection.send(new AreaChangedPacket(position));
 
             // Marcar el usuario como conectado
             userService.logIn(user);
 
         } catch (LoginErrorException e) {
-            // Re-lanzar errores de login
+            // Re-lanza errores de login
             throw e;
         } catch (Exception e) {
-            // Si algo falla, limpiar la cuenta creada
+            // Si algo falla, limpia la cuenta creada
             accDAO.delete(nick);
             throw new LoginErrorException("Error al colocar el personaje en el mundo: " + e.getMessage());
         }
@@ -338,20 +291,18 @@ public class LoginServiceImpl implements LoginService {
 
         // inventory - manejar el caso donde el inventario es null para personajes nuevos
         if (character.getInventory() != null) {
-            int invCapacity = character.getInventory().getCapacity();
-            for (int i = 0; i < invCapacity; i++)
+            for (int i = 0; i < character.getInventory().getCapacity(); i++)
                 connection.send(new ChangeInventorySlotPacket(character, (byte) i));
         }
         // Si el inventario es null, simplemente no enviamos nada (inventario vacío)
 
-        // spellbook - manejar el caso donde los spells son null para personajes nuevos
-        Spell[] spellbook = character.getSpells();
-        if (spellbook != null) {
-            int spells = spellbook.length;
-            for (int i = 0; i < spells; i++)
-                connection.send(new ChangeSpellSlotPacket(spellbook[i], (byte) i));
+        // spells - manejar el caso donde los spells son null para personajes nuevos
+        Spell[] spells = character.getSpells();
+        if (spells != null) {
+            for (int i = 0; i < spells.length; i++)
+                connection.send(new ChangeSpellSlotPacket(spells[i], (byte) i));
         }
-        // Si los spells son null, simplemente no enviamos nada (spellbook vacío)
+        // Si los spells son null, simplemente no enviamos nada (spells vacío)
 
         if (character.isParalyzed()) connection.send(new ParalizedPacket());
 

@@ -5,6 +5,7 @@ public class Position {
     private byte x, y;
     private int map;
 
+    // TODO Deberia cambiar la posicion de parametros, primero map?
     public Position(byte x, byte y, int map) {
         this.x = x;
         this.y = y;
@@ -97,6 +98,11 @@ public class Position {
 
     public void setMap(int map) {
         this.map = map;
+    }
+
+    @Override
+    public String toString() {
+        return "Position [x=" + x + ", y=" + y + ", map=" + map + "]";
     }
 
 }

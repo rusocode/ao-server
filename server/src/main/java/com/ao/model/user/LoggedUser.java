@@ -7,9 +7,9 @@ import com.ao.model.inventory.Inventory;
 import com.ao.model.map.Heading;
 import com.ao.model.map.Position;
 import com.ao.model.map.area.AreaInfo;
-import com.ao.model.spell.Spell;
 import com.ao.model.object.*;
 import com.ao.model.object.Object;
+import com.ao.model.spell.Spell;
 
 public class LoggedUser extends ConnectedUser implements UserCharacter {
 
@@ -60,11 +60,13 @@ public class LoggedUser extends ConnectedUser implements UserCharacter {
     private String name;
     private String description;
 
+    private Position position;
+
     // TODO Prohibit building this class without a builder (Effective Java, item 2)
     public LoggedUser(ConnectedUser user, Reputation reputation, Race race, Gender gender, Archetype archetype, boolean poisoned, boolean paralyzed,
                       boolean immobilized, boolean invisible, boolean mimetized, boolean dumbed, boolean hidden, int maxMana,
                       int minMana, int maxHp, int minHp, int maxThirstiness, int minThirstiness, int maxHunger, int minHunger, byte lvl,
-                      String name, String description) {
+                      String name, String description, Position position) {
         super(user.getConnection());
         this.reputation = reputation;
         this.race = race;
@@ -88,6 +90,7 @@ public class LoggedUser extends ConnectedUser implements UserCharacter {
         level = lvl;
         this.name = name;
         this.description = description;
+        this.position =  position;
     }
 
     @Override
@@ -327,7 +330,12 @@ public class LoggedUser extends ConnectedUser implements UserCharacter {
 
     @Override
     public Position getPosition() {
-        return null;
+        return position;
+    }
+
+    @Override
+    public void setPosition(Position position) {
+        this.position = position;
     }
 
     @Override

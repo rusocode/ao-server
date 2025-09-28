@@ -242,7 +242,7 @@ public class UserCharacterBuilder implements Builder<UserCharacter> {
 
         return new LoggedUser(user, reputation, race, gender, archetype.getArchetype(), poisoned,
                 paralyzed, immobilized, mimetized, invisible, dumbed, hidden, maxMana, minMana, maxHp, minHp,
-                maxThirstiness, minThirstiness, maxHunger, minHunger, lvl, name, description);
+                maxThirstiness, minThirstiness, maxHunger, minHunger, lvl, name, description, position);
     }
 
 }

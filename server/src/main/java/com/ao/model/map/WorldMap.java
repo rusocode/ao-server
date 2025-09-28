@@ -125,15 +125,15 @@ public class WorldMap {
     /**
      * Puts the given character at the given position. If the tile is unavailable, this will look around for an available one.
      *
-     * @param chara character to put.
+     * @param character character to put.
      */
-    public void putCharacterAtPos(Character chara, byte x, byte y) {
+    public void putCharacterAtPos(Character character, byte x, byte y) {
         synchronized (tiles) {
             Tile tile = getTile(x, y);
             if (tile.getCharacter() != null)
-                // TODO Check if getNearestAvailableTile instead shouldn't be used instead of this.
-                tile = getEmptyTileAround(x, y, chara.canWalkInWater(), !chara.canWalkInWater());
-            tile.setCharacter(chara);
+                // TODO Check if getNearestAvailableTile instead shouldn't be used instead of this
+                tile = getEmptyTileAround(x, y, character.canWalkInWater(), !character.canWalkInWater());
+            tile.setCharacter(character);
         }
     }
 

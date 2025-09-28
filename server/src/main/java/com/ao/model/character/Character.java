@@ -53,6 +53,8 @@ public interface Character {
 
     Position getPosition();
 
+    void setPosition(Position position);
+
     AreaInfo getCurrentAreaInfo();
 
     /**

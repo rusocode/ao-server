@@ -10,6 +10,7 @@ import com.ao.model.character.archetype.Archetype;
 import com.ao.model.character.archetype.UserArchetype;
 import com.ao.model.map.City;
 import com.ao.model.map.Heading;
+import com.ao.model.map.Position;
 import com.ao.model.user.Account;
 import com.ao.model.user.AccountImpl;
 import com.ao.model.user.ConnectedUser;
@@ -379,7 +380,7 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
         // TODO Update this when hp, mana and hit points get updated!
         return new LoggedUser(user, rep, race, gender, archetype.getArchetype(),
                 false, false, false, false, false, false, false, 0, 0, 0, 0,
-                Character.MAX_THIRSTINESS, 0, Character.MAX_HUNGER, 0, (byte) 1, name, "");
+                Character.MAX_THIRSTINESS, 0, Character.MAX_HUNGER, 0, (byte) 1, name, "", new Position(homeland.x(), homeland.y(), homeland.map()));
     }
 
     @Override
@@ -428,13 +429,31 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
         int maxHunger = IniUtils.getInt(ini, STATS_HEADER + "." + MAX_HUNGER_KEY, 0);
         byte lvl = Byte.parseByte(IniUtils.getString(ini, STATS_HEADER + "." + LEVEL_KEY, "0"));
 
+        String positionString = IniUtils.getString(ini, INIT_HEADER + "." + POSITION_KEY, null);
+        Position position = null;
+        if (positionString != null) {
+            // Espera formato: "map-x-y" (ej: "1-50-50")
+            String[] parts = positionString.split("-");
+            if (parts.length == 3) {
+                try {
+                    int map = Integer.parseInt(parts[0]);
+                    byte x = Byte.parseByte(parts[1]);
+                    byte y = Byte.parseByte(parts[2]);
+                    position = new Position(x, y, map);
+                } catch (NumberFormatException e) {
+                    LOGGER.error("Invalid position data for '{}': {}", nick, positionString);
+                }
+            } else LOGGER.error("Malformed POSITION for '{}': {}", nick, positionString);
+
+        } else LOGGER.error("Position not set for '{}'", nick);
+
+
         // TODO Complete description
         String description = "";
 
-        // TODO Validate character
-        return new LoggedUser(user, reputation, race, gender, archetype, poisoned, paralyzed, immobilized,
-                invisible, mimetized, dumbed, hidden, maxMana, mana, maxHitPoints, hitpoints, maxThirstiness, thirstiness, maxHunger,
-                hunger, lvl, nick, description);
+        return new LoggedUser(user, reputation, race, gender, archetype, poisoned, paralyzed, immobilized, invisible, mimetized,
+                dumbed, hidden, maxMana, mana, maxHitPoints, hitpoints, maxThirstiness, thirstiness, maxHunger, hunger, lvl, nick,
+                description, position);
     }
 
     @Override
