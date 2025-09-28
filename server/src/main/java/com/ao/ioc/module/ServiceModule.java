@@ -1,5 +1,6 @@
 package com.ao.ioc.module;
 
+import com.ao.action.ActionExecutor;
 import com.ao.service.*;
 import com.ao.service.login.LoginServiceImpl;
 import com.ao.service.map.AreaService;
@@ -30,6 +31,7 @@ public class ServiceModule extends AbstractModule {
         bind(LoginService.class).to(LoginServiceImpl.class).in(Singleton.class);
         bind(AreaService.class).to(AreaServiceImpl.class).in(Singleton.class);
         bind(MapService.class).to(MapServiceImpl.class).in(Singleton.class);
+        bind(new TypeLiteral<ActionExecutor<MapService>>(){}).to(MapServiceImpl.class).in(Singleton.class);
         bind(TimedEventsService.class).to(TimedEventsServiceImpl.class).in(Singleton.class);
         bind(ObjectService.class).to(ObjectServiceImpl.class).in(Singleton.class);
         bind(UserService.class).to(UserServiceImpl.class).in(Singleton.class);

@@ -1,5 +1,6 @@
 package com.ao.service.login;
 
+import com.ao.action.ActionExecutor;
 import com.ao.action.worldmap.MakeUserCharAction;
 import com.ao.config.ServerConfig;
 import com.ao.context.ApplicationContext;
@@ -12,12 +13,15 @@ import com.ao.model.character.*;
 import com.ao.model.character.Character;
 import com.ao.model.character.archetype.UserArchetype;
 import com.ao.model.map.City;
-import com.ao.model.spell.Spell;
+import com.ao.model.map.Position;
 import com.ao.model.user.Account;
 import com.ao.model.user.ConnectedUser;
 import com.ao.model.user.User;
 import com.ao.network.Connection;
-import com.ao.network.packet.outgoing.*;
+import com.ao.network.packet.outgoing.ParalizedPacket;
+import com.ao.network.packet.outgoing.UpdateHungerAndThirstPacket;
+import com.ao.network.packet.outgoing.UpdateStrengthAndDexterityPacket;
+import com.ao.network.packet.outgoing.UpdateUserStatsPacket;
 import com.ao.security.SecurityManager;
 import com.ao.service.CharacterBodyService;
 import com.ao.service.LoginService;
@@ -60,12 +64,14 @@ public class LoginServiceImpl implements LoginService {
     private final UserService userService;
     private final CharacterBodyService characterBodyService;
     private final MapService mapService;
+    private final ActionExecutor<MapService> mapActionExecutor;
+
     private String[] clientHashes;
     private String currentClientVersion;
 
     @Inject
     public LoginServiceImpl(AccountDAO accDAO, UserCharacterDAO charDAO, ServerConfig config, UserService userService,
-                            CharacterBodyService characterBodyService, MapService mapService,
+                            CharacterBodyService characterBodyService, MapService mapService, ActionExecutor<MapService> mapActionExecutor,
                             @Named("initialAvailableSkills") int initialAvailableSkills) {
         this.accDAO = accDAO;
         this.charDAO = charDAO;
@@ -74,6 +80,7 @@ public class LoginServiceImpl implements LoginService {
         this.userService = userService;
         this.characterBodyService = characterBodyService;
         this.mapService = mapService;
+        this.mapActionExecutor = mapActionExecutor;
         currentClientVersion = config.getVersion();
     }
 
@@ -160,6 +167,22 @@ public class LoginServiceImpl implements LoginService {
 
         // TODO: Put it in the world!
 
+        // 1. Crea la posicion inicial del personaje basada en su homeland (ciudad de origen)
+        Position initialPosition = new Position(homeland.x(), homeland.y(), homeland.map());
+        character.setPosition(initialPosition);
+
+        // 2. Envia estado inicial al cliente (inventario, spells, etc.)
+        sendInitialState(user, character);
+
+        // 3. Actualiza la conexion para que use el character como User (esto convierte el ConnectedUser en LoggedUser)
+        user.getConnection().changeUser((User) character);
+
+        // 4. Marca al usuario como logueado en el servicio (equivalente a UserLogged = True en VB6)
+        userService.logIn(user);
+
+        // Debugging
+        LOGGER.info("New character '{}' successfully placed in the world at position ({}, {}) on map {}", character.getName(), initialPosition.getX(), initialPosition.getY(), initialPosition.getMap());
+
     }
 
     @Override
@@ -228,14 +251,14 @@ public class LoginServiceImpl implements LoginService {
         Connection connection = user.getConnection();
 
         // inventory
-        int invCapacity = character.getInventory().getCapacity();
+        /* int invCapacity = character.getInventory().getCapacity();
         for (int i = 0; i < invCapacity; i++)
-            connection.send(new ChangeInventorySlotPacket(character, (byte) i));
+            connection.send(new ChangeInventorySlotPacket(character, (byte) i)); */
 
         // spellbook
-        Spell[] spells = character.getSpells();
+        /* Spell[] spells = character.getSpells();
         for (int i = 0; i < spells.length; i++)
-            connection.send(new ChangeSpellSlotPacket(spells[i], (byte) i));
+            connection.send(new ChangeSpellSlotPacket(spells[i], (byte) i)); */
 
         if (character.isParalyzed()) connection.send(new ParalizedPacket());
 
@@ -255,7 +278,9 @@ public class LoginServiceImpl implements LoginService {
 
         // TODO We want to take this as fat down as possible in this method...
         // Add the user to the map, notify everyone on area, and let the player know it's surroundings
-        new MakeUserCharAction(character, character.getPosition()).dispatch();
+        MakeUserCharAction action = new MakeUserCharAction(character, character.getPosition()); // Esto es equivalente al MakeUserChar(True, .Pos.Map, UserIndex, .Pos.Map, .Pos.X, .Pos.Y) del VB6
+        action.setExecutor(mapActionExecutor);
+        action.dispatch();
 
         // TODO Other (continue from TCP.bas line 1280-1288)
 
