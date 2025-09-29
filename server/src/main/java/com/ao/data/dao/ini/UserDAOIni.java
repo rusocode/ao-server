@@ -284,8 +284,8 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
         character.setProperty(INIT_HEADER + "." + HEAD_KEY, head);
         character.setProperty(INIT_HEADER + "." + BODY_KEY, body);
 
-        String positionKey = homeland.map() + "-" + homeland.x() + "-" + homeland.y();
-        character.setProperty(INIT_HEADER + "." + POSITION_KEY, positionKey);
+        String position = homeland.map() + "-" + homeland.x() + "-" + homeland.y();
+        character.setProperty(INIT_HEADER + "." + POSITION_KEY, position);
 
         // TODO Save last ip?
 
@@ -378,8 +378,7 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
         }
 
         // TODO Update this when hp, mana and hit points get updated!
-        return new LoggedUser(user, rep, race, gender, archetype.getArchetype(),
-                false, false, false, false, false, false, false, 0, 0, 0, 0,
+        return new LoggedUser(user, rep, race, gender, archetype.getArchetype(), false, false, false, false, false, false, false, 0, 0, 0, 0,
                 Character.MAX_THIRSTINESS, 0, Character.MAX_HUNGER, 0, (byte) 1, name, "", new Position(homeland.x(), homeland.y(), homeland.map()));
     }
 
@@ -444,9 +443,7 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
                     LOGGER.error("Invalid position data for '{}': {}", nick, positionString);
                 }
             } else LOGGER.error("Malformed POSITION for '{}': {}", nick, positionString);
-
         } else LOGGER.error("Position not set for '{}'", nick);
-
 
         // TODO Complete description
         String description = "";

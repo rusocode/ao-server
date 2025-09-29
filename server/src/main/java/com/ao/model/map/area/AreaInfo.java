@@ -36,6 +36,10 @@ public class AreaInfo {
         this.id = id;
     }
 
+    public static AreaInfo createNew() {
+        return new AreaInfo(0, 0, 0, 0, 0, 0, 0);
+    }
+
     public static int getAreaIdForPos(Position pos) {
         return getAreaIdForPos(pos.getX(), pos.getY());
     }

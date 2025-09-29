@@ -91,6 +91,8 @@ public class LoggedUser extends ConnectedUser implements UserCharacter {
         this.name = name;
         this.description = description;
         this.position = position;
+
+        this.areaInfo = AreaInfo.createNew();
     }
 
     @Override
