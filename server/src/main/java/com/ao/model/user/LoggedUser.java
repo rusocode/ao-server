@@ -90,7 +90,7 @@ public class LoggedUser extends ConnectedUser implements UserCharacter {
         level = lvl;
         this.name = name;
         this.description = description;
-        this.position =  position;
+        this.position = position;
     }
 
     @Override
@@ -613,27 +613,32 @@ public class LoggedUser extends ConnectedUser implements UserCharacter {
 
     @Override
     public byte getStrength() {
-        return getAttribute(Attribute.STRENGTH);
+        Byte val = getAttribute(Attribute.STRENGTH);
+        return val != null ? val : 0;
     }
 
     @Override
     public byte getDexterity() {
-        return getAttribute(Attribute.DEXTERITY);
+        Byte val = getAttribute(Attribute.DEXTERITY);
+        return val != null ? val : 0;
     }
 
     @Override
     public byte getIntelligence() {
-        return getAttribute(Attribute.INTELLIGENCE);
+        Byte val = getAttribute(Attribute.INTELLIGENCE);
+        return val != null ? val : 0;
     }
 
     @Override
     public byte getCharisma() {
-        return getAttribute(Attribute.CHARISMA);
+        Byte val = getAttribute(Attribute.CHARISMA);
+        return val != null ? val : 0;
     }
 
     @Override
     public byte getConstitution() {
-        return getAttribute(Attribute.CONSTITUTION);
+        Byte val = getAttribute(Attribute.CONSTITUTION);
+        return val != null ? val : 0;
     }
 
 }
