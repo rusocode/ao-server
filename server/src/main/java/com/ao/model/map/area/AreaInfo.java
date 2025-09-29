@@ -14,10 +14,9 @@ public class AreaInfo {
     static {
         // This assumes maps will always be square
         AREAS_RECEIVE = new int[WorldMap.MAP_WIDTH / AreaInfo.AREA_SIZE + 1];
-        for (int i = 1; i <= AREAS_RECEIVE.length; i++) {
+        for (int i = 1; i < AREAS_RECEIVE.length; i++)
             // Set the bit + the i-1 bit + the i+1 bit (if they exist)
-            AREAS_RECEIVE[i] = (1 << i) | (i != 0 ? 1 << (i - 1) : 0) | (i != AREAS_RECEIVE.length ? 1 << (i + 1) : 0);
-        }
+            AREAS_RECEIVE[i] = 1 << i | 1 << i - 1 | 1 << i + 1;
     }
 
     private int belongsX, belongsY;
