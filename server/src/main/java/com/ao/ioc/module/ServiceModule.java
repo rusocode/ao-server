@@ -1,6 +1,8 @@
 package com.ao.ioc.module;
 
 import com.ao.action.ActionExecutor;
+import com.ao.data.dao.CityDAO;
+import com.ao.data.dao.WorldMapDAO;
 import com.ao.service.*;
 import com.ao.service.login.LoginServiceImpl;
 import com.ao.service.map.AreaService;
@@ -11,6 +13,7 @@ import com.ao.service.user.UserServiceImpl;
 import com.ao.service.worldobject.ObjectServiceImpl;
 import com.ao.utils.RangeParser;
 import com.google.inject.AbstractModule;
+import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.google.inject.TypeLiteral;
 import com.google.inject.name.Names;
@@ -26,12 +29,33 @@ public class ServiceModule extends AbstractModule {
         this.properties = properties;
     }
 
+    @Provides
+    @Singleton
+    public MapServiceImpl provideMapServiceImpl(WorldMapDAO mapsDAO, CityDAO citiesDAO, AreaService areaService) {
+        return new MapServiceImpl(mapsDAO, citiesDAO, areaService);
+    }
+
+    @Provides
+    @Singleton
+    public MapService provideMapService(MapServiceImpl impl) {
+        return impl;
+    }
+
+    @Provides
+    @Singleton
+    public ActionExecutor<MapService> provideMapActionExecutor(MapServiceImpl impl) {
+        return impl;
+    }
+
     @Override
     protected void configure() {
         bind(LoginService.class).to(LoginServiceImpl.class).in(Singleton.class);
         bind(AreaService.class).to(AreaServiceImpl.class).in(Singleton.class);
-        bind(MapService.class).to(MapServiceImpl.class).in(Singleton.class);
-        bind(new TypeLiteral<ActionExecutor<MapService>>(){}).to(MapServiceImpl.class).in(Singleton.class);
+
+//        bind(MapService.class).to(MapServiceImpl.class).in(Singleton.class);
+//        bind(new TypeLiteral<ActionExecutor<MapService>>() {
+//        }).to(MapServiceImpl.class).in(Singleton.class);
+
         bind(TimedEventsService.class).to(TimedEventsServiceImpl.class).in(Singleton.class);
         bind(ObjectService.class).to(ObjectServiceImpl.class).in(Singleton.class);
         bind(UserService.class).to(UserServiceImpl.class).in(Singleton.class);
