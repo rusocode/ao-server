@@ -53,7 +53,7 @@ public class LoginServiceImpl implements LoginService {
     public static final String CHARACTER_IS_LOGGED_IN = "El personaje esta conectado.";
     public static final String INVALID_HEAD_ERROR = "La cabeza seleccionada no es valida.";
     public static final String INVALID_BODY_ERROR = "No existe un cuerpo para la combinacion seleccionada.";
-    public static final String INVALID_HOMELAND_ERROR = "El hogar seleccionado no es valido.";
+    public static final String INVALID_CITY_ERROR = "La ciudad seleccionada no es valida.";
     private final Logger LOGGER = LoggerFactory.getLogger(LoginServiceImpl.class);
     private final AccountDAO accDAO;
     private final UserCharacterDAO charDAO;
@@ -84,7 +84,7 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public void connectNewCharacter(ConnectedUser user, String nick, String password, Race race, Gender gender, byte bArchetype,
-                                    int head, String mail, byte bHomeland, String clientHash, String version) throws LoginErrorException {
+                                    int head, String mail, byte cityId, String clientHash, String version) throws LoginErrorException {
 
         checkClient(clientHash, version);
 
@@ -98,9 +98,8 @@ public class LoginServiceImpl implements LoginService {
 
         UserCharacterBuilder userCharacterBuilder = new UserCharacterBuilder();
 
-        // Valida homeland
-        City homeland = mapService.getCity(bHomeland);
-        if (homeland == null) throw new LoginErrorException(INVALID_HOMELAND_ERROR);
+        City city = mapService.getCity(cityId);
+        if (city == null) throw new LoginErrorException(INVALID_CITY_ERROR);
 
         // Valida archetype
         UserArchetype archetype;
@@ -121,7 +120,7 @@ public class LoginServiceImpl implements LoginService {
             userCharacterBuilder.withName(nick)
                     .withEmail(mail)
                     .withGender(gender) // Usar directamente
-                    .withCity(homeland)
+                    .withCity(city)
                     .withRace(race) // Usar directamente
                     .withArchetype(archetype)
                     .withHead(head)
@@ -144,7 +143,7 @@ public class LoginServiceImpl implements LoginService {
         // Once we have the account, let's create the character itself
         UserCharacter character;
         try {
-            character = charDAO.create(user, nick, race, gender, archetype, head, homeland,
+            character = charDAO.create(user, nick, race, gender, archetype, head, city,
                     user.getAttribute(Attribute.STRENGTH),
                     user.getAttribute(Attribute.DEXTERITY),
                     user.getAttribute(Attribute.INTELLIGENCE),
@@ -161,10 +160,8 @@ public class LoginServiceImpl implements LoginService {
         account.addCharacter(nick);
         user.setAccount(account);
 
-        // TODO: Put it in the world!
-
-        // 1. Crea la posicion inicial del personaje basada en su homeland (ciudad de origen)
-        Position initialPosition = new Position(homeland.x(), homeland.y(), homeland.map());
+        // 1. Crea la posicion inicial del personaje basada en la ciudad
+        Position initialPosition = new Position(city.x(), city.y(), city.map());
         character.setPosition(initialPosition);
 
         // 2. Envia estado inicial al cliente (inventario, spells, etc.)
@@ -176,10 +173,8 @@ public class LoginServiceImpl implements LoginService {
         // 4. Marca al usuario como logueado en el servicio (equivalente a UserLogged = True en VB6)
         userService.logIn(user);
 
-        LOGGER.info("charIndex={}, name={}, body={}, head={}, position={}", character.getCharIndex(), character.getName(), character.getBody(), character.getHead(), character.getPosition().toString());
-
         // Debugging
-        LOGGER.info("New character '{}' successfully placed in the world at position ({}, {}) on map {}", character.getName(), initialPosition.getX(), initialPosition.getY(), initialPosition.getMap());
+        LOGGER.info("New character '{}' successfully placed in the world at {}", character.getName(), character.getPosition().toString());
 
     }
 

@@ -39,7 +39,7 @@ public class LoginNewCharacterPacket implements IncomingPacket {
         // - race, gender, archetype: 3 bytes
         // - head: 4 bytes
         // - mail: minimo 2 bytes (longitud) + contenido
-        // - homeland: 1 byte
+        // - cityId: 1 byte
         int minRequiredBytes = 2 + 1 + security.getPasswordHashLength() + 3 + security.getClientHashLength() + 3 + 4 + 2 + 1 + 1;
 
         LOGGER.info("incomingBytes={}, minRequiredBytes={}", incomingBytes, minRequiredBytes);
@@ -61,15 +61,15 @@ public class LoginNewCharacterPacket implements IncomingPacket {
         byte archetype = buffer.get();
         int head = buffer.get();
         String mail = buffer.getUTF8String();
-        byte homeland = buffer.get();
+        byte cityId = buffer.get();
 
         Race characterRace = mapRaceFromClientId(race);
         Gender characterGender = mapGenderFromClientId(gender);
 
-        LOGGER.info("nick={}, password={}, version={}, clientHash={}, race={}, gender={}, archetype={}, head={}, mail={}, homeland={}", nick, password, version, clientHash, race, gender, archetype, head, mail, homeland);
+        LOGGER.info("nick={}, password={}, version={}, clientHash={}, race={}, gender={}, archetype={}, head={}, mail={}, cityId={}", nick, password, version, clientHash, race, gender, archetype, head, mail, cityId);
 
         try {
-            service.connectNewCharacter((ConnectedUser) connection.getUser(), nick, password, characterRace, characterGender, archetype, head, mail, homeland, clientHash, version);
+            service.connectNewCharacter((ConnectedUser) connection.getUser(), nick, password, characterRace, characterGender, archetype, head, mail, cityId, clientHash, version);
         } catch (LoginErrorException e) {
             loginError(connection, e.getMessage());
         }

@@ -42,7 +42,7 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
     private static final String PASSWORD_KEY = "Password";
     private static final String GENDER_KEY = "Genero";
     private static final String RACE_KEY = "Raza";
-    private static final String HOMELAND_KEY = "Hogar";
+    private static final String MAP_KEY = "Map";
     private static final String ARCHETYPE_KEY = "Clase";
     private static final String HEADING_KEY = "Heading";
     private static final String WEAPON_KEY = "Arma";
@@ -266,7 +266,7 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
 
     @Override
     public UserCharacter create(ConnectedUser user, String name, Race race, Gender gender, UserArchetype archetype, int head,
-                                City homeland, byte strength, byte dexterity, byte intelligence, byte charisma, byte constitution,
+                                City city, byte strength, byte dexterity, byte intelligence, byte charisma, byte constitution,
                                 int initialAvailableSkills, int body)
             throws DAOException, NameAlreadyTakenException {
 
@@ -274,7 +274,7 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
 
         character.setProperty(INIT_HEADER + "." + GENDER_KEY, gender.ordinal());
         character.setProperty(INIT_HEADER + "." + RACE_KEY, race.ordinal());
-        character.setProperty(INIT_HEADER + "." + HOMELAND_KEY, homeland);
+        character.setProperty(INIT_HEADER + "." + MAP_KEY, city.map());
         character.setProperty(INIT_HEADER + "." + ARCHETYPE_KEY, archetype.ordinal());
         character.setProperty(INIT_HEADER + "." + HEADING_KEY, Heading.SOUTH.ordinal());
         character.setProperty(INIT_HEADER + "." + WEAPON_KEY, NO_WEAPON);
@@ -284,7 +284,7 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
         character.setProperty(INIT_HEADER + "." + HEAD_KEY, head);
         character.setProperty(INIT_HEADER + "." + BODY_KEY, body);
 
-        String position = homeland.map() + "-" + homeland.x() + "-" + homeland.y();
+        String position = city.map() + "-" + city.x() + "-" + city.y();
         character.setProperty(INIT_HEADER + "." + POSITION_KEY, position);
 
         // TODO Save last ip?
@@ -379,7 +379,7 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
 
         // TODO Update this when hp, mana and hit points get updated!
         return new LoggedUser(user, rep, race, gender, archetype.getArchetype(), false, false, false, false, false, false, false, 0, 0, 0, 0,
-                Character.MAX_THIRSTINESS, 0, Character.MAX_HUNGER, 0, (byte) 1, name, "", new Position(homeland.x(), homeland.y(), homeland.map()));
+                Character.MAX_THIRSTINESS, 0, Character.MAX_HUNGER, 0, (byte) 1, name, "", new Position(city.x(), city.y(), city.map()));
     }
 
     @Override

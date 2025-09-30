@@ -234,11 +234,11 @@ public class LoginNewCharacterPacketTest {
         assertThat(errPacket.getValue().getMessage()).isEqualTo(LoginServiceImpl.ONLY_ADMINS_ERROR);
     }
 
-    private void writeLogin(String charName, String password, byte major, byte minor, byte version, String hash, byte race, byte gender, byte archetype, byte head, String mail, byte homeland) throws Exception {
+    private void writeLogin(String charName, String password, byte major, byte minor, byte version, String hash, byte race, byte gender, byte archetype, byte head, String mail, byte cityId) throws Exception {
         when(inputBuffer.getReadableBytes()).thenReturn(charName.length() + 2 + security.getPasswordHashLength() + 8 + security.getClientHashLength() + mail.length() + 2);
         when(inputBuffer.getASCIIString()).thenReturn(charName).thenReturn(mail);
         when(inputBuffer.getASCIIStringFixed(security.getPasswordHashLength())).thenReturn(password);
-        when(inputBuffer.get()).thenReturn(major).thenReturn(minor).thenReturn(version).thenReturn(race).thenReturn(gender).thenReturn(archetype).thenReturn(head).thenReturn(homeland);
+        when(inputBuffer.get()).thenReturn(major).thenReturn(minor).thenReturn(version).thenReturn(race).thenReturn(gender).thenReturn(archetype).thenReturn(head).thenReturn(cityId);
         when(inputBuffer.getASCIIStringFixed(security.getClientHashLength())).thenReturn(hash);
     }
 

@@ -23,6 +23,6 @@ public interface LoginService {
      * Attempts to connect a new character creating it with the given data.
      */
     void connectNewCharacter(ConnectedUser user, String username, String password, Race race, Gender gender, byte archetype,
-                             int head, String mail, byte homeland, String clientHash, String version) throws LoginErrorException;
+                             int head, String mail, byte cityId, String clientHash, String version) throws LoginErrorException;
 
 }

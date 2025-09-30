@@ -24,7 +24,7 @@ public class UserCharacterBuilder implements Builder<UserCharacter> {
     protected Race race;
     protected Gender gender;
     protected ConnectedUser user;
-    protected City homeland;
+    protected City city;
     protected UserArchetype archetype;
 
     protected Integer minHp, maxHp;
@@ -47,8 +47,8 @@ public class UserCharacterBuilder implements Builder<UserCharacter> {
     protected Reputation reputation;
     protected Position position;
 
-    public UserCharacterBuilder withCity(City homeland) {
-        this.homeland = Objects.requireNonNull(homeland);
+    public UserCharacterBuilder withCity(City city) {
+        this.city = Objects.requireNonNull(city);
         return this;
     }
 
@@ -225,7 +225,7 @@ public class UserCharacterBuilder implements Builder<UserCharacter> {
         Objects.requireNonNull(race);
         Objects.requireNonNull(gender);
         Objects.requireNonNull(user);
-        Objects.requireNonNull(homeland);
+        Objects.requireNonNull(city);
         Objects.requireNonNull(archetype);
         Objects.requireNonNull(head);
         Objects.requireNonNull(body);
