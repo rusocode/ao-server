@@ -2,14 +2,14 @@
 citie_count = 7
 
 [CITY1]
-map = 34
-x = 44
-y = 88
-
-[CITY2]
 map = 1
 x = 58
 y = 45
+
+[CITY2]
+map = 34
+x = 44
+y = 88
 
 [CITY3]
 map = 59

@@ -152,8 +152,6 @@ public class LoginServiceImpl implements LoginService {
                     user.getAttribute(Attribute.CONSTITUTION),
                     initialAvailableSkills, body);
 
-            LOGGER.info("charIndex={}, name={}, body={}, head={}", character.getCharIndex(), character.getName(), character.getBody(), character.getHead());
-
         } catch (DAOException e) {
             accDAO.delete(nick);
             throw new LoginErrorException(e.getMessage());
@@ -177,6 +175,8 @@ public class LoginServiceImpl implements LoginService {
 
         // 4. Marca al usuario como logueado en el servicio (equivalente a UserLogged = True en VB6)
         userService.logIn(user);
+
+        LOGGER.info("charIndex={}, name={}, body={}, head={}, position={}", character.getCharIndex(), character.getName(), character.getBody(), character.getHead(), character.getPosition().toString());
 
         // Debugging
         LOGGER.info("New character '{}' successfully placed in the world at position ({}, {}) on map {}", character.getName(), initialPosition.getX(), initialPosition.getY(), initialPosition.getMap());
@@ -268,7 +268,6 @@ public class LoginServiceImpl implements LoginService {
 
         // TODO Send user index in server? The client doesn't use it at all, and we have no user indexes in this server...
 
-        // TODO Tell client to load map
         WorldMap map = mapService.getMap(character.getPosition().getMap());
         connection.send(new ChangeMapPacket(map));
 
