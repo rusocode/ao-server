@@ -5,7 +5,7 @@ import com.ao.network.packet.OutgoingPacket;
 
 import java.io.UnsupportedEncodingException;
 
-public class ParalizedPacket implements OutgoingPacket {
+public class ParalyzedPacket implements OutgoingPacket {
 
     @Override
     public void write(DataBuffer buffer) throws UnsupportedEncodingException {

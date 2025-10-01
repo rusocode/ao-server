@@ -17,7 +17,6 @@ import com.ao.model.map.Position;
 import com.ao.model.map.WorldMap;
 import com.ao.model.user.Account;
 import com.ao.model.user.ConnectedUser;
-import com.ao.model.user.LoggedUser;
 import com.ao.model.user.User;
 import com.ao.network.Connection;
 import com.ao.network.packet.outgoing.*;
@@ -260,7 +259,7 @@ public class LoginServiceImpl implements LoginService {
         for (int i = 0; i < spells.length; i++)
             connection.send(new ChangeSpellSlotPacket(spells[i], (byte) i)); */
 
-        if (character.isParalyzed()) connection.send(new ParalizedPacket());
+        if (character.isParalyzed()) connection.send(new ParalyzedPacket());
 
         // TODO Check if map position is valid, or disconnect user if invalid map
 
