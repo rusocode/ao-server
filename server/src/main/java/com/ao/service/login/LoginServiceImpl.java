@@ -17,14 +17,12 @@ import com.ao.model.map.Position;
 import com.ao.model.map.WorldMap;
 import com.ao.model.user.Account;
 import com.ao.model.user.ConnectedUser;
+import com.ao.model.user.LoggedUser;
 import com.ao.model.user.User;
 import com.ao.network.Connection;
 import com.ao.network.packet.outgoing.*;
 import com.ao.security.SecurityManager;
-import com.ao.service.CharacterBodyService;
-import com.ao.service.LoginService;
-import com.ao.service.MapService;
-import com.ao.service.UserService;
+import com.ao.service.*;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import org.slf4j.Logger;
@@ -67,6 +65,8 @@ public class LoginServiceImpl implements LoginService {
     private String[] clientHashes;
     private String currentClientVersion;
 
+    private final CharacterIndexManager charIndexManager;
+
     @Inject
     public LoginServiceImpl(AccountDAO accDAO, UserCharacterDAO charDAO, ServerConfig config, UserService userService,
                             CharacterBodyService characterBodyService, MapService mapService, ActionExecutor<MapService> mapActionExecutor,
@@ -80,6 +80,9 @@ public class LoginServiceImpl implements LoginService {
         this.mapService = mapService;
         this.mapActionExecutor = mapActionExecutor;
         currentClientVersion = config.getVersion();
+
+        charIndexManager = new CharacterIndexManager();
+
     }
 
     @Override
@@ -150,6 +153,10 @@ public class LoginServiceImpl implements LoginService {
                     user.getAttribute(Attribute.CHARISMA),
                     user.getAttribute(Attribute.CONSTITUTION),
                     initialAvailableSkills, body);
+
+            int charIndex = charIndexManager.assignCharIndex();
+            character.setCharIndex(charIndex);
+            LOGGER.info("Assigned CharIndex {} to character '{}'", charIndex, character.getName());
 
         } catch (DAOException e) {
             accDAO.delete(nick);
