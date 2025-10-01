@@ -16,11 +16,11 @@ public class ServerPacketsManager {
     /**
      * Maps packets classes to their ids.
      */
-    protected static final Map<Class<? extends OutgoingPacket>, Integer> packets = new HashMap<>();
+    private static final Map<Class<? extends OutgoingPacket>, Integer> PACKET_REGISTRY = new HashMap<>();
 
     static {
         for (ServerPackets packet : ServerPackets.values())
-            packets.put(packet.packetClass, packet.ordinal());
+            PACKET_REGISTRY.put(packet.packetClass, packet.ordinal());
     }
 
     /**
@@ -31,7 +31,7 @@ public class ServerPacketsManager {
      */
     public static void write(OutgoingPacket packet, DataBuffer buffer) throws UnsupportedEncodingException {
         // Put the packet id before the packet itself
-        buffer.put(packets.get(packet.getClass()).byteValue());
+        buffer.put(PACKET_REGISTRY.get(packet.getClass()).byteValue());
         packet.write(buffer);
     }
 

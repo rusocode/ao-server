@@ -87,7 +87,7 @@ public class DataBuffer {
      * @return the UTF8 String
      */
     public String getUTF8String() {
-        short length = buffer.readShort(); // BIG_ENDIAN por defecto en Netty
+        short length = buffer.readShort();
         byte[] bytes = new byte[length];
         buffer.readBytes(bytes);
         return new String(bytes, StandardCharsets.UTF_8);
@@ -116,7 +116,6 @@ public class DataBuffer {
 
         return new String(stringBytes, 0, actualLength, StandardCharsets.UTF_8);
     }
-
 
     /**
      * Gets the amount readable bytes in the buffer.

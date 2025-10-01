@@ -26,21 +26,30 @@ public class LoginNewCharacterPacket implements IncomingPacket {
     private static final LoginService service = ApplicationContext.getInstance(LoginService.class);
     private static final SecurityManager security = ApplicationContext.getInstance(SecurityManager.class);
 
+    private static final int STRING_LENGTH_BYTES = 2; // The nick and mail
+    private static final int MIN_NICK_BYTES = 1;
+    private static final int MIN_MAIL_BYTES = 1;
+    private static final int VERSION_BYTES = 3;
+    private static final int RACE_BYTES = 1;
+    private static final int GENDER_BYTES = 1;
+    private static final int ARCHETYPE_BYTES = 1;
+    private static final int HEAD_BYTES = 1;
+    private static final int CITY_ID_BYTES = 1;
+
     @Override
     public boolean handle(DataBuffer buffer, Connection connection) throws ArrayIndexOutOfBoundsException, UnsupportedEncodingException {
 
         int incomingBytes = buffer.getReadableBytes();
 
-        // Calcular bytes requeridos:
-        // - nick: minimo 2 bytes (longitud) + contenido
-        // - password: longitud fija conocida
-        // - version: 3 bytes
-        // - client hash: longitud fija conocida
-        // - race, gender, archetype: 3 bytes
-        // - head: 1 bytes
-        // - mail: minimo 2 bytes (longitud) + contenido
-        // - cityId: 1 byte
-        int minRequiredBytes = 2 + 1 + security.getPasswordHashLength() + 3 + security.getClientHashLength() + 3 + 1 + 2 + 1 + 1;
+        int minRequiredBytes = STRING_LENGTH_BYTES + MIN_NICK_BYTES
+                + security.getPasswordHashLength()
+                + VERSION_BYTES
+                + RACE_BYTES
+                + GENDER_BYTES
+                + ARCHETYPE_BYTES
+                + HEAD_BYTES
+                + STRING_LENGTH_BYTES + MIN_MAIL_BYTES
+                + CITY_ID_BYTES;
 
         LOGGER.info("incomingBytes={}, minRequiredBytes={}", incomingBytes, minRequiredBytes);
 
@@ -49,8 +58,6 @@ public class LoginNewCharacterPacket implements IncomingPacket {
             LOGGER.error("Not enough bytes to read!");
             return false;
         }
-
-        LOGGER.info("Processing character data...");
 
         String nick = buffer.getUTF8String();
         String password = buffer.getUTF8StringFixed(security.getPasswordHashLength());

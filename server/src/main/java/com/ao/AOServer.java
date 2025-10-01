@@ -258,6 +258,7 @@ public class AOServer implements Runnable {
 
                                 @Override
                                 protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
+                                    // Mark the current reading position in the buffer (save a "restauration position")
                                     in.markReaderIndex();
                                     boolean processed = false;
 
@@ -269,6 +270,7 @@ public class AOServer implements Runnable {
                                     }
 
                                     if (!processed) {
+                                        // If the packet is incomplete, reset the reader index and wait for more data
                                         in.resetReaderIndex();
                                         return; // Wait for more data
                                     }
@@ -281,6 +283,7 @@ public class AOServer implements Runnable {
                             pipeline.addLast("encoder", new MessageToMessageEncoder<OutgoingPacket>() {
                                 @Override
                                 protected void encode(ChannelHandlerContext ctx, OutgoingPacket packet, List<Object> out) throws Exception {
+                                    // Create a dinamic byte buffer with a typical capacity of 256 bytes
                                     ByteBuf byteBuf = Unpooled.buffer();
 
                                     // Wrap the ByteBuf in our data buffer and write the packet into it
