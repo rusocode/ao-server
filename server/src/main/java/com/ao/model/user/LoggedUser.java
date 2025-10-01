@@ -1,5 +1,6 @@
 package com.ao.model.user;
 
+import com.ao.context.ApplicationContext;
 import com.ao.model.character.*;
 import com.ao.model.character.Character;
 import com.ao.model.character.archetype.Archetype;
@@ -10,6 +11,7 @@ import com.ao.model.map.area.AreaInfo;
 import com.ao.model.object.*;
 import com.ao.model.object.Object;
 import com.ao.model.spell.Spell;
+import com.ao.service.CharacterBodyService;
 
 public class LoggedUser extends ConnectedUser implements UserCharacter {
 
@@ -62,11 +64,14 @@ public class LoggedUser extends ConnectedUser implements UserCharacter {
 
     private Position position;
 
+    private int body;
+    private int head;
+
     // TODO Prohibit building this class without a builder (Effective Java, item 2)
     public LoggedUser(ConnectedUser user, Reputation reputation, Race race, Gender gender, Archetype archetype, boolean poisoned, boolean paralyzed,
                       boolean immobilized, boolean invisible, boolean mimetized, boolean dumbed, boolean hidden, int maxMana,
                       int minMana, int maxHp, int minHp, int maxThirstiness, int minThirstiness, int maxHunger, int minHunger, byte lvl,
-                      String name, String description, Position position) {
+                      String name, String description, Position position, int body, int head) {
         super(user.getConnection());
         this.reputation = reputation;
         this.race = race;
@@ -91,6 +96,9 @@ public class LoggedUser extends ConnectedUser implements UserCharacter {
         this.name = name;
         this.description = description;
         this.position = position;
+
+        this.body = body;
+        this.head = head;
 
         this.areaInfo = AreaInfo.createNew();
     }
@@ -218,11 +226,12 @@ public class LoggedUser extends ConnectedUser implements UserCharacter {
 
     @Override
     public int getBody() {
-        return 0;
+        return body;
     }
 
     @Override
     public void setBody(int body) {
+        this.body = body;
     }
 
     @Override
@@ -252,11 +261,12 @@ public class LoggedUser extends ConnectedUser implements UserCharacter {
 
     @Override
     public int getHead() {
-        return 0;
+        return head;
     }
 
     @Override
     public void setHead(int head) {
+        this.head = head;
     }
 
     @Override
@@ -641,6 +651,18 @@ public class LoggedUser extends ConnectedUser implements UserCharacter {
     public byte getConstitution() {
         Byte val = getAttribute(Attribute.CONSTITUTION);
         return val != null ? val : 0;
+    }
+
+    private int getDefaultHeadForRace(Race race, Gender gender) {
+        // Devolver una cabeza por defecto según la raza
+        // Estos son los primeros índices válidos de cada raza
+        return switch (race) {
+            case HUMAN -> gender == Gender.MALE ? 1 : 70;
+            case ELF -> gender == Gender.MALE ? 101 : 170;
+            case DARK_ELF -> gender == Gender.MALE ? 201 : 270;
+            case DWARF -> gender == Gender.MALE ? 301 : 370;
+            case GNOME -> gender == Gender.MALE ? 401 : 470;
+        };
     }
 
 }

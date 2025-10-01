@@ -272,7 +272,7 @@ public class LoginServiceImpl implements LoginService {
 
         // TODO We want to take this as fat down as possible in this method...
         // Add the user to the map, notify everyone on area, and let the player know it's surroundings
-        MakeUserCharAction action = new MakeUserCharAction(character, character.getPosition()); // Esto es equivalente al MakeUserChar(True, .Pos.Map, UserIndex, .Pos.Map, .Pos.X, .Pos.Y) del VB6
+        MakeUserCharAction action = new MakeUserCharAction(character, character.getPosition());
         action.setExecutor(mapActionExecutor);
         action.dispatch();
 

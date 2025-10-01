@@ -379,7 +379,7 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
 
         // TODO Update this when hp, mana and hit points get updated!
         return new LoggedUser(user, rep, race, gender, archetype.getArchetype(), false, false, false, false, false, false, false, 0, 0, 0, 0,
-                Character.MAX_THIRSTINESS, 0, Character.MAX_HUNGER, 0, (byte) 1, name, "", new Position(city.x(), city.y(), city.map()));
+                Character.MAX_THIRSTINESS, 0, Character.MAX_HUNGER, 0, (byte) 1, name, "", new Position(city.x(), city.y(), city.map()), body, head);
     }
 
     @Override
@@ -428,6 +428,9 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
         int maxHunger = IniUtils.getInt(ini, STATS_HEADER + "." + MAX_HUNGER_KEY, 0);
         byte lvl = Byte.parseByte(IniUtils.getString(ini, STATS_HEADER + "." + LEVEL_KEY, "0"));
 
+        int body = IniUtils.getInt(ini, INIT_HEADER + "." + BODY_KEY, 0);
+        int head = IniUtils.getInt(ini, INIT_HEADER + "." + HEAD_KEY, 0);
+
         String positionString = IniUtils.getString(ini, INIT_HEADER + "." + POSITION_KEY, null);
         Position position = null;
         if (positionString != null) {
@@ -450,7 +453,7 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
 
         return new LoggedUser(user, reputation, race, gender, archetype, poisoned, paralyzed, immobilized, invisible, mimetized,
                 dumbed, hidden, maxMana, mana, maxHitPoints, hitpoints, maxThirstiness, thirstiness, maxHunger, hunger, lvl, nick,
-                description, position);
+                description, position, body, head);
     }
 
     @Override
