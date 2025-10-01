@@ -13,7 +13,7 @@ public class Position {
     }
 
     /**
-     * Adds (or substract if the given number is negative) positions to the X axis.
+     * Adds (or substract if the given number is negative) positions to the x axis.
      *
      * @param positions positions to add
      */

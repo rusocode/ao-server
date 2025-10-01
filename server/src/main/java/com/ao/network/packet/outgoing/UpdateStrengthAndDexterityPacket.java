@@ -9,21 +9,7 @@ import java.io.UnsupportedEncodingException;
  * Packet to tell the client their new strength and dexterity values.
  */
 
-public class UpdateStrengthAndDexterityPacket implements OutgoingPacket {
-
-    protected byte strength, dexterity;
-
-    /**
-     * Creates a new UpdateStrengthAndDexterity packet
-     *
-     * @param strength  the user's strength
-     * @param dexterity the user's dexterity
-     */
-    public UpdateStrengthAndDexterityPacket(byte strength, byte dexterity) {
-        super();
-        this.strength = strength;
-        this.dexterity = dexterity;
-    }
+public record UpdateStrengthAndDexterityPacket(byte strength, byte dexterity) implements OutgoingPacket {
 
     @Override
     public void write(DataBuffer buffer) throws UnsupportedEncodingException {

@@ -6,18 +6,7 @@ import com.ao.network.packet.OutgoingPacket;
 
 import java.io.UnsupportedEncodingException;
 
-public class ConsoleMessagePacket implements OutgoingPacket {
-
-    private final String message;
-    private final Font font;
-
-    /**
-     * Creates a console message.
-     */
-    public ConsoleMessagePacket(String message, Font font) {
-        this.message = message;
-        this.font = font;
-    }
+public record ConsoleMessagePacket(String message, Font font) implements OutgoingPacket {
 
     @Override
     public void write(DataBuffer buffer) throws UnsupportedEncodingException {

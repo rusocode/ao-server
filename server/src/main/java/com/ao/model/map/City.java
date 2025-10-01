@@ -17,7 +17,7 @@ public record City(int map, byte x, byte y) {
     public City {
         if (map < 0) throw new IllegalArgumentException("Map must be non-negative, got: " + map);
         if (x < WorldMap.MIN_X || x > WorldMap.MAX_X)
-            throw new IllegalArgumentException("X coordinate must be between " + WorldMap.MIN_X + " and " + WorldMap.MAX_X + " (inclusive), got: " + x);
+            throw new IllegalArgumentException("x coordinate must be between " + WorldMap.MIN_X + " and " + WorldMap.MAX_X + " (inclusive), got: " + x);
         if (y < WorldMap.MIN_Y || y > WorldMap.MAX_Y)
             throw new IllegalArgumentException("Y coordinate must be between " + WorldMap.MIN_Y + " and " + WorldMap.MAX_Y + " (inclusive), got: " + y);
     }

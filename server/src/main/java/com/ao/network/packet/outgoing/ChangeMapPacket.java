@@ -10,18 +10,7 @@ import java.io.UnsupportedEncodingException;
  * Tells the user to load a different map.
  */
 
-public class ChangeMapPacket implements OutgoingPacket {
-
-    private final WorldMap map;
-
-    /**
-     * Creates a new ChangeMapPacket.
-     *
-     * @param map map to be loaded by the client
-     */
-    public ChangeMapPacket(WorldMap map) {
-        this.map = map;
-    }
+public record ChangeMapPacket(WorldMap map) implements OutgoingPacket {
 
     @Override
     public void write(DataBuffer buffer) throws UnsupportedEncodingException {

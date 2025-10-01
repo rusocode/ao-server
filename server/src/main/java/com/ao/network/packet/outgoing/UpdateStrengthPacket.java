@@ -9,19 +9,7 @@ import java.io.UnsupportedEncodingException;
  * Packet to tell the client their new strength value.
  */
 
-public class UpdateStrengthPacket implements OutgoingPacket {
-
-    protected byte strength;
-
-    /**
-     * Creates a new UpdateStrength packet
-     *
-     * @param strength the user's strength
-     */
-    public UpdateStrengthPacket(byte strength) {
-        super();
-        this.strength = strength;
-    }
+public record UpdateStrengthPacket(byte strength) implements OutgoingPacket {
 
     @Override
     public void write(DataBuffer buffer) throws UnsupportedEncodingException {

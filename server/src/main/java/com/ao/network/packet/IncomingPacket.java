@@ -13,8 +13,8 @@ public interface IncomingPacket {
      * @param buffer     buffer from which to read data
      * @param connection packet's connection container
      * @return true if the packet was complete, false otherwise
-     * @throws IndexOutOfBoundsException    if there is not enough data in the buffer
-     * @throws UnsupportedEncodingException if there is a string whose encoding it unknown
+     * @throws IndexOutOfBoundsException    if not enough data in the buffer
+     * @throws UnsupportedEncodingException if a string whose encoding it unknown
      */
     boolean handle(DataBuffer buffer, Connection connection) throws IndexOutOfBoundsException, UnsupportedEncodingException;
 

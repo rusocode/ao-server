@@ -288,7 +288,7 @@ public class WorldMap {
      * continue searching in the next "row" of tiles, starting at a top left. This method should be called from a synchronized
      * block.
      *
-     * @param lookAroundX tile's X value
+     * @param lookAroundX tile's x value
      * @param lookAroundY tile's Y value
      * @param canBeWater  whether the found tile can be water, or not
      * @param canBeLand   whether the found tile can be land, or not

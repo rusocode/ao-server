@@ -6,22 +6,12 @@ import com.ao.network.packet.OutgoingPacket;
 
 import java.io.UnsupportedEncodingException;
 
-public class ObjectCreatePacket implements OutgoingPacket {
-
-    private final Object object;
-    private final byte posX;
-    private final byte posY;
-
-    public ObjectCreatePacket(Object object, byte posX, byte posY) {
-        this.object = object;
-        this.posX = posX;
-        this.posY = posY;
-    }
+public record ObjectCreatePacket(Object object, byte x, byte y) implements OutgoingPacket {
 
     @Override
     public void write(DataBuffer buffer) throws UnsupportedEncodingException {
-        buffer.put(posX);
-        buffer.put(posY);
+        buffer.put(x);
+        buffer.put(y);
         buffer.putShort((short) object.getGraphic());
     }
 

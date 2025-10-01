@@ -5,13 +5,7 @@ import com.ao.network.packet.OutgoingPacket;
 
 import java.io.UnsupportedEncodingException;
 
-public class GuildChatPacket implements OutgoingPacket {
-
-    private final String message;
-
-    GuildChatPacket(String message) {
-        this.message = message;
-    }
+public record GuildChatPacket(String message) implements OutgoingPacket {
 
     @Override
     public void write(DataBuffer buffer) throws UnsupportedEncodingException {

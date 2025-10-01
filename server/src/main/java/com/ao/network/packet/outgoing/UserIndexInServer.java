@@ -11,18 +11,7 @@ import java.io.UnsupportedEncodingException;
  * TODO Is this packet needed at all? The user doesn't us the user index at all, and our server doesn't use user indexes anymore
  */
 
-public class UserIndexInServer implements OutgoingPacket {
-
-    private final short userIndex;
-
-    /**
-     * Creates a new UserIndexInServer
-     *
-     * @param userIndex index to tell to the client
-     */
-    public UserIndexInServer(short userIndex) {
-        this.userIndex = userIndex;
-    }
+public record UserIndexInServer(short userIndex) implements OutgoingPacket {
 
     @Override
     public void write(DataBuffer buffer) throws UnsupportedEncodingException {

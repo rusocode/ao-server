@@ -6,13 +6,7 @@ import com.ao.network.packet.OutgoingPacket;
 
 import java.io.UnsupportedEncodingException;
 
-public class UpdateUserStatsPacket implements OutgoingPacket {
-
-    private final UserCharacter user;
-
-    public UpdateUserStatsPacket(final UserCharacter user) {
-        this.user = user;
-    }
+public record UpdateUserStatsPacket(UserCharacter user) implements OutgoingPacket {
 
     @Override
     public void write(DataBuffer buffer) throws UnsupportedEncodingException {

@@ -10,22 +10,7 @@ import java.io.UnsupportedEncodingException;
  * Tells the client to change a spell's slot.
  */
 
-public class ChangeSpellSlotPacket implements OutgoingPacket {
-
-    private final Spell spell;
-    private final byte slot;
-
-    /**
-     * Creates a new ChangeSpellSlotPacket.
-     *
-     * @param spell spell to set at the given position (maybe null)
-     * @param slot  slot at which to set the item
-     */
-    public ChangeSpellSlotPacket(Spell spell, byte slot) {
-        super();
-        this.spell = spell;
-        this.slot = slot;
-    }
+public record ChangeSpellSlotPacket(Spell spell, byte slot) implements OutgoingPacket {
 
     @Override
     public void write(DataBuffer buffer) throws UnsupportedEncodingException {

@@ -6,27 +6,13 @@ import com.ao.network.packet.OutgoingPacket;
 
 import java.io.UnsupportedEncodingException;
 
-public class PlayWavePacket implements OutgoingPacket {
-
-    private final int wave;
-    private final Position position;
-
-    /**
-     * Creates PlayWavePacket.
-     *
-     * @param waveIndex wave index
-     * @param position  position of the map where the sound comes from
-     */
-    PlayWavePacket(int waveIndex, Position position) {
-        this.wave = waveIndex;
-        this.position = position;
-    }
+public record PlayWavePacket(int wave, Position position) implements OutgoingPacket {
 
     @Override
     public void write(DataBuffer buffer) throws UnsupportedEncodingException {
         buffer.put((byte) wave);
-        buffer.put((byte) position.getX());
-        buffer.put((byte) position.getY());
+        buffer.put(position.getX());
+        buffer.put(position.getY());
     }
 
 }

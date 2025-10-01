@@ -262,7 +262,7 @@ public class LoginServiceImpl implements LoginService {
 
         if (character.isParalyzed()) connection.send(new ParalizedPacket());
 
-        // TODO Check if map pos is valid, or disconnect user if invalid map
+        // TODO Check if map position is valid, or disconnect user if invalid map
 
         // TODO If position taken, find a suitable position
 

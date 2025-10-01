@@ -119,7 +119,7 @@ public class AreaServiceImpl implements AreaService {
             for (int y = minY; y <= maxY; y++) {
                 Character tileCharacter = map.getTile(x, y).getCharacter();
                 if (tileCharacter != null && tileCharacter instanceof LoggedUser) {
-                    // TODO Call MakeNpcChar(False, MapData(.Pos.Map, X, Y).UserIndex, NpcIndex, .Pos.Map, .Pos.X, .Pos.Y)
+                    // TODO Call MakeNpcChar(False, MapData(.Pos.Map, x, Y).UserIndex, NpcIndex, .Pos.Map, .Pos.x, .Pos.Y)
                 }
             }
         }

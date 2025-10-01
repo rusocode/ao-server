@@ -5,21 +5,7 @@ import com.ao.network.packet.OutgoingPacket;
 
 import java.io.UnsupportedEncodingException;
 
-public class PlayMidiPacket implements OutgoingPacket {
-
-    private final int midi;
-    private final int loops;
-
-    /**
-     * Creates a PlayMidiPacket.
-     *
-     * @param midiIndex index of the midi sound
-     * @param loops     number of times to be played. -1 for infinite time
-     */
-    public PlayMidiPacket(int midiIndex, int loops) {
-        this.midi = midiIndex;
-        this.loops = loops;
-    }
+public record PlayMidiPacket(int midi, int loops) implements OutgoingPacket {
 
     @Override
     public void write(DataBuffer buffer) throws UnsupportedEncodingException {
