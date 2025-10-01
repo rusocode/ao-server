@@ -102,6 +102,7 @@ public class AreaServiceImpl implements AreaService {
             connectionGroups.get(map.getId() - 1).add(user);
             // Tell the user he is in the map
             user.getConnection().send(new CharacterCreatePacket(character));
+            user.getConnection().send(new UserCharacterIndexInServerPacket(character.getCharIndex()));
             userEnteredRegion(map, areaInfo.getMinX(), areaInfo.getMinY(), maxX, maxY, user);
         } else npcEnteredRegion(map, areaInfo.getMinX(), areaInfo.getMinY(), maxX, maxY, (NpcCharacter) character);
 
