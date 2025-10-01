@@ -37,10 +37,10 @@ public class LoginNewCharacterPacket implements IncomingPacket {
         // - version: 3 bytes
         // - client hash: longitud fija conocida
         // - race, gender, archetype: 3 bytes
-        // - head: 4 bytes
+        // - head: 1 bytes
         // - mail: minimo 2 bytes (longitud) + contenido
         // - cityId: 1 byte
-        int minRequiredBytes = 2 + 1 + security.getPasswordHashLength() + 3 + security.getClientHashLength() + 3 + 4 + 2 + 1 + 1;
+        int minRequiredBytes = 2 + 1 + security.getPasswordHashLength() + 3 + security.getClientHashLength() + 3 + 1 + 2 + 1 + 1;
 
         LOGGER.info("incomingBytes={}, minRequiredBytes={}", incomingBytes, minRequiredBytes);
 
