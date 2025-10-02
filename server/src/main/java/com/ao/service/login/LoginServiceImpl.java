@@ -60,11 +60,9 @@ public class LoginServiceImpl implements LoginService {
     private final CharacterBodyService characterBodyService;
     private final MapService mapService;
     private final ActionExecutor<MapService> mapActionExecutor;
-
+    private final CharacterIndexManager charIndexManager;
     private String[] clientHashes;
     private String currentClientVersion;
-
-    private final CharacterIndexManager charIndexManager;
 
     @Inject
     public LoginServiceImpl(AccountDAO accDAO, UserCharacterDAO charDAO, ServerConfig config, UserService userService,
@@ -79,13 +77,12 @@ public class LoginServiceImpl implements LoginService {
         this.mapService = mapService;
         this.mapActionExecutor = mapActionExecutor;
         currentClientVersion = config.getVersion();
-
         charIndexManager = new CharacterIndexManager();
 
     }
 
     @Override
-    public void connectNewCharacter(ConnectedUser user, String nick, String password, Race race, Gender gender, byte bArchetype,
+    public void connectNewCharacter(ConnectedUser user, String nick, String password, int raceId, int genderId, byte bArchetype,
                                     int head, String mail, byte cityId, String clientHash, String version) throws LoginErrorException {
 
         checkClient(clientHash, version);
@@ -109,6 +106,18 @@ public class LoginServiceImpl implements LoginService {
             archetype = UserArchetype.get(bArchetype); // Solo archetype sigue siendo byte
         } catch (ArrayIndexOutOfBoundsException e) {
             throw new LoginErrorException(INVALID_ARCHETYPE_ERROR);
+        }
+
+        Race race = Race.findById(raceId);
+        if (race == null) {
+            LOGGER.warn("Invalid race ID: {}", raceId);
+            throw new LoginErrorException("Invalid race ID: " + raceId);
+        }
+
+        Gender gender = Gender.findById(genderId);
+        if (gender == null) {
+            LOGGER.warn("Invalid gender ID: {}", genderId);
+            throw new LoginErrorException("Invalid gender ID: " + genderId);
         }
 
         if (!characterBodyService.isValidHead(head, race, gender)) throw new LoginErrorException(INVALID_HEAD_ERROR);

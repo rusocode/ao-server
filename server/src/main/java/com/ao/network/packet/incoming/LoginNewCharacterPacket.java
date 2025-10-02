@@ -1,8 +1,6 @@
 package com.ao.network.packet.incoming;
 
 import com.ao.context.ApplicationContext;
-import com.ao.model.character.Gender;
-import com.ao.model.character.Race;
 import com.ao.model.user.ConnectedUser;
 import com.ao.network.Connection;
 import com.ao.network.DataBuffer;
@@ -16,9 +14,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.UnsupportedEncodingException;
 
-import static com.ao.service.login.LoginServiceImpl.INVALID_GENDER_ERROR;
-import static com.ao.service.login.LoginServiceImpl.INVALID_RACE_ERROR;
-
 public class LoginNewCharacterPacket implements IncomingPacket {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LoginNewCharacterPacket.class);
@@ -26,7 +21,7 @@ public class LoginNewCharacterPacket implements IncomingPacket {
     private static final LoginService service = ApplicationContext.getInstance(LoginService.class);
     private static final SecurityManager security = ApplicationContext.getInstance(SecurityManager.class);
 
-    private static final int STRING_LENGTH_BYTES = 2; // The nick and mail
+    private static final int STRING_LENGTH_BYTES = 2; // For the nick and mail
     private static final int MIN_NICK_BYTES = 1;
     private static final int MIN_MAIL_BYTES = 1;
     private static final int VERSION_BYTES = 3;
@@ -39,102 +34,57 @@ public class LoginNewCharacterPacket implements IncomingPacket {
     @Override
     public boolean handle(DataBuffer buffer, Connection connection) throws ArrayIndexOutOfBoundsException, UnsupportedEncodingException {
 
-        int incomingBytes = buffer.getReadableBytes();
+        if (!isValidBufferSize(buffer)) return false;
 
-        int minRequiredBytes = STRING_LENGTH_BYTES + MIN_NICK_BYTES
+        String nick = buffer.getUTF8String();
+        String password = buffer.getUTF8StringFixed(security.getPasswordHashLength());
+        String version = buffer.get() + "." + buffer.get() + "." + buffer.get(); // FIXME On the login these are shorts
+        String clientHash = buffer.getUTF8StringFixed(security.getClientHashLength());
+        byte raceId = buffer.get();
+        byte genderId = buffer.get();
+        byte archetype = buffer.get();
+        int head = buffer.get();
+        String mail = buffer.getUTF8String();
+        byte cityId = buffer.get();
+
+        LOGGER.info("nick={}, password={}, version={}, clientHash={}, raceId={}, genderId={}, archetype={}, head={}, mail={}, cityId={}", nick, password, version, clientHash, raceId, genderId, archetype, head, mail, cityId);
+
+        try {
+            service.connectNewCharacter((ConnectedUser) connection.getUser(), nick, password, raceId, genderId, archetype, head, mail, cityId, clientHash, version);
+        } catch (LoginErrorException e) {
+            connection.send(new ErrorMessagePacket(e.getMessage()));
+            connection.disconnect();
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean isValidBufferSize(DataBuffer buffer) {
+        int incomingBytes = buffer.getReadableBytes();
+        int minRequiredBytes = calculateMinRequiredBytes();
+
+        LOGGER.debug("incomingBytes={}, minRequiredBytes={}", incomingBytes, minRequiredBytes);
+
+        if (incomingBytes < minRequiredBytes) {
+            LOGGER.error("Not enough bytes to read!");
+            return false;
+        }
+
+        return true;
+    }
+
+    private int calculateMinRequiredBytes() {
+        return STRING_LENGTH_BYTES + MIN_NICK_BYTES
                 + security.getPasswordHashLength()
                 + VERSION_BYTES
+                + security.getClientHashLength()
                 + RACE_BYTES
                 + GENDER_BYTES
                 + ARCHETYPE_BYTES
                 + HEAD_BYTES
                 + STRING_LENGTH_BYTES + MIN_MAIL_BYTES
                 + CITY_ID_BYTES;
-
-        LOGGER.info("incomingBytes={}, minRequiredBytes={}", incomingBytes, minRequiredBytes);
-
-        // Ensure enough data is available to read
-        if (incomingBytes < minRequiredBytes) {
-            LOGGER.error("Not enough bytes to read!");
-            return false;
-        }
-
-        String nick = buffer.getUTF8String();
-        String password = buffer.getUTF8StringFixed(security.getPasswordHashLength());
-        String version = buffer.get() + "." + buffer.get() + "." + buffer.get(); // FIXME On the login these are shorts
-        String clientHash = buffer.getUTF8StringFixed(security.getClientHashLength());
-        byte race = buffer.get();
-        byte gender = buffer.get();
-        byte archetype = buffer.get();
-        int head = buffer.get();
-        String mail = buffer.getUTF8String();
-        byte cityId = buffer.get();
-
-        Race characterRace = mapRaceFromClientId(race);
-        Gender characterGender = mapGenderFromClientId(gender);
-
-        LOGGER.info("nick={}, password={}, version={}, clientHash={}, race={}, gender={}, archetype={}, head={}, mail={}, cityId={}", nick, password, version, clientHash, race, gender, archetype, head, mail, cityId);
-
-        try {
-            service.connectNewCharacter((ConnectedUser) connection.getUser(), nick, password, characterRace, characterGender, archetype, head, mail, cityId, clientHash, version);
-        } catch (LoginErrorException e) {
-            loginError(connection, e.getMessage());
-        }
-
-        return true;
-    }
-
-    /**
-     * Notifies the client about the error and closes the connection.
-     *
-     * @param connection connection where the login error has occurred
-     * @param cause      error cause
-     */
-    private void loginError(Connection connection, String cause) throws UnsupportedEncodingException {
-        connection.send(new ErrorMessagePacket(cause));
-        connection.disconnect();
-    }
-
-    /**
-     * Mapea el ID de raza del cliente al enum Race del servidor
-     */
-    private Race mapRaceFromClientId(byte clientRaceId) {
-        switch (clientRaceId) {
-            case 1:
-                return Race.HUMAN;      // Cliente: HUMAN(1)
-            case 2:
-                return Race.ELF;        // Cliente: ELF(2)
-            case 3:
-                return Race.DARK_ELF;   // Cliente: DROW_ELF(3)
-            case 4:
-                return Race.GNOME;      // Cliente: GNOME(4)
-            case 5:
-                return Race.DWARF;      // Cliente: DWARF(5)
-            default:
-                try {
-                    throw new LoginErrorException(INVALID_RACE_ERROR);
-                } catch (LoginErrorException e) {
-                    throw new RuntimeException(e);
-                }
-        }
-    }
-
-    /**
-     * Mapea el ID de género del cliente al enum Gender del servidor
-     */
-    private Gender mapGenderFromClientId(byte clientGenderId) {
-        switch (clientGenderId) {
-            case 1:
-                return Gender.MALE;     // Cliente: MALE (índice 0, envía 1)
-            case 2:
-                return Gender.FEMALE;   // Cliente: FEMALE (índice 1, envía 2)
-            default:
-                try {
-                    throw new LoginErrorException(INVALID_GENDER_ERROR);
-                } catch (LoginErrorException e) {
-                    throw new RuntimeException(e);
-                }
-        }
     }
 
 }

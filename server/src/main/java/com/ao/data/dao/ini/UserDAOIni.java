@@ -174,22 +174,6 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
     @Inject
     public UserDAOIni(@Named("CharfilesPath") String charfilesPath) {
         this.charfilesPath = charfilesPath;
-        /*
-        // Crea un Path a partir del string configurado (puede ser relativo o absoluto)
-        Path path = Paths.get(charfilesPath);
-        // Si la ruta es relativa, la convierte respecto a la raiz del proyecto
-        if (!path.isAbsolute()) {
-            // Obtiene el directorio actual absoluto (en este caso, el del modulo "server")
-            Path moduleDir = Paths.get("").toAbsolutePath().normalize(); // .../ao-server/server
-            // Sube un nivel al padre (la raiz del proyecto "ao-server")
-            Path projectRoot = moduleDir.getParent();                    // .../ao-server
-            // Combina la raiz del proyecto con la ruta relativa configurada (p. ej. "charfiles" → "ao-server/charfiles")
-            if (projectRoot != null) path = projectRoot.resolve(path);
-        }
-        // Convierte el Path resultante a una ruta absoluta normalizada y la guarda en el campo
-        this.charfilesPath = path.toAbsolutePath().normalize().toString();
-        /* Si charfilesPath es relativo, se reinterpreta contra la raiz del proyecto (no contra el working dir del modulo), y
-         * luego se guarda como ruta absoluta normalizada; si ya era absoluto, se respeta y solo se normaliza. */
     }
 
     @Override
@@ -404,8 +388,8 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
         Reputation reputation = new ReputationImpl(assassinPoints, banditPoints, bourgeoisPoints, thiefPoints, noblePoints, belongsToFaction);
 
         // TODO Por que necesita obtener el valor de la clave a traves del getString()?
-        Race race = Race.get(Byte.parseByte(IniUtils.getString(ini, INIT_HEADER + "." + RACE_KEY, "0")));
-        Gender gender = Gender.get(Byte.parseByte(IniUtils.getString(ini, INIT_HEADER + "." + GENDER_KEY, "0")));
+        Race race = Race.findById(Byte.parseByte(IniUtils.getString(ini, INIT_HEADER + "." + RACE_KEY, "0")));
+        Gender gender = Gender.findById(Byte.parseByte(IniUtils.getString(ini, INIT_HEADER + "." + GENDER_KEY, "0")));
         Archetype archetype = UserArchetype.get(Byte.parseByte(IniUtils.getString(ini, INIT_HEADER + "." + ARCHETYPE_KEY, "0"))).getArchetype();
         boolean poisoned = IniUtils.getInt(ini, FLAGS_HEADER + "." + POISONED_KEY, 0) == 1;
         boolean paralyzed = IniUtils.getInt(ini, FLAGS_HEADER + "." + PARALYZED_KEY, 0) == 1;
