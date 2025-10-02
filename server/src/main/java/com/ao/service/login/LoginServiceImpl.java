@@ -82,7 +82,7 @@ public class LoginServiceImpl implements LoginService {
     }
 
     @Override
-    public void connectNewCharacter(ConnectedUser user, String nick, String password, int raceId, int genderId, byte bArchetype,
+    public void connectNewCharacter(ConnectedUser user, String nick, String password, int raceId, int genderId, byte archetypeId,
                                     int head, String mail, byte cityId, String clientHash, String version) throws LoginErrorException {
 
         checkClient(clientHash, version);
@@ -100,12 +100,10 @@ public class LoginServiceImpl implements LoginService {
         City city = mapService.getCity(cityId);
         if (city == null) throw new LoginErrorException(INVALID_CITY_ERROR);
 
-        // Valida archetype
-        UserArchetype archetype;
-        try {
-            archetype = UserArchetype.get(bArchetype); // Solo archetype sigue siendo byte
-        } catch (ArrayIndexOutOfBoundsException e) {
-            throw new LoginErrorException(INVALID_ARCHETYPE_ERROR);
+        UserArchetype archetype = UserArchetype.findById(archetypeId);
+        if (archetype == null) {
+            LOGGER.warn("Invalid archetype ID: {}", archetypeId);
+            throw new LoginErrorException("Invalid archetype ID: " + archetypeId);
         }
 
         Race race = Race.findById(raceId);
@@ -123,16 +121,16 @@ public class LoginServiceImpl implements LoginService {
         if (!characterBodyService.isValidHead(head, race, gender)) throw new LoginErrorException(INVALID_HEAD_ERROR);
 
         // Get default body
-        int body = characterBodyService.getBody(race, gender); // Usar directamente
+        int body = characterBodyService.getBody(race, gender);
         if (body == 0) throw new LoginErrorException(INVALID_BODY_ERROR);
 
         // Build character
         try {
             userCharacterBuilder.withName(nick)
                     .withEmail(mail)
-                    .withGender(gender) // Usar directamente
+                    .withGender(gender)
                     .withCity(city)
-                    .withRace(race) // Usar directamente
+                    .withRace(race)
                     .withArchetype(archetype)
                     .withHead(head)
                     .withBody(body);

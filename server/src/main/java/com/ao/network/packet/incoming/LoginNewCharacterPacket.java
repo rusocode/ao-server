@@ -21,9 +21,9 @@ public class LoginNewCharacterPacket implements IncomingPacket {
     private static final LoginService service = ApplicationContext.getInstance(LoginService.class);
     private static final SecurityManager security = ApplicationContext.getInstance(SecurityManager.class);
 
-    private static final int STRING_LENGTH_BYTES = 2; // For the nick and mail
-    private static final int MIN_NICK_BYTES = 1;
-    private static final int MIN_MAIL_BYTES = 1;
+    private static final int STRING_LENGTH_BYTES = 2;
+    private static final int MIN_NICK_BYTES = STRING_LENGTH_BYTES + 1;
+    private static final int MIN_MAIL_BYTES = STRING_LENGTH_BYTES + 1;
     private static final int VERSION_BYTES = 3;
     private static final int RACE_BYTES = 1;
     private static final int GENDER_BYTES = 1;
@@ -42,15 +42,15 @@ public class LoginNewCharacterPacket implements IncomingPacket {
         String clientHash = buffer.getUTF8StringFixed(security.getClientHashLength());
         byte raceId = buffer.get();
         byte genderId = buffer.get();
-        byte archetype = buffer.get();
-        int head = buffer.get();
+        byte archetypeId = buffer.get();
+        int headId = buffer.get();
         String mail = buffer.getUTF8String();
         byte cityId = buffer.get();
 
-        LOGGER.info("nick={}, password={}, version={}, clientHash={}, raceId={}, genderId={}, archetype={}, head={}, mail={}, cityId={}", nick, password, version, clientHash, raceId, genderId, archetype, head, mail, cityId);
+        LOGGER.info("nick={}, password={}, version={}, clientHash={}, raceId={}, genderId={}, archetypeId={}, headId={}, mail={}, cityId={}", nick, password, version, clientHash, raceId, genderId, archetypeId, headId, mail, cityId);
 
         try {
-            service.connectNewCharacter((ConnectedUser) connection.getUser(), nick, password, raceId, genderId, archetype, head, mail, cityId, clientHash, version);
+            service.connectNewCharacter((ConnectedUser) connection.getUser(), nick, password, raceId, genderId, archetypeId, headId, mail, cityId, clientHash, version);
         } catch (LoginErrorException e) {
             connection.send(new ErrorMessagePacket(e.getMessage()));
             connection.disconnect();
@@ -75,7 +75,7 @@ public class LoginNewCharacterPacket implements IncomingPacket {
     }
 
     private int calculateMinRequiredBytes() {
-        return STRING_LENGTH_BYTES + MIN_NICK_BYTES
+        return MIN_NICK_BYTES
                 + security.getPasswordHashLength()
                 + VERSION_BYTES
                 + security.getClientHashLength()
@@ -83,7 +83,7 @@ public class LoginNewCharacterPacket implements IncomingPacket {
                 + GENDER_BYTES
                 + ARCHETYPE_BYTES
                 + HEAD_BYTES
-                + STRING_LENGTH_BYTES + MIN_MAIL_BYTES
+                + MIN_MAIL_BYTES
                 + CITY_ID_BYTES;
     }
 

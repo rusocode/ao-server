@@ -26,7 +26,7 @@ public class UserArchetypeTest {
     @Test
     public void testValueOf() {
         Archetype archetype = ArchetypeLocator.getArchetype(AssasinArchetype.class);
-        assertThat(UserArchetype.ASSASIN).isSameAs(UserArchetype.valueOf(archetype));
+        assertThat(UserArchetype.ASSASIN).isSameAs(UserArchetype.findByArchetype(archetype));
     }
 
 }

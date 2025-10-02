@@ -390,7 +390,7 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
         // TODO Por que necesita obtener el valor de la clave a traves del getString()?
         Race race = Race.findById(Byte.parseByte(IniUtils.getString(ini, INIT_HEADER + "." + RACE_KEY, "0")));
         Gender gender = Gender.findById(Byte.parseByte(IniUtils.getString(ini, INIT_HEADER + "." + GENDER_KEY, "0")));
-        Archetype archetype = UserArchetype.get(Byte.parseByte(IniUtils.getString(ini, INIT_HEADER + "." + ARCHETYPE_KEY, "0"))).getArchetype();
+        Archetype archetype = UserArchetype.findById(Byte.parseByte(IniUtils.getString(ini, INIT_HEADER + "." + ARCHETYPE_KEY, "0"))).getArchetype();
         boolean poisoned = IniUtils.getInt(ini, FLAGS_HEADER + "." + POISONED_KEY, 0) == 1;
         boolean paralyzed = IniUtils.getInt(ini, FLAGS_HEADER + "." + PARALYZED_KEY, 0) == 1;
 
