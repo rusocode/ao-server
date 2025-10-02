@@ -1,8 +1,9 @@
-package com.ao.service;
+package com.ao.service.npc;
 
 import com.ao.data.dao.NpcCharacterDAO;
 import com.ao.data.dao.exception.DAOException;
 import com.ao.model.character.npc.properties.Npc;
+import com.ao.service.NpcService;
 import com.google.inject.Inject;
 
 /**

@@ -4,6 +4,7 @@ import com.ao.data.dao.CityDAO;
 import com.ao.data.dao.WorldMapDAO;
 import com.ao.model.map.Tile;
 import com.ao.model.map.WorldMap;
+import com.ao.service.AreaService;
 import com.ao.service.MapService;
 import org.junit.jupiter.api.Test;
 

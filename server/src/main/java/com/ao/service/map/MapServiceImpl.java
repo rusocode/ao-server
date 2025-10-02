@@ -8,6 +8,7 @@ import com.ao.model.map.City;
 import com.ao.model.map.Heading;
 import com.ao.model.map.Position;
 import com.ao.model.map.WorldMap;
+import com.ao.service.AreaService;
 import com.ao.service.MapService;
 import com.google.inject.Inject;
 

@@ -2,6 +2,7 @@ package com.ao.service;
 
 import com.ao.model.character.Gender;
 import com.ao.model.character.Race;
+import com.ao.service.character.CharacterBodyServiceImpl;
 import com.ao.utils.RangeParser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

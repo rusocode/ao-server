@@ -13,6 +13,7 @@ import com.ao.model.object.Door;
 import com.ao.model.object.Object;
 import com.ao.network.Connection;
 import com.ao.network.packet.outgoing.*;
+import com.ao.service.AreaService;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 

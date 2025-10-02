@@ -1,4 +1,4 @@
-package com.ao.service.map;
+package com.ao.service;
 
 import com.ao.model.character.Character;
 import com.ao.model.map.Heading;

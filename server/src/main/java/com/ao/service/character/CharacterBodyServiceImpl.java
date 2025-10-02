@@ -1,7 +1,8 @@
-package com.ao.service;
+package com.ao.service.character;
 
 import com.ao.model.character.Gender;
 import com.ao.model.character.Race;
+import com.ao.service.CharacterBodyService;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
