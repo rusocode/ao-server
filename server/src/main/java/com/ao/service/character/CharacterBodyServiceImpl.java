@@ -58,61 +58,28 @@ public record CharacterBodyServiceImpl(List<Integer> headsDarkelfMale, List<Inte
         this.gnomeFemaleBody = gnomeFemaleBody;
         this.humanMaleBody = humanMaleBody;
         this.humanFemaleBody = humanFemaleBody;
-
     }
 
     @Override
     public boolean isValidHead(int head, Race race, Gender gender) {
-        switch (race) {
-            case DARK_ELF:
-                if (gender == Gender.MALE) return headsDarkelfMale.contains(head);
-                else return headsDarkelfFemale.contains(head);
-            case DWARF:
-                if (gender == Gender.MALE) return headsDwarfMale.contains(head);
-                else return headsDwarfFemale.contains(head);
-            case ELF:
-                if (gender == Gender.MALE) return headsElfMale.contains(head);
-                else return headsElfFemale.contains(head);
-            case GNOME:
-                if (gender == Gender.MALE) return headsGnomeMale.contains(head);
-                else return headsGnomeFemale.contains(head);
-            case HUMAN:
-                if (gender == Gender.MALE) return headsHumanMale.contains(head);
-                else return headsHumanFemale.contains(head);
-            default:
-                break;
-        }
-        return false;
+        return switch (race) {
+            case DARK_ELF -> gender == Gender.MALE ? headsDarkelfMale.contains(head) : headsDarkelfFemale.contains(head);
+            case DWARF -> gender == Gender.MALE ? headsDwarfMale.contains(head) : headsDwarfFemale.contains(head);
+            case ELF -> gender == Gender.MALE ? headsElfMale.contains(head) : headsElfFemale.contains(head);
+            case GNOME -> gender == Gender.MALE ? headsGnomeMale.contains(head) : headsGnomeFemale.contains(head);
+            case HUMAN -> gender == Gender.MALE ? headsHumanMale.contains(head) : headsHumanFemale.contains(head);
+        };
     }
 
     @Override
     public int getBody(Race race, Gender gender) {
-        int body = 0;
-        switch (race) {
-            case DARK_ELF:
-                if (gender == Gender.MALE) body = darkElfMaleBody;
-                else body = darkElfFemaleBody;
-                break;
-            case DWARF:
-                if (gender == Gender.MALE) body = dwarfMaleBody;
-                else body = dwarfFemaleBody;
-                break;
-            case ELF:
-                if (gender == Gender.MALE) body = elfMaleBody;
-                else body = elfFemaleBody;
-                break;
-            case GNOME:
-                if (gender == Gender.MALE) body = gnomeMaleBody;
-                else body = gnomeFemaleBody;
-                break;
-            case HUMAN:
-                if (gender == Gender.MALE) body = humanMaleBody;
-                else body = humanFemaleBody;
-                break;
-            default:
-                break;
-        }
-        return body;
+        return switch (race) {
+            case DARK_ELF -> gender == Gender.MALE ? darkElfMaleBody : darkElfFemaleBody;
+            case DWARF -> gender == Gender.MALE ? dwarfMaleBody : dwarfFemaleBody;
+            case ELF -> gender == Gender.MALE ? elfMaleBody : elfFemaleBody;
+            case GNOME -> gender == Gender.MALE ? gnomeMaleBody : gnomeFemaleBody;
+            case HUMAN -> gender == Gender.MALE ? humanMaleBody : humanFemaleBody;
+        };
     }
 
 }
