@@ -13,7 +13,7 @@ import java.util.List;
 public class RangeParser {
 
     private static final String CONFIG_VALUES_DELIMITER = ",";
-    private static final String CONFIG_RANGE_INDICATOR = "-";
+    private static final String CONFIG_RANGE_INDICATOR = "-"; // TODO Se podria nombrar a delimitador
 
     /**
      * Parses the string in to the appropriate extensive list of integers.

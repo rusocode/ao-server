@@ -89,7 +89,7 @@ public class CharacterBodyServiceTest {
     }
 
     @Test
-    public void GetBody() {
+    public void testGetBody() {
         assertThat(characterBodyService.getBody(Race.DARK_ELF, Gender.MALE)).isEqualTo(darkelfMaleBody);
         assertThat(characterBodyService.getBody(Race.DARK_ELF, Gender.FEMALE)).isEqualTo(darkelfFemaleBody);
         assertThat(characterBodyService.getBody(Race.DWARF, Gender.MALE)).isEqualTo(dwarfMaleBody);

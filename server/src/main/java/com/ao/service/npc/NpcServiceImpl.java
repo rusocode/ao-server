@@ -6,10 +6,6 @@ import com.ao.model.character.npc.properties.Npc;
 import com.ao.service.NpcService;
 import com.google.inject.Inject;
 
-/**
- * Default npc service implementation.
- */
-
 public class NpcServiceImpl implements NpcService {
 
     private final NpcCharacterDAO npcDAO;

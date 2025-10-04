@@ -300,12 +300,12 @@ public class LoginServiceImpl implements LoginService {
     }
 
     /**
-     * Checks if the given hash matches any of the valid hashes and if the given version is up to date.
+     * Checks if the given clientHash matches any of the valid hashes and if the given version is up to date.
      *
-     * @param hash    hash to check
-     * @param version client's version
+     * @param clientHash clientHash to check
+     * @param version    client's version
      */
-    private void checkClient(String hash, String version) throws LoginErrorException {
+    private void checkClient(String clientHash, String version) throws LoginErrorException {
 
         if (!currentClientVersion.equals(version))
             throw new LoginErrorException(String.format(CLIENT_OUT_OF_DATE_ERROR_FORMAT, currentClientVersion));
@@ -317,7 +317,7 @@ public class LoginServiceImpl implements LoginService {
         if (clientHashes.length < 1) return;
 
         for (String validHash : clientHashes)
-            if (hash.equals(validHash)) return;
+            if (clientHash.equals(validHash)) return;
 
         throw new LoginErrorException(CORRUPTED_CLIENT_ERROR);
     }
