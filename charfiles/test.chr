@@ -1,0 +1,118 @@
+[INIT]
+Genero = 0
+Raza = 0
+Map = 1
+Clase = 0
+Heading = 2
+Arma = 2
+Escudo = 2
+Casco = 2
+UpTime = 0
+Head = 1
+Body = 1
+Position = 1-58-45
+
+[FLAGS]
+Ban = 0
+Muerto = 0
+Escondido = 0
+Sed = 0
+Navegando = 0
+Envenenado = 0
+Paralizado = 0
+
+[CONSEJO]
+PERTENECE = 0
+PERTENECECAOS = 0
+
+[COUNTERS]
+Pena = 0
+
+[FACCIONES]
+EjercitoReal = 0
+EjercitoCaos = 0
+CrimMatados = 0
+rArCaos = 0
+rArReal = 0
+rExReal = 0
+recCaos = 0
+recReal = 0
+Reenlistadas = 0
+NivelIngreso = 0
+FechaIngreso = No ingreso a ninguna faccion
+MatadosIngreso = 0
+NextRecompensa = 0
+
+[ATRIBUTOS]
+AT1 = 15
+AT2 = 15
+AT4 = 15
+AT5 = 16
+AT3 = 16
+
+[SKILLS]
+SK2 = 0
+SK3 = 0
+SK4 = 0
+SK5 = 0
+SK6 = 0
+SK7 = 0
+SK8 = 0
+SK9 = 0
+SK10 = 0
+SK11 = 0
+SK12 = 0
+SK13 = 0
+SK14 = 0
+SK15 = 0
+SK16 = 0
+SK17 = 0
+SK18 = 0
+SK19 = 0
+SK20 = 0
+SK21 = 0
+
+[STATS]
+SkillPtsLibres = 10
+GLD = 0
+BANCO = 0
+ELV = 1
+EXP = 0
+
+[MUERTES]
+UserMuertes = 0
+NpcsMuertes = 0
+
+[BancoInventory]
+CantidadItems = 0
+
+[Inventory]
+WeaponEqpSlot = 0
+ArmourEqpSlot = 0
+CascoEqpSlot = 0
+BarconEqpSlot = 0
+MunicionSlot = 0
+AnilloSlot = 0
+
+[REP]
+Asesino = 0
+Bandido = 0
+Burguesia = 0
+Ladrones = 0
+Nobles = 1000
+
+[MASCOTAS]
+MAS1 = 0
+MAS2 = 0
+MAS3 = 0
+
+[RESEARCH]
+TrainingTime = 0
+
+[GUILD]
+GUILDINDEX = 0
+AspiranteA = 0
+
+[PENAS]
+Cant = 0
+

@@ -1,7 +1,5 @@
 package com.ao.service;
 
-import com.ao.model.character.Gender;
-import com.ao.model.character.Race;
 import com.ao.model.user.ConnectedUser;
 import com.ao.service.login.LoginErrorException;
 
