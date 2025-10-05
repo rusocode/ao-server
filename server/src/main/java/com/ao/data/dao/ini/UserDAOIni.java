@@ -5,11 +5,9 @@ import com.ao.data.dao.UserCharacterDAO;
 import com.ao.data.dao.exception.DAOException;
 import com.ao.data.dao.exception.NameAlreadyTakenException;
 import com.ao.model.character.*;
-import com.ao.model.character.Character;
 import com.ao.model.character.archetype.Archetype;
 import com.ao.model.character.archetype.UserArchetype;
 import com.ao.model.map.City;
-import com.ao.model.map.Heading;
 import com.ao.model.map.Position;
 import com.ao.model.user.Account;
 import com.ao.model.user.AccountImpl;
@@ -217,7 +215,7 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
     }
 
     @Override
-    public Account create(String username, String password, String mail) throws DAOException, NameAlreadyTakenException {
+    public Account create(String username, String password, String mail) throws DAOException {
 
         // Throws exception if the username already exists
         if (exists(username)) throw new NameAlreadyTakenException();
@@ -246,124 +244,6 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
         if (!charfile.exists()) return;
         boolean success = charfile.delete();
         if (!success) LOGGER.error("{} deletion failed.", username);
-    }
-
-    @Override
-    public UserCharacter create(ConnectedUser user, String name, Race race, Gender gender, UserArchetype archetype, int head,
-                                City city, byte strength, byte dexterity, byte intelligence, byte charisma, byte constitution,
-                                int initialAvailableSkills, int body)
-            throws DAOException, NameAlreadyTakenException {
-
-        INIConfiguration character = new INIConfiguration();
-
-        character.setProperty(INIT_HEADER + "." + GENDER_KEY, gender.ordinal());
-        character.setProperty(INIT_HEADER + "." + RACE_KEY, race.ordinal());
-        character.setProperty(INIT_HEADER + "." + MAP_KEY, city.map());
-        character.setProperty(INIT_HEADER + "." + ARCHETYPE_KEY, archetype.ordinal());
-        character.setProperty(INIT_HEADER + "." + HEADING_KEY, Heading.SOUTH.ordinal());
-        character.setProperty(INIT_HEADER + "." + WEAPON_KEY, NO_WEAPON);
-        character.setProperty(INIT_HEADER + "." + SHIELD_KEY, NO_SHIELD);
-        character.setProperty(INIT_HEADER + "." + HELMET_KEY, NO_HELMET);
-        character.setProperty(INIT_HEADER + "." + UPTIME_KEY, 0);
-        character.setProperty(INIT_HEADER + "." + HEAD_KEY, head);
-        character.setProperty(INIT_HEADER + "." + BODY_KEY, body);
-
-        String position = city.map() + "-" + city.x() + "-" + city.y();
-        character.setProperty(INIT_HEADER + "." + POSITION_KEY, position);
-
-        // TODO Save last ip?
-
-        character.setProperty(FLAGS_HEADER + "." + BANNED_KEY, 0);
-        character.setProperty(FLAGS_HEADER + "." + DEAD_KEY, 0);
-        character.setProperty(FLAGS_HEADER + "." + HIDDEN_KEY, 0);
-        character.setProperty(FLAGS_HEADER + "." + THIRSTY_KEY, 0);
-        character.setProperty(FLAGS_HEADER + "." + SAILING_KEY, 0);
-        character.setProperty(FLAGS_HEADER + "." + POISONED_KEY, 0);
-        character.setProperty(FLAGS_HEADER + "." + PARALYZED_KEY, 0);
-
-        character.setProperty(COUNCIL_HEADER + "." + BELONGS_KEY, 0);
-        character.setProperty(COUNCIL_HEADER + "." + BELONGS_TO_CHAOS_COUNCIL_KEY, 0);
-
-        character.setProperty(COUNTERS_HEADER + "." + LEFT_TIME_IN_JAIL_KEY, 0);
-
-        character.setProperty(FACTIONS_HEADER + "." + BELONGS_TO_ARMY_KEY, 0);
-        character.setProperty(FACTIONS_HEADER + "." + BELONGS_TO_CHAOS_KEY, 0);
-        character.setProperty(FACTIONS_HEADER + "." + BELONGS_TO_CHAOS_KEY, 0);
-        character.setProperty(FACTIONS_HEADER + "." + CRIMINALS_KILLED_KEY, 0);
-        character.setProperty(FACTIONS_HEADER + "." + CHAOS_ARMOR_RECEIVED_KEY, 0);
-        character.setProperty(FACTIONS_HEADER + "." + ARMY_ARMOR_RECEIVED_KEY, 0);
-        character.setProperty(FACTIONS_HEADER + "." + CHAOS_ARMOR_RECEIVED_KEY, 0);
-        character.setProperty(FACTIONS_HEADER + "." + ARMY_EXPERIENCE_RECEIVED_KEY, 0);
-        character.setProperty(FACTIONS_HEADER + "." + CHAOS_GRADE_KEY, 0);
-        character.setProperty(FACTIONS_HEADER + "." + ARMY_GRADE_KEY, 0);
-        character.setProperty(FACTIONS_HEADER + "." + REENLISTMENTS_KEY, 0);
-        character.setProperty(FACTIONS_HEADER + "." + ENLISTMENT_LEVEL_KEY, 0);
-        character.setProperty(FACTIONS_HEADER + "." + ENLISTMENT_DATE_KEY, NO_ENLISTMENT_KEY_MESSAGE);
-        character.setProperty(FACTIONS_HEADER + "." + ENLISTMENT_KILLS_KEY, 0);
-        character.setProperty(FACTIONS_HEADER + "." + NEXT_REWARD_KEY, 0);
-
-        character.setProperty(ATTRIBUTES_HEADER + "." + String.format(ATTRIBUTE_FORMAT_KEY, Attribute.STRENGTH.ordinal() + 1), strength);
-        character.setProperty(ATTRIBUTES_HEADER + "." + String.format(ATTRIBUTE_FORMAT_KEY, Attribute.DEXTERITY.ordinal() + 1), dexterity);
-        character.setProperty(ATTRIBUTES_HEADER + "." + String.format(ATTRIBUTE_FORMAT_KEY, Attribute.CHARISMA.ordinal() + 1), charisma);
-        character.setProperty(ATTRIBUTES_HEADER + "." + String.format(ATTRIBUTE_FORMAT_KEY, Attribute.CONSTITUTION.ordinal() + 1), constitution);
-        character.setProperty(ATTRIBUTES_HEADER + "." + String.format(ATTRIBUTE_FORMAT_KEY, Attribute.INTELLIGENCE.ordinal() + 1), intelligence);
-
-        for (byte i = 1; i < Skill.values().length; i++)
-            character.setProperty(SKILLS_HEADER + "." + String.format(SKILL_KEY_FORMAT, i + 1), 0);
-
-        character.setProperty(STATS_HEADER + "." + FREE_SKILL_POINTS_KEY, initialAvailableSkills);
-
-        character.setProperty(STATS_HEADER + "." + GOLD_KEY, 0);
-        character.setProperty(STATS_HEADER + "." + DEPOSITED_GOLD_KEY, 0);
-        character.setProperty(STATS_HEADER + "." + LEVEL_KEY, 1);
-        character.setProperty(STATS_HEADER + "." + EXPERIENCE_KEY, 0);
-
-        // TODO Assign HP, mana, stamina, and free skill points
-        // TODO Assign experience to level up
-
-        character.setProperty(KILLS_HEADER + "." + KILLED_USERS_KEY, 0);
-        character.setProperty(KILLS_HEADER + "." + KILLED_NPCS_KEY, 0);
-
-        character.setProperty(BANK_INVENTORY_HEADER + "." + ITEMS_AMOUNT_KEY, 0);
-
-        // TODO Put initial items
-        character.setProperty(INVENTORY_HEADER + "." + EQUIPPED_WEAPON_SLOT_KEY, 0);
-        character.setProperty(INVENTORY_HEADER + "." + EQUIPPED_ARMOUR_SLOT_KEY, 0);
-        character.setProperty(INVENTORY_HEADER + "." + EQUIPPED_HELMET_SLOT_KEY, 0);
-        character.setProperty(INVENTORY_HEADER + "." + EQUIPPED_BOAT_SLOT_KEY, 0);
-        character.setProperty(INVENTORY_HEADER + "." + MUNITION_SLOT_KEY, 0);
-        character.setProperty(INVENTORY_HEADER + "." + RING_SLOT_KEY, 0);
-
-        character.setProperty(REPUTATION_HEADER + "." + ASSASSIN_POINTS_KEY, 0);
-        character.setProperty(REPUTATION_HEADER + "." + BANDIT_POINTS_KEY, 0);
-        character.setProperty(REPUTATION_HEADER + "." + BOURGEOIS_POINTS_KEY, 0);
-        character.setProperty(REPUTATION_HEADER + "." + THIEF_POINTS_KEY, 0);
-        character.setProperty(REPUTATION_HEADER + "." + NOBLE_POINTS_KEY, INITIAL_NOBLE_POINTS);
-
-        // TODO Assign initial spells
-
-        for (byte i = 1; i < MAX_PETS_AMOUNT + 1; i++)
-            character.setProperty(PETS_HEADER + "." + String.format(PET_KEY_FORMAT, i), 0);
-
-        character.setProperty(RESEARCH_HEADER + "." + TRAINING_TIME_KEY, 0);
-
-        character.setProperty(GUILD_HEADER + "." + GUILD_INDEX_KEY, 0);
-        character.setProperty(GUILD_HEADER + "." + APPLICANT_TO_KEY, 0);
-
-        character.setProperty(CRIMINAL_RECORD_HEADER + "." + RECORDS_AMOUNT_KEY, 0);
-
-        Reputation rep = new ReputationImpl(0, 0, 0, 0, INITIAL_NOBLE_POINTS, false);
-
-        try (Writer writer = new BufferedWriter(new FileWriter(getCharFilePath(name)))) {
-            character.write(writer);
-        } catch (IOException | ConfigurationException e) {
-            LOGGER.error("Charfile (full charfile) creation failed!", e);
-            throw new DAOException(e);
-        }
-
-        // TODO Update this when hp, mana and hit points get updated!
-        return new LoggedUser(user, rep, race, gender, archetype.getArchetype(), false, false, false, false, false, false, false, 0, 0, 0, 0,
-                Character.MAX_THIRSTINESS, 0, Character.MAX_HUNGER, 0, (byte) 1, name, "", new Position(city.x(), city.y(), city.map()), body, head);
     }
 
     @Override
@@ -441,12 +321,169 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
     }
 
     @Override
+    public UserCharacter create(ConnectedUser user, String name, String password, String mail, Race race, Gender gender, UserArchetype archetype, int head, City city, byte strength, byte dexterity, byte intelligence, byte charisma, byte constitution, int initialAvailableSkills, int body) throws DAOException, NameAlreadyTakenException {
+        return null;
+    }
+
+    @Override
     public boolean exists(String username) {
         return (new File(getCharFilePath(username))).exists();
     }
 
+    @Override
+    public AccountAndCharacter createAccountAndCharacter(ConnectedUser user, String name, String password, String mail, Race race, Gender gender, UserArchetype archetype, int head, City city, byte strength, byte dexterity, byte intelligence, byte charisma, byte constitution, int initialAvailableSkills, int body) throws DAOException {
+
+        if (exists(name)) throw new NameAlreadyTakenException();
+
+        // Crear el archivo .chr
+        String charFilePath = getCharFilePath(name);
+        File charFile = new File(charFilePath);
+
+        INIConfiguration character = new INIConfiguration();
+
+        try {
+            // ============================================
+            // SECCIÓN [INIT] - Datos básicos y de cuenta
+            // ============================================
+            character.setProperty(INIT_HEADER + "." + PASSWORD_KEY, password);
+            character.setProperty(INIT_HEADER + "." + GENDER_KEY, gender.getId());
+            character.setProperty(INIT_HEADER + "." + RACE_KEY, race.getId());
+            character.setProperty(INIT_HEADER + "." + ARCHETYPE_KEY, archetype.getId());
+            character.setProperty(INIT_HEADER + "." + HEAD_KEY, head);
+            character.setProperty(INIT_HEADER + "." + BODY_KEY, body);
+            character.setProperty(INIT_HEADER + "." + MAP_KEY, city.map());
+            // ini.setProperty(INIT_HEADER + "." + POSITION_KEY, city.x() + "-" + city.y());
+
+            String position = city.map() + "-" + city.x() + "-" + city.y();
+            character.setProperty(INIT_HEADER + "." + POSITION_KEY, position);
+
+            character.setProperty(INIT_HEADER + "." + HEADING_KEY, 3); // Default heading
+            character.setProperty(INIT_HEADER + "." + LOGGED_KEY, 0);
+            character.setProperty(INIT_HEADER + "." + WEAPON_KEY, NO_WEAPON);
+            character.setProperty(INIT_HEADER + "." + SHIELD_KEY, NO_SHIELD);
+            character.setProperty(INIT_HEADER + "." + HELMET_KEY, NO_HELMET);
+            character.setProperty(INIT_HEADER + "." + UPTIME_KEY, 0);
+
+            // ============================================
+            // SECCIÓN [CONTACTO] - Email
+            // ============================================
+            character.setProperty(CONTACT_HEADER + "." + MAIL_KEY, mail);
+
+            // ============================================
+            // SECCIÓN [FLAGS] - Estados del personaje
+            // ============================================
+            character.setProperty(FLAGS_HEADER + "." + BANNED_KEY, 0);
+            character.setProperty(FLAGS_HEADER + "." + DEAD_KEY, 0);
+            character.setProperty(FLAGS_HEADER + "." + HIDDEN_KEY, 0);
+            character.setProperty(FLAGS_HEADER + "." + HUNGRY_KEY, 0);
+            character.setProperty(FLAGS_HEADER + "." + THIRSTY_KEY, 0);
+            character.setProperty(FLAGS_HEADER + "." + SAILING_KEY, 0);
+            character.setProperty(FLAGS_HEADER + "." + POISONED_KEY, 0);
+            character.setProperty(FLAGS_HEADER + "." + PARALYZED_KEY, 0);
+
+            // ============================================
+            // SECCIÓN [ATRIBUTOS] - Stats básicos
+            // ============================================
+            character.setProperty(ATTRIBUTES_HEADER + "." + String.format(ATTRIBUTE_FORMAT_KEY, 1), strength);
+            character.setProperty(ATTRIBUTES_HEADER + "." + String.format(ATTRIBUTE_FORMAT_KEY, 2), dexterity);
+            character.setProperty(ATTRIBUTES_HEADER + "." + String.format(ATTRIBUTE_FORMAT_KEY, 3), intelligence);
+            character.setProperty(ATTRIBUTES_HEADER + "." + String.format(ATTRIBUTE_FORMAT_KEY, 4), charisma);
+            character.setProperty(ATTRIBUTES_HEADER + "." + String.format(ATTRIBUTE_FORMAT_KEY, 5), constitution);
+
+            // ============================================
+            // SECCIÓN [SKILLS] - Inicializar skills en 0
+            // ============================================
+            for (int i = 1; i <= 20; i++) { // Ajusta según la cantidad de skills
+                character.setProperty(SKILLS_HEADER + "." + String.format(SKILL_KEY_FORMAT, i), 0);
+            }
+
+            // ============================================
+            // SECCIÓN [STATS] - Stats del personaje
+            // ============================================
+            int maxHP = calculateMaxHP(constitution, archetype);
+            int maxStamina = calculateMaxStamina(constitution);
+            int maxMana = calculateMaxMana(intelligence, archetype);
+
+            character.setProperty(STATS_HEADER + "." + MAX_HP_KEY, maxHP);
+            character.setProperty(STATS_HEADER + "." + MIN_HP_KEY, maxHP);
+            character.setProperty(STATS_HEADER + "." + MAX_STAMINA_KEY, maxStamina);
+            character.setProperty(STATS_HEADER + "." + MIN_STAMINA_KEY, maxStamina);
+            character.setProperty(STATS_HEADER + "." + MAX_MANA_KEY, maxMana);
+            character.setProperty(STATS_HEADER + "." + MIN_MANA_KEY, maxMana);
+            character.setProperty(STATS_HEADER + "." + MAX_HIT_KEY, 2);
+            character.setProperty(STATS_HEADER + "." + MIN_HIT_KEY, 1);
+            character.setProperty(STATS_HEADER + "." + MAX_HUNGER_KEY, 100);
+            character.setProperty(STATS_HEADER + "." + MIN_HUNGER_KEY, 100);
+            character.setProperty(STATS_HEADER + "." + MAX_THIRSTINESS_KEY, 100);
+            character.setProperty(STATS_HEADER + "." + MIN_THIRSTINESS_KEY, 100);
+            character.setProperty(STATS_HEADER + "." + FREE_SKILL_POINTS_KEY, initialAvailableSkills);
+            character.setProperty(STATS_HEADER + "." + LEVEL_KEY, 1);
+            character.setProperty(STATS_HEADER + "." + EXPERIENCE_KEY, 0);
+            character.setProperty(STATS_HEADER + "." + EXPERIENCE_TO_LEVEL_UP_KEY, 300);
+            character.setProperty(STATS_HEADER + "." + GOLD_KEY, 0);
+            character.setProperty(STATS_HEADER + "." + DEPOSITED_GOLD_KEY, 0);
+
+            // ============================================
+            // SECCIÓN [REP] - Reputación inicial
+            // ============================================
+            character.setProperty(REPUTATION_HEADER + "." + ASSASSIN_POINTS_KEY, 0);
+            character.setProperty(REPUTATION_HEADER + "." + BANDIT_POINTS_KEY, 0);
+            character.setProperty(REPUTATION_HEADER + "." + BOURGEOIS_POINTS_KEY, 0);
+            character.setProperty(REPUTATION_HEADER + "." + THIEF_POINTS_KEY, 0);
+            character.setProperty(REPUTATION_HEADER + "." + NOBLE_POINTS_KEY, INITIAL_NOBLE_POINTS);
+
+            // ============================================
+            // SECCIÓN [INVENTORY] - Inventario vacío
+            // ============================================
+            character.setProperty(INVENTORY_HEADER + "." + ITEMS_AMOUNT_KEY, 0);
+            character.setProperty(INVENTORY_HEADER + "." + EQUIPPED_WEAPON_SLOT_KEY, 0);
+            character.setProperty(INVENTORY_HEADER + "." + EQUIPPED_ARMOUR_SLOT_KEY, 0);
+            character.setProperty(INVENTORY_HEADER + "." + EQUIPPED_HELMET_SLOT_KEY, 0);
+            character.setProperty(INVENTORY_HEADER + "." + EQUIPPED_BOAT_SLOT_KEY, 0);
+            character.setProperty(INVENTORY_HEADER + "." + MUNITION_SLOT_KEY, 0);
+            character.setProperty(INVENTORY_HEADER + "." + RING_SLOT_KEY, 0);
+
+            // ============================================
+            // Guardar el archivo
+            // ============================================
+            try (FileWriter writer = new FileWriter(charFile)) {
+                character.write(writer);
+                LOGGER.info("Created new character file: {}", charFilePath);
+            }
+
+        } catch (Exception e) {
+            LOGGER.error("Error creating character file for '{}'", name, e);
+            // Limpiar archivo si algo salió mal
+            if (charFile.exists()) charFile.delete();
+            throw new DAOException();
+        }
+
+        // Crear las instancias de Account y UserCharacter
+        Account account = new AccountImpl(name, password, mail, new HashSet<>(), false);
+
+        return new UserCharacterDAO.AccountAndCharacter(account, load(user, name));
+    }
+
     String getCharFilePath(String username) {
         return Paths.get(charfilesPath).resolve(username + FILE_EXTENSION).toString();
+    }
+
+    // Métodos auxiliares para calcular stats iniciales
+    private int calculateMaxHP(byte constitution, UserArchetype archetype) {
+        // Implementa la lógica según tus reglas
+        return 15 + constitution / 3;
+    }
+
+    private int calculateMaxStamina(byte constitution) {
+        // Implementa la lógica según tus reglas
+        return 15 + constitution / 3;
+    }
+
+    private int calculateMaxMana(byte intelligence, UserArchetype archetype) {
+        // Implementa la lógica según tus reglas
+        // Los magos deberían tener más maná
+        // return archetype.canCastSpells() ? intelligence * 3 : 0;
+        return 0;
     }
 
     private INIConfiguration readCharFile(String username) throws DAOException {

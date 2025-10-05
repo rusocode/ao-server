@@ -23,8 +23,8 @@ public class LoginExistingCharacterPacket implements IncomingPacket {
         if (buffer.getReadableBytes() < 5 + security.getPasswordHashLength() + security.getClientHashLength())
             return false;
 
-        String username = buffer.getASCIIString();
-        String password = buffer.getASCIIStringFixed(security.getPasswordHashLength());
+        String username = buffer.getUTF8String();
+        String password = buffer.getUTF8StringFixed(security.getPasswordHashLength());
 
         String version = buffer.get() + "." + buffer.get() + "." + buffer.get();
         String clientHash = buffer.getASCIIStringFixed(security.getClientHashLength());

@@ -78,4 +78,8 @@ public enum UserArchetype {
         return archetype;
     }
 
+    public int getId() {
+    	return id;
+    }
+
 }

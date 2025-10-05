@@ -124,50 +124,33 @@ public class LoginServiceImpl implements LoginService {
         int body = characterBodyService.getBody(race, gender);
         if (body == 0) throw new LoginErrorException(INVALID_BODY_ERROR);
 
-        // Build character
+        // Create account and character in a single atomic operation
+        UserCharacterDAO.AccountAndCharacter result;
         try {
-            userCharacterBuilder.withName(nick)
-                    .withEmail(mail)
-                    .withGender(gender)
-                    .withCity(city)
-                    .withRace(race)
-                    .withArchetype(archetype)
-                    .withHead(head)
-                    .withBody(body);
-        } catch (Exception e) {
-            throw new LoginErrorException(e.getMessage());
-        }
-
-        // Create an account
-        Account account;
-        try {
-            account = accDAO.create(nick, password, mail);
-        } catch (NameAlreadyTakenException e) {
-            throw new LoginErrorException(ACCOUNT_NAME_TAKEN_ERROR);
-        } catch (DAOException e) {
-            accDAO.delete(nick);
-            throw new LoginErrorException(DAO_ERROR);
-        }
-
-        // Once we have the account, let's create the character itself
-        UserCharacter character;
-        try {
-            character = charDAO.create(user, nick, race, gender, archetype, head, city,
+            result = charDAO.createAccountAndCharacter(
+                    user, nick, password, mail,
+                    race, gender, archetype, head, city,
                     user.getAttribute(Attribute.STRENGTH),
                     user.getAttribute(Attribute.DEXTERITY),
                     user.getAttribute(Attribute.INTELLIGENCE),
                     user.getAttribute(Attribute.CHARISMA),
                     user.getAttribute(Attribute.CONSTITUTION),
-                    initialAvailableSkills, body);
-
-            int charIndex = charIndexManager.assignCharIndex();
-            character.setCharIndex(charIndex);
-            LOGGER.info("Assigned CharIndex {} to character '{}'", charIndex, character.getName());
-
+                    initialAvailableSkills, body
+            );
+        } catch (NameAlreadyTakenException e) {
+            throw new LoginErrorException(ACCOUNT_NAME_TAKEN_ERROR);
         } catch (DAOException e) {
-            accDAO.delete(nick);
-            throw new LoginErrorException(e.getMessage());
+            LOGGER.error("Error creating account and character for '{}'", nick, e);
+            throw new LoginErrorException(DAO_ERROR);
         }
+
+        Account account = result.account();
+        UserCharacter character = result.character();
+
+        // Assign character index
+        int charIndex = charIndexManager.assignCharIndex();
+        character.setCharIndex(charIndex);
+        LOGGER.info("Assigned CharIndex {} to character '{}'", charIndex, character.getName());
 
         // Associate character with account and user
         account.addCharacter(nick);

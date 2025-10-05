@@ -28,4 +28,8 @@ public enum Race {
         return BY_ID.get(id);
     }
 
+    public int getId() {
+        return id;
+    }
+
 }
