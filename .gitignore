@@ -1,9 +1,11 @@
-# Ignore the folder /target and /charfiles in the project root
+# Ignore the folder /target and in the project root
 target
-charfiles
 
 # Ignore all the files and folders that begin with a point (hidden files)
 .*
 
 # Don't ignore .gitignore itself
 !.gitignore
+
+charfiles/*
+!charfiles/.gitkeep
