@@ -95,7 +95,7 @@ public class LoginServiceImpl implements LoginService {
 
         if (user.getAttribute(Attribute.DEXTERITY) == null) throw new LoginErrorException(MUST_THROW_DICES_BEFORE_ERROR);
 
-        UserCharacterBuilder userCharacterBuilder = new UserCharacterBuilder();
+        UserCharacterBuilder userCharacterBuilder = new UserCharacterBuilder(); // TODO ?
 
         City city = mapService.getCity(cityId);
         if (city == null) throw new LoginErrorException(INVALID_CITY_ERROR);
@@ -203,6 +203,7 @@ public class LoginServiceImpl implements LoginService {
         if (!account.hasCharacter(username)) throw new LoginErrorException(CHARACTER_NOT_FOUND_ERROR);
 
         UserCharacter character;
+
         try {
             character = charDAO.load(user, username);
         } catch (DAOException e) {
@@ -213,6 +214,10 @@ public class LoginServiceImpl implements LoginService {
 
         if (config.isRestrictedToAdmins() && !character.getPrivileges().isGameMaster())
             throw new LoginErrorException(ONLY_ADMINS_ERROR);
+
+        int charIndex = charIndexManager.assignCharIndex();
+        character.setCharIndex(charIndex);
+        LOGGER.info("Assigned CharIndex {} to character '{}'", charIndex, character.getName());
 
         // TODO tell the client it's current resuscitation lock state
 
@@ -261,6 +266,8 @@ public class LoginServiceImpl implements LoginService {
 
         WorldMap map = mapService.getMap(character.getPosition().getMap());
         connection.send(new ChangeMapPacket(map));
+
+        LOGGER.info("Sending character appearance: head={}, body={}, race={}, gender={}, for '{}'", character.getHead(), character.getBody(), character.getRace(), character.getGender(), character.getName());
 
         // TODO Tell client to play midi
 
