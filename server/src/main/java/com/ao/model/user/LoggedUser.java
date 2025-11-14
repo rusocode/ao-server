@@ -25,6 +25,8 @@ public class LoggedUser extends ConnectedUser implements UserCharacter {
     private Armor armor;
     private Accessory accessory;
 
+    private Privileges privileges;
+
     /*
      * UserFlags
      */
@@ -480,11 +482,13 @@ public class LoggedUser extends ConnectedUser implements UserCharacter {
 
     @Override
     public Privileges getPrivileges() {
-        return new Privileges(1);
+        return privileges;
+        // return new Privileges(1); // TODO Siempre devuelve 1 independientemente de si es admin o no
     }
 
     @Override
     public void setPrivileges(Privileges privileges) {
+        this.privileges = privileges;
     }
 
     @Override
