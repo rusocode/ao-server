@@ -29,7 +29,7 @@ public class AccountImplTest {
 
     @Test
     public void testGetName() {
-        assertThat(ACCOUNT_NAME).isEqualTo(account.getName()); // Se asegura de que el valor actual sea igual al valor esperado
+        assertThat(ACCOUNT_NAME).isEqualTo(account.getNick()); // Se asegura de que el valor actual sea igual al valor esperado
     }
 
     @Test

@@ -25,7 +25,7 @@ import static org.mockito.Mockito.mock;
 public class UserDAOIniTest {
 
     private static final String CHARACTER_NICK = "test"; // TODO No seria mejor CHARACTER_NAME O CHARACTER_USERNAME o USERNAME?
-    private static final String NEW_CHARACTER_NICK = "newtest";
+    private static final String NEW_CHARACTER_NICK = "test";
     private static final String CHARACTER_MAIL = "test@test.com";
     private static final String CHARACTER_PASSWORD = "testpass";
     private UserDAOIni userDAOIni;
@@ -51,7 +51,7 @@ public class UserDAOIniTest {
     public void testCreateAccount() throws DAOException {
         Account account = userDAOIni.create(NEW_CHARACTER_NICK, CHARACTER_PASSWORD, CHARACTER_MAIL);
 
-        assertThat(account.getName()).isEqualTo(NEW_CHARACTER_NICK);
+        assertThat(account.getNick()).isEqualTo(NEW_CHARACTER_NICK);
         assertThat(account.getMail()).isEqualTo(CHARACTER_MAIL);
 
         assertThat(account.authenticate(CHARACTER_PASSWORD)).isTrue();
@@ -67,7 +67,7 @@ public class UserDAOIniTest {
         Account account = userDAOIni.get(CHARACTER_NICK);
         assertThat(account).isNotNull();
         // Ensure the correct character is retrieved
-        assertThat(account.getName()).isEqualTo(CHARACTER_NICK);
+        assertThat(account.getNick()).isEqualTo(CHARACTER_NICK);
     }
 
     @Test
@@ -95,8 +95,8 @@ public class UserDAOIniTest {
         City city = mock(City.class);
 
         // TODO Use constants!!
-        UserCharacter userCharacter = userDAOIni.create(mock(ConnectedUser.class), NEW_CHARACTER_NICK, "password", "mail", Race.HUMAN, Gender.FEMALE, UserArchetype.ASSASIN,
-                75, city, (byte) 18, (byte) 18, (byte) 18, (byte) 18, (byte) 18, 10, 1);
+        UserCharacter userCharacter = userDAOIni.createAccountAndCharacter(mock(ConnectedUser.class), "test", "password", "mail", Race.HUMAN, Gender.FEMALE, UserArchetype.ASSASIN,
+                75, city, (byte) 18, (byte) 18, (byte) 18, (byte) 18, (byte) 18, 10, 1).character();
 
         File file = new File(userDAOIni.getCharFilePath(NEW_CHARACTER_NICK));
 

@@ -54,31 +54,42 @@ public class LoginServiceImpl implements LoginService {
     private final Logger LOGGER = LoggerFactory.getLogger(LoginServiceImpl.class);
     private final AccountDAO accDAO;
     private final UserCharacterDAO charDAO;
+
     private final ServerConfig config;
-    private final int initialAvailableSkills;
+
+    // Services
     private final UserService userService;
     private final CharacterBodyService characterBodyService;
     private final MapService mapService;
+    private final PrivilegesService privilegesService;
+
     private final ActionExecutor<MapService> mapActionExecutor;
     private final CharacterIndexManager charIndexManager;
+    private final int initialAvailableSkills;
     private String[] clientHashes;
     private String currentClientVersion;
 
     @Inject
     public LoginServiceImpl(AccountDAO accDAO, UserCharacterDAO charDAO, ServerConfig config, UserService userService,
-                            CharacterBodyService characterBodyService, MapService mapService, ActionExecutor<MapService> mapActionExecutor,
+                            CharacterBodyService characterBodyService, MapService mapService, PrivilegesService privilegesService,
+                            ActionExecutor<MapService> mapActionExecutor,
                             @Named("initialAvailableSkills") int initialAvailableSkills) {
+
         this.accDAO = accDAO;
         this.charDAO = charDAO;
+
         this.config = config;
-        this.initialAvailableSkills = initialAvailableSkills;
+
         this.userService = userService;
         this.characterBodyService = characterBodyService;
         this.mapService = mapService;
+        this.privilegesService = privilegesService;
+
         this.mapActionExecutor = mapActionExecutor;
         currentClientVersion = config.getVersion();
         charIndexManager = new CharacterIndexManager();
 
+        this.initialAvailableSkills = initialAvailableSkills;
     }
 
     @Override
@@ -175,7 +186,7 @@ public class LoginServiceImpl implements LoginService {
     }
 
     @Override
-    public void connectExistingCharacter(ConnectedUser user, String username, String password, String version, String clientHash) throws LoginErrorException {
+    public void connectExistingCharacter(ConnectedUser user, String nick, String password, String version, String clientHash) throws LoginErrorException {
 
         checkClient(clientHash, version);
 
@@ -184,7 +195,7 @@ public class LoginServiceImpl implements LoginService {
         Account account;
 
         try {
-            account = accDAO.get(username);
+            account = accDAO.get(nick);
         } catch (DAOException e) {
             throw new LoginErrorException(DAO_ERROR);
         }
@@ -200,17 +211,28 @@ public class LoginServiceImpl implements LoginService {
 
         // TODO Do something with the account!!!
 
-        if (!account.hasCharacter(username)) throw new LoginErrorException(CHARACTER_NOT_FOUND_ERROR);
+        if (!account.hasCharacter(nick)) throw new LoginErrorException(CHARACTER_NOT_FOUND_ERROR);
 
         UserCharacter character;
 
         try {
-            character = charDAO.load(user, username);
+            character = charDAO.load(user, nick);
         } catch (DAOException e) {
             throw new LoginErrorException(DAO_ERROR);
         }
 
         // TODO If user is a GM, log it to admin's log with it's ip.
+
+        Privileges privileges = new Privileges(privilegesService.getPrivilegeFlags(nick));
+
+        LOGGER.debug("Privilege for {}: {}", nick, privilegesService.getPrivilegeDescription(nick));
+
+        character.setPrivileges(privileges);
+
+        // Debug log
+        LOGGER.debug("Character '{}' privileges flags: {}", character.getName(), character.getPrivileges().getPrivilegesFlags());
+
+        if (privilegesService.isDios(nick)) LOGGER.info("GM '{}' connected!", nick); // TODO Agregar "from IP..."
 
         if (config.isRestrictedToAdmins() && !character.getPrivileges().isGameMaster())
             throw new LoginErrorException(ONLY_ADMINS_ERROR);
@@ -266,8 +288,6 @@ public class LoginServiceImpl implements LoginService {
 
         WorldMap map = mapService.getMap(character.getPosition().getMap());
         connection.send(new ChangeMapPacket(map));
-
-        LOGGER.info("Sending character appearance: head={}, body={}, race={}, gender={}, for '{}'", character.getHead(), character.getBody(), character.getRace(), character.getGender(), character.getName());
 
         // TODO Tell client to play midi
 

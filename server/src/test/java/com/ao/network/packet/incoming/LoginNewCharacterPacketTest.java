@@ -117,7 +117,7 @@ public class LoginNewCharacterPacketTest {
         Account account = capture.getValue();
 
         assertThat(account.hasCharacter(CHARACTER_NAME)).isTrue();
-        assertThat(account.getName()).isEqualTo(CHARACTER_NAME);
+        assertThat(account.getNick()).isEqualTo(CHARACTER_NAME);
         assertThat(account.getMail()).isEqualTo(CHARACTER_MAIL);
 
         // TODO Check if the charfile was created.

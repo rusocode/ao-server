@@ -22,6 +22,7 @@ public class ServerConfigIni implements ServerConfig {
     private static final Logger LOGGER = LoggerFactory.getLogger(ServerConfigIni.class);
 
     private static final String INIT_HEADER = "INIT";
+    private static final String INIT_DIOSES = "Dioses"; // TODO No se esta usando
 
     /** INI file keys. */
     private static final String BACKLOG_KEY = "Backlog";

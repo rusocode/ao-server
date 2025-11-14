@@ -8,12 +8,12 @@ import java.util.Set;
 
 public class AccountImpl implements Account {
 
-    private final String name, password, mail;
+    private final String nick, password, mail;
     protected Set<String> characters;
     private boolean banned;
 
-    public AccountImpl(String name, String password, String mail, Set<String> characters, boolean banned) {
-        this.name = name;
+    public AccountImpl(String nick, String password, String mail, Set<String> characters, boolean banned) {
+        this.nick = nick;
         this.password = password;
         this.mail = mail;
         this.characters = characters;
@@ -21,8 +21,8 @@ public class AccountImpl implements Account {
     }
 
     @Override
-    public String getName() {
-        return name;
+    public String getNick() {
+        return nick;
     }
 
     @Override
@@ -67,7 +67,7 @@ public class AccountImpl implements Account {
     public int hashCode() {
         int prime = 31;
         int result = 1;
-        result = prime * result + ((name == null) ? 0 : name.hashCode());
+        result = prime * result + ((nick == null) ? 0 : nick.hashCode());
         return result;
     }
 
@@ -77,9 +77,9 @@ public class AccountImpl implements Account {
         if (obj == null) return false;
         if (getClass() != obj.getClass()) return false;
         AccountImpl other = (AccountImpl) obj;
-        if (name == null) {
-            if (other.name != null) return false;
-        } else if (!name.equals(other.name)) return false;
+        if (nick == null) {
+            if (other.nick != null) return false;
+        } else if (!nick.equals(other.nick)) return false;
         return true;
     }
 

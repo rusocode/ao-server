@@ -39,7 +39,7 @@ public interface UserCharacterDAO {
                          int initialAvailableSkills, int body) throws DAOException, NameAlreadyTakenException;
 
     AccountAndCharacter createAccountAndCharacter(
-            ConnectedUser user, String name, String password, String mail,
+            ConnectedUser user, String nick, String password, String mail,
             Race race, Gender gender, UserArchetype archetype, int head,
             City city, byte strength, byte dexterity, byte intelligence,
             byte charisma, byte constitution, int initialAvailableSkills, int body

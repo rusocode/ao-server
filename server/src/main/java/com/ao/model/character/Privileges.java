@@ -7,7 +7,7 @@ public class Privileges {
     private final int USER = 0x01;
     private final int COUNSELOR = 0x02;
     private final int DEMIGOD = 0x04;
-    private final int GOD = 0x08;
+    private final int DIOS = 0x08;
     private final int ADMIN = 0x10;
     private final int ROLE_MASTER = 0x20;
     private final int CHAOS_COUNSELOR = 0x40;
@@ -31,8 +31,8 @@ public class Privileges {
         return ((privilegesFlags & DEMIGOD) != 0);
     }
 
-    public boolean isGod() {
-        return ((privilegesFlags & GOD) != 0);
+    public boolean isDios() {
+        return ((privilegesFlags & DIOS) != 0);
     }
 
     public boolean isAdmin() {
@@ -52,7 +52,7 @@ public class Privileges {
     }
 
     public boolean isGameMaster() {
-        return ((privilegesFlags & (ADMIN | GOD | DEMIGOD | COUNSELOR)) != 0);
+        return ((privilegesFlags & (ADMIN | DIOS | DEMIGOD | COUNSELOR)) != 0);
     }
 
     public int getPrivilegesFlags() {

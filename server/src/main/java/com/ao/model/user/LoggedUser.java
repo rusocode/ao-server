@@ -1,6 +1,5 @@
 package com.ao.model.user;
 
-import com.ao.context.ApplicationContext;
 import com.ao.model.character.*;
 import com.ao.model.character.Character;
 import com.ao.model.character.archetype.Archetype;
@@ -11,7 +10,6 @@ import com.ao.model.map.area.AreaInfo;
 import com.ao.model.object.*;
 import com.ao.model.object.Object;
 import com.ao.model.spell.Spell;
-import com.ao.service.CharacterBodyService;
 
 public class LoggedUser extends ConnectedUser implements UserCharacter {
 
@@ -494,6 +492,7 @@ public class LoggedUser extends ConnectedUser implements UserCharacter {
         return 0;
     }
 
+    // TODO Nunca se establece el color del nick
     @Override
     public void setNickColor(int colorIndex) {
     }

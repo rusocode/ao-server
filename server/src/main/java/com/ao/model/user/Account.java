@@ -4,7 +4,7 @@ import java.util.Set;
 
 public interface Account {
 
-    String getName();
+    String getNick();
 
     String getMail();
 

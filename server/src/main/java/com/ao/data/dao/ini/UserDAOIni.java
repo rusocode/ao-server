@@ -331,12 +331,12 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
     }
 
     @Override
-    public AccountAndCharacter createAccountAndCharacter(ConnectedUser user, String name, String password, String mail, Race race, Gender gender, UserArchetype archetype, int head, City city, byte strength, byte dexterity, byte intelligence, byte charisma, byte constitution, int initialAvailableSkills, int body) throws DAOException {
+    public AccountAndCharacter createAccountAndCharacter(ConnectedUser user, String nick, String password, String mail, Race race, Gender gender, UserArchetype archetype, int head, City city, byte strength, byte dexterity, byte intelligence, byte charisma, byte constitution, int initialAvailableSkills, int body) throws DAOException {
 
-        if (exists(name)) throw new NameAlreadyTakenException();
+        if (exists(nick)) throw new NameAlreadyTakenException();
 
         // Crear el archivo .chr
-        String charFilePath = getCharFilePath(name);
+        String charFilePath = getCharFilePath(nick);
         File charFile = new File(charFilePath);
 
         INIConfiguration character = new INIConfiguration();
@@ -452,16 +452,16 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
             }
 
         } catch (Exception e) {
-            LOGGER.error("Error creating character file for '{}'", name, e);
+            LOGGER.error("Error creating character file for '{}'", nick, e);
             // Limpiar archivo si algo salió mal
             if (charFile.exists()) charFile.delete();
             throw new DAOException();
         }
 
         // Crear las instancias de Account y UserCharacter
-        Account account = new AccountImpl(name, password, mail, new HashSet<>(), false);
+        Account account = new AccountImpl(nick, password, mail, new HashSet<>(), false);
 
-        return new UserCharacterDAO.AccountAndCharacter(account, load(user, name));
+        return new UserCharacterDAO.AccountAndCharacter(account, load(user, nick));
     }
 
     String getCharFilePath(String username) {

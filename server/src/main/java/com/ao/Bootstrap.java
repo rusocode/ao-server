@@ -47,14 +47,14 @@ public class Bootstrap {
 
         AOServer server = new AOServer();
 
-        long timeMillis = System.currentTimeMillis();
+        long start = System.currentTimeMillis();
 
         LOGGER.info("Initializing AO Server...");
         loadApplicationContext(server);
         startTimers(server);
         configureNetworking(server);
 
-        LOGGER.info("\u001B[1;32mServer initialized in {} ms\u001B[0m", System.currentTimeMillis() - timeMillis);
+        LOGGER.info("\u001B[1;32mServer initialized in {} ms\u001B[0m", System.currentTimeMillis() - start);
 
         return server;
     }
@@ -66,7 +66,6 @@ public class Bootstrap {
      */
     private static void configureNetworking(AOServer server) throws IOException {
         byte[] addr = {0, 0, 0, 0};
-
         LOGGER.info("Initializing server socket configuration...");
         ServerConfig config = ApplicationContext.getInstance(ServerConfig.class);
         InetSocketAddress endpoint = new InetSocketAddress(Inet4Address.getByAddress(addr), config.getServerListeningPort());
@@ -91,7 +90,7 @@ public class Bootstrap {
     /**
      * Loads the application context on the given server.
      *
-     * @param server The server on which to load the application context.
+     * @param server the server on which to load the application context
      */
     private static void loadApplicationContext(AOServer server) throws DAOException {
 
