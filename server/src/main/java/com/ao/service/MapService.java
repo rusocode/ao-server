@@ -4,7 +4,7 @@ import com.ao.model.character.Character;
 import com.ao.model.map.City;
 import com.ao.model.map.Heading;
 import com.ao.model.map.Position;
-import com.ao.model.map.WorldMap;
+import com.ao.model.map.Map;
 
 /**
  * Map Service interface.
@@ -23,7 +23,7 @@ public interface MapService {
      * @param id map's id
      * @return the loaded map
      */
-    WorldMap getMap(int id);
+    Map getMap(int id);
 
     /**
      * Loads all cities.

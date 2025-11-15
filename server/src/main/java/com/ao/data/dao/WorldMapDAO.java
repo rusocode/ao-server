@@ -1,6 +1,10 @@
 package com.ao.data.dao;
 
-import com.ao.model.map.WorldMap;
+import com.ao.model.map.Map;
+
+/**
+ * DAO for maps.
+ */
 
 public interface WorldMapDAO {
 
@@ -9,6 +13,6 @@ public interface WorldMapDAO {
      *
      * @return the array of maps
      */
-    WorldMap[] load();
+    Map[] load();
 
 }

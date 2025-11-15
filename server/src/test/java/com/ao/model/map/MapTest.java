@@ -9,13 +9,13 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
-public class WorldMapTest {
+public class MapTest {
 
-    private WorldMap map;
+    private Map map;
 
     @BeforeEach
     public void setUp() {
-        map = new WorldMap("foo", 1, (short) 1, new Tile[]{});
+        map = new Map("foo", 1, (short) 1, new Tile[]{});
     }
 
     @Test
@@ -24,7 +24,7 @@ public class WorldMapTest {
         Tile t2 = new Tile(false, true, false, Trigger.NONE, null, null, null);
         Tile t3 = new Tile(true, true, false, Trigger.NONE, null, null, null);
 
-        map = new WorldMap("foo", 1, (short) 1, new Tile[]{t, t2, t3});
+        map = new Map("foo", 1, (short) 1, new Tile[]{t, t2, t3});
 
         assertThat(t).isEqualTo(map.getTile(0, 0));
         assertThat(t2).isEqualTo(map.getTile(1, 0));
@@ -33,11 +33,11 @@ public class WorldMapTest {
 
     @Test
     public void testEquals() {
-        WorldMap map2 = new WorldMap("foo", 1, (short) 1, new Tile[]{});
-        WorldMap map3 = new WorldMap("foo", 2, (short) 1, new Tile[]{});
-        WorldMap map4 = new WorldMap("asd", 1, (short) 1, new Tile[]{});
-        WorldMap map5 = new WorldMap("asd", 3, (short) 1, new Tile[]{null});
-        WorldMap map6 = new WorldMap(null, 4, (short) 1, new Tile[]{});
+        Map map2 = new Map("foo", 1, (short) 1, new Tile[]{});
+        Map map3 = new Map("foo", 2, (short) 1, new Tile[]{});
+        Map map4 = new Map("asd", 1, (short) 1, new Tile[]{});
+        Map map5 = new Map("asd", 3, (short) 1, new Tile[]{null});
+        Map map6 = new Map(null, 4, (short) 1, new Tile[]{});
 
         assertThat(map).isEqualTo(map);
         assertThat(map).isEqualTo(map2);
@@ -66,7 +66,7 @@ public class WorldMapTest {
         for (int i = 0; i < 2600; i++)
             tiles[i] = new Tile(true, true, false, Trigger.NONE, null, null, null);
 
-        map = new WorldMap("foo", 1, (short) 1, tiles);
+        map = new Map("foo", 1, (short) 1, tiles);
 
         map.getTile(8, 8).setCharacter(mock(Character.class));
         map.getTile(15, 8).setCharacter(mock(Character.class));

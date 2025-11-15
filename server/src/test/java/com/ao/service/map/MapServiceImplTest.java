@@ -3,7 +3,7 @@ package com.ao.service.map;
 import com.ao.data.dao.CityDAO;
 import com.ao.data.dao.WorldMapDAO;
 import com.ao.model.map.Tile;
-import com.ao.model.map.WorldMap;
+import com.ao.model.map.Map;
 import com.ao.service.AreaService;
 import com.ao.service.MapService;
 import org.junit.jupiter.api.Test;
@@ -26,12 +26,12 @@ public class MapServiceImplTest {
     @Test
     public void testGetMap() {
         int mapId = 1;
-        WorldMap map = new WorldMap(null, mapId, (short) 1, new Tile[]{});
+        Map map = new Map(null, mapId, (short) 1, new Tile[]{});
         WorldMapDAO dao = mock(WorldMapDAO.class);
         CityDAO cityDao = mock(CityDAO.class);
         AreaService areaService = mock(AreaService.class);
 
-        when(dao.load()).thenReturn(new WorldMap[]{map});
+        when(dao.load()).thenReturn(new Map[]{map});
 
         MapService service = new MapServiceImpl(dao, cityDao, areaService);
         service.loadMaps();

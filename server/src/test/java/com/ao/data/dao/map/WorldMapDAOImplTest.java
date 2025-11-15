@@ -3,7 +3,7 @@ package com.ao.data.dao.map;
 import com.ao.data.dao.WorldMapDAO;
 import com.ao.model.map.Position;
 import com.ao.model.map.Trigger;
-import com.ao.model.map.WorldMap;
+import com.ao.model.map.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -22,8 +22,8 @@ public class WorldMapDAOImplTest {
 
     @Test
     public void testLoadMaps() {
-        WorldMap[] maps = dao.load();
-        WorldMap map = maps[0];
+        Map[] maps = dao.load();
+        Map map = maps[0];
 
         // Check for blocked/non-blocked
         assertThat(map.getTile(0, 0).isBlocked()).isTrue();
@@ -34,10 +34,10 @@ public class WorldMapDAOImplTest {
 
         Position tileExit = map.getTile(19, 84).getTileExit();
         assertThat(tileExit != null).isTrue();
-        assertThat(tileExit.getX()).isGreaterThanOrEqualTo((byte) WorldMap.MIN_X);
-        assertThat(tileExit.getX()).isLessThanOrEqualTo((byte) WorldMap.MAX_X);
-        assertThat(tileExit.getX()).isGreaterThanOrEqualTo((byte) WorldMap.MIN_Y);
-        assertThat(tileExit.getX()).isLessThanOrEqualTo((byte) WorldMap.MAX_Y);
+        assertThat(tileExit.getX()).isGreaterThanOrEqualTo((byte) Map.MIN_X);
+        assertThat(tileExit.getX()).isLessThanOrEqualTo((byte) Map.MAX_X);
+        assertThat(tileExit.getX()).isGreaterThanOrEqualTo((byte) Map.MIN_Y);
+        assertThat(tileExit.getX()).isLessThanOrEqualTo((byte) Map.MAX_Y);
 
         assertThat(Trigger.NONE).isEqualTo(map.getTile(0, 0).getTrigger());
         assertThat(Trigger.UNDER_ROOF).isEqualTo(map.getTile(23, 32).getTrigger());

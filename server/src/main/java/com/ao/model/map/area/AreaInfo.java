@@ -2,7 +2,7 @@ package com.ao.model.map.area;
 
 import com.ao.model.map.Heading;
 import com.ao.model.map.Position;
-import com.ao.model.map.WorldMap;
+import com.ao.model.map.Map;
 
 public class AreaInfo {
 
@@ -13,7 +13,7 @@ public class AreaInfo {
 
     static {
         // This assumes maps will always be square
-        AREAS_RECEIVE = new int[WorldMap.MAP_WIDTH / AreaInfo.AREA_SIZE + 1];
+        AREAS_RECEIVE = new int[Map.MAP_WIDTH / AreaInfo.AREA_SIZE + 1];
         for (int i = 1; i < AREAS_RECEIVE.length; i++)
             // Set the bit + the i-1 bit + the i+1 bit (if they exist)
             AREAS_RECEIVE[i] = 1 << i | 1 << i - 1 | 1 << i + 1;

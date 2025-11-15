@@ -14,7 +14,7 @@ import com.ao.model.character.Character;
 import com.ao.model.character.archetype.UserArchetype;
 import com.ao.model.map.City;
 import com.ao.model.map.Position;
-import com.ao.model.map.WorldMap;
+import com.ao.model.map.Map;
 import com.ao.model.user.Account;
 import com.ao.model.user.ConnectedUser;
 import com.ao.model.user.User;
@@ -286,7 +286,7 @@ public class LoginServiceImpl implements LoginService {
 
         // TODO Send user index in server? The client doesn't use it at all, and we have no user indexes in this server...
 
-        WorldMap map = mapService.getMap(character.getPosition().getMap());
+        Map map = mapService.getMap(character.getPosition().getMap());
         connection.send(new ChangeMapPacket(map));
 
         // TODO Tell client to play midi

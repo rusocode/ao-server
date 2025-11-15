@@ -49,7 +49,7 @@ public class Position {
      * @return true if the given position is in the vision range, false otherwise
      */
     public boolean inVisionRange(Position pos) {
-        if (map != pos.map || Math.abs(x - pos.x) > WorldMap.VISIBLE_AREA_WIDTH || Math.abs(y - pos.y) > WorldMap.VISIBLE_AREA_HEIGHT)
+        if (map != pos.map || Math.abs(x - pos.x) > Map.VISIBLE_AREA_WIDTH || Math.abs(y - pos.y) > Map.VISIBLE_AREA_HEIGHT)
             return false;
         return true;
     }

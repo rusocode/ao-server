@@ -4,7 +4,7 @@ import com.ao.data.dao.WorldMapDAO;
 import com.ao.model.map.Position;
 import com.ao.model.map.Tile;
 import com.ao.model.map.Trigger;
-import com.ao.model.map.WorldMap;
+import com.ao.model.map.Map;
 import com.ao.utils.RangeParser;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
@@ -19,6 +19,9 @@ import java.nio.ByteOrder;
 import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
+
+// TODO Se podria renombrar a WorldMapDAOIni para mantener el mismo patron de nombres del paquete "com.ao.data.dao.ini" ya que no
+//  le veo sentido usar el posfijo "Impl" en este caso, solo lo deberia usar en el paquete "service"
 
 public class WorldMapDAOImpl implements WorldMapDAO {
 
@@ -50,8 +53,8 @@ public class WorldMapDAOImpl implements WorldMapDAO {
     }
 
     @Override
-    public WorldMap[] load() {
-        WorldMap[] maps = new WorldMap[mapsAmount];
+    public Map[] load() {
+        Map[] maps = new Map[mapsAmount];
         // Maps enumeration starts at 1
         for (int i = 1; i <= mapsAmount; i++)
             maps[i - 1] = loadMap(i);
@@ -63,7 +66,7 @@ public class WorldMapDAOImpl implements WorldMapDAO {
      *
      * @param id map's id
      */
-    private WorldMap loadMap(int id) {
+    private Map loadMap(int id) {
         byte[] bufInf, bufMap;
 
         // TODO Load .dat file too
@@ -114,7 +117,7 @@ public class WorldMapDAOImpl implements WorldMapDAO {
         infBuffer.getLong();
         infBuffer.getShort();
 
-        Tile[] tiles = new Tile[WorldMap.MAP_HEIGHT * WorldMap.MAP_WIDTH];
+        Tile[] tiles = new Tile[Map.MAP_HEIGHT * Map.MAP_WIDTH];
 
         byte flag;
         boolean blocked;
@@ -127,8 +130,8 @@ public class WorldMapDAOImpl implements WorldMapDAO {
         short floor;
 
         // Tiles enumeration starts at 1
-        for (int y = WorldMap.MIN_Y; y <= WorldMap.MAX_Y; y++) {
-            for (int x = WorldMap.MIN_X; x <= WorldMap.MAX_X; x++) {
+        for (int y = Map.MIN_Y; y <= Map.MAX_Y; y++) {
+            for (int x = Map.MIN_X; x <= Map.MAX_X; x++) {
                 blocked = isWater = isLava = false;
                 trigger = Trigger.NONE;
                 tileExit = null;
@@ -208,12 +211,12 @@ public class WorldMapDAOImpl implements WorldMapDAO {
                 }
 
                 // TODO Replace the nulls with the NpcCharacter and WorldObject objects
-                tiles[WorldMap.getTileKey(x, y)] = new Tile(blocked, isWater, isLava, trigger, tileExit, null, null);
+                tiles[Map.getTileKey(x, y)] = new Tile(blocked, isWater, isLava, trigger, tileExit, null, null);
             }
         }
 
         // Fill the map with the loaded data
-        return new WorldMap(null, id, mapVersion, tiles);
+        return new Map(null, id, mapVersion, tiles);
     }
 
     /**

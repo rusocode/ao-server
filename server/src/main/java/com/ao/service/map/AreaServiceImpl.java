@@ -5,7 +5,7 @@ import com.ao.model.character.NpcCharacter;
 import com.ao.model.character.UserCharacter;
 import com.ao.model.map.Heading;
 import com.ao.model.map.Tile;
-import com.ao.model.map.WorldMap;
+import com.ao.model.map.Map;
 import com.ao.model.map.area.AreaInfo;
 import com.ao.model.user.ConnectedUser;
 import com.ao.model.user.LoggedUser;
@@ -37,7 +37,7 @@ public class AreaServiceImpl implements AreaService {
     }
 
     @Override
-    public void checkIfUserNeedsUpdate(WorldMap map, Character character, Heading heading) {
+    public void checkIfUserNeedsUpdate(Map map, Character character, Heading heading) {
         AreaInfo areaInfo = character.getCurrentAreaInfo();
 
         if (areaInfo.isInSameArea(character.getPosition())) return;
@@ -90,7 +90,7 @@ public class AreaServiceImpl implements AreaService {
     }
 
     @Override
-    public void addCharToMap(WorldMap map, Character character) {
+    public void addCharToMap(Map map, Character character) {
         AreaInfo areaInfo = character.getCurrentAreaInfo();
         areaInfo.setForPosition(character.getPosition());
 
@@ -110,11 +110,11 @@ public class AreaServiceImpl implements AreaService {
     }
 
     @Override
-    public void removeUserFromMap(WorldMap map, LoggedUser user) {
+    public void removeUserFromMap(Map map, LoggedUser user) {
         connectionGroups.get(map.getId() - 1).remove(user);
     }
 
-    private void npcEnteredRegion(WorldMap map, int minX, int minY, int maxX, int maxY, NpcCharacter character) {
+    private void npcEnteredRegion(Map map, int minX, int minY, int maxX, int maxY, NpcCharacter character) {
         // TODO I believe these bounds are always safe, check it
         for (int x = minX; x <= maxX; x++) {
             for (int y = minY; y <= maxY; y++) {
@@ -126,7 +126,7 @@ public class AreaServiceImpl implements AreaService {
         }
     }
 
-    private void userEnteredRegion(WorldMap map, int minX, int minY, int maxX, int maxY, LoggedUser user) {
+    private void userEnteredRegion(Map map, int minX, int minY, int maxX, int maxY, LoggedUser user) {
         Connection userConnection = user.getConnection();
 
         // Tell the user he changed areas, so he can get rid of old data

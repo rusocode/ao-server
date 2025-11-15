@@ -7,7 +7,7 @@ import com.ao.model.character.Character;
 import com.ao.model.map.City;
 import com.ao.model.map.Heading;
 import com.ao.model.map.Position;
-import com.ao.model.map.WorldMap;
+import com.ao.model.map.Map;
 import com.ao.service.AreaService;
 import com.ao.service.MapService;
 import com.google.inject.Inject;
@@ -21,7 +21,7 @@ public class MapServiceImpl extends ActionExecutor<MapService> implements MapSer
     private final WorldMapDAO mapsDAO; // Sin DI tendria que hardcodear el objeto -> new WorldMapDAOImpl("maps/", 1, "maps.properties");
     private final CityDAO citiesDAO;
     private final AreaService areaService;
-    private WorldMap[] maps;
+    private Map[] maps;
     private City[] cities;
 
     @Inject
@@ -37,7 +37,7 @@ public class MapServiceImpl extends ActionExecutor<MapService> implements MapSer
     }
 
     @Override
-    public WorldMap getMap(int id) {
+    public Map getMap(int id) {
         if (id < 1 || id > maps.length) return null;
         // Maps enumeration starts at 1, not 0
         return maps[id - 1];
@@ -57,7 +57,7 @@ public class MapServiceImpl extends ActionExecutor<MapService> implements MapSer
 
     @Override
     public void putCharacterAtPos(Character chara, Position pos) {
-        WorldMap map = getMap(pos.getMap());
+        Map map = getMap(pos.getMap());
         map.putCharacterAtPos(chara, pos.getX(), pos.getY());
         areaService.addCharToMap(map, chara);
     }
@@ -82,7 +82,7 @@ public class MapServiceImpl extends ActionExecutor<MapService> implements MapSer
                 break;
         }
 
-        WorldMap map = getMap(position.getMap());
+        Map map = getMap(position.getMap());
 
         // Check if the position is available
         if (map.isTileAvailable(x, y, !character.isSailing(), character.isSailing(), true, true)) {

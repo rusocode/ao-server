@@ -10,7 +10,7 @@ import java.util.List;
  * A game's map.
  */
 
-public class WorldMap {
+public class Map {
 
     public static final int MAP_WIDTH = 100;
     public static final int MAP_HEIGHT = 100;
@@ -38,7 +38,7 @@ public class WorldMap {
      * @param version map's version
      * @param tiles   array of tiles composing the map
      */
-    public WorldMap(String name, int id, short version, Tile[] tiles) {
+    public Map(String name, int id, short version, Tile[] tiles) {
         super();
         this.name = name;
         this.id = id;
@@ -74,7 +74,7 @@ public class WorldMap {
      * @return the tile at the given coordinates
      */
     public Tile getTile(int x, int y) {
-        return tiles[WorldMap.getTileKey(x, y)];
+        return tiles[Map.getTileKey(x, y)];
     }
 
     /**
@@ -107,10 +107,10 @@ public class WorldMap {
         Character character;
 
         int yy;
-        int toX = Math.min(x + WorldMap.VISIBLE_AREA_WIDTH * 2, MAX_X);
-        int toY = Math.min(y + WorldMap.VISIBLE_AREA_HEIGHT * 2, MAX_Y);
-        int fromY = Math.max(y - WorldMap.VISIBLE_AREA_HEIGHT, MIN_Y);
-        int fromX = Math.max(x - WorldMap.VISIBLE_AREA_WIDTH, MIN_X);
+        int toX = Math.min(x + Map.VISIBLE_AREA_WIDTH * 2, MAX_X);
+        int toY = Math.min(y + Map.VISIBLE_AREA_HEIGHT * 2, MAX_Y);
+        int fromY = Math.max(y - Map.VISIBLE_AREA_HEIGHT, MIN_Y);
+        int fromX = Math.max(x - Map.VISIBLE_AREA_WIDTH, MIN_X);
 
         for (int xx = fromX; xx < toX; xx++) {
             for (yy = fromY; yy < toY; yy++) {
@@ -159,7 +159,7 @@ public class WorldMap {
         if (this == obj) return true;
         if (obj == null) return false;
         if (getClass() != obj.getClass()) return false;
-        WorldMap other = (WorldMap) obj;
+        Map other = (Map) obj;
         if (id != other.id) return false;
         if (name == null) {
             if (other.name != null) return false;
