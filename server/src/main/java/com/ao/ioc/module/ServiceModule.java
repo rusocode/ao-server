@@ -2,7 +2,7 @@ package com.ao.ioc.module;
 
 import com.ao.action.ActionExecutor;
 import com.ao.data.dao.CityDAO;
-import com.ao.data.dao.WorldMapDAO;
+import com.ao.data.dao.MapDAO;
 import com.ao.service.*;
 import com.ao.service.character.CharacterBodyServiceImpl;
 import com.ao.service.login.LoginServiceImpl;
@@ -32,7 +32,7 @@ public class ServiceModule extends AbstractModule {
 
     @Provides
     @Singleton
-    public MapServiceImpl provideMapServiceImpl(WorldMapDAO mapsDAO, CityDAO citiesDAO, AreaService areaService) {
+    public MapServiceImpl provideMapServiceImpl(MapDAO mapsDAO, CityDAO citiesDAO, AreaService areaService) {
         return new MapServiceImpl(mapsDAO, citiesDAO, areaService);
     }
 

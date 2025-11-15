@@ -1,6 +1,6 @@
 package com.ao.data.dao.map;
 
-import com.ao.data.dao.WorldMapDAO;
+import com.ao.data.dao.MapDAO;
 import com.ao.model.map.Position;
 import com.ao.model.map.Tile;
 import com.ao.model.map.Trigger;
@@ -23,9 +23,9 @@ import java.util.Set;
 // TODO Se podria renombrar a WorldMapDAOIni para mantener el mismo patron de nombres del paquete "com.ao.data.dao.ini" ya que no
 //  le veo sentido usar el posfijo "Impl" en este caso, solo lo deberia usar en el paquete "service"
 
-public class WorldMapDAOImpl implements WorldMapDAO {
+public class MapDAOImpl implements MapDAO {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(WorldMapDAOImpl.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(MapDAOImpl.class);
 
     private static final String MAP_FILE_NAME_FORMAT = "Mapa%d.map";
     private static final String INF_FILE_NAME_FORMAT = "Mapa%d.inf";
@@ -46,7 +46,7 @@ public class WorldMapDAOImpl implements WorldMapDAO {
     private final Set<Short> lavaGrhs = new HashSet<>();
 
     @Inject
-    public WorldMapDAOImpl(@Named("mapsPath") String mapsPath, @Named("mapsAmount") int mapsAmount, @Named("mapsConfigFile") String mapsConfigFile) {
+    public MapDAOImpl(@Named("mapsPath") String mapsPath, @Named("mapsAmount") int mapsAmount, @Named("mapsConfigFile") String mapsConfigFile) {
         this.mapsPath = mapsPath;
         this.mapsAmount = mapsAmount;
         loadMapsConfig(mapsConfigFile);

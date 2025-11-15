@@ -2,7 +2,7 @@ package com.ao.service.map;
 
 import com.ao.action.ActionExecutor;
 import com.ao.data.dao.CityDAO;
-import com.ao.data.dao.WorldMapDAO;
+import com.ao.data.dao.MapDAO;
 import com.ao.model.character.Character;
 import com.ao.model.map.City;
 import com.ao.model.map.Heading;
@@ -18,22 +18,22 @@ import com.google.inject.Inject;
 
 public class MapServiceImpl extends ActionExecutor<MapService> implements MapService {
 
-    private final WorldMapDAO mapsDAO; // Sin DI tendria que hardcodear el objeto -> new WorldMapDAOImpl("maps/", 1, "maps.properties");
-    private final CityDAO citiesDAO;
+    private final MapDAO mapDAO; // Sin DI tendria que hardcodear el objeto -> new WorldMapDAOImpl("maps/", 1, "maps.properties");
+    private final CityDAO cityDAO;
     private final AreaService areaService;
     private Map[] maps;
     private City[] cities;
 
     @Inject
-    public MapServiceImpl(WorldMapDAO mapsDAO, CityDAO citiesDAO, AreaService areaService) {
-        this.mapsDAO = mapsDAO;
-        this.citiesDAO = citiesDAO;
+    public MapServiceImpl(MapDAO mapDAO, CityDAO cityDAO, AreaService areaService) {
+        this.mapDAO = mapDAO;
+        this.cityDAO = cityDAO;
         this.areaService = areaService;
     }
 
     @Override
     public void loadMaps() {
-        maps = mapsDAO.load();
+        maps = mapDAO.load();
     }
 
     @Override
@@ -45,7 +45,7 @@ public class MapServiceImpl extends ActionExecutor<MapService> implements MapSer
 
     @Override
     public void loadCities() {
-        cities = citiesDAO.load();
+        cities = cityDAO.load();
     }
 
     @Override

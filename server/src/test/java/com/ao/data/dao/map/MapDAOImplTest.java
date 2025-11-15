@@ -1,6 +1,6 @@
 package com.ao.data.dao.map;
 
-import com.ao.data.dao.WorldMapDAO;
+import com.ao.data.dao.MapDAO;
 import com.ao.model.map.Position;
 import com.ao.model.map.Trigger;
 import com.ao.model.map.Map;
@@ -9,15 +9,15 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class WorldMapDAOImplTest {
+public class MapDAOImplTest {
 
     private static final String MAPS_PATH = "maps/";
     private static final String MAPS_CONFIG_FILE = "maps.properties";
-    private WorldMapDAO dao;
+    private MapDAO dao;
 
     @BeforeEach
     public void setUp() {
-        dao = new WorldMapDAOImpl(MAPS_PATH, 1, MAPS_CONFIG_FILE);
+        dao = new MapDAOImpl(MAPS_PATH, 1, MAPS_CONFIG_FILE);
     }
 
     @Test

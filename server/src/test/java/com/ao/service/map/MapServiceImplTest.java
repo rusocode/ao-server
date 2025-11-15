@@ -1,7 +1,7 @@
 package com.ao.service.map;
 
 import com.ao.data.dao.CityDAO;
-import com.ao.data.dao.WorldMapDAO;
+import com.ao.data.dao.MapDAO;
 import com.ao.model.map.Tile;
 import com.ao.model.map.Map;
 import com.ao.service.AreaService;
@@ -16,7 +16,7 @@ public class MapServiceImplTest {
 
     @Test
     public void testLoadMaps() {
-        WorldMapDAO dao = mock(WorldMapDAO.class);
+        MapDAO dao = mock(MapDAO.class);
         CityDAO cityDao = mock(CityDAO.class);
         AreaService areaService = mock(AreaService.class);
         MapService service = new MapServiceImpl(dao, cityDao, areaService);
@@ -27,7 +27,7 @@ public class MapServiceImplTest {
     public void testGetMap() {
         int mapId = 1;
         Map map = new Map(null, mapId, (short) 1, new Tile[]{});
-        WorldMapDAO dao = mock(WorldMapDAO.class);
+        MapDAO dao = mock(MapDAO.class);
         CityDAO cityDao = mock(CityDAO.class);
         AreaService areaService = mock(AreaService.class);
 

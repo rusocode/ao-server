@@ -6,7 +6,7 @@ import com.ao.model.map.Map;
  * DAO for maps.
  */
 
-public interface WorldMapDAO {
+public interface MapDAO {
 
     /**
      * Loads all maps.
