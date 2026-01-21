@@ -1,10 +1,7 @@
 package com.ao.network;
 
 import com.ao.network.packet.IncomingPacket;
-import com.ao.network.packet.incoming.LoginExistingCharacterPacket;
-import com.ao.network.packet.incoming.LoginNewCharacterPacket;
-import com.ao.network.packet.incoming.ThrowDicesPacket;
-import com.ao.network.packet.incoming.WalkPacket;
+import com.ao.network.packet.incoming.*;
 
 import java.io.UnsupportedEncodingException;
 
@@ -39,9 +36,9 @@ public class ClientPacketsManager {
         LOGIN_EXISTING_CHARACTER(LoginExistingCharacterPacket.class),
         THROW_DICE(ThrowDicesPacket.class),
         LOGIN_NEW_CHARACTER(LoginNewCharacterPacket.class),
-        // TALK(null),
-        // YELL(null),
-        // WHISPER(null),
+        TALK(TalkPacket.class),
+        YELL(YellPacket.class),
+        WHISPER(WhisperPacket.class),
         WALK(WalkPacket.class);
 
         private final IncomingPacket handler;
