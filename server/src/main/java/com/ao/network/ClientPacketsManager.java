@@ -22,7 +22,14 @@ public class ClientPacketsManager {
      * @return true if a packet could be processed, false otherwise
      */
     public static boolean handle(DataBuffer buffer, Connection connection) throws UnsupportedEncodingException, ArrayIndexOutOfBoundsException {
-        return ClientPackets.values()[buffer.get()].handler.handle(buffer, connection);
+        // Leer el ID del paquete sin avanzar el índice del buffer
+//        byte packetId = buffer.getBuffer().getByte(buffer.getBuffer().readerIndex());
+//        System.out.println("Client packet: " + packetId);
+
+        byte id = buffer.get();
+        System.out.println("Client id: " + id);
+
+        return ClientPackets.values()[id].handler.handle(buffer, connection);
     }
 
     /**
