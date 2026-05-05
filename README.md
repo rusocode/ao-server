@@ -5,7 +5,8 @@
 
 <img align="right" width="100" src="logo.png"/>
 
-Servidor de [Argentum Online](https://es.wikipedia.org/wiki/Argentum_Online) escrito en Java compatible con el [cliente](https://github.com/gasti-jm/argentum-online-lwjgl3) en Java.
+Servidor de [Argentum Online](https://es.wikipedia.org/wiki/Argentum_Online) escrito en Java compatible con el [cliente](https://github.com/gasti-jm/argentum-online-lwjgl3/tree/network-java) en Java.
+> IMPORTANTE: Verifica que la rama seleccionada en el cliente sea <b><i>network-java</i></b> ya que esta es la que mantiene compatibilidad con este servidor, la rama <b><i>main</i></b> del cliente mantiene compatibilidad con el servidor de VB6.
 
 El objetivo del servidor es aprovechar el multithreading y las características que ofrece Java (APIs, librerías y frameworks) para mejorar el rendimiento del juego.
 
