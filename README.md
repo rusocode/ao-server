@@ -1,20 +1,15 @@
-<div align='center'>
-   <br>
-  <img src="logo.png" alt="Logo"/>
-</div>
-
 # AO-Server
 
 ![Maven Build](https://github.com/rusocode/ao-server/actions/workflows/maven.yml/badge.svg)
 [![Coverage Status](https://coveralls.io/repos/github/rusocode/ao-server/badge.svg?branch=main)](https://coveralls.io/github/rusocode/ao-server?branch=main)
 
+<img align="right" width="100" src="logo.png"/>
+
 Servidor escrito en **Java 17** para el MMORPG [Argentum Online](https://es.wikipedia.org/wiki/Argentum_Online), originalmente desarrollado en 1999 con Visual Basic 6.
 
 El objetivo del servidor es aprovechar el **multithreading** y las características que ofrece Java (APIs, librerías y frameworks) para mejorar el rendimiento del juego.
 
-> AO-Server está basado en [AOXP-Server](https://github.com/aoxp/AOXP-Server) dado que la implementación original dejó de mantenerse.
-
----
+<b>AO-Server está basado en [AOXP-Server](https://github.com/aoxp/AOXP-Server) dado que la implementación original dejó de mantenerse.</b>
 
 ## ✨ Características
 
