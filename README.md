@@ -29,7 +29,7 @@ El objetivo del servidor es aprovechar el **multithreading** y las característi
 - 📊 **CI/CD** con GitHub Actions y reportes de cobertura.
 
 > [!TIP]
-> Para un análisis técnico profundo de la arquitectura de red (Netty), inyección de dependencias (Guice) y modelo de dominio, consulta la [Documentación de Arquitectura del Servidor](../docs/server-architecture.md).
+> Para un análisis técnico profundo de la arquitectura de red (Netty), inyección de dependencias (Guice) y modelo de dominio, consulta la documentación de la [arquitectura del servidor](https://github.com/rusocode/ao-server/blob/main/server-architecture.md).
 
 ---
 
