@@ -12,7 +12,7 @@ Servidor escrito en **Java 17** para el MMORPG [Argentum Online](https://es.wiki
 
 El objetivo del servidor es aprovechar el **multithreading** y las características que ofrece Java (APIs, librerías y frameworks) para mejorar el rendimiento del juego.
 
-> AO-Server está basado en [AOXP-Server](https://github.com/aoxp/AOXP-Server/commit/daa8d10b83b762a0072dd022e99fdfab1c57bb6b) dado que la implementación original dejó de mantenerse.
+> AO-Server está basado en [AOXP-Server](https://github.com/aoxp/AOXP-Server) dado que la implementación original dejó de mantenerse.
 
 ---
 
