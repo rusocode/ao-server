@@ -1,20 +1,16 @@
-<div align='center'>
-   <br>
-  <img src="logo.png" alt="Logo"/>
-</div>
-
 # AO-Server
 
 ![Maven Build](https://github.com/rusocode/ao-server/actions/workflows/maven.yml/badge.svg)
 [![Coverage Status](https://coveralls.io/repos/github/rusocode/ao-server/badge.svg?branch=main)](https://coveralls.io/github/rusocode/ao-server?branch=main)
 
-Servidor escrito en **Java 17** para el MMORPG [Argentum Online](https://es.wikipedia.org/wiki/Argentum_Online), originalmente desarrollado en 1999 con Visual Basic 6.
+<img align="right" width="100" src="logo.png"/>
 
-El objetivo del servidor es aprovechar el **multithreading** y las características que ofrece Java (APIs, librerías y frameworks) para mejorar el rendimiento del juego.
+Servidor de [Argentum Online](https://es.wikipedia.org/wiki/Argentum_Online) escrito en Java compatible con el [cliente](https://github.com/gasti-jm/argentum-online-lwjgl3/tree/network-java) en Java.
+> IMPORTANTE: Verificar que la rama seleccionada en el cliente sea <b><i>network-java</i></b> ya que es la que mantiene compatibilidad con este servidor, la rama <b><i>main</i></b> del cliente SOLO es compatible con el servidor de VB6.
 
-> AO-Server está basado en [AOXP-Server](https://github.com/aoxp/AOXP-Server/commit/daa8d10b83b762a0072dd022e99fdfab1c57bb6b) dado que la implementación original dejó de mantenerse.
+El objetivo del servidor es aprovechar el multithreading y las características que ofrece Java (APIs, librerías y frameworks) para mejorar el rendimiento del juego.
 
----
+<b>AO-Server está basado en [AOXP-Server](https://github.com/aoxp/AOXP-Server) dado que la implementación original dejó de mantenerse.</b>
 
 ## ✨ Características
 
@@ -29,7 +25,7 @@ El objetivo del servidor es aprovechar el **multithreading** y las característi
 - 📊 **CI/CD** con GitHub Actions y reportes de cobertura.
 
 > [!TIP]
-> Para un análisis técnico profundo de la arquitectura de red (Netty), inyección de dependencias (Guice) y modelo de dominio, consulta la [Documentación de Arquitectura del Servidor](../docs/server-architecture.md).
+> Para un análisis técnico profundo de la arquitectura de red (Netty), inyección de dependencias (Guice) y modelo de dominio, consulta la documentación de la [arquitectura del servidor](https://github.com/rusocode/ao-server/blob/main/server-architecture.md).
 
 ---
 
@@ -114,7 +110,7 @@ mvn -B package -pl server -am
 java -jar server/target/server-1.0-SNAPSHOT-jar-with-dependencies.jar
 ```
 
-El servidor se inicia en `0.0.0.0:7666` por defecto.
+El servidor se inicia en `127.0.0.1:7666` por defecto.
 
 ---
 
