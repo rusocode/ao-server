@@ -26,6 +26,7 @@ import com.ao.model.object.factory.ObjectFactoryException;
 import com.ao.model.object.properties.ObjectProperties;
 import com.ao.service.MapService;
 import com.ao.utils.IniUtils;
+import com.ao.utils.ResourceUtils;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import org.apache.commons.configuration2.INIConfiguration;
@@ -133,10 +134,10 @@ public record NpcDAOIni(String npcsFilePath,
     @Override
     public Npc[] load() throws DAOException {
         INIConfiguration ini = null;
-        InputStream inputStream = getClass().getClassLoader().getResourceAsStream(npcsFilePath);
+        InputStream inputStream = ResourceUtils.getStream(npcsFilePath);
         if (inputStream == null)
-            throw new IllegalArgumentException("The file '" + npcsFilePath + "' was not found in the classpath!");
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+            throw new IllegalArgumentException("The file '" + npcsFilePath + "' was not found!");
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, java.nio.charset.StandardCharsets.UTF_8))) {
             ini = new INIConfiguration();
             ini.read(reader);
             LOGGER.info("Npcs loaded successfully!");

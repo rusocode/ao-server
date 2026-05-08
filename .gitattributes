@@ -1,0 +1,18 @@
+# Forzar normalización de texto a LF para consistencia entre OS
+* text=auto eol=lf
+
+# Archivos Java y de configuración como texto
+*.java text
+*.ini text
+*.dat text
+*.inf text
+*.properties text
+*.xml text
+*.md text
+
+# ARCHIVOS BINARIOS (CRÍTICO - No tocar finales de línea)
+*.map binary
+*.png binary
+*.jpg binary
+*.ico binary
+*.jar binary

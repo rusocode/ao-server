@@ -3,6 +3,7 @@ package com.ao.data.dao.ini;
 import com.ao.data.dao.CityDAO;
 import com.ao.model.map.City;
 import com.ao.utils.IniUtils;
+import com.ao.utils.ResourceUtils;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import org.apache.commons.configuration2.INIConfiguration;
@@ -42,10 +43,10 @@ public record CityDAOIni(String citiesFilePath) implements CityDAO {
     @Override
     public City[] load() {
         INIConfiguration ini = null;
-        InputStream inputStream = getClass().getClassLoader().getResourceAsStream(citiesFilePath);
+        InputStream inputStream = ResourceUtils.getStream(citiesFilePath);
         if (inputStream == null)
-            throw new IllegalArgumentException("The file '" + citiesFilePath + "' was not found in the classpath!");
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+            throw new IllegalArgumentException("The file '" + citiesFilePath + "' was not found!");
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, java.nio.charset.StandardCharsets.UTF_8))) {
             ini = new INIConfiguration();
             ini.read(reader);
             LOGGER.info("Cities loaded successfully!");

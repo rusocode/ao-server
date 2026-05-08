@@ -1,11 +1,31 @@
-# Ignore the folder /target and in the project root
-target
+# Maven
+target/
+*.log
 
-# Ignore all the files and folders that begin with a point (hidden files)
+# IDEs y archivos de sistema
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+.project
+.classpath
+.settings/
+.DS_Store
+Thumbs.db
+
+# Ignorar archivos ocultos (excepto .gitignore y .gitattributes)
 .*
-
-# Don't ignore .gitignore itself
 !.gitignore
+!.gitattributes
 
+# Datos dinámicos de usuarios
 charfiles/*
 !charfiles/.gitkeep
+server/charfiles/*
+
+# Logs y volcados de salida
+logs/
+test_output.txt
+*.txt
+

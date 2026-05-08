@@ -1,6 +1,7 @@
 package com.ao.config.ini;
 
 import com.ao.config.ServerConfig;
+import com.ao.utils.ResourceUtils;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import org.apache.commons.configuration2.INIConfiguration;
@@ -47,9 +48,9 @@ public class ServerConfigIni implements ServerConfig {
      */
     @Inject
     public ServerConfigIni(@Named("ServerConfigIni") String serverConfigIni) {
-        InputStream inputStream = getClass().getClassLoader().getResourceAsStream(serverConfigIni);
+        InputStream inputStream = ResourceUtils.getStream(serverConfigIni);
         if (inputStream == null)
-            throw new IllegalArgumentException("The file '" + serverConfigIni + "' was not found in the classpath!");
+            throw new IllegalArgumentException("The file '" + serverConfigIni + "' was not found!");
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
             ini = new INIConfiguration();
             ini.read(reader);

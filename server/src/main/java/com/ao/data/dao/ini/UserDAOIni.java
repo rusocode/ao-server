@@ -14,6 +14,7 @@ import com.ao.model.user.AccountImpl;
 import com.ao.model.user.ConnectedUser;
 import com.ao.model.user.LoggedUser;
 import com.ao.utils.IniUtils;
+import com.ao.utils.ResourceUtils;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import org.apache.commons.configuration2.INIConfiguration;
@@ -22,6 +23,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.Set;
@@ -226,8 +229,12 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
         ini.setProperty(FLAGS_HEADER + "." + BANNED_KEY, "0");
 
         String filePath = getCharFilePath(username);
+        File file = new File(filePath);
+        if (file.getParentFile() != null) {
+            file.getParentFile().mkdirs();
+        }
 
-        try (Writer writer = new BufferedWriter(new FileWriter(filePath))) {
+        try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8))) {
             ini.write(writer);
             LOGGER.debug("Charfile '{}' created successfully!", username);
         } catch (IOException | ConfigurationException e) {
@@ -446,7 +453,11 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
             // ============================================
             // Guardar el archivo
             // ============================================
-            try (FileWriter writer = new FileWriter(charFile)) {
+            File file = new File(charFilePath);
+            if (file.getParentFile() != null) {
+                file.getParentFile().mkdirs();
+            }
+            try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8))) {
                 character.write(writer);
                 LOGGER.info("Created new character file: {}", charFilePath);
             }
@@ -492,12 +503,12 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
 
         // If the file does exist in the dynamic directory, try searching for it in the classpath (for test files)
         if (!file.exists()) {
-            InputStream inputStream = getClass().getClassLoader().getResourceAsStream("charfiles/" + username/* .toUpperCase() */ + FILE_EXTENSION);
+            InputStream inputStream = ResourceUtils.getStream("charfiles/" + username + FILE_EXTENSION);
 
             // The file does exist in the file system and classpath
             if (inputStream == null) return null;
 
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
                 ini = new INIConfiguration();
                 ini.read(reader);
                 LOGGER.info("Charfile loaded successfully from classpath!");
@@ -507,7 +518,7 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
             }
         } else {
             // Read from the file system
-            try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8))) {
                 ini = new INIConfiguration();
                 ini.read(reader);
                 LOGGER.info("Charfile loaded successfully from filesystem!");

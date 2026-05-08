@@ -6,6 +6,7 @@ import com.ao.model.map.Tile;
 import com.ao.model.map.Trigger;
 import com.ao.model.map.Map;
 import com.ao.utils.RangeParser;
+import com.ao.utils.ResourceUtils;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import org.slf4j.Logger;
@@ -75,16 +76,16 @@ public class MapDAOImpl implements MapDAO {
 
         try {
             // Load .inf file from the classpath
-            try (InputStream infStream = getClass().getClassLoader().getResourceAsStream(infFileName)) {
+            try (InputStream infStream = ResourceUtils.getStream(infFileName)) {
                 if (infStream == null)
-                    throw new FileNotFoundException("The file " + infFileName + " was not found in the classpath");
+                    throw new FileNotFoundException("The file " + infFileName + " was not found");
                 bufInf = infStream.readAllBytes();
             }
 
             // Load .map file from the classpath
-            try (InputStream mapStream = getClass().getClassLoader().getResourceAsStream(mapFileName)) {
+            try (InputStream mapStream = ResourceUtils.getStream(mapFileName)) {
                 if (mapStream == null)
-                    throw new FileNotFoundException("The file " + mapFileName + " was not found in the classpath");
+                    throw new FileNotFoundException("The file " + mapFileName + " was not found");
                 bufMap = mapStream.readAllBytes();
             }
 
@@ -227,9 +228,9 @@ public class MapDAOImpl implements MapDAO {
     private void loadMapsConfig(String configFile) {
         Properties properties = new Properties();
         try {
-            InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(configFile);
+            InputStream inputStream = ResourceUtils.getStream(configFile);
             if (inputStream == null)
-                throw new FileNotFoundException("The file " + configFile + " was not found in the classpath");
+                throw new FileNotFoundException("The file " + configFile + " was not found");
             properties.load(inputStream);
             inputStream.close();
         } catch (IOException e) {

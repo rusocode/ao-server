@@ -2,6 +2,7 @@ package com.ao.config.ini;
 
 import com.ao.config.ArchetypeConfiguration;
 import com.ao.model.character.archetype.Archetype;
+import com.ao.utils.ResourceUtils;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import org.apache.commons.configuration2.INIConfiguration;
@@ -27,11 +28,11 @@ public class ArchetypeConfigurationIni implements ArchetypeConfiguration {
 
     @Inject
     public ArchetypeConfigurationIni(@Named("ArchetypeConfigIni") String archetypeConfigIni) {
-        // Load from a classpath using try-with-resources for automatic resource management
-        InputStream inputStream = getClass().getClassLoader().getResourceAsStream(archetypeConfigIni);
+        // Load using try-with-resources for automatic resource management
+        InputStream inputStream = ResourceUtils.getStream(archetypeConfigIni);
         if (inputStream == null)
-            throw new IllegalArgumentException("The file " + archetypeConfigIni + " was not found in the classpath");
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+            throw new IllegalArgumentException("The file " + archetypeConfigIni + " was not found");
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, java.nio.charset.StandardCharsets.UTF_8))) {
             ini = new INIConfiguration();
             ini.read(reader);
         } catch (Exception e) {

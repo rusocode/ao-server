@@ -25,7 +25,7 @@ public class DaoModule extends AbstractModule {
         bind(MapDAO.class).to(MapDAOImpl.class).in(Singleton.class);
         bind(String.class).annotatedWith(Names.named("mapsPath")).toInstance(properties.getProperty("config.path.maps"));
         bind(Integer.class).annotatedWith(Names.named("mapsAmount")).toInstance(Integer.parseInt(properties.getProperty("config.maps.amount")));
-        bind(String.class).annotatedWith(Names.named("mapsConfigFile")).toInstance("maps.properties");
+        bind(String.class).annotatedWith(Names.named("mapsConfigFile")).toInstance(properties.getProperty("config.path.mapsproperties"));
 
         bind(AccountDAO.class).to(UserDAOIni.class).in(Singleton.class);
         bind(UserCharacterDAO.class).to(UserDAOIni.class).in(Singleton.class);

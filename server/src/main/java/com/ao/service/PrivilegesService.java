@@ -1,5 +1,6 @@
 package com.ao.service;
 
+import com.ao.utils.ResourceUtils;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.google.inject.name.Named;
@@ -81,9 +82,9 @@ public class PrivilegesService {
      * TODO Se esta cargando dos veces el archivo de configuracion del servidor
      */
     private INIConfiguration loadConfiguration(String serverConfigIni) {
-        InputStream inputStream = getClass().getClassLoader().getResourceAsStream(serverConfigIni);
+        InputStream inputStream = ResourceUtils.getStream(serverConfigIni);
         if (inputStream == null)
-            throw new IllegalArgumentException("The file '" + serverConfigIni + "' was not found in the classpath!");
+            throw new IllegalArgumentException("The file '" + serverConfigIni + "' was not found!");
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
             INIConfiguration config = new INIConfiguration();
             config.read(reader);

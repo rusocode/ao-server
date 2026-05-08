@@ -25,11 +25,14 @@ public class ApplicationProperties {
      * @param name the name of the file from which to load properties
      */
     public static void loadProperties(String name) {
-        ClassLoader loader = Thread.currentThread().getContextClassLoader();
         Properties props = new Properties();
-        try {
-            props.load(loader.getResourceAsStream(name));
-            properties.putAll(props);
+        try (java.io.InputStream stream = com.ao.utils.ResourceUtils.getStream(name)) {
+            if (stream != null) {
+                props.load(stream);
+                properties.putAll(props);
+            } else {
+                LOGGER.error("Properties file {} not found!", name);
+            }
         } catch (Exception e) {
             LOGGER.error("Error loading {} properties file!", name, e);
         }
