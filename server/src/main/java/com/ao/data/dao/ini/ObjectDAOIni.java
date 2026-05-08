@@ -4,10 +4,10 @@ import com.ao.data.dao.ObjectDAO;
 import com.ao.data.dao.exception.DAOException;
 import com.ao.model.character.Race;
 import com.ao.model.character.archetype.UserArchetype;
+import com.ao.model.object.ObjectType;
 import com.ao.model.object.PotionType;
 import com.ao.model.object.ResourceSourceType;
 import com.ao.model.object.WoodType;
-import com.ao.model.object.ObjectType;
 import com.ao.model.object.properties.*;
 import com.ao.model.object.properties.crafting.Craftable;
 import com.ao.model.object.properties.crafting.CraftingSkill;
@@ -33,17 +33,13 @@ import java.util.stream.IntStream;
 /**
  * Implementation of the Object DAO backed by INI files.
  * <p>
- * En las claves de tipo flag (0 o 1, true o false), la claves obvias como por
- * ejemplo {@code droppable=1} (que se puede tirar) no
- * se especifican en {@code objects.dat} ya que seria redundante especificar que
- * la mayoria de objetos si se pueden tirar al
- * suelo, por lo tanto esta clave obtiene el valor "true" por defecto desde el
- * metodo {@code isDroppable()} si la clave no se
+ * En las claves de tipo flag (0 o 1, true o false), la claves obvias como por ejemplo {@code droppable=1} (que se puede tirar) no
+ * se especifican en {@code objects.dat} ya que seria redundante especificar que la mayoria de objetos si se pueden tirar al
+ * suelo, por lo tanto esta clave obtiene el valor "true" por defecto desde el metodo {@code isDroppable()} si la clave no se
  * especifico en el objeto.
  * <p>
  * TODO Se podrian reemplazar los archivos INI por JSON
- * TODO Si dividieramos el archivo objects.dat en varios archivos especificos de
- * cada objeto, entonces no seria necesario especificar
+ * TODO Si dividieramos el archivo objects.dat en varios archivos especificos de cada objeto, entonces no seria necesario especificar
  * la clave "object_type" para cada objeto
  */
 
@@ -60,8 +56,7 @@ public class ObjectDAOIni implements ObjectDAO {
     private static final String OBJECT_TYPE_KEY = "object_type";
     private static final String VALUE_KEY = "value";
     private static final String SMITHING_SKILL_KEY = "smithing_skill"; // SkHerreria
-    private static final String NAVIGATION_SKILL_KEY = "navigation_skill"; // Nueva clave, antes se usaba "MinSkill"
-                                                                           // (inconsistencia)
+    private static final String NAVIGATION_SKILL_KEY = "navigation_skill"; // Nueva clave, antes se usaba "MinSkill" (inconsistencia)
     private static final String CARPENTRY_SKILL_KEY = "carpentry_skill"; // SkCarpinteria
     private static final String NEWBIE_KEY = "newbie";
     private static final String MIN_ARMOR_DEFENSE_KEY = "min_armor_defense";
@@ -78,16 +73,12 @@ public class ObjectDAOIni implements ObjectDAO {
     private static final String MAX_HIT_KEY = "max_hit";
     private static final String STABBING_KEY = "stabbing"; // Apuñala
     private static final String PIERCING_DAMAGE_KEY = "piercing_damage"; // Refuerzo
-    private static final String MAGIC_POWER_KEY = "magic_power"; // Antes llamada "StaffPower" que tambien se usaba para
-                                                                 // determinar si el objeto era magico (inconsistencia)
-    private static final String MAGICAL_WEAPON_KEY = "magical_weapon"; // Nueva clave, antes se usaba "StaffPower"
-                                                                       // (inconsistencia)
+    private static final String MAGIC_POWER_KEY = "magic_power"; // Antes llamada "StaffPower" que tambien se usaba para determinar si el objeto era magico (inconsistencia)
+    private static final String MAGICAL_WEAPON_KEY = "magical_weapon"; // Nueva clave, antes se usaba "StaffPower" (inconsistencia)
     private static final String RANGED_WEAPON_KEY = "ranged_weapon"; // Proyectil
     /**
-     * Puede que sea redundante especificar si el objeto arco tiene municiones, pero
-     * esta flag diferencia dos casos dentro de las
-     * armas a distancia: armas que consumen municion externa (p. ej., arcos que
-     * usan flechas) y armas arrojadizas/autosuficientes
+     * Puede que sea redundante especificar si el objeto arco tiene municiones, pero esta flag diferencia dos casos dentro de las
+     * armas a distancia: armas que consumen municion externa (p. ej., arcos que usan flechas) y armas arrojadizas/autosuficientes
      * (p. ej., cuchillas).
      */
     private static final String AMMO_KEY = "ammo";
@@ -112,9 +103,7 @@ public class ObjectDAOIni implements ObjectDAO {
     private static final String RESPAWNABLE_KEY = "respawnable"; // Crucial
     private static final String DROPPABLE_KEY = "droppable"; // NoSeCae
     private static final String NO_LOG_KEY = "no_log";
-    private static final String BIG_GRAPHIC_KEY = "big_graphic"; // VGrande TODO En algunos proyectos de AO, esta
-                                                                 // propiedad suele nombrarse como "GrhSecundario", pero
-                                                                 // no entiendo para que es
+    private static final String BIG_GRAPHIC_KEY = "big_graphic"; // VGrande TODO En algunos proyectos de AO, esta propiedad suele nombrarse como "GrhSecundario", pero no entiendo para que es
     private static final String TEXT_KEY = "text";
     private static final String FORUM_NAME_KEY = "forum_name"; // ID
     private static final String BACKPACK_TYPE_KEY = "backpack_type";
@@ -129,17 +118,12 @@ public class ObjectDAOIni implements ObjectDAO {
     private static final String OBJECT_PREFIX = "OBJ";
     private static final String SOUND_PREFIX = "sound";
 
-    /**
-     * Horrible, but it's completely hardwired in an old VB version and can't be
-     * induced from the dat.
-     */
+    /** Horrible, but it's completely hardwired in an old VB version and can't be induced from the dat. */
     private static final int WOOD_INDEX = 58;
     private static final int ELVEN_WOOD_INDEX = 1006;
-    private static final int[] INGOTS = { 386, 387, 388 };
+    private static final int[] INGOTS = {386, 387, 388};
 
-    /**
-     * Maps names from config files to their corresponding UserArchetype enum value.
-     */
+    /** Maps names from config files to their corresponding UserArchetype enum value. */
     private static final Map<String, UserArchetype> archetypes;
 
     static {
@@ -157,13 +141,12 @@ public class ObjectDAOIni implements ObjectDAO {
         archetypes.put("BANDIDO", UserArchetype.BANDIT);
         archetypes.put("PALADIN", UserArchetype.PALADIN);
         archetypes.put("CAZADOR", UserArchetype.HUNTER);
-        // Se are not used in AO 0.13.x and later, but left in case someone wants them
-        // ^_^
-        // archetypesByName.put("PESCADOR", UserArchetype.FISHER);
-        // archetypesByName.put("HERRERO", UserArchetype.BLACKSMITH);
-        // archetypesByName.put("LEÑADOR", UserArchetype.LUMBERJACK);
-        // archetypesByName.put("MINERO", UserArchetype.MINER);
-        // archetypesByName.put("CARPINTERO", UserArchetype.CARPENTER);
+        // Se are not used in AO 0.13.x and later, but left in case someone wants them ^_^
+//		archetypesByName.put("PESCADOR", UserArchetype.FISHER);
+//		archetypesByName.put("HERRERO", UserArchetype.BLACKSMITH);
+//		archetypesByName.put("LEÑADOR", UserArchetype.LUMBERJACK);
+//		archetypesByName.put("MINERO", UserArchetype.MINER);
+//		archetypesByName.put("CARPINTERO", UserArchetype.CARPENTER);
         archetypes.put("PIRATA", UserArchetype.PIRATE);
         archetypes.put("TRABAJADOR", UserArchetype.WORKER);
     }
@@ -186,10 +169,8 @@ public class ObjectDAOIni implements ObjectDAO {
         // Reset craftables
         craftables = new HashMap<>();
         InputStream inputStream = ResourceUtils.getStream(objectsFilePath);
-        if (inputStream == null)
-            throw new IllegalArgumentException("The file '" + objectsFilePath + "' was not found!");
-        try (BufferedReader reader = new BufferedReader(
-                new InputStreamReader(inputStream, java.nio.charset.StandardCharsets.UTF_8))) {
+        if (inputStream == null) throw new IllegalArgumentException("The file '" + objectsFilePath + "' was not found!");
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, java.nio.charset.StandardCharsets.UTF_8))) {
             ini = new INIConfiguration();
             ini.read(reader);
             LOGGER.info("Objects loaded successfully!");
@@ -210,8 +191,7 @@ public class ObjectDAOIni implements ObjectDAO {
 
     @Override
     public Map<Integer, Craftable> getAllCraftables() throws DAOException {
-        if (craftables == null)
-            load(); // Force the ini to be loaded!
+        if (craftables == null) load(); // Force the ini to be loaded!
         return craftables;
     }
 
@@ -238,13 +218,12 @@ public class ObjectDAOIni implements ObjectDAO {
         LegacyObjectType objectType = LegacyObjectType.findById(objectTypeId);
 
         // Objeto inexistente
-        if (name.isEmpty() && objectTypeId == -1) {
-            return null;
-        }
+        if (name.isEmpty() && objectTypeId == -1) return null;
+
 
         // El objeto existe, pero el tipo es invalido
         if (objectType == null) {
-            LOGGER.error("Tipo de objeto invalido en la seccion [{}]", section);
+            LOGGER.error("Unknown object type in section [{}]", section);
             return null;
         }
 
@@ -306,12 +285,10 @@ public class ObjectDAOIni implements ObjectDAO {
             case TREE:
             case ELVEN_TREE:
             case MINE:
-                object = loadResourceSource(objectType.getObjectType(), id, name, graphicIndex, objectType, ini,
-                        section);
+                object = loadResourceSource(objectType.getObjectType(), id, name, graphicIndex, objectType, ini, section);
                 break;
             case WOOD:
-                object = loadWood(objectType.getObjectType(), id, name, graphicIndex,
-                        id == ELVEN_WOOD_INDEX ? WoodType.ELVEN : WoodType.NORMAL, ini, section);
+                object = loadWood(objectType.getObjectType(), id, name, graphicIndex, id == ELVEN_WOOD_INDEX ? WoodType.ELVEN : WoodType.NORMAL, ini, section);
                 break;
             case KEY:
                 object = loadKey(objectType.getObjectType(), id, name, graphicIndex, ini, section);
@@ -349,33 +326,24 @@ public class ObjectDAOIni implements ObjectDAO {
 
     private Craftable loadCraftable(ObjectProperties object, INIConfiguration ini, String section) throws DAOException {
         CraftingSkill craftingSkill = getCraftingSkill(ini, section);
-        if (null == craftingSkill)
-            throw new DAOException("This object cannot be crafted!");
-        return new Craftable(object, craftingSkill, getCraftingSkillPoints(ini, section), getWood(ini, section),
-                getElvenWood(ini, section), getGoldIngot(ini, section), getSilverIngot(ini, section),
-                getIronIngot(ini, section));
+        if (null == craftingSkill) throw new DAOException("This object cannot be crafted!");
+        return new Craftable(object, craftingSkill, getCraftingSkillPoints(ini, section), getWood(ini, section), getElvenWood(ini, section), getGoldIngot(ini, section), getSilverIngot(ini, section), getIronIngot(ini, section));
     }
 
     private CraftingSkill getCraftingSkill(INIConfiguration ini, String section) {
         String carpentrySkill = section + "." + CARPENTRY_SKILL_KEY;
         String smithingSkill = section + "." + SMITHING_SKILL_KEY;
-        if (IniUtils.getInt(ini, carpentrySkill, -1) != -1)
-            return CraftingSkill.CARPENTRY;
-        if (IniUtils.getInt(ini, smithingSkill, -1) != -1)
-            return CraftingSkill.SMITHING;
+        if (IniUtils.getInt(ini, carpentrySkill, -1) != -1) return CraftingSkill.CARPENTRY;
+        if (IniUtils.getInt(ini, smithingSkill, -1) != -1) return CraftingSkill.SMITHING;
         return null;
     }
 
-    private ObjectProperties loadWood(ObjectType type, int id, String name, int graphic, WoodType woodType,
-            INIConfiguration ini, String section) {
-        return new WoodProperties(type, id, name, graphic, getValue(ini, section), getForbiddenArchetypes(ini, section),
-                getForbiddenRaces(ini, section),
-                isNewbie(ini, section), getNoLog(ini, section), isDroppable(ini, section), isRespawnable(ini, section),
-                woodType);
+    private ObjectProperties loadWood(ObjectType type, int id, String name, int graphic, WoodType woodType, INIConfiguration ini, String section) {
+        return new WoodProperties(type, id, name, graphic, getValue(ini, section), getForbiddenArchetypes(ini, section), getForbiddenRaces(ini, section),
+                isNewbie(ini, section), getNoLog(ini, section), isDroppable(ini, section), isRespawnable(ini, section), woodType);
     }
 
-    private ObjectProperties loadResourceSource(ObjectType type, int id, String name, int graphic,
-            LegacyObjectType legactType, INIConfiguration ini, String section) {
+    private ObjectProperties loadResourceSource(ObjectType type, int id, String name, int graphic, LegacyObjectType legactType, INIConfiguration ini, String section) {
         ResourceSourceInfo info = getResourceSourceInfo(legactType, ini, section);
         if (info == null) {
             LOGGER.error("Unexpected resource source of type {}", type.name());
@@ -384,31 +352,23 @@ public class ObjectDAOIni implements ObjectDAO {
         return new ResourceSourceProperties(type, id, name, graphic, info.id, info.type);
     }
 
-    private ObjectProperties loadDefensiveItem(ObjectType type, int id, String name, int graphic, INIConfiguration ini,
-            String section) {
-        return new DefensiveItemProperties(type, id, name, graphic, getValue(ini, section),
-                getCraftingSkillPoints(ini, section), getForbiddenArchetypes(ini, section),
-                getForbiddenRaces(ini, section), isNewbie(ini, section), getNoLog(ini, section),
-                isDroppable(ini, section), isRespawnable(ini, section),
-                getEquippedGraphic(ini, section), getMinArmorDefense(ini, section), getMaxArmorDefense(ini, section),
-                getMinMagicDefense(ini, section), getMaxMagicDefense(ini, section));
+    private ObjectProperties loadDefensiveItem(ObjectType type, int id, String name, int graphic, INIConfiguration ini, String section) {
+        return new DefensiveItemProperties(type, id, name, graphic, getValue(ini, section), getCraftingSkillPoints(ini, section), getForbiddenArchetypes(ini, section),
+                getForbiddenRaces(ini, section), isNewbie(ini, section), getNoLog(ini, section), isDroppable(ini, section), isRespawnable(ini, section),
+                getEquippedGraphic(ini, section), getMinArmorDefense(ini, section), getMaxArmorDefense(ini, section), getMinMagicDefense(ini, section), getMaxMagicDefense(ini, section));
     }
 
-    private ObjectProperties loadTeleport(ObjectType type, int id, String name, int graphic, INIConfiguration ini,
-            String section) {
+    private ObjectProperties loadTeleport(ObjectType type, int id, String name, int graphic, INIConfiguration ini, String section) {
         return new TeleportProperties(type, id, name, graphic, getRange(ini, section));
     }
 
     private ObjectProperties loadProps(int id, String name, int graphic, INIConfiguration ini, String section) {
-        if (!isPickupable(ini, section))
-            return new ObjectProperties(ObjectType.PROP, id, name, graphic);
+        if (!isPickupable(ini, section)) return new ObjectProperties(ObjectType.PROP, id, name, graphic);
         return loadGenericItem(ObjectType.GRABABLE_PROP, id, name, graphic, ini, section);
     }
 
-    private ObjectProperties loadGenericItem(ObjectType type, int id, String name, int graphic, INIConfiguration ini,
-            String section) {
-        return new ItemProperties(type, id, name, graphic, getValue(ini, section), getForbiddenArchetypes(ini, section),
-                getForbiddenRaces(ini, section),
+    private ObjectProperties loadGenericItem(ObjectType type, int id, String name, int graphic, INIConfiguration ini, String section) {
+        return new ItemProperties(type, id, name, graphic, getValue(ini, section), getForbiddenArchetypes(ini, section), getForbiddenRaces(ini, section),
                 isNewbie(ini, section), getNoLog(ini, section), isDroppable(ini, section), isRespawnable(ini, section));
     }
 
@@ -425,71 +385,50 @@ public class ObjectDAOIni implements ObjectDAO {
         PotionType potionType = getPotionType(ini, section);
 
         if (potionType == PotionType.DEATH)
-            return new ItemProperties(ObjectType.DEATH_POTION, id, name, graphic, value, forbiddenArchetypes,
-                    forbiddenRaces, newbie, noLog, droppable, respawnable);
+            return new ItemProperties(ObjectType.DEATH_POTION, id, name, graphic, value, forbiddenArchetypes, forbiddenRaces, newbie, noLog, droppable, respawnable);
         else if (potionType == PotionType.POISON)
-            return new ItemProperties(ObjectType.POISON_POTION, id, name, graphic, value, forbiddenArchetypes,
-                    forbiddenRaces, newbie, noLog, droppable, respawnable);
+            return new ItemProperties(ObjectType.POISON_POTION, id, name, graphic, value, forbiddenArchetypes, forbiddenRaces, newbie, noLog, droppable, respawnable);
 
         int minModifier = getMinModifier(ini, section);
         int maxModifier = getMaxModifier(ini, section);
 
         if (potionType == PotionType.HP)
-            return new StatModifyingItemProperties(ObjectType.HP_POTION, id, name, graphic, value, forbiddenArchetypes,
-                    forbiddenRaces, newbie, noLog, droppable, respawnable, minModifier, maxModifier);
+            return new StatModifyingItemProperties(ObjectType.HP_POTION, id, name, graphic, value, forbiddenArchetypes, forbiddenRaces, newbie, noLog, droppable, respawnable, minModifier, maxModifier);
         else if (potionType == PotionType.MANA)
-            return new StatModifyingItemProperties(ObjectType.MANA_POTION, id, name, graphic, value,
-                    forbiddenArchetypes, forbiddenRaces, newbie, noLog, droppable, respawnable, minModifier,
-                    maxModifier);
+            return new StatModifyingItemProperties(ObjectType.MANA_POTION, id, name, graphic, value, forbiddenArchetypes, forbiddenRaces, newbie, noLog, droppable, respawnable, minModifier, maxModifier);
 
         int effectDuration = getEffectDuration(ini, section);
 
         if (potionType == PotionType.STRENGTH)
-            return new TemporalStatModifyingItemProperties(ObjectType.STRENGTH_POTION, id, name, graphic, value,
-                    forbiddenArchetypes, forbiddenRaces, newbie, noLog, droppable, respawnable, minModifier,
-                    maxModifier, effectDuration);
+            return new TemporalStatModifyingItemProperties(ObjectType.STRENGTH_POTION, id, name, graphic, value, forbiddenArchetypes, forbiddenRaces, newbie, noLog, droppable, respawnable, minModifier, maxModifier, effectDuration);
         else if (potionType == PotionType.DEXTERITY)
-            return new TemporalStatModifyingItemProperties(ObjectType.DEXTERITY_POTION, id, name, graphic, value,
-                    forbiddenArchetypes, forbiddenRaces, newbie, noLog, droppable, respawnable, minModifier,
-                    maxModifier, effectDuration);
+            return new TemporalStatModifyingItemProperties(ObjectType.DEXTERITY_POTION, id, name, graphic, value, forbiddenArchetypes, forbiddenRaces, newbie, noLog, droppable, respawnable, minModifier, maxModifier, effectDuration);
 
         // This should never happen...
         LOGGER.error("Potion type '{}' not found", potionType.name());
         return null;
     }
 
-    private ObjectProperties loadMusicalInstrument(ObjectType type, int id, String name, int graphic,
-            INIConfiguration ini, String section) {
-        return new MusicalInstrumentProperties(type, id, name, graphic, getValue(ini, section),
-                getForbiddenArchetypes(ini, section), getForbiddenRaces(ini, section),
-                isNewbie(ini, section), getNoLog(ini, section), isDroppable(ini, section), isRespawnable(ini, section),
-                getEquippedGraphic(ini, section), getSounds(ini, section));
+    private ObjectProperties loadMusicalInstrument(ObjectType type, int id, String name, int graphic, INIConfiguration ini, String section) {
+        return new MusicalInstrumentProperties(type, id, name, graphic, getValue(ini, section), getForbiddenArchetypes(ini, section), getForbiddenRaces(ini, section),
+                isNewbie(ini, section), getNoLog(ini, section), isDroppable(ini, section), isRespawnable(ini, section), getEquippedGraphic(ini, section), getSounds(ini, section));
     }
 
-    private ObjectProperties loadBoat(ObjectType type, int id, String name, int graphic, INIConfiguration ini,
-            String section) {
-        return new BoatProperties(type, id, name, graphic, getValue(ini, section), getNavigationSkill(ini, section),
-                getCraftingSkillPoints(ini, section),
-                getForbiddenArchetypes(ini, section), getForbiddenRaces(ini, section), isNewbie(ini, section),
-                getNoLog(ini, section), isDroppable(ini, section),
-                isRespawnable(ini, section), getEquippedGraphic(ini, section), getMinArmorDefense(ini, section),
-                getMaxArmorDefense(ini, section),
-                getMinMagicDefense(ini, section), getMaxMagicDefense(ini, section), getMinHit(ini, section),
-                getMaxHit(ini, section));
+    private ObjectProperties loadBoat(ObjectType type, int id, String name, int graphic, INIConfiguration ini, String section) {
+        return new BoatProperties(type, id, name, graphic, getValue(ini, section), getNavigationSkill(ini, section), getCraftingSkillPoints(ini, section),
+                getForbiddenArchetypes(ini, section), getForbiddenRaces(ini, section), isNewbie(ini, section), getNoLog(ini, section), isDroppable(ini, section),
+                isRespawnable(ini, section), getEquippedGraphic(ini, section), getMinArmorDefense(ini, section), getMaxArmorDefense(ini, section),
+                getMinMagicDefense(ini, section), getMaxMagicDefense(ini, section), getMinHit(ini, section), getMaxHit(ini, section));
     }
 
-    private ObjectProperties loadFood(ObjectType type, int id, String name, int graphic, INIConfiguration ini,
-            String section) {
+    private ObjectProperties loadFood(ObjectType type, int id, String name, int graphic, INIConfiguration ini, String section) {
         int hungerPoints = getHungerPoints(ini, section);
         // TODO Por que se pasa "hungerPoints" dos veces?
-        return new StatModifyingItemProperties(type, id, name, graphic, getValue(ini, section),
-                getForbiddenArchetypes(ini, section), getForbiddenRaces(ini, section),
-                isNewbie(ini, section), getNoLog(ini, section), isDroppable(ini, section), isRespawnable(ini, section),
-                hungerPoints, hungerPoints);
+        return new StatModifyingItemProperties(type, id, name, graphic, getValue(ini, section), getForbiddenArchetypes(ini, section), getForbiddenRaces(ini, section),
+                isNewbie(ini, section), getNoLog(ini, section), isDroppable(ini, section), isRespawnable(ini, section), hungerPoints, hungerPoints);
     }
 
-    private ObjectProperties loadDrink(ObjectType type, int id, String name, int graphic, INIConfiguration ini,
-            String section) {
+    private ObjectProperties loadDrink(ObjectType type, int id, String name, int graphic, INIConfiguration ini, String section) {
 
         int value = getValue(ini, section);
         boolean newbie = isNewbie(ini, section);
@@ -500,8 +439,7 @@ public class ObjectDAOIni implements ObjectDAO {
         boolean droppable = isDroppable(ini, section);
         boolean respawnable = isRespawnable(ini, section);
 
-        if (type != ObjectType.EMPTY_BOTTLE)
-            getThirstPoints(ini, section); // TODO No se esta usando este valor
+        if (type != ObjectType.EMPTY_BOTTLE) getThirstPoints(ini, section); // TODO No se esta usando este valor
 
         int openIndex = getOpenIndex(ini, section);
         int closedIndex = getClosedIndex(ini, section);
@@ -513,19 +451,15 @@ public class ObjectDAOIni implements ObjectDAO {
 
             RefillableStatModifyingItemProperties otherObjectProperties = null;
 
-            // Only take the other object that's already loaded to make sure the other one
-            // has already loaded
+            // Only take the other object that's already loaded to make sure the other one has already loaded
             if (filled && id > openIndex)
                 otherObjectProperties = (RefillableStatModifyingItemProperties) objectProperties[openIndex - 1];
             else if (!filled && id > closedIndex)
                 otherObjectProperties = (RefillableStatModifyingItemProperties) objectProperties[closedIndex - 1];
 
-            return new RefillableStatModifyingItemProperties(type, id, name, graphic, value, forbiddenArchetypes,
-                    forbiddenRaces, newbie, noLog, droppable, respawnable, modifier, modifier, filled,
-                    otherObjectProperties);
+            return new RefillableStatModifyingItemProperties(type, id, name, graphic, value, forbiddenArchetypes, forbiddenRaces, newbie, noLog, droppable, respawnable, modifier, modifier, filled, otherObjectProperties);
         } else
-            return new StatModifyingItemProperties(type, id, name, graphic, value, forbiddenArchetypes, forbiddenRaces,
-                    newbie, noLog, droppable, respawnable, modifier, modifier);
+            return new StatModifyingItemProperties(type, id, name, graphic, value, forbiddenArchetypes, forbiddenRaces, newbie, noLog, droppable, respawnable, modifier, modifier);
 
     }
 
@@ -545,50 +479,34 @@ public class ObjectDAOIni implements ObjectDAO {
         boolean respawnable = isRespawnable(ini, section);
         if (isRangedWeapon(ini, section)) {
             boolean ammo = hasAmmo(ini, section);
-            return new RangedWeaponProperties(ObjectType.RANGED_WEAPON, id, name, graphic, value, craftingSkill,
-                    forbiddenArchetypes, forbiddenRaces, newbie, noLog, droppable, respawnable, equippedGraphic,
-                    stabbing, piercingDamage, minHit, maxHit, ammo);
+            return new RangedWeaponProperties(ObjectType.RANGED_WEAPON, id, name, graphic, value, craftingSkill, forbiddenArchetypes, forbiddenRaces, newbie, noLog, droppable, respawnable, equippedGraphic, stabbing, piercingDamage, minHit, maxHit, ammo);
         } else if (isMagicalWeapon(ini, section)) {
             int magicPower = getMagicPower(ini, section);
             int staffDamageBonus = getStaffDamageBonus(ini, section);
-            return new StaffProperties(ObjectType.MAGICAL_WEAPON, id, name, graphic, value, craftingSkill,
-                    forbiddenArchetypes, forbiddenRaces, newbie, noLog, droppable, respawnable, equippedGraphic,
-                    stabbing, piercingDamage, minHit, maxHit, magicPower, staffDamageBonus);
+            return new StaffProperties(ObjectType.MAGICAL_WEAPON, id, name, graphic, value, craftingSkill, forbiddenArchetypes, forbiddenRaces, newbie, noLog, droppable, respawnable, equippedGraphic, stabbing, piercingDamage, minHit, maxHit, magicPower, staffDamageBonus);
         }
-        return new WeaponProperties(ObjectType.MELEE_WEAPON, id, name, graphic, value, craftingSkill,
-                forbiddenArchetypes, forbiddenRaces, newbie, noLog, droppable, respawnable, equippedGraphic, stabbing,
-                piercingDamage, minHit, maxHit);
+        return new WeaponProperties(ObjectType.MELEE_WEAPON, id, name, graphic, value, craftingSkill, forbiddenArchetypes, forbiddenRaces, newbie, noLog, droppable, respawnable, equippedGraphic, stabbing, piercingDamage, minHit, maxHit);
     }
 
-    private ObjectProperties loadAmmunition(ObjectType type, int id, String name, int graphic, INIConfiguration ini,
-            String section) {
-        return new AmmunitionProperties(type, id, name, graphic, getValue(ini, section),
-                getForbiddenArchetypes(ini, section), getForbiddenRaces(ini, section),
-                isNewbie(ini, section), getNoLog(ini, section), isDroppable(ini, section), isRespawnable(ini, section),
-                getEquippedGraphic(ini, section),
+    private ObjectProperties loadAmmunition(ObjectType type, int id, String name, int graphic, INIConfiguration ini, String section) {
+        return new AmmunitionProperties(type, id, name, graphic, getValue(ini, section), getForbiddenArchetypes(ini, section), getForbiddenRaces(ini, section),
+                isNewbie(ini, section), getNoLog(ini, section), isDroppable(ini, section), isRespawnable(ini, section), getEquippedGraphic(ini, section),
                 getMinHit(ini, section), getMaxHit(ini, section));
     }
 
-    private ObjectProperties loadParchment(ObjectType type, int id, String name, int graphic, INIConfiguration ini,
-            String section) {
+    private ObjectProperties loadParchment(ObjectType type, int id, String name, int graphic, INIConfiguration ini, String section) {
         int spellIndex = getSpellIndex(ini, section);
         // TODO Create the Spell implementation
-        return new ParchmentProperties(type, id, name, graphic, getValue(ini, section),
-                getForbiddenArchetypes(ini, section), getForbiddenRaces(ini, section),
-                isNewbie(ini, section), getNoLog(ini, section), isDroppable(ini, section), isRespawnable(ini, section),
-                null);
+        return new ParchmentProperties(type, id, name, graphic, getValue(ini, section), getForbiddenArchetypes(ini, section), getForbiddenRaces(ini, section),
+                isNewbie(ini, section), getNoLog(ini, section), isDroppable(ini, section), isRespawnable(ini, section), null);
     }
 
-    private ObjectProperties loadKey(ObjectType type, int id, String name, int graphic, INIConfiguration ini,
-            String section) {
-        return new KeyProperties(type, id, name, graphic, getValue(ini, section), getCraftingSkillPoints(ini, section),
-                getForbiddenArchetypes(ini, section),
-                getForbiddenRaces(ini, section), isNewbie(ini, section), getNoLog(ini, section),
-                isDroppable(ini, section), isRespawnable(ini, section), getKey(ini, section));
+    private ObjectProperties loadKey(ObjectType type, int id, String name, int graphic, INIConfiguration ini, String section) {
+        return new KeyProperties(type, id, name, graphic, getValue(ini, section), getCraftingSkillPoints(ini, section), getForbiddenArchetypes(ini, section),
+                getForbiddenRaces(ini, section), isNewbie(ini, section), getNoLog(ini, section), isDroppable(ini, section), isRespawnable(ini, section), getKey(ini, section));
     }
 
-    private ObjectProperties loadDoor(ObjectType type, int id, String name, int graphic, INIConfiguration ini,
-            String section) {
+    private ObjectProperties loadDoor(ObjectType type, int id, String name, int graphic, INIConfiguration ini, String section) {
 
         boolean open = isOpen(ini, section);
         boolean locked = isLocked(ini, section);
@@ -604,54 +522,40 @@ public class ObjectDAOIni implements ObjectDAO {
             return null;
         }
 
-        // Only take the other object that's already loaded to make sure the other one
-        // has already loaded
-        if (open && id > closedIndex)
-            otherObjectProperties = (DoorProperties) objectProperties[closedIndex - 1];
-        else if (!open && id > openIndex)
-            otherObjectProperties = (DoorProperties) objectProperties[openIndex - 1];
+        // Only take the other object that's already loaded to make sure the other one has already loaded
+        if (open && id > closedIndex) otherObjectProperties = (DoorProperties) objectProperties[closedIndex - 1];
+        else if (!open && id > openIndex) otherObjectProperties = (DoorProperties) objectProperties[openIndex - 1];
 
         return new DoorProperties(type, id, name, graphic, open, locked, key, otherObjectProperties);
     }
 
-    private ObjectProperties loadSign(ObjectType type, int id, String name, int graphic, INIConfiguration ini,
-            String section) {
+    private ObjectProperties loadSign(ObjectType type, int id, String name, int graphic, INIConfiguration ini, String section) {
         return new SignProperties(type, id, name, graphic, getBigGraphic(ini, section), getText(ini, section));
     }
 
-    private ObjectProperties loadForum(ObjectType type, int id, String name, int graphic, INIConfiguration ini,
-            String section) {
+    private ObjectProperties loadForum(ObjectType type, int id, String name, int graphic, INIConfiguration ini, String section) {
         return new ForumProperties(type, id, name, graphic, getForumName(ini, section));
     }
 
-    private ObjectProperties loadBackpack(ObjectType type, int id, String name, int graphic, INIConfiguration ini,
-            String section) {
-        return new BackpackProperties(type, id, name, graphic, getValue(ini, section),
-                getForbiddenArchetypes(ini, section), getForbiddenRaces(ini, section),
-                isNewbie(ini, section), getNoLog(ini, section), isDroppable(ini, section), isRespawnable(ini, section),
-                getEquippedGraphic(ini, section),
+    private ObjectProperties loadBackpack(ObjectType type, int id, String name, int graphic, INIConfiguration ini, String section) {
+        return new BackpackProperties(type, id, name, graphic, getValue(ini, section), getForbiddenArchetypes(ini, section), getForbiddenRaces(ini, section),
+                isNewbie(ini, section), getNoLog(ini, section), isDroppable(ini, section), isRespawnable(ini, section), getEquippedGraphic(ini, section),
                 getAmountForBackpackType(getBackpackType(ini, section)));
     }
 
-    private ObjectProperties loadMineral(ObjectType type, int id, String name, int graphic, INIConfiguration ini,
-            String section) {
-        return new MineralProperties(type, id, name, graphic, getValue(ini, section),
-                getForbiddenArchetypes(ini, section), getForbiddenRaces(ini, section),
-                isNewbie(ini, section), getNoLog(ini, section), isDroppable(ini, section), isRespawnable(ini, section),
-                getIngotIndex(ini, section));
+    private ObjectProperties loadMineral(ObjectType type, int id, String name, int graphic, INIConfiguration ini, String section) {
+        return new MineralProperties(type, id, name, graphic, getValue(ini, section), getForbiddenArchetypes(ini, section), getForbiddenRaces(ini, section),
+                isNewbie(ini, section), getNoLog(ini, section), isDroppable(ini, section), isRespawnable(ini, section), getIngotIndex(ini, section));
     }
 
     private ObjectProperties loadIngot(int id, String name, int graphic, INIConfiguration ini, String section) {
-        return new ItemProperties(ObjectType.INGOT, id, name, graphic, getValue(ini, section),
-                getForbiddenArchetypes(ini, section),
-                getForbiddenRaces(ini, section), isNewbie(ini, section), getNoLog(ini, section),
-                isDroppable(ini, section), isRespawnable(ini, section));
+        return new ItemProperties(ObjectType.INGOT, id, name, graphic, getValue(ini, section), getForbiddenArchetypes(ini, section),
+                getForbiddenRaces(ini, section), isNewbie(ini, section), getNoLog(ini, section), isDroppable(ini, section), isRespawnable(ini, section));
     }
 
     private ObjectProperties loadGem(int id, String name, int graphic, INIConfiguration ini, String section) {
         for (int ingot : INGOTS)
-            if (ingot == id)
-                return loadIngot(id, name, graphic, ini, section);
+            if (ingot == id) return loadIngot(id, name, graphic, ini, section);
         return loadProps(id, name, graphic, ini, section);
     }
 
@@ -666,13 +570,10 @@ public class ObjectDAOIni implements ObjectDAO {
         List<UserArchetype> forbiddenArchetypes = new LinkedList<>();
         for (int i = 1; i <= UserArchetype.values().length; i++) {
             String key = IniUtils.getString(ini, section + "." + FORBIDDEN_ARCHETYPE_KEY + i, null);
-            if (key == null)
-                continue; // Ignore a missing or empty key
+            if (key == null) continue; // Ignore a missing or empty key
             UserArchetype archetype = archetypes.get(key);
-            if (archetype != null)
-                forbiddenArchetypes.add(archetype);
-            else
-                LOGGER.error("Unexpected forbidden archetype loading object: {}", key); // This shouldn't happen!
+            if (archetype != null) forbiddenArchetypes.add(archetype);
+            else LOGGER.error("Unexpected forbidden archetype loading object: {}", key); // This shouldn't happen!
         }
         return forbiddenArchetypes.isEmpty() ? null : forbiddenArchetypes;
     }
@@ -686,16 +587,11 @@ public class ObjectDAOIni implements ObjectDAO {
      */
     private List<Race> getForbiddenRaces(INIConfiguration ini, String section) {
         List<Race> forbiddenRaces = new LinkedList<>();
-        if (IniUtils.getBoolean(ini, section + "." + DWARF_KEY, false))
-            forbiddenRaces.add(Race.DWARF);
-        if (IniUtils.getBoolean(ini, section + "." + DARK_ELF_KEY, false))
-            forbiddenRaces.add(Race.DARK_ELF);
-        if (IniUtils.getBoolean(ini, section + "." + ELF_KEY, false))
-            forbiddenRaces.add(Race.ELF);
-        if (IniUtils.getBoolean(ini, section + "." + GNOME_KEY, false))
-            forbiddenRaces.add(Race.GNOME);
-        if (IniUtils.getBoolean(ini, section + "." + HUMAN_KEY, false))
-            forbiddenRaces.add(Race.HUMAN);
+        if (IniUtils.getBoolean(ini, section + "." + DWARF_KEY, false)) forbiddenRaces.add(Race.DWARF);
+        if (IniUtils.getBoolean(ini, section + "." + DARK_ELF_KEY, false)) forbiddenRaces.add(Race.DARK_ELF);
+        if (IniUtils.getBoolean(ini, section + "." + ELF_KEY, false)) forbiddenRaces.add(Race.ELF);
+        if (IniUtils.getBoolean(ini, section + "." + GNOME_KEY, false)) forbiddenRaces.add(Race.GNOME);
+        if (IniUtils.getBoolean(ini, section + "." + HUMAN_KEY, false)) forbiddenRaces.add(Race.HUMAN);
         return forbiddenRaces.isEmpty() ? null : forbiddenRaces;
     }
 
@@ -704,8 +600,7 @@ public class ObjectDAOIni implements ObjectDAO {
      *
      * @param ini     ini configuration
      * @param section section from which to read the value
-     * @return the list of sounds the object may reproduce or empty list if none
-     *         exists
+     * @return the list of sounds the object may reproduce or empty list if none exists
      */
     private List<Integer> getSounds(INIConfiguration ini, String section) {
         int soundCount = 3;
@@ -721,15 +616,13 @@ public class ObjectDAOIni implements ObjectDAO {
      *
      * @param ini     ini configuration
      * @param section section from which to read the value
-     * @return the object's crafting skill points, or 0 if the key of the crafting
-     *         skill is missing or has an invalid value
+     * @return the object's crafting skill points, or 0 if the key of the crafting skill is missing or has an invalid value
      */
     private int getCraftingSkillPoints(INIConfiguration ini, String section) {
-        String[] craftingSkills = { CARPENTRY_SKILL_KEY, SMITHING_SKILL_KEY };
+        String[] craftingSkills = {CARPENTRY_SKILL_KEY, SMITHING_SKILL_KEY};
         for (String craftingSkill : craftingSkills) {
             int value = IniUtils.getInt(ini, section + "." + craftingSkill, -1);
-            if (value != -1)
-                return value;
+            if (value != -1) return value;
         }
         return 0; // TODO Deberia devolver -1?
     }
@@ -739,15 +632,13 @@ public class ObjectDAOIni implements ObjectDAO {
      *
      * @param ini     ini configuration
      * @param section section from which to read the value
-     * @return the object equipped graphic, or 0 if the key of the object equipped
-     *         graphic is missing or has an invalid value
+     * @return the object equipped graphic, or 0 if the key of the object equipped graphic is missing or has an invalid value
      */
     private int getEquippedGraphic(INIConfiguration ini, String section) {
-        String[] equippedGraphics = { EQUIPPED_ARMOR_GRAPHIC_KEY, EQUIPPED_WEAPON_GRAPHIC_KEY };
+        String[] equippedGraphics = {EQUIPPED_ARMOR_GRAPHIC_KEY, EQUIPPED_WEAPON_GRAPHIC_KEY};
         for (String equippedGraphic : equippedGraphics) {
             int value = IniUtils.getInt(ini, section + "." + equippedGraphic, -1);
-            if (value != -1)
-                return value;
+            if (value != -1) return value;
         }
         return 0;
     }
@@ -757,8 +648,7 @@ public class ObjectDAOIni implements ObjectDAO {
      *
      * @param ini     ini configuration
      * @param section section from which to read the value
-     * @return the object's potion type, or 0 if the key {@code POTION_TYPE_KEY} is
-     *         missing or has an invalid value
+     * @return the object's potion type, or 0 if the key {@code POTION_TYPE_KEY} is missing or has an invalid value
      */
     private PotionType getPotionType(INIConfiguration ini, String section) {
         return PotionType.valueOf(IniUtils.getInt(ini, section + "." + POTION_TYPE_KEY, 0));
@@ -769,8 +659,7 @@ public class ObjectDAOIni implements ObjectDAO {
      *
      * @param ini     ini configuration
      * @param section section from which to read the value
-     * @return the object text, or 0 if the key {@code TEXT_KEY} is missing or has
-     *         an invalid value
+     * @return the object text, or 0 if the key {@code TEXT_KEY} is missing or has an invalid value
      */
     private String getText(INIConfiguration ini, String section) {
         return IniUtils.getString(ini, section + "." + TEXT_KEY, "");
@@ -781,8 +670,7 @@ public class ObjectDAOIni implements ObjectDAO {
      *
      * @param ini     ini configuration
      * @param section section from which to read the value
-     * @return the object forum name, or 0 if the key {@code FORUM_NAME_KEY} is
-     *         missing or has an invalid value
+     * @return the object forum name, or 0 if the key {@code FORUM_NAME_KEY} is missing or has an invalid value
      */
     private String getForumName(INIConfiguration ini, String section) {
         return IniUtils.getString(ini, section + "." + FORUM_NAME_KEY, "");
@@ -793,8 +681,7 @@ public class ObjectDAOIni implements ObjectDAO {
      *
      * @param ini     ini configuration
      * @param section section from which to read the value
-     * @return the object value, or 0 if the key {@code VALUE_KEY} is missing or has
-     *         an invalid value
+     * @return the object value, or 0 if the key {@code VALUE_KEY} is missing or has an invalid value
      */
     private int getValue(INIConfiguration ini, String section) {
         return IniUtils.getInt(ini, section + "." + VALUE_KEY, 0);
@@ -805,8 +692,7 @@ public class ObjectDAOIni implements ObjectDAO {
      *
      * @param ini     ini configuration
      * @param section section from which to read the value
-     * @return the object's wood, or 0 if the key {@code IRON_INGOT_KEY} is missing
-     *         or has an invalid value
+     * @return the object's wood, or 0 if the key {@code IRON_INGOT_KEY} is missing or has an invalid value
      */
     private int getWood(INIConfiguration ini, String section) {
         return IniUtils.getInt(ini, section + "." + WOOD_KEY, 0);
@@ -817,8 +703,7 @@ public class ObjectDAOIni implements ObjectDAO {
      *
      * @param ini     ini configuration
      * @param section section from which to read the value
-     * @return the object's elven wood, or 0 if the key {@code ELVEN_WOOD_KEY} is
-     *         missing or has an invalid value
+     * @return the object's elven wood, or 0 if the key {@code ELVEN_WOOD_KEY} is missing or has an invalid value
      */
     private int getElvenWood(INIConfiguration ini, String section) {
         return IniUtils.getInt(ini, section + "." + ELVEN_WOOD_KEY, 0);
@@ -829,8 +714,7 @@ public class ObjectDAOIni implements ObjectDAO {
      *
      * @param ini     ini configuration
      * @param section section from which to read the value
-     * @return the object's iron ingots, or 0 if the key {@code IRON_INGOT_KEY} is
-     *         missing or has an invalid value
+     * @return the object's iron ingots, or 0 if the key {@code IRON_INGOT_KEY} is missing or has an invalid value
      */
     private int getIronIngot(INIConfiguration ini, String section) {
         return IniUtils.getInt(ini, section + "." + IRON_INGOT_KEY, 0);
@@ -841,8 +725,7 @@ public class ObjectDAOIni implements ObjectDAO {
      *
      * @param ini     ini configuration
      * @param section section from which to read the value
-     * @return the object's silver ingots, or 0 if the key {@code SILVER_INGOT_KEY}
-     *         is missing or has an invalid value
+     * @return the object's silver ingots, or 0 if the key {@code SILVER_INGOT_KEY} is missing or has an invalid value
      */
     private int getSilverIngot(INIConfiguration ini, String section) {
         return IniUtils.getInt(ini, section + "." + SILVER_INGOT_KEY, 0);
@@ -853,8 +736,7 @@ public class ObjectDAOIni implements ObjectDAO {
      *
      * @param ini     ini configuration
      * @param section section from which to read the value
-     * @return the object's gold ingots, or 0 if the key {@code GOLD_INGOT_KEY} is
-     *         missing or has an invalid value
+     * @return the object's gold ingots, or 0 if the key {@code GOLD_INGOT_KEY} is missing or has an invalid value
      */
     private int getGoldIngot(INIConfiguration ini, String section) {
         return IniUtils.getInt(ini, section + "." + GOLD_INGOT_KEY, 0);
@@ -865,8 +747,7 @@ public class ObjectDAOIni implements ObjectDAO {
      *
      * @param ini     ini configuration
      * @param section section from which to read the value
-     * @return the object's min defense, or 0 if the key
-     *         {@code MIN_ARMOR_DEFENSE_KEY} is missing or has an invalid value
+     * @return the object's min defense, or 0 if the key {@code MIN_ARMOR_DEFENSE_KEY} is missing or has an invalid value
      */
     private int getMinArmorDefense(INIConfiguration ini, String section) {
         return IniUtils.getInt(ini, section + "." + MIN_ARMOR_DEFENSE_KEY, 0);
@@ -877,8 +758,7 @@ public class ObjectDAOIni implements ObjectDAO {
      *
      * @param ini     ini configuration
      * @param section section from which to read the value
-     * @return the object's max armor defense, or 0 if the key
-     *         {@code MAX_ARMOR_DEFENSE_KEY} is missing or has an invalid value
+     * @return the object's max armor defense, or 0 if the key {@code MAX_ARMOR_DEFENSE_KEY} is missing or has an invalid value
      */
     private int getMaxArmorDefense(INIConfiguration ini, String section) {
         return IniUtils.getInt(ini, section + "." + MAX_ARMOR_DEFENSE_KEY, 0);
@@ -889,8 +769,7 @@ public class ObjectDAOIni implements ObjectDAO {
      *
      * @param ini     ini configuration
      * @param section section from which to read the value
-     * @return the object's min magic defense, or 0 if the key
-     *         {@code MIN_MAGIC_DEFENSE_KEY} is missing or has an invalid value
+     * @return the object's min magic defense, or 0 if the key {@code MIN_MAGIC_DEFENSE_KEY} is missing or has an invalid value
      */
     private int getMinMagicDefense(INIConfiguration ini, String section) {
         return IniUtils.getInt(ini, section + "." + MIN_MAGIC_DEFENSE_KEY, 0);
@@ -901,8 +780,7 @@ public class ObjectDAOIni implements ObjectDAO {
      *
      * @param ini     ini configuration
      * @param section section from which to read the value
-     * @return the object's max magic defense, or 0 if the key
-     *         {@code MAX_MAGIC_DEFENSE_KEY} is missing or has an invalid value
+     * @return the object's max magic defense, or 0 if the key {@code MAX_MAGIC_DEFENSE_KEY} is missing or has an invalid value
      */
     private int getMaxMagicDefense(INIConfiguration ini, String section) {
         return IniUtils.getInt(ini, section + "." + MAX_MAGIC_DEFENSE_KEY, 0);
@@ -913,8 +791,7 @@ public class ObjectDAOIni implements ObjectDAO {
      *
      * @param ini     ini configuration
      * @param section section from which to read the value
-     * @return the object's min hit, or 0 if the key {@code MIN_HIT_KEY} is missing
-     *         or has an invalid value
+     * @return the object's min hit, or 0 if the key {@code MIN_HIT_KEY} is missing or has an invalid value
      */
     private int getMinHit(INIConfiguration ini, String section) {
         return IniUtils.getInt(ini, section + "." + MIN_HIT_KEY, 0);
@@ -925,8 +802,7 @@ public class ObjectDAOIni implements ObjectDAO {
      *
      * @param ini     ini configuration
      * @param section section from which to read the value
-     * @return the object's max hit, or 0 if the key {@code MAX_HIT_KEY} is missing
-     *         or has an invalid value
+     * @return the object's max hit, or 0 if the key {@code MAX_HIT_KEY} is missing or has an invalid value
      */
     private int getMaxHit(INIConfiguration ini, String section) {
         return IniUtils.getInt(ini, section + "." + MAX_HIT_KEY, 0);
@@ -937,8 +813,7 @@ public class ObjectDAOIni implements ObjectDAO {
      *
      * @param ini     ini configuration
      * @param section section from which to read the value
-     * @return the object's hunger points, or 0 if the key {@code HUNGER_POINTS_KEY}
-     *         is missing or has an invalid value
+     * @return the object's hunger points, or 0 if the key {@code HUNGER_POINTS_KEY} is missing or has an invalid value
      */
     private int getHungerPoints(INIConfiguration ini, String section) {
         return IniUtils.getInt(ini, section + "." + HUNGER_POINTS_KEY, 0);
@@ -949,8 +824,7 @@ public class ObjectDAOIni implements ObjectDAO {
      *
      * @param ini     ini configuration
      * @param section section from which to read the value
-     * @return the object thirst points, or 0 if the key {@code THIRST_POINTS_KEY}
-     *         is missing or has an invalid value
+     * @return the object thirst points, or 0 if the key {@code THIRST_POINTS_KEY} is missing or has an invalid value
      */
     private int getThirstPoints(INIConfiguration ini, String section) {
         return IniUtils.getInt(ini, section + "." + THIRST_POINTS_KEY, 0);
@@ -961,8 +835,7 @@ public class ObjectDAOIni implements ObjectDAO {
      *
      * @param ini     ini configuration
      * @param section section from which to read the value
-     * @return the object's piercing damage, or 0 if the key
-     *         {@code PIERCING_DAMAGE_KEY} is missing or has an invalid value
+     * @return the object's piercing damage, or 0 if the key {@code PIERCING_DAMAGE_KEY} is missing or has an invalid value
      */
     private int getPiercingDamage(INIConfiguration ini, String section) {
         return IniUtils.getInt(ini, section + "." + PIERCING_DAMAGE_KEY, 0);
@@ -973,8 +846,7 @@ public class ObjectDAOIni implements ObjectDAO {
      *
      * @param ini     ini configuration
      * @param section section from which to read the value
-     * @return the object's magic power, or 0 if the key {@code MAGIC_POWER_KEY} is
-     *         missing or has an invalid value
+     * @return the object's magic power, or 0 if the key {@code MAGIC_POWER_KEY} is missing or has an invalid value
      */
     private int getMagicPower(INIConfiguration ini, String section) {
         return IniUtils.getInt(ini, section + "." + MAGIC_POWER_KEY, 0);
@@ -985,8 +857,7 @@ public class ObjectDAOIni implements ObjectDAO {
      *
      * @param ini     ini configuration
      * @param section section from which to read the value
-     * @return the object's staff damage bonus, or 0 if the key
-     *         {@code STAFF_DAMAGE_BONUS_KEY} is missing or has an invalid value
+     * @return the object's staff damage bonus, or 0 if the key {@code STAFF_DAMAGE_BONUS_KEY} is missing or has an invalid value
      */
     private int getStaffDamageBonus(INIConfiguration ini, String section) {
         return IniUtils.getInt(ini, section + "." + STAFF_DAMAGE_BONUS_KEY, 0);
@@ -997,8 +868,7 @@ public class ObjectDAOIni implements ObjectDAO {
      *
      * @param ini     ini configuration
      * @param section section from which to read the value
-     * @return the object's navigation skill, or 0 if the key
-     *         {@code NAVIGATION_SKILL_KEY} is missing or has an invalid value
+     * @return the object's navigation skill, or 0 if the key {@code NAVIGATION_SKILL_KEY} is missing or has an invalid value
      */
     private int getNavigationSkill(INIConfiguration ini, String section) {
         return IniUtils.getInt(ini, section + "." + NAVIGATION_SKILL_KEY, 0);
@@ -1009,8 +879,7 @@ public class ObjectDAOIni implements ObjectDAO {
      *
      * @param ini     ini configuration
      * @param section section from which to read the value
-     * @return the object's range, or 0 if the key {@code RANGE_KEY} is missing or
-     *         has an invalid value
+     * @return the object's range, or 0 if the key {@code RANGE_KEY} is missing or has an invalid value
      */
     private int getRange(INIConfiguration ini, String section) {
         return IniUtils.getInt(ini, section + "." + RANGE_KEY, 0);
@@ -1021,8 +890,7 @@ public class ObjectDAOIni implements ObjectDAO {
      *
      * @param ini     ini configuration
      * @param section section from which to read the value
-     * @return the object's min modifier, or 0 if the key {@code MIN_MODIFIER} is
-     *         missing or has an invalid value
+     * @return the object's min modifier, or 0 if the key {@code MIN_MODIFIER} is missing or has an invalid value
      */
     private int getMinModifier(INIConfiguration ini, String section) {
         return IniUtils.getInt(ini, section + "." + MIN_MODIFIER, 0);
@@ -1033,8 +901,7 @@ public class ObjectDAOIni implements ObjectDAO {
      *
      * @param ini     ini configuration
      * @param section section from which to read the value
-     * @return the object's max modifier, or 0 if the key {@code MAX_MODIFIER} is
-     *         missing or has an invalid value
+     * @return the object's max modifier, or 0 if the key {@code MAX_MODIFIER} is missing or has an invalid value
      */
     private int getMaxModifier(INIConfiguration ini, String section) {
         return IniUtils.getInt(ini, section + "." + MAX_MODIFIER, 0);
@@ -1045,8 +912,7 @@ public class ObjectDAOIni implements ObjectDAO {
      *
      * @param ini     ini configuration
      * @param section section from which to read the value
-     * @return the object effect duration, or 0 if the key
-     *         {@code EFFECT_DURATION_KEY} is missing or has an invalid value
+     * @return the object effect duration, or 0 if the key {@code EFFECT_DURATION_KEY} is missing or has an invalid value
      */
     private int getEffectDuration(INIConfiguration ini, String section) {
         return IniUtils.getInt(ini, section + "." + EFFECT_DURATION_KEY, 0);
@@ -1057,8 +923,7 @@ public class ObjectDAOIni implements ObjectDAO {
      *
      * @param ini     ini configuration
      * @param section section from which to read the value
-     * @return the object's spell index, or 0 if the key {@code SPELL_INDEX_KEY} is
-     *         missing or has an invalid value
+     * @return the object's spell index, or 0 if the key {@code SPELL_INDEX_KEY} is missing or has an invalid value
      */
     private int getSpellIndex(INIConfiguration ini, String section) {
         return IniUtils.getInt(ini, section + "." + SPELL_INDEX_KEY, 0);
@@ -1069,8 +934,7 @@ public class ObjectDAOIni implements ObjectDAO {
      *
      * @param ini     ini configuration
      * @param section section from which to read the value
-     * @return the object's a mineral index, or 0 if the key
-     *         {@code MINERAL_INDEX_KEY} is missing or has an invalid value
+     * @return the object's a mineral index, or 0 if the key {@code MINERAL_INDEX_KEY} is missing or has an invalid value
      */
     private int getMineralIndex(INIConfiguration ini, String section) {
         return IniUtils.getInt(ini, section + "." + MINERAL_INDEX_KEY, 0);
@@ -1081,8 +945,7 @@ public class ObjectDAOIni implements ObjectDAO {
      *
      * @param ini     ini configuration
      * @param section section from which to read the value
-     * @return the object's key, or 0 if the key {@code KEY_KEY} is missing or has
-     *         an invalid value
+     * @return the object's key, or 0 if the key {@code KEY_KEY} is missing or has an invalid value
      */
     private int getKey(INIConfiguration ini, String section) {
         return IniUtils.getInt(ini, section + "." + KEY_KEY, 0);
@@ -1093,8 +956,7 @@ public class ObjectDAOIni implements ObjectDAO {
      *
      * @param ini     ini configuration
      * @param section section from which to read the value
-     * @return the object closed index, or 0 if the key {@code CLOSED_INDEX_KEY} is
-     *         missing or has an invalid value
+     * @return the object closed index, or 0 if the key {@code CLOSED_INDEX_KEY} is missing or has an invalid value
      */
     private int getClosedIndex(INIConfiguration ini, String section) {
         return IniUtils.getInt(ini, section + "." + CLOSED_INDEX_KEY, 0);
@@ -1105,8 +967,7 @@ public class ObjectDAOIni implements ObjectDAO {
      *
      * @param ini     ini configuration
      * @param section section from which to read the value
-     * @return the object open index, or 0 if the key {@code OPEN_INDEX_KEY} is
-     *         missing or has an invalid value
+     * @return the object open index, or 0 if the key {@code OPEN_INDEX_KEY} is missing or has an invalid value
      */
     private int getOpenIndex(INIConfiguration ini, String section) {
         return IniUtils.getInt(ini, section + "." + OPEN_INDEX_KEY, 0);
@@ -1117,8 +978,7 @@ public class ObjectDAOIni implements ObjectDAO {
      *
      * @param ini     ini configuration
      * @param section section from which to read the value
-     * @return the object's big graphic, or 0 if the key {@code BIG_GRAPHIC_KEY} is
-     *         missing or has an invalid value
+     * @return the object's big graphic, or 0 if the key {@code BIG_GRAPHIC_KEY} is missing or has an invalid value
      */
     private int getBigGraphic(INIConfiguration ini, String section) {
         return IniUtils.getInt(ini, section + "." + BIG_GRAPHIC_KEY, 0);
@@ -1129,8 +989,7 @@ public class ObjectDAOIni implements ObjectDAO {
      *
      * @param ini     ini configuration
      * @param section section from which to read the value
-     * @return the object's backpack type, or 0 if the key {@code BACKPACK_TYPE_KEY}
-     *         is missing or has an invalid value
+     * @return the object's backpack type, or 0 if the key {@code BACKPACK_TYPE_KEY} is missing or has an invalid value
      */
     private int getBackpackType(INIConfiguration ini, String section) {
         return IniUtils.getInt(ini, section + "." + BACKPACK_TYPE_KEY, 0);
@@ -1141,8 +1000,7 @@ public class ObjectDAOIni implements ObjectDAO {
      *
      * @param ini     ini configuration
      * @param section section from which to read the value
-     * @return the object's ingot index, or 0 if the key {@code INGOT_INDEX_KEY} is
-     *         missing or has an invalid value
+     * @return the object's ingot index, or 0 if the key {@code INGOT_INDEX_KEY} is missing or has an invalid value
      */
     private int getIngotIndex(INIConfiguration ini, String section) {
         return IniUtils.getInt(ini, section + "." + INGOT_INDEX_KEY, 0);
@@ -1163,8 +1021,7 @@ public class ObjectDAOIni implements ObjectDAO {
      *
      * @param ini     ini configuration
      * @param section section from which to read the value
-     * @return true if the object should log, or false if the key {@code NO_LOG_KEY}
-     *         is missing or has an invalid value
+     * @return true if the object should log, or false if the key {@code NO_LOG_KEY} is missing or has an invalid value
      */
     private boolean getNoLog(INIConfiguration ini, String section) {
         return IniUtils.getBoolean(ini, section + "." + NO_LOG_KEY, false);
@@ -1175,8 +1032,7 @@ public class ObjectDAOIni implements ObjectDAO {
      *
      * @param ini     ini configuration
      * @param section section from which to read the value
-     * @return true if the object has ammo, or false if the key {@code AMMO_KEY} is
-     *         missing or has an invalid value
+     * @return true if the object has ammo, or false if the key {@code AMMO_KEY} is missing or has an invalid value
      */
     private boolean hasAmmo(INIConfiguration ini, String section) {
         return IniUtils.getBoolean(ini, section + "." + AMMO_KEY, false);
@@ -1185,18 +1041,14 @@ public class ObjectDAOIni implements ObjectDAO {
     /**
      * Checks if the object is newbie.
      * <p>
-     * IMPORTANTE: la clave <b>newbie</b> solo se especifica en objects.dat para los
-     * objetos newbies con el valor 1, es decir que
-     * esta clave es opcional ya que no hace falta especificar newbie=0 para TODOS
-     * los otros objetos ya que para las claves
-     * faltantes, newbie=0 en este caso, las maneja con un valor false por defecto.
-     * Esto se hace para evitar tener que especificar
+     * IMPORTANTE: la clave <b>newbie</b> solo se especifica en objects.dat para los objetos newbies con el valor 1, es decir que
+     * esta clave es opcional ya que no hace falta especificar newbie=0 para TODOS los otros objetos ya que para las claves
+     * faltantes, newbie=0 en este caso, las maneja con un valor false por defecto. Esto se hace para evitar tener que especificar
      * la clave <b>newbie</b> en todos los objetos que no son newbies.
      *
      * @param ini     ini configuration
      * @param section section from which to read the value
-     * @return true if the object is newbie, or false if the key {@code NEWBIE_KEY}
-     *         is missing or has an invalid value
+     * @return true if the object is newbie, or false if the key {@code NEWBIE_KEY} is missing or has an invalid value
      */
     private boolean isNewbie(INIConfiguration ini, String section) {
         return IniUtils.getBoolean(ini, section + "." + NEWBIE_KEY, false);
@@ -1207,8 +1059,7 @@ public class ObjectDAOIni implements ObjectDAO {
      *
      * @param ini     ini configuration
      * @param section section from which to read the value
-     * @return true if the object is stabbing, or false if the key
-     *         {@code STABBING_KEY} is missing or has an invalid value
+     * @return true if the object is stabbing, or false if the key {@code STABBING_KEY} is missing or has an invalid value
      */
     private boolean isStabbing(INIConfiguration ini, String section) {
         return IniUtils.getBoolean(ini, section + "." + STABBING_KEY, false);
@@ -1219,9 +1070,8 @@ public class ObjectDAOIni implements ObjectDAO {
      *
      * @param ini     ini configuration
      * @param section section from which to read the value
-     * @return true if the object is a magical weapon, or false if the key
-     *         {@code MAGICAL_WEAPON_KEY} is missing or has an invalid
-     *         value
+     * @return true if the object is a magical weapon, or false if the key {@code MAGICAL_WEAPON_KEY} is missing or has an invalid
+     * value
      */
     private boolean isMagicalWeapon(INIConfiguration ini, String section) {
         return IniUtils.getBoolean(ini, section + "." + MAGICAL_WEAPON_KEY, false);
@@ -1232,9 +1082,8 @@ public class ObjectDAOIni implements ObjectDAO {
      *
      * @param ini     ini configuration
      * @param section section from which to read the value
-     * @return true if the object is a ranged weapon, or false if the key
-     *         {@code RANGED_WEAPON_KEY} is missing or has an invalid
-     *         value
+     * @return true if the object is a ranged weapon, or false if the key {@code RANGED_WEAPON_KEY} is missing or has an invalid
+     * value
      */
     private boolean isRangedWeapon(INIConfiguration ini, String section) {
         return IniUtils.getBoolean(ini, section + "." + RANGED_WEAPON_KEY, false);
@@ -1245,9 +1094,8 @@ public class ObjectDAOIni implements ObjectDAO {
      *
      * @param ini     ini configuration
      * @param section section from which to read the value
-     * @return true if the object is pickupable; false if the key
-     *         {@code PICKUPABLE_KEY} is missing or has an invalid value, or is
-     *         equal to 0
+     * @return true if the object is pickupable; false if the key {@code PICKUPABLE_KEY} is missing or has an invalid value, or is
+     * equal to 0
      */
     private boolean isPickupable(INIConfiguration ini, String section) {
         return IniUtils.getBoolean(ini, section + "." + PICKUPABLE_KEY, true);
@@ -1256,16 +1104,13 @@ public class ObjectDAOIni implements ObjectDAO {
     /**
      * Checks if the object is droppable.
      * <p>
-     * La mayoria de los objetos son droppables, por lo tanto no es necesario
-     * especificar {@code droppable = 1} en
-     * {@code objects.dat}. Esto significa que solo se especifican los objetos que
-     * no son droppables con {@code droppable = 0}.
+     * La mayoria de los objetos son droppables, por lo tanto no es necesario especificar {@code droppable = 1} en
+     * {@code objects.dat}. Esto significa que solo se especifican los objetos que no son droppables con {@code droppable = 0}.
      *
      * @param ini     ini configuration
      * @param section section from which to read the value
-     * @return true if the object is droppable; false if the key
-     *         {@code DROPPABLE_KEY} is missing or has an invalid value, or is
-     *         equal to 0
+     * @return true if the object is droppable; false if the key {@code DROPPABLE_KEY} is missing or has an invalid value, or is
+     * equal to 0
      */
     private boolean isDroppable(INIConfiguration ini, String section) {
         return IniUtils.getBoolean(ini, section + "." + DROPPABLE_KEY, true);
@@ -1276,8 +1121,7 @@ public class ObjectDAOIni implements ObjectDAO {
      *
      * @param ini     ini configuration
      * @param section section from which to read the value
-     * @return true if the object is open, or false if the key {@code OPEN_KEY} is
-     *         missing or has an invalid value
+     * @return true if the object is open, or false if the key {@code OPEN_KEY} is missing or has an invalid value
      */
     private boolean isOpen(INIConfiguration ini, String section) {
         return IniUtils.getBoolean(ini, section + "." + OPEN_KEY, false);
@@ -1288,8 +1132,7 @@ public class ObjectDAOIni implements ObjectDAO {
      *
      * @param ini     ini configuration
      * @param section section from which to read the value
-     * @return true if the object locked, or false if the key {@code LOCKED_KEY} is
-     *         missing or has an invalid value
+     * @return true if the object locked, or false if the key {@code LOCKED_KEY} is missing or has an invalid value
      */
     private boolean isLocked(INIConfiguration ini, String section) {
         return IniUtils.getBoolean(ini, section + "." + LOCKED_KEY, false);
