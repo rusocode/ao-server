@@ -25,8 +25,8 @@ public class LoginExistingCharacterPacketTest {
     private static final String CHARACTER_NAME = "test";
     private static final String CHARACTER_PASSWORD = "a";
     private static final byte CLIENT_MAJOR = 0;
-    private static final byte CLIENT_MINOR = 12;
-    private static final byte CLIENT_REVISION = 2;
+    private static final byte CLIENT_MINOR = 13;
+    private static final byte CLIENT_REVISION = 0;
 
     static {
         ApplicationProperties.loadProperties("project.properties");
@@ -81,7 +81,9 @@ public class LoginExistingCharacterPacketTest {
         writeLogin(CHARACTER_NAME, CHARACTER_PASSWORD, (byte) 0, (byte) 0, (byte) 0, "");
         packet.handle(inputBuffer, connection);
         verify(connection).send(errPacket.capture());
-        assertThat(errPacket.getValue().getMessage()).isEqualTo(String.format(LoginServiceImpl.CLIENT_OUT_OF_DATE_ERROR_FORMAT, CLIENT_MAJOR + "." + CLIENT_MINOR + "." + CLIENT_REVISION));
+        assertThat(errPacket.getValue().getMessage())
+                .isEqualTo(String.format(LoginServiceImpl.CLIENT_OUT_OF_DATE_ERROR_FORMAT,
+                        CLIENT_MAJOR + "." + CLIENT_MINOR + "." + CLIENT_REVISION));
     }
 
     @Test
@@ -92,12 +94,14 @@ public class LoginExistingCharacterPacketTest {
         assertThat(errPacket.getValue().getMessage()).isEqualTo(LoginServiceImpl.BANNED_CHARACTER_ERROR);
     }
 
-    private void writeLogin(String charName, String password, byte major, byte minor, byte version, String hash) throws Exception {
-        when(inputBuffer.getReadableBytes()).thenReturn(charName.length() + 2 + security.getPasswordHashLength() + 6 + security.getClientHashLength());
-        when(inputBuffer.getASCIIString()).thenReturn(charName);
-        when(inputBuffer.getASCIIStringFixed(security.getPasswordHashLength())).thenReturn(password);
+    private void writeLogin(String charName, String password, byte major, byte minor, byte version, String hash)
+            throws Exception {
+        when(inputBuffer.getReadableBytes()).thenReturn(
+                charName.length() + 2 + security.getPasswordHashLength() + 6 + security.getClientHashLength());
+        when(inputBuffer.getUTF8String()).thenReturn(charName);
+        when(inputBuffer.getUTF8StringFixed(security.getPasswordHashLength())).thenReturn(password);
         when(inputBuffer.get()).thenReturn(major).thenReturn(minor).thenReturn(version);
-        when(inputBuffer.getASCIIStringFixed(security.getClientHashLength())).thenReturn(hash);
+        when(inputBuffer.getUTF8StringFixed(security.getClientHashLength())).thenReturn(hash);
     }
 
 }

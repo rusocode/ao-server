@@ -28,7 +28,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Default implementation of the login service. <b>An account is the same as a character.</b>
+ * Default implementation of the login service. <b>An account is the same as a
+ * character.</b>
  */
 
 public class LoginServiceImpl implements LoginService {
@@ -71,9 +72,9 @@ public class LoginServiceImpl implements LoginService {
 
     @Inject
     public LoginServiceImpl(AccountDAO accDAO, UserCharacterDAO charDAO, ServerConfig config, UserService userService,
-                            CharacterBodyService characterBodyService, MapService mapService, PrivilegesService privilegesService,
-                            ActionExecutor<MapService> mapActionExecutor,
-                            @Named("initialAvailableSkills") int initialAvailableSkills) {
+            CharacterBodyService characterBodyService, MapService mapService, PrivilegesService privilegesService,
+            ActionExecutor<MapService> mapActionExecutor,
+            @Named("initialAvailableSkills") int initialAvailableSkills) {
 
         this.accDAO = accDAO;
         this.charDAO = charDAO;
@@ -93,47 +94,62 @@ public class LoginServiceImpl implements LoginService {
     }
 
     @Override
-    public void connectNewCharacter(ConnectedUser user, String nick, String password, int raceId, int genderId, byte archetypeId,
-                                    int head, String mail, byte cityId, String clientHash, String version) throws LoginErrorException {
+    public void connectNewCharacter(ConnectedUser user, String nick, String password, int raceId, int genderId,
+            byte archetypeId,
+            int head, String mail, byte cityId, String clientHash, String version) throws LoginErrorException {
 
         checkClient(clientHash, version);
 
         // Validaciones del servidor
-        if (!config.isCharacterCreationEnabled()) throw new LoginErrorException(CHARACTER_CREATION_DISABLED_ERROR);
-        if (config.isRestrictedToAdmins()) throw new LoginErrorException(ONLY_ADMINS_ERROR);
+        if (!config.isCharacterCreationEnabled())
+            throw new LoginErrorException(CHARACTER_CREATION_DISABLED_ERROR);
+        if (config.isRestrictedToAdmins())
+            throw new LoginErrorException(ONLY_ADMINS_ERROR);
+
+        if (!ValidatorService.validCharacterName(nick)) {
+            throw new LoginErrorException(UserCharacterBuilder.INVALID_NAME_ERROR);
+        }
+
+        if (!ValidatorService.validEmail(mail)) {
+            throw new LoginErrorException(UserCharacterBuilder.INVALID_EMAIL_ERROR);
+        }
 
         // TODO Check to avoid mass characters creation for this IP
 
-        if (user.getAttribute(Attribute.DEXTERITY) == null) throw new LoginErrorException(MUST_THROW_DICES_BEFORE_ERROR);
+        if (user.getAttribute(Attribute.DEXTERITY) == null)
+            throw new LoginErrorException(MUST_THROW_DICES_BEFORE_ERROR);
 
         UserCharacterBuilder userCharacterBuilder = new UserCharacterBuilder(); // TODO ?
 
         City city = mapService.getCity(cityId);
-        if (city == null) throw new LoginErrorException(INVALID_CITY_ERROR);
+        if (city == null)
+            throw new LoginErrorException(INVALID_CITY_ERROR);
 
         UserArchetype archetype = UserArchetype.findById(archetypeId);
         if (archetype == null) {
             LOGGER.warn("Invalid archetype ID: {}", archetypeId);
-            throw new LoginErrorException("Invalid archetype ID: " + archetypeId);
+            throw new LoginErrorException(INVALID_ARCHETYPE_ERROR);
         }
 
         Race race = Race.findById(raceId);
         if (race == null) {
             LOGGER.warn("Invalid race ID: {}", raceId);
-            throw new LoginErrorException("Invalid race ID: " + raceId);
+            throw new LoginErrorException(INVALID_RACE_ERROR);
         }
 
         Gender gender = Gender.findById(genderId);
         if (gender == null) {
             LOGGER.warn("Invalid gender ID: {}", genderId);
-            throw new LoginErrorException("Invalid gender ID: " + genderId);
+            throw new LoginErrorException(INVALID_GENDER_ERROR);
         }
 
-        if (!characterBodyService.isValidHead(head, race, gender)) throw new LoginErrorException(INVALID_HEAD_ERROR);
+        if (!characterBodyService.isValidHead(head, race, gender))
+            throw new LoginErrorException(INVALID_HEAD_ERROR);
 
         // Get default body
         int body = characterBodyService.getBody(race, gender);
-        if (body == 0) throw new LoginErrorException(INVALID_BODY_ERROR);
+        if (body == 0)
+            throw new LoginErrorException(INVALID_BODY_ERROR);
 
         // Create account and character in a single atomic operation
         UserCharacterDAO.AccountAndCharacter result;
@@ -146,8 +162,7 @@ public class LoginServiceImpl implements LoginService {
                     user.getAttribute(Attribute.INTELLIGENCE),
                     user.getAttribute(Attribute.CHARISMA),
                     user.getAttribute(Attribute.CONSTITUTION),
-                    initialAvailableSkills, body
-            );
+                    initialAvailableSkills, body);
         } catch (NameAlreadyTakenException e) {
             throw new LoginErrorException(ACCOUNT_NAME_TAKEN_ERROR);
         } catch (DAOException e) {
@@ -174,19 +189,23 @@ public class LoginServiceImpl implements LoginService {
         // 2. Envia estado inicial al cliente (inventario, spells, etc.)
         sendInitialState(user, character);
 
-        // 3. Actualiza la conexion para que use el character como User (esto convierte el ConnectedUser en LoggedUser)
+        // 3. Actualiza la conexion para que use el character como User (esto convierte
+        // el ConnectedUser en LoggedUser)
         user.getConnection().changeUser((User) character);
 
-        // 4. Marca al usuario como logueado en el servicio (equivalente a UserLogged = True en VB6)
+        // 4. Marca al usuario como logueado en el servicio (equivalente a UserLogged =
+        // True en VB6)
         userService.logIn(user);
 
         // Debugging
-        LOGGER.info("New character '{}' successfully placed in the world at {}", character.getName(), character.getPosition().toString());
+        LOGGER.info("New character '{}' successfully placed in the world at {}", character.getName(),
+                character.getPosition().toString());
 
     }
 
     @Override
-    public void connectExistingCharacter(ConnectedUser user, String nick, String password, String version, String clientHash) throws LoginErrorException {
+    public void connectExistingCharacter(ConnectedUser user, String nick, String password, String version,
+            String clientHash) throws LoginErrorException {
 
         checkClient(clientHash, version);
 
@@ -202,16 +221,21 @@ public class LoginServiceImpl implements LoginService {
 
         // TODO Is the ip in use?
 
-        if (account == null) throw new LoginErrorException(CHARACTER_NOT_FOUND_ERROR);
-        if (!account.authenticate(password)) throw new LoginErrorException(INCORRECT_PASSWORD_ERROR);
-        if (account.isBanned()) throw new LoginErrorException(BANNED_CHARACTER_ERROR);
-        if (userService.isLoggedIn(user)) throw new LoginErrorException(CHARACTER_IS_LOGGED_IN);
+        if (account == null)
+            throw new LoginErrorException(CHARACTER_NOT_FOUND_ERROR);
+        if (!account.authenticate(password))
+            throw new LoginErrorException(INCORRECT_PASSWORD_ERROR);
+        if (account.isBanned())
+            throw new LoginErrorException(BANNED_CHARACTER_ERROR);
+        if (userService.isLoggedIn(user))
+            throw new LoginErrorException(CHARACTER_IS_LOGGED_IN);
 
         // TODO Add ip to connected ips
 
         // TODO Do something with the account!!!
 
-        if (!account.hasCharacter(nick)) throw new LoginErrorException(CHARACTER_NOT_FOUND_ERROR);
+        if (!account.hasCharacter(nick))
+            throw new LoginErrorException(CHARACTER_NOT_FOUND_ERROR);
 
         UserCharacter character;
 
@@ -230,9 +254,11 @@ public class LoginServiceImpl implements LoginService {
         character.setPrivileges(privileges);
 
         // Debug log
-        LOGGER.debug("Character '{}' privileges flags: {}", character.getName(), character.getPrivileges().getPrivilegesFlags());
+        LOGGER.debug("Character '{}' privileges flags: {}", character.getName(),
+                character.getPrivileges().getPrivilegesFlags());
 
-        if (privilegesService.isDios(nick)) LOGGER.info("GM '{}' connected!", nick); // TODO Agregar "from IP..."
+        if (privilegesService.isDios(nick))
+            LOGGER.info("GM '{}' connected!", nick); // TODO Agregar "from IP..."
 
         if (config.isRestrictedToAdmins() && !character.getPrivileges().isGameMaster())
             throw new LoginErrorException(ONLY_ADMINS_ERROR);
@@ -267,16 +293,21 @@ public class LoginServiceImpl implements LoginService {
         Connection connection = user.getConnection();
 
         // inventory
-        /* int invCapacity = character.getInventory().getCapacity();
-        for (int i = 0; i < invCapacity; i++)
-            connection.send(new ChangeInventorySlotPacket(character, (byte) i)); */
+        /*
+         * int invCapacity = character.getInventory().getCapacity();
+         * for (int i = 0; i < invCapacity; i++)
+         * connection.send(new ChangeInventorySlotPacket(character, (byte) i));
+         */
 
         // spellbook
-        /* Spell[] spells = character.getSpells();
-        for (int i = 0; i < spells.length; i++)
-            connection.send(new ChangeSpellSlotPacket(spells[i], (byte) i)); */
+        /*
+         * Spell[] spells = character.getSpells();
+         * for (int i = 0; i < spells.length; i++)
+         * connection.send(new ChangeSpellSlotPacket(spells[i], (byte) i));
+         */
 
-        if (character.isParalyzed()) connection.send(new ParalyzedPacket());
+        if (character.isParalyzed())
+            connection.send(new ParalyzedPacket());
 
         // TODO Check if map position is valid, or disconnect user if invalid map
 
@@ -284,7 +315,8 @@ public class LoginServiceImpl implements LoginService {
 
         // TODO Set sailing and use boat if in water (and has a boat)
 
-        // TODO Send user index in server? The client doesn't use it at all, and we have no user indexes in this server...
+        // TODO Send user index in server? The client doesn't use it at all, and we have
+        // no user indexes in this server...
 
         Map map = mapService.getMap(character.getPosition().getMap());
         connection.send(new ChangeMapPacket(map));
@@ -294,23 +326,27 @@ public class LoginServiceImpl implements LoginService {
         // TODO Initialize chat color
 
         // TODO We want to take this as fat down as possible in this method...
-        // Add the user to the map, notify everyone on area, and let the player know it's surroundings
+        // Add the user to the map, notify everyone on area, and let the player know
+        // it's surroundings
         MakeUserCharAction action = new MakeUserCharAction(character, character.getPosition());
         action.setExecutor(mapActionExecutor);
         action.dispatch();
 
         // TODO Other (continue from TCP.bas line 1280-1288)
 
-        // TODO these lines can be moved further up, but I want to be sure other TODOs don't mess with that...
+        // TODO these lines can be moved further up, but I want to be sure other TODOs
+        // don't mess with that...
         connection.send(new UpdateUserStatsPacket(character));
-        connection.send(new UpdateHungerAndThirstPacket(character.getHunger(), Character.MAX_HUNGER, character.getThirstiness(), Character.MAX_THIRSTINESS));
+        connection.send(new UpdateHungerAndThirstPacket(character.getHunger(), Character.MAX_HUNGER,
+                character.getThirstiness(), Character.MAX_THIRSTINESS));
         connection.send(new UpdateStrengthAndDexterityPacket(character.getStrength(), character.getDexterity()));
 
         // TODO Other (continue from TCP.bas line 1296)
     }
 
     /**
-     * Checks if the given clientHash matches any of the valid hashes and if the given version is up to date.
+     * Checks if the given clientHash matches any of the valid hashes and if the
+     * given version is up to date.
      *
      * @param clientHash clientHash to check
      * @param version    client's version
@@ -324,10 +360,12 @@ public class LoginServiceImpl implements LoginService {
             // FIXME Why is it loaded here?
             clientHashes = ApplicationContext.getInstance(SecurityManager.class).getValidClientHashes();
 
-        if (clientHashes.length < 1) return;
+        if (clientHashes.length < 1)
+            return;
 
         for (String validHash : clientHashes)
-            if (clientHash.equals(validHash)) return;
+            if (clientHash.equals(validHash))
+                return;
 
         throw new LoginErrorException(CORRUPTED_CLIENT_ERROR);
     }

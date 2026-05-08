@@ -33,17 +33,17 @@ public class LoginNewCharacterPacketTest {
     private static final String CHARACTER_NAME = "test";
     private static final String CHARACTER_PASSWORD = "a";
     private static final String CHARACTER_MAIL = "test@ao.com";
-    private static final byte CHARACTER_ARCHETYPE = (byte) UserArchetype.ASSASIN.ordinal();
-    private static final byte CHARACTER_RACE = (byte) Race.HUMAN.ordinal();
-    private static final byte CHARACTER_GENDER = (byte) Gender.MALE.ordinal();
+    private static final byte CHARACTER_ARCHETYPE = (byte) UserArchetype.ASSASIN.getId();
+    private static final byte CHARACTER_RACE = (byte) Race.HUMAN.getId();
+    private static final byte CHARACTER_GENDER = (byte) Gender.MALE.getId();
     private static final byte CHARACTER_HOMELAND = 1;
     private static final byte CHARACTER_HEAD = 10;
 
     private static final String INVALID_CHARACTER_NAME = " ";
 
     private static final byte CLIENT_MAJOR = 0;
-    private static final byte CLIENT_MINOR = 12;
-    private static final byte CLIENT_VERSION = 2;
+    private static final byte CLIENT_MINOR = 13;
+    private static final byte CLIENT_VERSION = 0;
 
     static {
         ApplicationProperties.loadProperties("project.properties");
@@ -69,6 +69,7 @@ public class LoginNewCharacterPacketTest {
         security = ApplicationContext.getInstance(SecurityManager.class);
 
         MapService mapService = ApplicationContext.getInstance(MapService.class);
+        mapService.loadMaps();
         mapService.loadCities();
 
         config.setRestrictedToAdmins(false);
@@ -134,7 +135,9 @@ public class LoginNewCharacterPacketTest {
 
         packet.handle(inputBuffer, connection);
         verify(connection).send(errPacket.capture());
-        assertThat(errPacket.getValue().getMessage()).isEqualTo(String.format(LoginServiceImpl.CLIENT_OUT_OF_DATE_ERROR_FORMAT, CLIENT_MAJOR + "." + CLIENT_MINOR + "." + CLIENT_VERSION));
+        assertThat(errPacket.getValue().getMessage())
+                .isEqualTo(String.format(LoginServiceImpl.CLIENT_OUT_OF_DATE_ERROR_FORMAT,
+                        CLIENT_MAJOR + "." + CLIENT_MINOR + "." + CLIENT_VERSION));
     }
 
     @Test
@@ -234,12 +237,15 @@ public class LoginNewCharacterPacketTest {
         assertThat(errPacket.getValue().getMessage()).isEqualTo(LoginServiceImpl.ONLY_ADMINS_ERROR);
     }
 
-    private void writeLogin(String charName, String password, byte major, byte minor, byte version, String hash, byte race, byte gender, byte archetype, byte head, String mail, byte cityId) throws Exception {
-        when(inputBuffer.getReadableBytes()).thenReturn(charName.length() + 2 + security.getPasswordHashLength() + 8 + security.getClientHashLength() + mail.length() + 2);
-        when(inputBuffer.getASCIIString()).thenReturn(charName).thenReturn(mail);
-        when(inputBuffer.getASCIIStringFixed(security.getPasswordHashLength())).thenReturn(password);
-        when(inputBuffer.get()).thenReturn(major).thenReturn(minor).thenReturn(version).thenReturn(race).thenReturn(gender).thenReturn(archetype).thenReturn(head).thenReturn(cityId);
-        when(inputBuffer.getASCIIStringFixed(security.getClientHashLength())).thenReturn(hash);
+    private void writeLogin(String charName, String password, byte major, byte minor, byte version, String hash,
+            byte race, byte gender, byte archetype, byte head, String mail, byte cityId) throws Exception {
+        when(inputBuffer.getReadableBytes()).thenReturn(charName.length() + 2 + security.getPasswordHashLength() + 8
+                + security.getClientHashLength() + mail.length() + 2);
+        when(inputBuffer.getUTF8String()).thenReturn(charName).thenReturn(mail);
+        when(inputBuffer.getUTF8StringFixed(security.getPasswordHashLength())).thenReturn(password);
+        when(inputBuffer.get()).thenReturn(major).thenReturn(minor).thenReturn(version).thenReturn(race)
+                .thenReturn(gender).thenReturn(archetype).thenReturn(head).thenReturn(cityId);
+        when(inputBuffer.getUTF8StringFixed(security.getClientHashLength())).thenReturn(hash);
     }
 
 }
