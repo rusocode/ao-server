@@ -171,9 +171,10 @@ public record NpcDAOIni(String npcsFilePath,
         Heading heading = Heading.get((byte) (IniUtils.getInt(ini, section + "." + HEADING_KEY, 1) - 1));
         short body = (short) IniUtils.getInt(ini, section + "." + BODY_KEY, 0);
         boolean respawnable = IniUtils.getBoolean(ini, section + "." + RESPAWNABLE_KEY, true);
-        Class<? extends Behavior> behavior = getBehavior(ini, section);
-        Class<? extends AttackStrategy> attackStrategy = getAttackStrategy(ini, section);
-        Class<? extends MovementStrategy> movementStrategy = getMovementStrategy(ini, section);
+        AIType aiType = getAIType(ini, section);
+        Class<? extends Behavior> behavior = aiType != null ? aiType.getBehavior() : null;
+        Class<? extends AttackStrategy> attackStrategy = aiType != null ? aiType.getAttackStrategy() : null;
+        Class<? extends MovementStrategy> movementStrategy = aiType != null ? aiType.getMovementStrategy() : null;
 
         NpcType npcType = NpcType.findById(IniUtils.getInt(ini, section + "." + NPC_TYPE_KEY, -1));
 
@@ -184,15 +185,15 @@ public record NpcDAOIni(String npcsFilePath,
 
         return switch (npcType) {
             case COMMON ->
-                    loadCreature(NpcType.COMMON, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, ini, section);
+                    loadCreature(NpcType.COMMON, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, aiType, ini, section);
             case DRAGON, PRETORIAN ->
-                    loadCreature(npcType, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, ini, section);
+                    loadCreature(npcType, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, aiType, ini, section);
             case TRAINER ->
                     loadTrainer(npcType, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, ini, section);
             case GOVERNOR ->
                     loadGovernor(npcType, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, ini, section);
             case ROYAL_GUARD, CHAOS_GUARD ->
-                    loadGuard(npcType, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, ini, section);
+                    loadGuard(npcType, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, aiType, ini, section);
             case NOBLE ->
                     loadNoble(npcType, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, ini, section);
             case NEWBIE_RESUCITATOR, RESUCITATOR, GAMBLER, BANKER ->
@@ -242,24 +243,24 @@ public record NpcDAOIni(String npcsFilePath,
     // TODO Separar metodo para npc hostiles y varios/decorativos o cambiar nombre de CreatureNpc a algun nombre mas generico
     private Npc loadCreature(NpcType type, int id, String name, short body, short head, Heading heading, boolean respawnable,
                              String description, Class<? extends Behavior> behavior, Class<? extends AttackStrategy> attackStrategy,
-                             Class<? extends MovementStrategy> movementStrategy, INIConfiguration ini, String section) {
+                             Class<? extends MovementStrategy> movementStrategy, AIType aiType, INIConfiguration ini, String section) {
 
         return new CreatureNpc(type, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy,
                 getExperience(ini, section), getGold(ini, section), getMinHP(ini, section), getMaxHP(ini, section),
                 getMinHit(ini, section), getMaxHit(ini, section), getDefense(ini, section), getMagicDefense(ini, section), getAttack(ini, section),
                 getEvasion(ini, section), getSpells(ini, section), isAquatic(ini, section), isAttackable(ini, section),
-                isPoisonous(ini, section), isUnparalyzable(ini, section), isHostile(ini, section), isTameable(ini, section), getDrops(ini, section));
+                isPoisonous(ini, section), isUnparalyzable(ini, section), isHostile(ini, section), isTameable(ini, section), getDrops(aiType, ini, section));
     }
 
     private Npc loadGuard(NpcType type, int id, String name, short body, short head, Heading heading, boolean respawnable,
                           String description, Class<? extends Behavior> behavior, Class<? extends AttackStrategy> attackStrategy,
-                          Class<? extends MovementStrategy> movementStrategy, INIConfiguration ini, String section) {
+                          Class<? extends MovementStrategy> movementStrategy, AIType aiType, INIConfiguration ini, String section) {
 
         return new GuardNpc(type, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy,
                 getExperience(ini, section), getGold(ini, section), getMinHP(ini, section), getMaxHP(ini, section), getMinHit(ini, section),
                 getMaxHit(ini, section), getDefense(ini, section), getMagicDefense(ini, section), getAttack(ini, section), getEvasion(ini, section),
                 getSpells(ini, section), isAquatic(ini, section), isAttackable(ini, section), isPoisonous(ini, section),
-                isUnparalyzable(ini, section), isHostile(ini, section), isTameable(ini, section), getDrops(ini, section), isReturning(ini, section));
+                isUnparalyzable(ini, section), isHostile(ini, section), isTameable(ini, section), getDrops(aiType, ini, section), isReturning(ini, section));
     }
 
     /**
@@ -295,20 +296,12 @@ public record NpcDAOIni(String npcsFilePath,
      * @param section section from which to read the value
      * @return the npc's drops; null if none exists
      */
-    private Drop getDrops(INIConfiguration ini, String section) {
+    private Drop getDrops(AIType aiType, INIConfiguration ini, String section) {
         int objectCount = IniUtils.getInt(ini, section + "." + OBJECT_COUNT_KEY, -1);
         if (objectCount == -1) return null;
 
-        int aiTypeId = IniUtils.getInt(ini, section + "." + AI_TYPE_KEY, -1);
-
-        if (aiTypeId == -1) {
-            logKeyNotFoundOrInvalid(AI_TYPE_KEY, section);
-            return null;
-        }
-
-        AIType aiType = AIType.findById(aiTypeId);
         if (aiType == null) {
-            Logger.warn("The AI type id {} does not exist!", aiTypeId);
+            logKeyNotFoundOrInvalid(AI_TYPE_KEY, section);
             return null;
         }
 
@@ -469,42 +462,6 @@ public record NpcDAOIni(String npcsFilePath,
         }
         // Logger.debug("[CITY{}]: map={}, x={}, y={}", cityId, city.map(), city.x(), city.y());
         return city;
-    }
-
-    /**
-     * Gets npc behavior.
-     *
-     * @param ini     ini configuration
-     * @param section section from which to read the value
-     * @return the npc behavior or null if the AIType is null
-     */
-    private Class<? extends Behavior> getBehavior(INIConfiguration ini, String section) {
-        AIType aiType = getAIType(ini, section);
-        return aiType != null ? aiType.getBehavior() : null;
-    }
-
-    /**
-     * Gets npc attack strategy.
-     *
-     * @param ini     ini configuration
-     * @param section section from which to read the value
-     * @return the npc attack strategy or null if the AIType is null
-     */
-    private Class<? extends AttackStrategy> getAttackStrategy(INIConfiguration ini, String section) {
-        AIType aiType = getAIType(ini, section);
-        return aiType != null ? aiType.getAttackStrategy() : null;
-    }
-
-    /**
-     * Gets npc movement strategy.
-     *
-     * @param ini     ini configuration
-     * @param section section from which to read the value
-     * @return the npc movement strategy or null if the AIType is null
-     */
-    private Class<? extends MovementStrategy> getMovementStrategy(INIConfiguration ini, String section) {
-        AIType aiType = getAIType(ini, section);
-        return aiType != null ? aiType.getMovementStrategy() : null;
     }
 
     /**
