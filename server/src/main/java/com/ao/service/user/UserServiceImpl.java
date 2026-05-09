@@ -25,4 +25,9 @@ public class UserServiceImpl implements UserService {
         connectedUsers.remove(user);
     }
 
+    @Override
+    public Set<ConnectedUser> getConnectedUsers() {
+        return connectedUsers;
+    }
+
 }
