@@ -27,12 +27,12 @@
 
         <!-- Logging -->
         <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
+            <groupId>org.tinylog</groupId>
+            <artifactId>tinylog-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-core</artifactId>
+            <groupId>org.tinylog</groupId>
+            <artifactId>tinylog-impl</artifactId>
         </dependency>
 
         <!-- Utilities -->

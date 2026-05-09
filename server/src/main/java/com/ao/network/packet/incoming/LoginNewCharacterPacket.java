@@ -9,14 +9,11 @@ import com.ao.network.packet.outgoing.ErrorMessagePacket;
 import com.ao.security.SecurityManager;
 import com.ao.service.LoginService;
 import com.ao.service.login.LoginErrorException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.tinylog.Logger;
 
 import java.io.UnsupportedEncodingException;
 
 public class LoginNewCharacterPacket implements IncomingPacket {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(LoginNewCharacterPacket.class);
 
     private static final LoginService service = ApplicationContext.getInstance(LoginService.class);
     private static final SecurityManager security = ApplicationContext.getInstance(SecurityManager.class);
@@ -47,7 +44,7 @@ public class LoginNewCharacterPacket implements IncomingPacket {
         String mail = buffer.getUTF8String();
         byte cityId = buffer.get();
 
-        LOGGER.info("nick={}, password={}, version={}, clientHash={}, raceId={}, genderId={}, archetypeId={}, headId={}, mail={}, cityId={}", nick, password, version, clientHash, raceId, genderId, archetypeId, headId, mail, cityId);
+        Logger.info("nick={}, password={}, version={}, clientHash={}, raceId={}, genderId={}, archetypeId={}, headId={}, mail={}, cityId={}", nick, password, version, clientHash, raceId, genderId, archetypeId, headId, mail, cityId);
 
         try {
             service.connectNewCharacter((ConnectedUser) connection.getUser(), nick, password, raceId, genderId, archetypeId, headId, mail, cityId, clientHash, version);
@@ -64,10 +61,10 @@ public class LoginNewCharacterPacket implements IncomingPacket {
         int incomingBytes = buffer.getReadableBytes();
         int minRequiredBytes = calculateMinRequiredBytes();
 
-        LOGGER.debug("incomingBytes={}, minRequiredBytes={}", incomingBytes, minRequiredBytes);
+        Logger.debug("incomingBytes={}, minRequiredBytes={}", incomingBytes, minRequiredBytes);
 
         if (incomingBytes < minRequiredBytes) {
-            LOGGER.error("Not enough bytes to read!");
+            Logger.error("Not enough bytes to read!");
             return false;
         }
 

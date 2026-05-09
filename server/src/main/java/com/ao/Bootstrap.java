@@ -13,7 +13,6 @@ import com.ao.service.MapService;
 import com.ao.service.NpcService;
 import com.ao.service.ObjectService;
 import com.ao.service.UserService;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -126,7 +125,7 @@ public class Bootstrap {
                         changed = true;
                     }
 
-                    // Si hubo cambios, enviamos el paquete que analizamos antes
+                    // Si hubo cambios, enviamos el paquete de actualización
                     if (changed) {
                         connectedUser.getConnection().send(new UpdateUserStatsPacket(character));
                     }
@@ -162,13 +161,11 @@ public class Bootstrap {
         }, 0, intervals.getNpc().getAiTick(), TimeUnit.MILLISECONDS);
 
         // 4. WORLD SAVE (Guardado automático de personajes)
-        // El intervalo suele ser mayor (ej. cada 15 o 30 minutos)
         scheduler.scheduleAtFixedRate(() -> {
-            // TODO: Lógica de guardado masivo de charfiles y copia del mundo
+            // TODO: Lógica de guardado masivo
         }, 15, 15, TimeUnit.MINUTES);
 
         // 5. EFECTOS TEMPORALES (Veneno, Parálisis, Invisibilidad)
-        // Usamos un tick genérico (ej. 500ms o 1s) para procesar estados que expiran
         scheduler.scheduleAtFixedRate(() -> {
             // TODO: Lógica de limpieza de estados temporales
         }, 0, 1000, TimeUnit.MILLISECONDS);
@@ -185,9 +182,7 @@ public class Bootstrap {
         LOGGER.info("Loading application context...");
 
         LOGGER.info("Loading maps...");
-        MapService mapService = ApplicationContext.getInstance(MapService.class); // Sin DI tendria que hardcodear la
-                                                                                  // creacion del objeto -> new
-                                                                                  // MapServiceImpl();
+        MapService mapService = ApplicationContext.getInstance(MapService.class);
         mapService.loadMaps();
 
         LOGGER.info("Loading cities...");
@@ -200,8 +195,6 @@ public class Bootstrap {
         LOGGER.info("Loading npcs...");
         NpcService npcService = ApplicationContext.getInstance(NpcService.class);
         npcService.loadNpcs();
-
-        // TODO Load other services and classes from application context
     }
 
 }

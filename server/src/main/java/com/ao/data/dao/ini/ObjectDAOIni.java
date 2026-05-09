@@ -17,8 +17,7 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import org.apache.commons.configuration2.INIConfiguration;
 import org.apache.commons.configuration2.ex.ConfigurationException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.tinylog.Logger;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -44,8 +43,6 @@ import java.util.stream.IntStream;
  */
 
 public class ObjectDAOIni implements ObjectDAO {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(ObjectDAOIni.class);
 
     private static final String INIT_HEADER = "INIT";
     private static final String OBJECT_COUNT_KEY = "object_count";
@@ -173,9 +170,9 @@ public class ObjectDAOIni implements ObjectDAO {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, java.nio.charset.StandardCharsets.UTF_8))) {
             ini = new INIConfiguration();
             ini.read(reader);
-            LOGGER.info("Objects loaded successfully!");
+            Logger.info("Objects loaded successfully!");
         } catch (IOException | ConfigurationException e) {
-            LOGGER.error("Error loading objects!", e);
+            Logger.error("Error loading objects!", e);
             System.exit(-1);
         }
 
@@ -223,7 +220,7 @@ public class ObjectDAOIni implements ObjectDAO {
 
         // El objeto existe, pero el tipo es invalido
         if (objectType == null) {
-            LOGGER.error("Unknown object type in section [{}]", section);
+            Logger.error("Unknown object type in section [{}]", section);
             return null;
         }
 
@@ -309,7 +306,7 @@ public class ObjectDAOIni implements ObjectDAO {
                 object = loadMineral(objectType.getObjectType(), id, name, graphicIndex, ini, section);
                 break;
             default:
-                LOGGER.error("Unexpected object found: {}", objectTypeId);
+                Logger.error("Unexpected object found: {}", objectTypeId);
         }
 
         // Check if the object is craftable
@@ -317,7 +314,7 @@ public class ObjectDAOIni implements ObjectDAO {
             try {
                 craftables.put(object.getId(), loadCraftable(object, ini, section));
             } catch (DAOException e) {
-                LOGGER.error("Item id '{}' cannot be crafted!", id);
+                Logger.error("Item id '{}' cannot be crafted!", id);
             }
         }
 
@@ -346,7 +343,7 @@ public class ObjectDAOIni implements ObjectDAO {
     private ObjectProperties loadResourceSource(ObjectType type, int id, String name, int graphic, LegacyObjectType legactType, INIConfiguration ini, String section) {
         ResourceSourceInfo info = getResourceSourceInfo(legactType, ini, section);
         if (info == null) {
-            LOGGER.error("Unexpected resource source of type {}", type.name());
+            Logger.error("Unexpected resource source of type {}", type.name());
             return null;
         }
         return new ResourceSourceProperties(type, id, name, graphic, info.id, info.type);
@@ -405,7 +402,7 @@ public class ObjectDAOIni implements ObjectDAO {
             return new TemporalStatModifyingItemProperties(ObjectType.DEXTERITY_POTION, id, name, graphic, value, forbiddenArchetypes, forbiddenRaces, newbie, noLog, droppable, respawnable, minModifier, maxModifier, effectDuration);
 
         // This should never happen...
-        LOGGER.error("Potion type '{}' not found", potionType.name());
+        Logger.error("Potion type '{}' not found", potionType.name());
         return null;
     }
 
@@ -518,7 +515,7 @@ public class ObjectDAOIni implements ObjectDAO {
         DoorProperties otherObjectProperties = null;
 
         if (openIndex == 0 || closedIndex == 0) {
-            LOGGER.error("Invalid door definition for id '{}'. Ids for open and closed states are required.", id);
+            Logger.error("Invalid door definition for id '{}'. Ids for open and closed states are required.", id);
             return null;
         }
 
@@ -573,7 +570,7 @@ public class ObjectDAOIni implements ObjectDAO {
             if (key == null) continue; // Ignore a missing or empty key
             UserArchetype archetype = archetypes.get(key);
             if (archetype != null) forbiddenArchetypes.add(archetype);
-            else LOGGER.error("Unexpected forbidden archetype loading object: {}", key); // This shouldn't happen!
+            else Logger.error("Unexpected forbidden archetype loading object: {}", key); // This shouldn't happen!
         }
         return forbiddenArchetypes.isEmpty() ? null : forbiddenArchetypes;
     }

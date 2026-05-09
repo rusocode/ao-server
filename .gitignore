@@ -29,4 +29,6 @@ server/charfiles/*
 logs/
 test_output.txt
 *.txt
-
+
+# Qodana
+qodana.yaml

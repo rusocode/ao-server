@@ -6,8 +6,7 @@ import com.ao.utils.ResourceUtils;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import org.apache.commons.configuration2.INIConfiguration;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.tinylog.Logger;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -22,7 +21,6 @@ public class ArchetypeConfigurationIni implements ArchetypeConfiguration {
     private static final String RANGED_ACCURACY_HEADER = "MODATAQUEPROYECTILES";
     private static final String RANGED_DAMAGE_HEADER = "MODDAÑOPROYECTILES";
     private static final String WRESTLING_DAMAGE_HEADER = "MODDAÑOWRESTLING";
-    private static final Logger LOGGER = LoggerFactory.getLogger(ArchetypeConfigurationIni.class);
 
     private final INIConfiguration ini;
 
@@ -36,7 +34,7 @@ public class ArchetypeConfigurationIni implements ArchetypeConfiguration {
             ini = new INIConfiguration();
             ini.read(reader);
         } catch (Exception e) {
-            LOGGER.error("Archetype configuration loading failed for file: {}", archetypeConfigIni, e);
+            Logger.error("Archetype configuration loading failed for file: {}", archetypeConfigIni, e);
             throw new RuntimeException("Failed to load archetype configuration", e);
         }
     }

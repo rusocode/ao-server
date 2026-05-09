@@ -9,8 +9,7 @@ import com.ao.utils.RangeParser;
 import com.ao.utils.ResourceUtils;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.tinylog.Logger;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -25,8 +24,6 @@ import java.util.Set;
 //  le veo sentido usar el posfijo "Impl" en este caso, solo lo deberia usar en el paquete "service"
 
 public class MapDAOImpl implements MapDAO {
-
-    private final static Logger LOGGER = LoggerFactory.getLogger(MapDAOImpl.class);
 
     private static final String MAP_FILE_NAME_FORMAT = "Mapa%d.map";
     private static final String INF_FILE_NAME_FORMAT = "Mapa%d.inf";
@@ -90,7 +87,7 @@ public class MapDAOImpl implements MapDAO {
             }
 
         } catch (IOException e) {
-            LOGGER.error("Map " + id + " loading failed!", e);
+            Logger.error("Map " + id + " loading failed!", e);
             throw new RuntimeException(e);
         }
 
@@ -175,7 +172,7 @@ public class MapDAOImpl implements MapDAO {
                     try {
                         trigger = Trigger.get(triggerIndex);
                     } catch (ArrayIndexOutOfBoundsException e) {
-                        LOGGER.warn(String.format("The position (%d, %d, %d) has an invalid trigger: %d.", id, x, y, triggerIndex));
+                        Logger.warn(String.format("The position (%d, %d, %d) has an invalid trigger: %d.", id, x, y, triggerIndex));
                         trigger = Trigger.NONE;
                     }
                 }
@@ -190,7 +187,7 @@ public class MapDAOImpl implements MapDAO {
                     byte toY = (byte) infBuffer.getShort();
 
                     if (toMap < 1 || toMap > mapsAmount)
-                        LOGGER.error(String.format("The position (%d, %d, %d) has an invalid tile exit to a non-existant map (%d). Omitting.", id, x, y, toMap));
+                        Logger.error(String.format("The position (%d, %d, %d) has an invalid tile exit to a non-existant map (%d). Omitting.", id, x, y, toMap));
                     else tileExit = new Position(toX, toY, toMap);
 
                 }
@@ -234,7 +231,7 @@ public class MapDAOImpl implements MapDAO {
             properties.load(inputStream);
             inputStream.close();
         } catch (IOException e) {
-            LOGGER.error("Error loading maps properties file({})", configFile);
+            Logger.error("Error loading maps properties file({})", configFile);
             throw new RuntimeException(e);
         }
         waterGrhs.addAll(RangeParser.parseShorts(properties.getProperty("maps.water")));

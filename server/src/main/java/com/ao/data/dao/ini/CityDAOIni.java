@@ -8,8 +8,7 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import org.apache.commons.configuration2.INIConfiguration;
 import org.apache.commons.configuration2.ex.ConfigurationException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.tinylog.Logger;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -21,8 +20,6 @@ import java.io.InputStreamReader;
  */
 
 public record CityDAOIni(String citiesFilePath) implements CityDAO {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(CityDAOIni.class);
 
     private static final String INIT_HEADER = "INIT";
     private static final String CITIE_COUNT_KEY = "citie_count";
@@ -49,9 +46,9 @@ public record CityDAOIni(String citiesFilePath) implements CityDAO {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, java.nio.charset.StandardCharsets.UTF_8))) {
             ini = new INIConfiguration();
             ini.read(reader);
-            LOGGER.info("Cities loaded successfully!");
+            Logger.info("Cities loaded successfully!");
         } catch (IOException | ConfigurationException e) {
-            LOGGER.error("Error loading citites!", e);
+            Logger.error("Error loading citites!", e);
             System.exit(-1);
         }
 
@@ -74,11 +71,11 @@ public record CityDAOIni(String citiesFilePath) implements CityDAO {
      * @return new city
      */
     private City loadCity(int id, INIConfiguration ini) {
-        String section = CITY_PREFIX + id;
+        String section = CITY_PREFIX + id + ".";
 
-        int map = IniUtils.getInt(ini, section + "." + MAP_KEY, -1);
-        byte x = (byte) IniUtils.getInt(ini, section + "." + X_KEY, -1);
-        byte y = (byte) IniUtils.getInt(ini, section + "." + Y_KEY, -1);
+        int map = IniUtils.getInt(ini, section + MAP_KEY, -1);
+        byte x = (byte) IniUtils.getInt(ini, section + X_KEY, -1);
+        byte y = (byte) IniUtils.getInt(ini, section + Y_KEY, -1);
 
         return new City(map, x, y);
     }
