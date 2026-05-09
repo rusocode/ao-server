@@ -13,8 +13,8 @@ import com.ao.model.character.*;
 import com.ao.model.character.Character;
 import com.ao.model.character.archetype.UserArchetype;
 import com.ao.model.map.City;
-import com.ao.model.map.Position;
 import com.ao.model.map.Map;
+import com.ao.model.map.Position;
 import com.ao.model.user.Account;
 import com.ao.model.user.ConnectedUser;
 import com.ao.model.user.User;
@@ -24,8 +24,7 @@ import com.ao.security.SecurityManager;
 import com.ao.service.*;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.tinylog.Logger;
 
 /**
  * Default implementation of the login service. <b>An account is the same as a character.</b>
@@ -51,7 +50,6 @@ public class LoginServiceImpl implements LoginService {
     public static final String INVALID_HEAD_ERROR = "La cabeza seleccionada no es valida.";
     public static final String INVALID_BODY_ERROR = "No existe un cuerpo para la combinacion seleccionada.";
     public static final String INVALID_CITY_ERROR = "La ciudad seleccionada no es valida.";
-    private final Logger LOGGER = LoggerFactory.getLogger(LoginServiceImpl.class);
     private final AccountDAO accDAO;
     private final UserCharacterDAO charDAO;
 
@@ -102,7 +100,7 @@ public class LoginServiceImpl implements LoginService {
         if (!config.isCharacterCreationEnabled()) throw new LoginErrorException(CHARACTER_CREATION_DISABLED_ERROR);
         if (config.isRestrictedToAdmins()) throw new LoginErrorException(ONLY_ADMINS_ERROR);
 
-        if (!ValidatorService.validCharacterName(nick))throw new LoginErrorException(UserCharacterBuilder.INVALID_NAME_ERROR);
+        if (!ValidatorService.validCharacterName(nick)) throw new LoginErrorException(UserCharacterBuilder.INVALID_NAME_ERROR);
         if (!ValidatorService.validEmail(mail)) throw new LoginErrorException(UserCharacterBuilder.INVALID_EMAIL_ERROR);
 
 
@@ -117,19 +115,19 @@ public class LoginServiceImpl implements LoginService {
 
         UserArchetype archetype = UserArchetype.findById(archetypeId);
         if (archetype == null) {
-            LOGGER.warn("Invalid archetype ID: {}", archetypeId);
+            Logger.warn("Invalid archetype ID: {}", archetypeId);
             throw new LoginErrorException(INVALID_ARCHETYPE_ERROR);
         }
 
         Race race = Race.findById(raceId);
         if (race == null) {
-            LOGGER.warn("Invalid race ID: {}", raceId);
+            Logger.warn("Invalid race ID: {}", raceId);
             throw new LoginErrorException(INVALID_RACE_ERROR);
         }
 
         Gender gender = Gender.findById(genderId);
         if (gender == null) {
-            LOGGER.warn("Invalid gender ID: {}", genderId);
+            Logger.warn("Invalid gender ID: {}", genderId);
             throw new LoginErrorException(INVALID_GENDER_ERROR);
         }
 
@@ -154,7 +152,7 @@ public class LoginServiceImpl implements LoginService {
         } catch (NameAlreadyTakenException e) {
             throw new LoginErrorException(ACCOUNT_NAME_TAKEN_ERROR);
         } catch (DAOException e) {
-            LOGGER.error("Error creating account and character for '{}'", nick, e);
+            Logger.error("Error creating account and character for '{}'", nick, e);
             throw new LoginErrorException(DAO_ERROR);
         }
 
@@ -164,7 +162,7 @@ public class LoginServiceImpl implements LoginService {
         // Assign character index
         int charIndex = charIndexManager.assignCharIndex();
         character.setCharIndex(charIndex);
-        LOGGER.info("Assigned CharIndex {} to character '{}'", charIndex, character.getName());
+        Logger.info("Assigned CharIndex {} to character '{}'", charIndex, character.getName());
 
         // Associate character with account and user
         account.addCharacter(nick);
@@ -184,7 +182,7 @@ public class LoginServiceImpl implements LoginService {
         userService.logIn(user);
 
         // Debugging
-        LOGGER.info("New character '{}' successfully placed in the world at {}", character.getName(), character.getPosition().toString());
+        Logger.info("New character '{}' successfully placed in the world at {}", character.getName(), character.getPosition().toString());
 
     }
 
@@ -228,21 +226,21 @@ public class LoginServiceImpl implements LoginService {
 
         Privileges privileges = new Privileges(privilegesService.getPrivilegeFlags(nick));
 
-        LOGGER.debug("Privilege for {}: {}", nick, privilegesService.getPrivilegeDescription(nick));
+        Logger.debug("Privilege for {}: {}", nick, privilegesService.getPrivilegeDescription(nick));
 
         character.setPrivileges(privileges);
 
         // Debug log
-        LOGGER.debug("Character '{}' privileges flags: {}", character.getName(), character.getPrivileges().getPrivilegesFlags());
+        Logger.debug("Character '{}' privileges flags: {}", character.getName(), character.getPrivileges().getPrivilegesFlags());
 
-        if (privilegesService.isDios(nick)) LOGGER.info("GM '{}' connected!", nick); // TODO Agregar "from IP..."
+        if (privilegesService.isDios(nick)) Logger.info("GM '{}' connected!", nick); // TODO Agregar "from IP..."
 
         if (config.isRestrictedToAdmins() && !character.getPrivileges().isGameMaster())
             throw new LoginErrorException(ONLY_ADMINS_ERROR);
 
         int charIndex = charIndexManager.assignCharIndex();
         character.setCharIndex(charIndex);
-        LOGGER.info("Assigned CharIndex {} to character '{}'", charIndex, character.getName());
+        Logger.info("Assigned CharIndex {} to character '{}'", charIndex, character.getName());
 
         // TODO tell the client it's current resuscitation lock state
 

@@ -6,8 +6,7 @@ import com.google.inject.Singleton;
 import com.google.inject.name.Named;
 import org.apache.commons.configuration2.INIConfiguration;
 import org.apache.commons.configuration2.ex.ConfigurationException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.tinylog.Logger;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -26,8 +25,6 @@ import java.util.Set;
 
 @Singleton
 public class PrivilegesService {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(PrivilegesService.class);
 
     /** Nombres de las secciones en el archivo INI. */
     private static final String DIOSES_SECTION = "Dioses";
@@ -88,10 +85,10 @@ public class PrivilegesService {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
             INIConfiguration config = new INIConfiguration();
             config.read(reader);
-            LOGGER.info("Server configuration loaded successfully for privileges!");
+            Logger.info("Server configuration loaded successfully for privileges!");
             return config;
         } catch (IOException | ConfigurationException e) {
-            LOGGER.error("Error loading server configuration for privileges!", e);
+            Logger.error("Error loading server configuration for privileges!", e);
             throw new RuntimeException("Failed to load privileges configuration", e);
         }
     }
@@ -120,8 +117,8 @@ public class PrivilegesService {
             if (nick != null && !nick.isBlank()) {
                 // Normaliza el nombre a mayusculas para comparacion case-insensitive
                 dioses.add(nick.trim().toUpperCase());
-                LOGGER.debug("Loaded {} from section {}: {}", "Dios", PrivilegesService.DIOSES_SECTION, nick);
-            } else LOGGER.warn("Empty or null value for key: {}", key);
+                Logger.debug("Loaded {} from section {}: {}", "Dios", PrivilegesService.DIOSES_SECTION, nick);
+            } else Logger.warn("Empty or null value for key: {}", key);
         }
     }
 
@@ -129,8 +126,8 @@ public class PrivilegesService {
      * Resgistra la cantidad de privilegios para los Dioses.
      */
     private void logLoadedPrivileges() {
-        LOGGER.info("Privileges loaded successfully:");
-        LOGGER.info("Dioses: {}", dioses.size());
+        Logger.info("Privileges loaded successfully:");
+        Logger.info("Dioses: {}", dioses.size());
     }
 
 }

@@ -1,7 +1,6 @@
 package com.ao.context;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.tinylog.Logger;
 
 import java.util.Properties;
 
@@ -10,8 +9,6 @@ import java.util.Properties;
  */
 
 public class ApplicationProperties {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationProperties.class);
 
     private static final Properties properties = new Properties();
 
@@ -31,10 +28,10 @@ public class ApplicationProperties {
                 props.load(stream);
                 properties.putAll(props);
             } else {
-                LOGGER.error("Properties file {} not found!", name);
+                Logger.error("Properties file {} not found!", name);
             }
         } catch (Exception e) {
-            LOGGER.error("Error loading {} properties file!", name, e);
+            Logger.error("Error loading {} properties file!", name, e);
         }
     }
 

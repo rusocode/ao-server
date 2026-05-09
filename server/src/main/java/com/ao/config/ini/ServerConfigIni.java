@@ -6,8 +6,7 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import org.apache.commons.configuration2.INIConfiguration;
 import org.apache.commons.configuration2.ex.ConfigurationException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.tinylog.Logger;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -19,8 +18,6 @@ import java.io.InputStreamReader;
  */
 
 public class ServerConfigIni implements ServerConfig {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(ServerConfigIni.class);
 
     private static final String INIT_HEADER = "INIT";
     private static final String INIT_DIOSES = "Dioses"; // TODO No se esta usando
@@ -54,9 +51,9 @@ public class ServerConfigIni implements ServerConfig {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
             ini = new INIConfiguration();
             ini.read(reader);
-            LOGGER.info("Server configuration loaded successfully!");
+            Logger.info("Server configuration loaded successfully!");
         } catch (IOException | ConfigurationException e) {
-            LOGGER.error("Error loading server configuration!", e);
+            Logger.error("Error loading server configuration!", e);
             System.exit(-1);
         }
     }

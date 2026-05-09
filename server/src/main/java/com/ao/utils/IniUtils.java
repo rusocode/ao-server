@@ -3,16 +3,13 @@ package com.ao.utils;
 import org.apache.commons.configuration2.INIConfiguration;
 import org.apache.commons.configuration2.ex.ConversionException;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.tinylog.Logger;
 
 /**
  * Utilidades para leer valores tipados desde INI con logging uniforme, centralizando el logging y el fallback en un lugar.
  */
 
 public final class IniUtils {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(IniUtils.class);
 
     private IniUtils() {
     }
@@ -25,14 +22,14 @@ public final class IniUtils {
 
     public static int getRequiredInt(INIConfiguration ini, String key) {
         if (!ini.containsKey(key)) {
-            LOGGER.error("Missing required key '{}'!", key);
+            Logger.error("Missing required key '{}'!", key);
             System.exit(-1);
         }
         Integer value = 0;
         try {
             value = ini.getInteger(key, null);
         } catch (ConversionException e) {
-            LOGGER.error("{}", e.getMessage());
+            Logger.error("{}", e.getMessage());
             System.exit(-1);
         }
         return value;

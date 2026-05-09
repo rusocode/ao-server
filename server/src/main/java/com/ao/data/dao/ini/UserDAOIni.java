@@ -19,12 +19,10 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import org.apache.commons.configuration2.INIConfiguration;
 import org.apache.commons.configuration2.ex.ConfigurationException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.tinylog.Logger;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.Set;
@@ -34,8 +32,6 @@ import java.util.Set;
  */
 
 public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharacterDAO {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(UserDAOIni.class);
 
     private static final String FILE_EXTENSION = ".chr";
 
@@ -185,7 +181,7 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
         INIConfiguration ini = readCharFile(username);
 
         if (ini == null) {
-            LOGGER.debug("Character '{}' not found!", username);
+            Logger.debug("Character '{}' not found!", username);
             return null;
         }
 
@@ -197,7 +193,7 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
             String banned = IniUtils.getString(ini, FLAGS_HEADER + "." + BANNED_KEY, "");
 
             if (password.isBlank() || mail.isBlank() || banned.isBlank()) {
-                LOGGER.warn("Missing required fields for '{}': password={}, mail={}, banned={}", username, password, mail, banned);
+                Logger.warn("Missing required fields for '{}': password={}, mail={}, banned={}", username, password, mail, banned);
                 throw new DAOException("Character file is missing required data.");
             }
 
@@ -211,7 +207,7 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
             return new AccountImpl(username, password, mail, characters, isBanned);
 
         } catch (Exception e) {
-            LOGGER.error("Error geting charfile (account data) for username '{}'.", username, e);
+            Logger.error("Error geting charfile (account data) for username '{}'.", username, e);
             throw new DAOException("Failed to geting account: " + e.getMessage());
         }
 
@@ -236,9 +232,9 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
 
         try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8))) {
             ini.write(writer);
-            LOGGER.debug("Charfile '{}' created successfully!", username);
+            Logger.debug("Charfile '{}' created successfully!", username);
         } catch (IOException | ConfigurationException e) {
-            LOGGER.error("Error creating charfile! {}", e.getMessage());
+            Logger.error("Error creating charfile! {}", e.getMessage());
             throw new DAOException(e);
         }
 
@@ -250,7 +246,7 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
         File charfile = new File(getCharFilePath(username));
         if (!charfile.exists()) return;
         boolean success = charfile.delete();
-        if (!success) LOGGER.error("{} deletion failed.", username);
+        if (!success) Logger.error("{} deletion failed.", username);
     }
 
     @Override
@@ -261,7 +257,7 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
         INIConfiguration ini = readCharFile(nick);
 
         if (ini == null) {
-            LOGGER.debug("Character '{}' not found", nick);
+            Logger.debug("Character '{}' not found", nick);
             return null;
         }
 
@@ -314,10 +310,10 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
                     byte y = Byte.parseByte(parts[2]);
                     position = new Position(x, y, map);
                 } catch (NumberFormatException e) {
-                    LOGGER.error("Invalid position data for '{}': {}", nick, positionString);
+                    Logger.error("Invalid position data for '{}': {}", nick, positionString);
                 }
-            } else LOGGER.error("Malformed POSITION for '{}': {}", nick, positionString);
-        } else LOGGER.error("Position not set for '{}'", nick);
+            } else Logger.error("Malformed POSITION for '{}': {}", nick, positionString);
+        } else Logger.error("Position not set for '{}'", nick);
 
         // TODO Complete description
         String description = "";
@@ -459,11 +455,11 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
             }
             try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8))) {
                 character.write(writer);
-                LOGGER.info("Created new character file: {}", charFilePath);
+                Logger.info("Created new character file: {}", charFilePath);
             }
 
         } catch (Exception e) {
-            LOGGER.error("Error creating character file for '{}'", nick, e);
+            Logger.error("Error creating character file for '{}'", nick, e);
             // Limpiar archivo si algo salió mal
             if (charFile.exists()) charFile.delete();
             throw new DAOException();
@@ -511,9 +507,9 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
                 ini = new INIConfiguration();
                 ini.read(reader);
-                LOGGER.info("Charfile loaded successfully from classpath!");
+                Logger.info("Charfile loaded successfully from classpath!");
             } catch (IOException | ConfigurationException e) {
-                LOGGER.error("Charfile loading from classpath failed!", e);
+                Logger.error("Charfile loading from classpath failed!", e);
                 throw new DAOException(e); // TODO O sys.ext?
             }
         } else {
@@ -521,9 +517,9 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8))) {
                 ini = new INIConfiguration();
                 ini.read(reader);
-                LOGGER.info("Charfile loaded successfully from filesystem!");
+                Logger.info("Charfile loaded successfully from filesystem!");
             } catch (IOException | ConfigurationException e) {
-                LOGGER.error("Charfile loading from filesystem failed!", e);
+                Logger.error("Charfile loading from filesystem failed!", e);
                 throw new DAOException(e);
             }
         }

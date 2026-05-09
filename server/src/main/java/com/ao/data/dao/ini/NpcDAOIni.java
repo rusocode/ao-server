@@ -18,12 +18,12 @@ import com.ao.model.inventory.Inventory;
 import com.ao.model.inventory.InventoryImpl;
 import com.ao.model.map.City;
 import com.ao.model.map.Heading;
-import com.ao.model.spell.Spell;
 import com.ao.model.object.Item;
 import com.ao.model.object.ObjectType;
 import com.ao.model.object.factory.ObjectFactory;
 import com.ao.model.object.factory.ObjectFactoryException;
 import com.ao.model.object.properties.ObjectProperties;
+import com.ao.model.spell.Spell;
 import com.ao.service.MapService;
 import com.ao.utils.IniUtils;
 import com.ao.utils.ResourceUtils;
@@ -31,8 +31,7 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import org.apache.commons.configuration2.INIConfiguration;
 import org.apache.commons.configuration2.ex.ConfigurationException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.tinylog.Logger;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -59,8 +58,6 @@ public record NpcDAOIni(String npcsFilePath,
                         ObjectDAO objectDAO,
                         ObjectFactory objectFactory,
                         MapService mapService) implements NpcCharacterDAO {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(NpcDAOIni.class);
 
     private static final String INIT_HEADER = "INIT";
     private static final String NPC_COUNT_KEY = "npc_count";
@@ -140,9 +137,9 @@ public record NpcDAOIni(String npcsFilePath,
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, java.nio.charset.StandardCharsets.UTF_8))) {
             ini = new INIConfiguration();
             ini.read(reader);
-            LOGGER.info("Npcs loaded successfully!");
+            Logger.info("Npcs loaded successfully!");
         } catch (IOException | ConfigurationException e) {
-            LOGGER.error("Error loading npcs!", e);
+            Logger.error("Error loading npcs!", e);
             System.exit(-1);
         }
 
@@ -181,7 +178,7 @@ public record NpcDAOIni(String npcsFilePath,
         NpcType npcType = NpcType.findById(IniUtils.getInt(ini, section + "." + NPC_TYPE_KEY, -1));
 
         if (npcType == null) {
-            LOGGER.error("Unknown npc type in section [{}]", section);
+            Logger.error("Unknown npc type in section [{}]", section);
             return null;
         }
 
@@ -277,7 +274,7 @@ public record NpcDAOIni(String npcsFilePath,
     private List<Spell> getSpells(INIConfiguration ini, String section) {
         int spellCount = IniUtils.getInt(ini, section + "." + SPELL_COUNT_KEY, 0);
         if (spellCount <= 0) {
-            LOGGER.warn("No spells found for npc [{}]", section);
+            Logger.warn("No spells found for npc [{}]", section);
             return null;
         }
 
@@ -311,7 +308,7 @@ public record NpcDAOIni(String npcsFilePath,
 
         AIType aiType = AIType.findById(aiTypeId);
         if (aiType == null) {
-            LOGGER.warn("The AI type id {} does not exist!", aiTypeId);
+            Logger.warn("The AI type id {} does not exist!", aiTypeId);
             return null;
         }
 
@@ -370,9 +367,9 @@ public record NpcDAOIni(String npcsFilePath,
                 try {
                     item = objectFactory.getObject(objectProperties, amount);
                     if (item != null) inventory.addItem(item);
-                    else LOGGER.error("Npc has object id '{}' in inventory but it's not an item", objId);
+                    else Logger.error("Npc has object id '{}' in inventory but it's not an item", objId);
                 } catch (ObjectFactoryException e) {
-                    LOGGER.warn("Npc with item id '{}' cannot be created", objId);
+                    Logger.warn("Npc with item id '{}' cannot be created", objId);
                 }
             }
         }
@@ -462,15 +459,15 @@ public record NpcDAOIni(String npcsFilePath,
             return null;
         }
         if (cityId < 0 || cityId > 255) {
-            LOGGER.warn("City id '{}' out of range [0..255] in section [{}]", cityId, section);
+            Logger.warn("City id '{}' out of range [0..255] in section [{}]", cityId, section);
             return null;
         }
         City city = mapService.getCity((byte) cityId);
         if (city == null) {
-            LOGGER.warn("The city id {} does not exist!", cityId);
+            Logger.warn("The city id {} does not exist!", cityId);
             return null;
         }
-        // LOGGER.debug("[CITY{}]: map={}, x={}, y={}", cityId, city.map(), city.x(), city.y());
+        // Logger.debug("[CITY{}]: map={}, x={}, y={}", cityId, city.map(), city.x(), city.y());
         return city;
     }
 
@@ -526,7 +523,7 @@ public record NpcDAOIni(String npcsFilePath,
         }
         AIType aiType = AIType.findById(aiTypeId);
         if (aiType == null) {
-            LOGGER.warn("The AI type id {} does not exist!", aiTypeId);
+            Logger.warn("The AI type id {} does not exist!", aiTypeId);
             return null;
         }
         return aiType;
@@ -745,7 +742,7 @@ public record NpcDAOIni(String npcsFilePath,
     }
 
     private void logKeyNotFoundOrInvalid(String key, String section) {
-        LOGGER.warn("The key '{}' was not found in section [{}] or its value is invalid!", key, section);
+        Logger.warn("The key '{}' was not found in section [{}] or its value is invalid!", key, section);
     }
 
 }
