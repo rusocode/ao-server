@@ -1,4 +1,4 @@
-<!-- Generated: 2026-05-08 | Files scanned: 258 classes / 47 packages | Token estimate: ~600 -->
+<!-- Generated: 2026-05-09 | Files scanned: 258 classes / 47 packages | Token estimate: ~600 -->
 
 # Architecture
 
@@ -44,15 +44,15 @@ aoserver (parent POM)
 
 ## Layer Responsibilities
 
-| Layer | Role | Location |
-|-------|------|----------|
-| Network | Packet framing, en/decryption | `network/`, `server-security/` |
-| Packet handlers | Protocol dispatch | `network/packet/incoming/`, `network/packet/outgoing/` |
-| Services | Business logic, game state | `service/` |
-| DAOs | File I/O | `data/dao/` |
-| Domain model | Entities, value objects | `model/` |
-| IoC | Guice wiring | `ioc/module/` |
-| Actions | Async command queue | `action/` |
+| Layer           | Role                          | Location                                               |
+|-----------------|-------------------------------|--------------------------------------------------------|
+| Network         | Packet framing, en/decryption | `network/`, `server-security/`                         |
+| Packet handlers | Protocol dispatch             | `network/packet/incoming/`, `network/packet/outgoing/` |
+| Services        | Business logic, game state    | `service/`                                             |
+| DAOs            | File I/O                      | `data/dao/`                                            |
+| Domain model    | Entities, value objects       | `model/`                                               |
+| IoC             | Guice wiring                  | `ioc/module/`                                          |
+| Actions         | Async command queue           | `action/`                                              |
 
 ## Key Design Patterns
 

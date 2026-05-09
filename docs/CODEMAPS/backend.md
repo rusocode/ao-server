@@ -1,10 +1,11 @@
-<!-- Generated: 2026-05-08 | Files scanned: 258 classes / 47 packages | Token estimate: ~900 -->
+<!-- Generated: 2026-05-09 | Files scanned: 258 classes / 47 packages | Token estimate: ~900 -->
 
 # Backend
 
 ## Packet Dispatch
 
 ### Incoming (Client → Server) — 7 packets
+
 ```
 ClientPacketsManager.dispatch(packetId, DataBuffer, Connection)
   LOGIN_EXISTING  → LoginExistingCharacterPacket → LoginService.connectExistingCharacter()
@@ -17,6 +18,7 @@ ClientPacketsManager.dispatch(packetId, DataBuffer, Connection)
 ```
 
 ### Outgoing (Server → Client) — 23 packets
+
 ```
 ServerPacketsManager → OutgoingPacket.write(DataBuffer) → Connection.send()
 
@@ -55,14 +57,14 @@ NpcService (NpcServiceImpl)
 
 ## Guice Module → Bindings
 
-| Module | Key Bindings |
-|--------|-------------|
-| BootstrapModule | ServerConfig → ServerConfigIni |
-| ConfigurationModule | ArchetypeConfiguration → ArchetypeConfigurationIni |
-| DaoModule | All 6 DAO interfaces → implementations (Singleton) |
-| ServiceModule | All service interfaces → implementations (Singleton); named int/string config params |
-| SecurityModule | SecurityManager → dynamically loaded class from config |
-| ArchetypeModule | 17 archetype @Provides methods (one per archetype class) |
+| Module              | Key Bindings                                                                         |
+|---------------------|--------------------------------------------------------------------------------------|
+| BootstrapModule     | ServerConfig → ServerConfigIni                                                       |
+| ConfigurationModule | ArchetypeConfiguration → ArchetypeConfigurationIni                                   |
+| DaoModule           | All 6 DAO interfaces → implementations (Singleton)                                   |
+| ServiceModule       | All service interfaces → implementations (Singleton); named int/string config params |
+| SecurityModule      | SecurityManager → dynamically loaded class from config                               |
+| ArchetypeModule     | 17 archetype @Provides methods (one per archetype class)                             |
 
 ## Key Files
 
@@ -80,4 +82,5 @@ com/ao/service/map/MapServiceImpl.java      map state + movement
 
 ## Async Model
 
-`ActionExecutor<T extends ActionExecutor<?>>` wraps a `BlockingQueue<Action>` processed by a single background thread. Used by `MapServiceImpl` to serialize world-map mutations without explicit locks.
+`ActionExecutor<T extends ActionExecutor<?>>` wraps a `BlockingQueue<Action>` processed by a single background thread.
+Used by `MapServiceImpl` to serialize world-map mutations without explicit locks.

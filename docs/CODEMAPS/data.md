@@ -1,4 +1,4 @@
-<!-- Generated: 2026-05-08 | Files scanned: 258 classes / 47 packages | Token estimate: ~700 -->
+<!-- Generated: 2026-05-09 | Files scanned: 258 classes / 47 packages | Token estimate: ~700 -->
 
 # Data
 
@@ -8,17 +8,18 @@ All persistence is via legacy flat files under `data/`. No migrations — data f
 
 ## Data Files
 
-| File | Format | DAO | Model |
-|------|--------|-----|-------|
-| `data/maps/*.map` (290 files) | Binary | MapDAOImpl | Map, Tile, Trigger |
-| `data/objects.dat` | INI | ObjectDAOIni | WorldObject hierarchy (43 types) |
-| `data/npcs.dat` | INI | NpcDAOIni | NpcCharacter |
-| `data/cities.dat` | INI | CityDAOIni | City |
-| `charfiles/*.chr` | INI | UserDAOIni | Account, UserCharacter |
+| File                          | Format | DAO          | Model                            |
+|-------------------------------|--------|--------------|----------------------------------|
+| `data/maps/*.map` (290 files) | Binary | MapDAOImpl   | Map, Tile, Trigger               |
+| `data/objects.dat`            | INI    | ObjectDAOIni | WorldObject hierarchy (43 types) |
+| `data/npcs.dat`               | INI    | NpcDAOIni    | NpcCharacter                     |
+| `data/cities.dat`             | INI    | CityDAOIni   | City                             |
+| `charfiles/*.chr`             | INI    | UserDAOIni   | Account, UserCharacter           |
 
 ## Domain Model
 
 ### Character Hierarchy
+
 ```
 Character (interface)
 ├── UserCharacter
@@ -30,6 +31,7 @@ Character (interface)
 ```
 
 ### WorldObject Hierarchy (43 ObjectType values)
+
 ```
 Object (interface)
 └── AbstractObject
@@ -44,6 +46,7 @@ Object (interface)
 ```
 
 ### Spell Model
+
 ```
 Spell
 ├── id, name, magicWords, description
@@ -55,6 +58,7 @@ Spell
 ```
 
 ### Map Model
+
 ```
 Map
 ├── id, width, height
@@ -65,6 +69,7 @@ Map
 ```
 
 ### User/Account Model
+
 ```
 Account (AccountImpl)
 ├── username, passwordHash
@@ -80,9 +85,11 @@ UserCharacter (wraps Character)
 
 ## Configuration Files (Not Game Data)
 
-| File | Format | Loaded By |
-|------|--------|-----------|
-| `data/config/server.ini` | INI | ServerConfigIni |
-| `server/src/main/resources/project.properties` | Java Properties | ApplicationProperties |
+| File                                           | Format          | Loaded By                        |
+|------------------------------------------------|-----------------|----------------------------------|
+| `data/config/server.ini`                       | INI             | ServerConfigIni                  |
+| `server/src/main/resources/project.properties` | Java Properties | ApplicationProperties            |
+| `server/src/main/resources/tinylog.properties` | Java Properties | tinylog runtime (classpath scan) |
 
-`project.properties` keys: `config.path.maps`, `config.path.server`, `config.heads.<race>.<gender>` (ranges), `config.bodies.<race>.<gender>` (ranges), `config.inventory.itemperrow`, `config.security.manager`
+`project.properties` keys: `config.path.maps`, `config.path.server`, `config.heads.<race>.<gender>` (ranges),
+`config.bodies.<race>.<gender>` (ranges), `config.inventory.itemperrow`, `config.security.manager`
