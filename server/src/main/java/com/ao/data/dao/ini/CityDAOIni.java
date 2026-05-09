@@ -7,6 +7,7 @@ import com.ao.utils.ResourceUtils;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import org.apache.commons.configuration2.INIConfiguration;
+import org.apache.commons.configuration2.SubnodeConfiguration;
 import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.tinylog.Logger;
 
@@ -14,12 +15,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Implementation of the City DAO backed by INI files.
  */
 
-public record CityDAOIni(String citiesFilePath) implements CityDAO {
+public final class CityDAOIni implements CityDAO {
 
     private static final String INIT_HEADER = "INIT";
     private static final String CITIE_COUNT_KEY = "citie_count";
@@ -32,6 +34,8 @@ public record CityDAOIni(String citiesFilePath) implements CityDAO {
     private static final String X_KEY = "x";
     private static final String Y_KEY = "y";
 
+    private final String citiesFilePath;
+
     @Inject
     public CityDAOIni(@Named("citiesFilePath") String citiesFilePath) {
         this.citiesFilePath = citiesFilePath;
@@ -43,7 +47,7 @@ public record CityDAOIni(String citiesFilePath) implements CityDAO {
         InputStream inputStream = ResourceUtils.getStream(citiesFilePath);
         if (inputStream == null)
             throw new IllegalArgumentException("The file '" + citiesFilePath + "' was not found!");
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, java.nio.charset.StandardCharsets.UTF_8))) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
             ini = new INIConfiguration();
             ini.read(reader);
             Logger.info("Cities loaded successfully!");
@@ -71,11 +75,11 @@ public record CityDAOIni(String citiesFilePath) implements CityDAO {
      * @return new city
      */
     private City loadCity(int id, INIConfiguration ini) {
-        String section = CITY_PREFIX + id + ".";
+        SubnodeConfiguration section = ini.getSection(CITY_PREFIX + id);
 
-        int map = IniUtils.getInt(ini, section + MAP_KEY, -1);
-        byte x = (byte) IniUtils.getInt(ini, section + X_KEY, -1);
-        byte y = (byte) IniUtils.getInt(ini, section + Y_KEY, -1);
+        int map = IniUtils.getInt(section, MAP_KEY, -1);
+        byte x = (byte) IniUtils.getInt(section, X_KEY, -1);
+        byte y = (byte) IniUtils.getInt(section, Y_KEY, -1);
 
         return new City(map, x, y);
     }

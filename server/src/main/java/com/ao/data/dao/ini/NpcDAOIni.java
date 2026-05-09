@@ -69,6 +69,7 @@ public final class NpcDAOIni implements NpcCharacterDAO {
     private static final String SOUND_PREFIX = "sound"; // SND
     private static final String CREATURE_ID_PREFIX = "creature_id"; // CI
     private static final String CREATURE_NAME_PREFIX = "creature_name"; // CN
+
     /** Ini file keys. */
     private static final String NAME_KEY = "name";
     private static final String NPC_TYPE_KEY = "npc_type"; // NpcType
