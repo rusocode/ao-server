@@ -306,7 +306,7 @@ public record NpcDAOIni(String npcsFilePath,
         // Pretorian Npcs drop all their items when killed, a little bit hardcoded, but want to be compatible with old AO
         if (aiType.isPretorian()) return new DropEverything(getInventory(section));
 
-        List<Dropable> dropables = new LinkedList<>();
+        List<Dropable> dropables = new ArrayList<>();
 
         /* In Argentum Online, a 10% chance exists for dropping nothing. The remaining 90% splits among the counted objects so
          * that each has 10% the chance of the previous one. In other words, the first object is more likely than the second. */
