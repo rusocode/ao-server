@@ -1,0 +1,48 @@
+intervals:
+  regeneration:
+    hp: 100
+    hp_resting: 50
+    stamina: 20
+    stamina_resting: 10
+    mana_recovery_percent: 5
+
+  survival:
+    thirst: 3000
+    hunger: 4000
+
+  states:
+    poison: 250
+    paralyzed: 300
+    invisible: 400
+    hidden: 500
+    cold: 10
+
+  combat:
+    user_attack: 1000
+    npc_attack: 1200
+    spell_cast: 800
+    magic_hit_delay: 600
+    hit_magic_delay: 600
+    bow_attack: 900
+    use_item: 75
+    work: 350
+
+  movement:
+    user: 150
+
+  npc:
+    ai_tick: 200
+
+  world:
+    save_interval: 60
+    summon_duration: 500
+    rain_stamina_loss: 5000
+    fx_wav_delay: 100
+
+  network:
+    connection_retry: 1500
+    close_connection: 3
+
+  system:
+    main_engine_tick: 25
+    auto_restart: 50000

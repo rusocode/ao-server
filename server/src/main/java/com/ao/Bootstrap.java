@@ -94,7 +94,7 @@ public class Bootstrap {
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(4);
         server.setScheduler(scheduler);
 
-        // 1. REGENERACIÓN (Vida, Maná, Stamina)
+        // 1a. REGENERACIÓN de Vida y Maná
         scheduler.scheduleAtFixedRate(() -> {
             try {
                 for (ConnectedUser connectedUser : userService.getConnectedUsers()) {
@@ -103,10 +103,8 @@ public class Bootstrap {
                     if (user instanceof UserCharacter character && !character.isDead()) {
                         boolean changed = false;
 
-                        /* Los bloques synchronized protegen las secuencias read-modify-write de cada stat. Esto protege entre los
-                         * propios game loops, pero la sincronizacion completa requiere que los handlers de Netty tambien
-                         * sincronicen sobre el mismo objeto — queda pendiente como trabajo futuro cuando se implementen esos
-                         * handlers */
+                        /* synchronized protege la secuencia read-modify-write de cada stat entre los game loops.
+                         * La sincronizacion completa con los handlers de Netty queda pendiente. */
                         synchronized (character) {
                             if (character.getHitPoints() < character.getMaxHitPoints()) {
                                 character.addToHitPoints(1);
@@ -116,6 +114,28 @@ public class Bootstrap {
                                 character.addToMana(1);
                                 changed = true;
                             }
+                        }
+
+                        if (changed) {
+                            connectedUser.getConnection().send(new UpdateUserStatsPacket(character));
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                Logger.error("HP/Mana regen loop failed, skipping tick", e);
+            }
+        }, 0, intervals.getRegeneration().getHp(), TimeUnit.MILLISECONDS);
+
+        // 1b. REGENERACIÓN de Stamina (intervalo propio, más corto)
+        scheduler.scheduleAtFixedRate(() -> {
+            try {
+                for (ConnectedUser connectedUser : userService.getConnectedUsers()) {
+                    User user = connectedUser.getConnection().getUser();
+
+                    if (user instanceof UserCharacter character && !character.isDead()) {
+                        boolean changed = false;
+
+                        synchronized (character) {
                             if (character.getStamina() < character.getMaxStamina()) {
                                 character.setStamina(Math.min(character.getMaxStamina(), character.getStamina() + 5));
                                 changed = true;
@@ -128,11 +148,11 @@ public class Bootstrap {
                     }
                 }
             } catch (Exception e) {
-                Logger.error("Regen loop failed, skipping tick", e);
+                Logger.error("Stamina regen loop failed, skipping tick", e);
             }
-        }, 0, intervals.getRegeneration().getHp(), TimeUnit.MILLISECONDS);
+        }, 0, intervals.getRegeneration().getStamina(), TimeUnit.MILLISECONDS);
 
-        // 2. Hambre y Sed
+        // 2a. Hambre
         scheduler.scheduleAtFixedRate(() -> {
             try {
                 for (ConnectedUser connectedUser : userService.getConnectedUsers()) {
@@ -142,6 +162,26 @@ public class Bootstrap {
                         synchronized (character) {
                             if (character.getHunger() > 0)
                                 character.addToHunger(-1);
+                        }
+
+                        connectedUser.getConnection().send(new UpdateHungerAndThirstPacket(
+                                character.getHunger(), UserCharacter.MAX_HUNGER,
+                                character.getThirstiness(), UserCharacter.MAX_THIRSTINESS));
+                    }
+                }
+            } catch (Exception e) {
+                Logger.error("Hunger loop failed, skipping tick", e);
+            }
+        }, 0, intervals.getSurvival().getHunger(), TimeUnit.MILLISECONDS);
+
+        // 2b. Sed (intervalo propio)
+        scheduler.scheduleAtFixedRate(() -> {
+            try {
+                for (ConnectedUser connectedUser : userService.getConnectedUsers()) {
+                    User user = connectedUser.getConnection().getUser();
+
+                    if (user instanceof UserCharacter character && !character.isDead()) {
+                        synchronized (character) {
                             if (character.getThirstiness() > 0)
                                 character.addToThirstiness(-1);
                         }
@@ -152,9 +192,9 @@ public class Bootstrap {
                     }
                 }
             } catch (Exception e) {
-                Logger.error("Survival loop failed, skipping tick", e);
+                Logger.error("Thirst loop failed, skipping tick", e);
             }
-        }, 0, intervals.getSurvival().getHunger(), TimeUnit.MILLISECONDS);
+        }, 0, intervals.getSurvival().getThirst(), TimeUnit.MILLISECONDS);
 
         // 3. IA DE NPCs (Movimiento y ataque de criaturas)
         scheduler.scheduleAtFixedRate(() -> {
@@ -166,13 +206,14 @@ public class Bootstrap {
         }, 0, intervals.getNpc().getAiTick(), TimeUnit.MILLISECONDS);
 
         // 4. WORLD SAVE (Guardado automático de personajes)
+        int saveIntervalMinutes = intervals.getWorld().getSaveInterval();
         scheduler.scheduleAtFixedRate(() -> {
             try {
                 // TODO: Lógica de guardado masivo
             } catch (Exception e) {
                 Logger.error("World save loop failed, skipping tick", e);
             }
-        }, 15, 15, TimeUnit.MINUTES);
+        }, saveIntervalMinutes, saveIntervalMinutes, TimeUnit.MINUTES);
 
         // 5. EFECTOS TEMPORALES (Veneno, Parálisis, Invisibilidad)
         scheduler.scheduleAtFixedRate(() -> {
@@ -181,7 +222,7 @@ public class Bootstrap {
             } catch (Exception e) {
                 Logger.error("Temp effects loop failed, skipping tick", e);
             }
-        }, 0, 1000, TimeUnit.MILLISECONDS);
+        }, 0, intervals.getStates().getPoison(), TimeUnit.MILLISECONDS);
 
     }
 
