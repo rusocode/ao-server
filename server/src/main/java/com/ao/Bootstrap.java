@@ -89,81 +89,98 @@ public class Bootstrap {
         Logger.info("Starting up game timers...");
 
         IntervalsConfig intervals = ApplicationContext.getInstance(IntervalsConfig.class);
+        UserService userService = ApplicationContext.getInstance(UserService.class);
 
-        // Pool de hilos (4 hilos deberia ser suficiente por el momento)
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(4);
+        server.setScheduler(scheduler);
 
         // 1. REGENERACIÓN (Vida, Maná, Stamina)
         scheduler.scheduleAtFixedRate(() -> {
-            UserService userService = ApplicationContext.getInstance(UserService.class);
+            try {
+                for (ConnectedUser connectedUser : userService.getConnectedUsers()) {
+                    User user = connectedUser.getConnection().getUser();
 
-            for (ConnectedUser connectedUser : userService.getConnectedUsers()) {
-                User user = connectedUser.getConnection().getUser();
+                    if (user instanceof UserCharacter character && !character.isDead()) {
+                        boolean changed = false;
 
-                if (user instanceof UserCharacter character && !character.isDead()) {
-                    boolean changed = false;
+                        /* Los bloques synchronized protegen las secuencias read-modify-write de cada stat. Esto protege entre los
+                         * propios game loops, pero la sincronizacion completa requiere que los handlers de Netty tambien
+                         * sincronicen sobre el mismo objeto — queda pendiente como trabajo futuro cuando se implementen esos
+                         * handlers */
+                        synchronized (character) {
+                            if (character.getHitPoints() < character.getMaxHitPoints()) {
+                                character.addToHitPoints(1);
+                                changed = true;
+                            }
+                            if (character.getMana() < character.getMaxMana()) {
+                                character.addToMana(1);
+                                changed = true;
+                            }
+                            if (character.getStamina() < character.getMaxStamina()) {
+                                character.setStamina(Math.min(character.getMaxStamina(), character.getStamina() + 5));
+                                changed = true;
+                            }
+                        }
 
-                    // Regeneración de Vida (+1)
-                    if (character.getHitPoints() < character.getMaxHitPoints()) {
-                        character.addToHitPoints(1);
-                        changed = true;
-                    }
-
-                    // Regeneración de Maná (+1)
-                    if (character.getMana() < character.getMaxMana()) {
-                        character.addToMana(1);
-                        changed = true;
-                    }
-
-                    // Regeneración de Energía (+5)
-                    if (character.getStamina() < character.getMaxStamina()) {
-                        character.setStamina(Math.min(character.getMaxStamina(), character.getStamina() + 5));
-                        changed = true;
-                    }
-
-                    // Si hubo cambios, enviamos el paquete de actualización
-                    if (changed) {
-                        connectedUser.getConnection().send(new UpdateUserStatsPacket(character));
+                        if (changed) {
+                            connectedUser.getConnection().send(new UpdateUserStatsPacket(character));
+                        }
                     }
                 }
+            } catch (Exception e) {
+                Logger.error("Regen loop failed, skipping tick", e);
             }
         }, 0, intervals.getRegeneration().getHp(), TimeUnit.MILLISECONDS);
 
         // 2. Hambre y Sed
         scheduler.scheduleAtFixedRate(() -> {
-            UserService userService = ApplicationContext.getInstance(UserService.class);
+            try {
+                for (ConnectedUser connectedUser : userService.getConnectedUsers()) {
+                    User user = connectedUser.getConnection().getUser();
 
-            for (ConnectedUser connectedUser : userService.getConnectedUsers()) {
-                User user = connectedUser.getConnection().getUser();
+                    if (user instanceof UserCharacter character && !character.isDead()) {
+                        synchronized (character) {
+                            if (character.getHunger() > 0)
+                                character.addToHunger(-1);
+                            if (character.getThirstiness() > 0)
+                                character.addToThirstiness(-1);
+                        }
 
-                if (user instanceof UserCharacter character && !character.isDead()) {
-                    // Bajamos hambre y sed (sin bajar de 0)
-                    if (character.getHunger() > 0)
-                        character.addToHunger(-1);
-                    if (character.getThirstiness() > 0)
-                        character.addToThirstiness(-1);
-
-                    // Enviamos el paquete de supervivencia
-                    connectedUser.getConnection().send(new UpdateHungerAndThirstPacket(
-                            character.getHunger(), UserCharacter.MAX_HUNGER,
-                            character.getThirstiness(), UserCharacter.MAX_THIRSTINESS));
+                        connectedUser.getConnection().send(new UpdateHungerAndThirstPacket(
+                                character.getHunger(), UserCharacter.MAX_HUNGER,
+                                character.getThirstiness(), UserCharacter.MAX_THIRSTINESS));
+                    }
                 }
+            } catch (Exception e) {
+                Logger.error("Survival loop failed, skipping tick", e);
             }
         }, 0, intervals.getSurvival().getHunger(), TimeUnit.MILLISECONDS);
 
         // 3. IA DE NPCs (Movimiento y ataque de criaturas)
         scheduler.scheduleAtFixedRate(() -> {
-            // TODO: Lógica NPCs
+            try {
+                // TODO: Lógica NPCs
+            } catch (Exception e) {
+                Logger.error("NPC AI loop failed, skipping tick", e);
+            }
         }, 0, intervals.getNpc().getAiTick(), TimeUnit.MILLISECONDS);
 
         // 4. WORLD SAVE (Guardado automático de personajes)
         scheduler.scheduleAtFixedRate(() -> {
-            // TODO: Lógica de guardado masivo
+            try {
+                // TODO: Lógica de guardado masivo
+            } catch (Exception e) {
+                Logger.error("World save loop failed, skipping tick", e);
+            }
         }, 15, 15, TimeUnit.MINUTES);
 
         // 5. EFECTOS TEMPORALES (Veneno, Parálisis, Invisibilidad)
         scheduler.scheduleAtFixedRate(() -> {
-            // TODO: Lógica de limpieza de estados temporales
+            try {
+                // TODO: Lógica de limpieza de estados temporales
+            } catch (Exception e) {
+                Logger.error("Temp effects loop failed, skipping tick", e);
+            }
         }, 0, 1000, TimeUnit.MILLISECONDS);
 
     }

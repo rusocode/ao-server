@@ -21,6 +21,8 @@ import io.netty.util.AttributeKey;
 
 import java.net.InetSocketAddress;
 import java.util.List;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Starts and runs the AOServer network infrastructure. This method initializes the Netty-based server framework and begins
@@ -191,6 +193,7 @@ public class AOServer implements Runnable {
     private int backlog;
     private EventLoopGroup bossGroup;
     private EventLoopGroup workerGroup;
+    private ScheduledExecutorService scheduler;
 
     /**
      * Starts running the AOServer. <b>Initialize it properly before running it.</b>
@@ -319,8 +322,25 @@ public class AOServer implements Runnable {
      * Gracefully shutdown the server.
      */
     public void shutdown() {
+        if (scheduler != null) {
+            scheduler.shutdown();
+            try {
+                if (!scheduler.awaitTermination(5, TimeUnit.SECONDS))
+                    scheduler.shutdownNow();
+            } catch (InterruptedException e) {
+                scheduler.shutdownNow();
+                Thread.currentThread().interrupt();
+            }
+        }
         if (bossGroup != null) bossGroup.shutdownGracefully();
         if (workerGroup != null) workerGroup.shutdownGracefully();
+    }
+
+    /**
+     * @param scheduler game loop scheduler to shut down on server stop
+     */
+    public void setScheduler(ScheduledExecutorService scheduler) {
+        this.scheduler = scheduler;
     }
 
     /**
