@@ -30,6 +30,7 @@ import com.ao.utils.ResourceUtils;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import org.apache.commons.configuration2.INIConfiguration;
+import org.apache.commons.configuration2.SubnodeConfiguration;
 import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.tinylog.Logger;
 
@@ -163,52 +164,53 @@ public record NpcDAOIni(String npcsFilePath,
      */
     private Npc loadNpc(int id, INIConfiguration ini) {
 
-        String section = NPC_PREFIX + id;
+        String sectionName = NPC_PREFIX + id;
+        SubnodeConfiguration section = ini.getSection(sectionName);
 
-        String name = IniUtils.getString(ini, section + "." + NAME_KEY, "");
-        String description = IniUtils.getString(ini, section + "." + DESCRIPTION_KEY, "");
-        short head = (short) IniUtils.getInt(ini, section + "." + HEAD_KEY, 0);
-        Heading heading = Heading.get((byte) (IniUtils.getInt(ini, section + "." + HEADING_KEY, 1) - 1));
-        short body = (short) IniUtils.getInt(ini, section + "." + BODY_KEY, 0);
-        boolean respawnable = IniUtils.getBoolean(ini, section + "." + RESPAWNABLE_KEY, true);
-        AIType aiType = getAIType(ini, section);
+        String name = IniUtils.getString(section, NAME_KEY, "");
+        String description = IniUtils.getString(section, DESCRIPTION_KEY, "");
+        short head = (short) IniUtils.getInt(section, HEAD_KEY, 0);
+        Heading heading = Heading.get((byte) (IniUtils.getInt(section, HEADING_KEY, 1) - 1));
+        short body = (short) IniUtils.getInt(section, BODY_KEY, 0);
+        boolean respawnable = IniUtils.getBoolean(section, RESPAWNABLE_KEY, true);
+        AIType aiType = getAIType(section, sectionName);
         Class<? extends Behavior> behavior = aiType != null ? aiType.getBehavior() : null;
         Class<? extends AttackStrategy> attackStrategy = aiType != null ? aiType.getAttackStrategy() : null;
         Class<? extends MovementStrategy> movementStrategy = aiType != null ? aiType.getMovementStrategy() : null;
 
-        NpcType npcType = NpcType.findById(IniUtils.getInt(ini, section + "." + NPC_TYPE_KEY, -1));
+        NpcType npcType = NpcType.findById(IniUtils.getInt(section, NPC_TYPE_KEY, -1));
 
         if (npcType == null) {
-            Logger.error("Unknown npc type in section [{}]", section);
+            Logger.error("Unknown npc type in section [{}]", sectionName);
             return null;
         }
 
         return switch (npcType) {
             case COMMON ->
-                    loadCreature(NpcType.COMMON, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, aiType, ini, section);
+                    loadCreature(NpcType.COMMON, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, aiType, section, sectionName);
             case DRAGON, PRETORIAN ->
-                    loadCreature(npcType, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, aiType, ini, section);
+                    loadCreature(npcType, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, aiType, section, sectionName);
             case TRAINER ->
-                    loadTrainer(npcType, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, ini, section);
+                    loadTrainer(npcType, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, section, sectionName);
             case GOVERNOR ->
-                    loadGovernor(npcType, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, ini, section);
+                    loadGovernor(npcType, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, section, sectionName);
             case ROYAL_GUARD, CHAOS_GUARD ->
-                    loadGuard(npcType, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, aiType, ini, section);
+                    loadGuard(npcType, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, aiType, section, sectionName);
             case NOBLE ->
-                    loadNoble(npcType, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, ini, section);
+                    loadNoble(npcType, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, section);
             case NEWBIE_RESUCITATOR, RESUCITATOR, GAMBLER, BANKER ->
                     loadBasicNpc(npcType, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy);
             case MERCHANT ->
-                    loadMerchant(npcType, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, ini, section);
+                    loadMerchant(npcType, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, section, sectionName);
         };
 
     }
 
     private Npc loadNoble(NpcType type, int id, String name, short body, short head, Heading heading, boolean respawnable,
                           String description, Class<? extends Behavior> behavior, Class<? extends AttackStrategy> attackStrategy,
-                          Class<? extends MovementStrategy> movementStrategy, INIConfiguration ini, String section) {
+                          Class<? extends MovementStrategy> movementStrategy, SubnodeConfiguration section) {
 
-        return new NobleNpc(type, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, getAlignment(ini, section));
+        return new NobleNpc(type, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, getAlignment(section));
     }
 
     private Npc loadBasicNpc(NpcType type, int id, String name, short body, short head, Heading heading, boolean respawnable,
@@ -220,47 +222,47 @@ public record NpcDAOIni(String npcsFilePath,
 
     private Npc loadGovernor(NpcType type, int id, String name, short body, short head, Heading heading, boolean respawnable,
                              String description, Class<? extends Behavior> behavior, Class<? extends AttackStrategy> attackStrategy,
-                             Class<? extends MovementStrategy> movementStrategy, INIConfiguration ini, String section) {
+                             Class<? extends MovementStrategy> movementStrategy, SubnodeConfiguration section, String sectionName) {
 
-        return new GovernorNpc(type, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, getCity(ini, section));
+        return new GovernorNpc(type, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, getCity(section, sectionName));
     }
 
     private Npc loadMerchant(NpcType type, int id, String name, short body, short head, Heading heading, boolean respawnable,
                              String description, Class<? extends Behavior> behavior, Class<? extends AttackStrategy> attackStrategy,
-                             Class<? extends MovementStrategy> movementStrategy, INIConfiguration ini, String section) {
+                             Class<? extends MovementStrategy> movementStrategy, SubnodeConfiguration section, String sectionName) {
 
         return new MerchantNpc(type, id, name, body, head, heading, respawnable, behavior, attackStrategy, movementStrategy,
-                description, getInventory(ini, section), isRestockable(ini, section), getAcceptedObjectTypes(ini, section));
+                description, getInventory(section), isRestockable(section), getAcceptedObjectTypes(section, sectionName));
     }
 
     private Npc loadTrainer(NpcType type, int id, String name, short body, short head, Heading heading, boolean respawnable,
                             String description, Class<? extends Behavior> behavior, Class<? extends AttackStrategy> attackStrategy,
-                            Class<? extends MovementStrategy> movementStrategy, INIConfiguration ini, String section) {
+                            Class<? extends MovementStrategy> movementStrategy, SubnodeConfiguration section, String sectionName) {
 
-        return new TrainerNpc(type, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, getCreatures(ini, section));
+        return new TrainerNpc(type, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, getCreatures(section, sectionName));
     }
 
     // TODO Separar metodo para npc hostiles y varios/decorativos o cambiar nombre de CreatureNpc a algun nombre mas generico
     private Npc loadCreature(NpcType type, int id, String name, short body, short head, Heading heading, boolean respawnable,
                              String description, Class<? extends Behavior> behavior, Class<? extends AttackStrategy> attackStrategy,
-                             Class<? extends MovementStrategy> movementStrategy, AIType aiType, INIConfiguration ini, String section) {
+                             Class<? extends MovementStrategy> movementStrategy, AIType aiType, SubnodeConfiguration section, String sectionName) {
 
         return new CreatureNpc(type, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy,
-                getExperience(ini, section), getGold(ini, section), getMinHP(ini, section), getMaxHP(ini, section),
-                getMinHit(ini, section), getMaxHit(ini, section), getDefense(ini, section), getMagicDefense(ini, section), getAttack(ini, section),
-                getEvasion(ini, section), getSpells(ini, section), isAquatic(ini, section), isAttackable(ini, section),
-                isPoisonous(ini, section), isUnparalyzable(ini, section), isHostile(ini, section), isTameable(ini, section), getDrops(aiType, ini, section));
+                getExperience(section), getGold(section), getMinHP(section), getMaxHP(section),
+                getMinHit(section), getMaxHit(section), getDefense(section), getMagicDefense(section), getAttack(section),
+                getEvasion(section), getSpells(section, sectionName), isAquatic(section), isAttackable(section),
+                isPoisonous(section), isUnparalyzable(section), isHostile(section), isTameable(section), getDrops(aiType, section, sectionName));
     }
 
     private Npc loadGuard(NpcType type, int id, String name, short body, short head, Heading heading, boolean respawnable,
                           String description, Class<? extends Behavior> behavior, Class<? extends AttackStrategy> attackStrategy,
-                          Class<? extends MovementStrategy> movementStrategy, AIType aiType, INIConfiguration ini, String section) {
+                          Class<? extends MovementStrategy> movementStrategy, AIType aiType, SubnodeConfiguration section, String sectionName) {
 
         return new GuardNpc(type, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy,
-                getExperience(ini, section), getGold(ini, section), getMinHP(ini, section), getMaxHP(ini, section), getMinHit(ini, section),
-                getMaxHit(ini, section), getDefense(ini, section), getMagicDefense(ini, section), getAttack(ini, section), getEvasion(ini, section),
-                getSpells(ini, section), isAquatic(ini, section), isAttackable(ini, section), isPoisonous(ini, section),
-                isUnparalyzable(ini, section), isHostile(ini, section), isTameable(ini, section), getDrops(aiType, ini, section), isReturning(ini, section));
+                getExperience(section), getGold(section), getMinHP(section), getMaxHP(section), getMinHit(section),
+                getMaxHit(section), getDefense(section), getMagicDefense(section), getAttack(section), getEvasion(section),
+                getSpells(section, sectionName), isAquatic(section), isAttackable(section), isPoisonous(section),
+                isUnparalyzable(section), isHostile(section), isTameable(section), getDrops(aiType, section, sectionName), isReturning(section));
     }
 
     /**
@@ -268,22 +270,20 @@ public record NpcDAOIni(String npcsFilePath,
      * <p>
      * TODO Implement
      *
-     * @param ini     ini configuration
-     * @param section section from which to read the value
      * @return the npc's spells; null if none exists
      */
-    private List<Spell> getSpells(INIConfiguration ini, String section) {
-        int spellCount = IniUtils.getInt(ini, section + "." + SPELL_COUNT_KEY, 0);
+    private List<Spell> getSpells(SubnodeConfiguration section, String sectionName) {
+        int spellCount = IniUtils.getInt(section, SPELL_COUNT_KEY, 0);
         if (spellCount <= 0) {
-            Logger.warn("No spells found for npc [{}]", section);
+            Logger.warn("No spells found for npc [{}]", sectionName);
             return null;
         }
 
         List<Spell> spells = null;
         for (int i = 1; i <= spellCount; i++) {
-            String spell = section + "." + SPELL_PREFIX + i;
-            if (!ini.containsKey(spell)) continue;
-            int value = IniUtils.getInt(ini, spell, -1);
+            String spellKey = SPELL_PREFIX + i;
+            if (!section.containsKey(spellKey)) continue;
+            int value = IniUtils.getInt(section, spellKey, -1);
             // if (value != -1) spells.add(new Spell(value, ));
         }
         return spells;
@@ -292,21 +292,19 @@ public record NpcDAOIni(String npcsFilePath,
     /**
      * Gets npc's drops.
      *
-     * @param ini     ini configuration
-     * @param section section from which to read the value
      * @return the npc's drops; null if none exists
      */
-    private Drop getDrops(AIType aiType, INIConfiguration ini, String section) {
-        int objectCount = IniUtils.getInt(ini, section + "." + OBJECT_COUNT_KEY, -1);
+    private Drop getDrops(AIType aiType, SubnodeConfiguration section, String sectionName) {
+        int objectCount = IniUtils.getInt(section, OBJECT_COUNT_KEY, -1);
         if (objectCount == -1) return null;
 
         if (aiType == null) {
-            logKeyNotFoundOrInvalid(AI_TYPE_KEY, section);
+            logKeyNotFoundOrInvalid(AI_TYPE_KEY, sectionName);
             return null;
         }
 
         // Pretorian Npcs drop all their items when killed, a little bit hardcoded, but want to be compatible with old AO
-        if (aiType.isPretorian()) return new DropEverything(getInventory(ini, section));
+        if (aiType.isPretorian()) return new DropEverything(getInventory(section));
 
         List<Dropable> dropables = new LinkedList<>();
 
@@ -318,7 +316,7 @@ public record NpcDAOIni(String npcsFilePath,
              * contiene el valor "12-8", en donde el 12 es el id del objeto a dropear y el 8 la cantidad, y el simbolo '-' es un
              * separador. En este caso, el id 12 serian monedas de oro ([OBJ12] en objects.dat). El ultimo drop (drop5),
              * representa el objeto [OBJ197] y es el que menos probabilidades tiene de dropear. */
-            String slot = IniUtils.getString(ini, section + "." + DROP_PREFIX + i, "");
+            String slot = IniUtils.getString(section, DROP_PREFIX + i, "");
             if (!slot.isEmpty()) {
                 String[] slotInfo = slot.split("-");
                 // In every step except the last one, leave a 10% chance for the next level
@@ -339,18 +337,16 @@ public record NpcDAOIni(String npcsFilePath,
     /**
      * Gets the inventory from the npc.
      *
-     * @param ini     ini configuration
-     * @param section section from which to read the value
      * @return the inventory from the npc; null if none exists
      */
-    private Inventory getInventory(INIConfiguration ini, String section) {
-        int objectCount = IniUtils.getInt(ini, section + "." + OBJECT_COUNT_KEY, -1);
+    private Inventory getInventory(SubnodeConfiguration section) {
+        int objectCount = IniUtils.getInt(section, OBJECT_COUNT_KEY, -1);
         if (objectCount == -1) return null;
 
         Inventory inventory = new InventoryImpl(objectCount);
 
         for (int i = 1; i <= inventory.getCapacity(); i++) {
-            String slot = IniUtils.getString(ini, section + "." + OBJECT_INVENTORY_PREFIX + i, "");
+            String slot = IniUtils.getString(section, OBJECT_INVENTORY_PREFIX + i, "");
             if (!slot.isEmpty()) {
                 String[] slotInfo = slot.split("-");
                 int objId = Integer.parseInt(slotInfo[0]);
@@ -373,14 +369,12 @@ public record NpcDAOIni(String npcsFilePath,
     /**
      * Get the sounds from the npc.
      *
-     * @param ini     ini configuration
-     * @param section section from which to read the value
      * @return the list of sounds from the npc or empty list if none exists
      */
-    private List<Integer> getSounds(INIConfiguration ini, String section) {
+    private List<Integer> getSounds(SubnodeConfiguration section) {
         int soundCount = 3;
         return IntStream.rangeClosed(1, soundCount)
-                .map(i -> IniUtils.getInt(ini, section + "." + SOUND_PREFIX + i, -1))
+                .map(i -> IniUtils.getInt(section, SOUND_PREFIX + i, -1))
                 .filter(value -> value != -1)
                 .boxed()
                 .toList();
@@ -389,20 +383,18 @@ public record NpcDAOIni(String npcsFilePath,
     /**
      * Loads the creatures the npc can summon.
      *
-     * @param ini     ini configuration
-     * @param section section from which to read the value
      * @return the creatures the npc can summon; null if none exists
      */
-    private Map<Integer, String> getCreatures(INIConfiguration ini, String section) {
-        int creatureCount = IniUtils.getInt(ini, section + "." + CREATURE_COUNT_KEY, -1);
+    private Map<Integer, String> getCreatures(SubnodeConfiguration section, String sectionName) {
+        int creatureCount = IniUtils.getInt(section, CREATURE_COUNT_KEY, -1);
         if (creatureCount == -1) {
-            logKeyNotFoundOrInvalid(CREATURE_COUNT_KEY, section);
+            logKeyNotFoundOrInvalid(CREATURE_COUNT_KEY, sectionName);
             return null;
         }
         Map<Integer, String> creatures = new HashMap<>(creatureCount);
         for (int i = 1; i <= creatureCount; i++) {
-            int creatureId = IniUtils.getInt(ini, section + "." + CREATURE_ID_PREFIX + i, -1);
-            String creatureName = IniUtils.getString(ini, section + "." + CREATURE_NAME_PREFIX + i, "");
+            int creatureId = IniUtils.getInt(section, CREATURE_ID_PREFIX + i, -1);
+            String creatureName = IniUtils.getString(section, CREATURE_NAME_PREFIX + i, "");
             if (creatureId != -1 && !creatureName.isEmpty()) creatures.put(creatureId, creatureName);
         }
         return creatures.isEmpty() ? null : creatures;
@@ -411,12 +403,10 @@ public record NpcDAOIni(String npcsFilePath,
     /**
      * Gets npc's alignment.
      *
-     * @param ini     ini configuration
-     * @param section section from which to read the value
      * @return the npc's alignment; or null if the key {@code ALIGNMENT_KEY} is missing or has an invalid value
      */
-    private Alignment getAlignment(INIConfiguration ini, String section) {
-        int alignment = IniUtils.getInt(ini, section + "." + ALIGNMENT_KEY, 0);
+    private Alignment getAlignment(SubnodeConfiguration section) {
+        int alignment = IniUtils.getInt(section, ALIGNMENT_KEY, 0);
         if (alignment == 0) return null; // El 0 se considera una alineacion neutral // TODO Deberia creear la constante NEUTRAL?
         return alignment == 1 ? Alignment.CITIZEN : Alignment.CRIMINAL;
     }
@@ -424,14 +414,12 @@ public record NpcDAOIni(String npcsFilePath,
     /**
      * Gets the types of the object to be accepted in commerce.
      *
-     * @param ini     ini configuration
-     * @param section section from which to read the value
      * @return the types of the object to be accepted in commerce
      */
-    private Set<ObjectType> getAcceptedObjectTypes(INIConfiguration ini, String section) {
-        int objectTypeId = IniUtils.getInt(ini, section + "." + OBJECT_TYPE_KEY, -1);
+    private Set<ObjectType> getAcceptedObjectTypes(SubnodeConfiguration section, String sectionName) {
+        int objectTypeId = IniUtils.getInt(section, OBJECT_TYPE_KEY, -1);
         if (objectTypeId == -1) {
-            logKeyNotFoundOrInvalid(OBJECT_TYPE_KEY, section);
+            logKeyNotFoundOrInvalid(OBJECT_TYPE_KEY, sectionName);
             return null;
         }
         LegacyObjectType objectType = LegacyObjectType.findById(objectTypeId);
@@ -441,18 +429,16 @@ public record NpcDAOIni(String npcsFilePath,
     /**
      * Gets npc's city.
      *
-     * @param ini     ini configuration
-     * @param section section from which to read the value
      * @return the npc's city; null if the key {@code CITY_KEY} is missing or has an invalid value, or if the city doesn't exist
      */
-    private City getCity(INIConfiguration ini, String section) {
-        int cityId = IniUtils.getInt(ini, section + "." + CITY_KEY, -1);
+    private City getCity(SubnodeConfiguration section, String sectionName) {
+        int cityId = IniUtils.getInt(section, CITY_KEY, -1);
         if (cityId == -1) {
-            logKeyNotFoundOrInvalid(CITY_KEY, section);
+            logKeyNotFoundOrInvalid(CITY_KEY, sectionName);
             return null;
         }
         if (cityId < 0 || cityId > 255) {
-            Logger.warn("City id '{}' out of range [0..255] in section [{}]", cityId, section);
+            Logger.warn("City id '{}' out of range [0..255] in section [{}]", cityId, sectionName);
             return null;
         }
         City city = mapService.getCity((byte) cityId);
@@ -467,15 +453,13 @@ public record NpcDAOIni(String npcsFilePath,
     /**
      * Gets AI type.
      *
-     * @param ini     ini configuration
-     * @param section section from which to read the value
      * @return the AI type; null if the key {@code AI_TYPE_KEY} is missing or has an invalid value, or if the AI type doesn't
      * exist
      */
-    private AIType getAIType(INIConfiguration ini, String section) {
-        int aiTypeId = IniUtils.getInt(ini, section + "." + AI_TYPE_KEY, -1);
+    private AIType getAIType(SubnodeConfiguration section, String sectionName) {
+        int aiTypeId = IniUtils.getInt(section, AI_TYPE_KEY, -1);
         if (aiTypeId == -1) {
-            logKeyNotFoundOrInvalid(AI_TYPE_KEY, section);
+            logKeyNotFoundOrInvalid(AI_TYPE_KEY, sectionName);
             return null;
         }
         AIType aiType = AIType.findById(aiTypeId);
@@ -489,217 +473,179 @@ public record NpcDAOIni(String npcsFilePath,
     /**
      * Gets npc's experience.
      *
-     * @param ini     ini configuration
-     * @param section section from which to read the value
      * @return the npc's experience, or 0 if the key {@code EXPERIENCE_KEY} is missing or has an invalid value
      */
-    private int getExperience(INIConfiguration ini, String section) {
-        return IniUtils.getInt(ini, section + "." + EXPERIENCE_KEY, 0);
+    private int getExperience(SubnodeConfiguration section) {
+        return IniUtils.getInt(section, EXPERIENCE_KEY, 0);
     }
 
     /**
      * Gets npc's gold.
      *
-     * @param ini     ini configuration
-     * @param section section from which to read the value
      * @return the npc's gold, or 0 if the key {@code GOLD_KEY} is missing or has an invalid value
      */
-    private int getGold(INIConfiguration ini, String section) {
-        return IniUtils.getInt(ini, section + "." + GOLD_KEY, 0);
+    private int getGold(SubnodeConfiguration section) {
+        return IniUtils.getInt(section, GOLD_KEY, 0);
     }
 
     /**
      * Gets npc's min hp.
      *
-     * @param ini     ini configuration
-     * @param section section from which to read the value
      * @return the npc's a min hp, or 0 if the key {@code MIN_HP_KEY} is missing or has an invalid value
      */
-    private int getMinHP(INIConfiguration ini, String section) {
-        return IniUtils.getInt(ini, section + "." + MIN_HP_KEY, 0);
+    private int getMinHP(SubnodeConfiguration section) {
+        return IniUtils.getInt(section, MIN_HP_KEY, 0);
     }
 
     /**
      * Gets npc's max hp.
      *
-     * @param ini     ini configuration
-     * @param section section from which to read the value
      * @return the npc's max hp, or 0 if the key {@code MAX_HP_KEY} is missing or has an invalid value
      */
-    private int getMaxHP(INIConfiguration ini, String section) {
-        return IniUtils.getInt(ini, section + "." + MAX_HP_KEY, 0);
+    private int getMaxHP(SubnodeConfiguration section) {
+        return IniUtils.getInt(section, MAX_HP_KEY, 0);
     }
 
     /**
      * Gets npc's min hit.
      *
-     * @param ini     ini configuration
-     * @param section section from which to read the value
      * @return the npc's min hit, or 0 if the key {@code MIN_HIT_KEY} is missing or has an invalid value
      */
-    private int getMinHit(INIConfiguration ini, String section) {
-        return IniUtils.getInt(ini, section + "." + MIN_HIT_KEY, 0);
+    private int getMinHit(SubnodeConfiguration section) {
+        return IniUtils.getInt(section, MIN_HIT_KEY, 0);
     }
 
     /**
      * Gets npc's max hit.
      *
-     * @param ini     ini configuration
-     * @param section section from which to read the value
      * @return the npc's max hit, or 0 if the key {@code MAX_HIT_KEY} is missing or has an invalid value
      */
-    private int getMaxHit(INIConfiguration ini, String section) {
-        return IniUtils.getInt(ini, section + "." + MAX_HIT_KEY, 0);
+    private int getMaxHit(SubnodeConfiguration section) {
+        return IniUtils.getInt(section, MAX_HIT_KEY, 0);
     }
 
     /**
      * Gets npc's attack.
      *
-     * @param ini     ini configuration
-     * @param section section from which to read the value
      * @return the npc's attack, or 0 if the key {@code ATTACK_KEY} is missing or has an invalid value
      */
-    private short getAttack(INIConfiguration ini, String section) {
-        return (short) IniUtils.getInt(ini, section + "." + ATTACK_KEY, 0);
+    private short getAttack(SubnodeConfiguration section) {
+        return (short) IniUtils.getInt(section, ATTACK_KEY, 0);
     }
 
     /**
      * Gets npc's defense.
      *
-     * @param ini     ini configuration
-     * @param section section from which to read the value
      * @return the npc's defense, or 0 if the key {@code DEFENSE_KEY} is missing or has an invalid value
      */
-    private short getDefense(INIConfiguration ini, String section) {
+    private short getDefense(SubnodeConfiguration section) {
         // TODO Es la mejor practica hacer un cast a short?
-        return (short) IniUtils.getInt(ini, section + "." + DEFENSE_KEY, 0);
+        return (short) IniUtils.getInt(section, DEFENSE_KEY, 0);
     }
 
     /**
      * Gets npc's magic defense.
      *
-     * @param ini     ini configuration
-     * @param section section from which to read the value
      * @return the npc's magic defense, or 0 if the key {@code MAGIC_DEFENSE_KEY} is missing or has an invalid value
      */
-    private short getMagicDefense(INIConfiguration ini, String section) {
-        return (short) IniUtils.getInt(ini, section + "." + MAGIC_DEFENSE_KEY, 0);
+    private short getMagicDefense(SubnodeConfiguration section) {
+        return (short) IniUtils.getInt(section, MAGIC_DEFENSE_KEY, 0);
     }
 
     /**
      * Gets npc's evasion.
      *
-     * @param ini     ini configuration
-     * @param section section from which to read the value
      * @return the npc's evasion, or 0 if the key {@code EVASION_KEY} is missing or has an invalid value
      */
-    private short getEvasion(INIConfiguration ini, String section) {
-        return (short) IniUtils.getInt(ini, section + "." + EVASION_KEY, 0);
+    private short getEvasion(SubnodeConfiguration section) {
+        return (short) IniUtils.getInt(section, EVASION_KEY, 0);
     }
 
     /**
      * Check if the npc returns to its original position.
      *
-     * @param ini     ini configuration
-     * @param section section from which to read the value
      * @return true if the npc returns to its original position, or false if the key {@code RETURNING_KEY} is missing or has an
      * invalid value
      */
-    private boolean isReturning(INIConfiguration ini, String section) {
-        return IniUtils.getBoolean(ini, section + "." + RETURNING_KEY, false);
+    private boolean isReturning(SubnodeConfiguration section) {
+        return IniUtils.getBoolean(section, RETURNING_KEY, false);
     }
 
     /**
      * Checks if the npc has restockable keys.
      *
-     * @param ini     ini configuration
-     * @param section section from which to read the value
      * @return true if the npc has restockable keys, or false if the key {@code RESTOCKABLE_KEY} is missing or has an invalid
      * value
      */
-    private boolean isRestockable(INIConfiguration ini, String section) {
-        return IniUtils.getBoolean(ini, section + "." + RESTOCKABLE_KEY, false);
+    private boolean isRestockable(SubnodeConfiguration section) {
+        return IniUtils.getBoolean(section, RESTOCKABLE_KEY, false);
     }
 
     /**
      * Checks if the npc is merchant.
      *
-     * @param ini     ini configuration
-     * @param section section from which to read the value
      * @return true if the npc is merchant, or false if the key {@code MERCHANT_KEY} is missing or has an invalid value
      */
-    private boolean isMerchant(INIConfiguration ini, String section) {
-        return IniUtils.getBoolean(ini, section + "." + MERCHANT_KEY, false);
+    private boolean isMerchant(SubnodeConfiguration section) {
+        return IniUtils.getBoolean(section, MERCHANT_KEY, false);
     }
 
     /**
      * Checks if the npc is aquatic.
      *
-     * @param ini     ini configuration
-     * @param section section from which to read the value
      * @return true if the npc is aquatic, or false if the key {@code AQUATIC_KEY} is missing or has an invalid value
      */
-    private boolean isAquatic(INIConfiguration ini, String section) {
-        return IniUtils.getBoolean(ini, section + "." + AQUATIC_KEY, false);
+    private boolean isAquatic(SubnodeConfiguration section) {
+        return IniUtils.getBoolean(section, AQUATIC_KEY, false);
     }
 
     /**
      * Checks if the npc is attackable.
      *
-     * @param ini     ini configuration
-     * @param section section from which to read the value
      * @return true if the npc is attackable, or false if the key {@code ATTACKABLE_KEY} is missing or has an invalid value
      */
-    private boolean isAttackable(INIConfiguration ini, String section) {
-        return IniUtils.getBoolean(ini, section + "." + ATTACKABLE_KEY, false);
+    private boolean isAttackable(SubnodeConfiguration section) {
+        return IniUtils.getBoolean(section, ATTACKABLE_KEY, false);
     }
 
     /**
      * Checks if the npc is hostile.
      *
-     * @param ini     ini configuration
-     * @param section section from which to read the value
      * @return true if the npc is hostile, or false if the key {@code HOSTILE_KEY} is missing or has an invalid value
      */
-    private boolean isHostile(INIConfiguration ini, String section) {
-        return IniUtils.getBoolean(ini, section + "." + HOSTILE_KEY, false);
+    private boolean isHostile(SubnodeConfiguration section) {
+        return IniUtils.getBoolean(section, HOSTILE_KEY, false);
     }
 
     /**
      * Checks if the npc is tameable.
      *
-     * @param ini     ini configuration
-     * @param section section from which to read the value
      * @return true if the npc is tameable, or false if the key {@code TAMEABLE_KEY} is missing or has an invalid value
      */
-    private boolean isTameable(INIConfiguration ini, String section) {
-        return IniUtils.getBoolean(ini, section + "." + TAMEABLE_KEY, false);
+    private boolean isTameable(SubnodeConfiguration section) {
+        return IniUtils.getBoolean(section, TAMEABLE_KEY, false);
     }
 
     /**
      * Checks if the npc is poisonous.
      *
-     * @param ini     ini configuration
-     * @param section section from which to read the value
      * @return true if the npc is poisonous, or false if the key {@code POISONOUS_KEY} is missing or has an invalid value
      */
-    private boolean isPoisonous(INIConfiguration ini, String section) {
-        return IniUtils.getBoolean(ini, section + "." + POISONOUS_KEY, false);
+    private boolean isPoisonous(SubnodeConfiguration section) {
+        return IniUtils.getBoolean(section, POISONOUS_KEY, false);
     }
 
     /**
      * Checks if the npc is unparalyzable.
      *
-     * @param ini     ini configuration
-     * @param section section from which to read the value
      * @return true if the npc is unparalyzable, or false if the key {@code UNPARALYZABLE_KEY} is missing or has an invalid value
      */
-    private boolean isUnparalyzable(INIConfiguration ini, String section) {
-        return IniUtils.getBoolean(ini, section + "." + UNPARALYZABLE_KEY, false);
+    private boolean isUnparalyzable(SubnodeConfiguration section) {
+        return IniUtils.getBoolean(section, UNPARALYZABLE_KEY, false);
     }
 
-    private void logKeyNotFoundOrInvalid(String key, String section) {
-        Logger.warn("The key '{}' was not found in section [{}] or its value is invalid!", key, section);
+    private void logKeyNotFoundOrInvalid(String key, String sectionName) {
+        Logger.warn("The key '{}' was not found in section [{}] or its value is invalid!", key, sectionName);
     }
 
 }
