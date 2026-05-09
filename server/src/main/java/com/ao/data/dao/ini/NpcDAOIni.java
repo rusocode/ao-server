@@ -39,7 +39,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.*;
-import java.util.stream.IntStream;
 
 /**
  * Implementation of the npc DAO backed by INI files.
@@ -372,12 +371,12 @@ public record NpcDAOIni(String npcsFilePath,
      * @return the list of sounds from the npc or empty list if none exists
      */
     private List<Integer> getSounds(SubnodeConfiguration section) {
-        int soundCount = 3;
-        return IntStream.rangeClosed(1, soundCount)
-                .map(i -> IniUtils.getInt(section, SOUND_PREFIX + i, -1))
-                .filter(value -> value != -1)
-                .boxed()
-                .toList();
+        List<Integer> sounds = new ArrayList<>(3);
+        for (int i = 1; i <= 3; i++) {
+            int value = IniUtils.getInt(section, SOUND_PREFIX + i, -1);
+            if (value != -1) sounds.add(value);
+        }
+        return sounds;
     }
 
     /**
