@@ -1,0 +1,60 @@
+# Game Intervals Configuration for AO-Java
+# All values are in milliseconds unless specified otherwise.
+
+intervals:
+  # Health and Stamina regeneration cycles
+  regeneration:
+    hp: 1600
+    hp_resting: 100
+    stamina: 10
+    stamina_resting: 5
+    mana_recovery_percent: 6 # From [BALANCE] PorcentajeRecuperoMana
+
+  # Survival mechanics
+  survival:
+    thirst: 6000
+    hunger: 6500
+
+  # Periodic state updates
+  states:
+    poison: 500
+    paralyzed: 500
+    invisible: 500
+    hidden: 500
+    cold: 15
+
+  # Combat and Action timing
+  combat:
+    user_attack: 1500
+    npc_attack: 1600
+    spell_cast: 1400
+    magic_hit_delay: 1000   # IntervaloMagiaGolpe
+    hit_magic_delay: 1000   # IntervaloGolpeMagia
+    bow_attack: 1400        # IntervaloFlechasCazadores
+    use_item: 125           # IntervaloUserPuedeUsar
+    work: 700               # IntervaloTrabajo
+
+  # Movement timing
+  movement:
+    user: 200
+
+  # NPC AI and behavior
+  npc:
+    ai_tick: 380
+
+  # World and Environment events
+  world:
+    save_interval: 180      # In minutes (IntervaloWS)
+    summon_duration: 1001
+    rain_stamina_loss: 9999
+    fx_wav_delay: 190
+
+  # Network and Connection management
+  network:
+    connection_retry: 3000
+    close_connection: 5     # In seconds (IntervaloCerrarConexion)
+
+  # Core Engine timings
+  system:
+    main_engine_tick: 50    # IntervaloTimerExec
+    auto_restart: 100000

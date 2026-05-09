@@ -14,10 +14,11 @@ target/
 .DS_Store
 Thumbs.db
 
-# Ignorar archivos ocultos (excepto .gitignore y .gitattributes)
+# Ignorar archivos ocultos (excepto configuraciones esenciales)
 .*
 !.gitignore
 !.gitattributes
+!.editorconfig
 
 # Datos dinámicos de usuarios
 charfiles/*

@@ -1,5 +1,7 @@
 package com.ao.service;
 
+import java.util.Set;
+
 import com.ao.model.user.ConnectedUser;
 
 public interface UserService {
@@ -21,5 +23,12 @@ public interface UserService {
      * Log out a ConnectedUser.
      */
     void logOut(ConnectedUser user);
+
+    /**
+     * Obtiene el conjunto de todos los users conectados al servidor.
+     *
+     * @return conjunto de usuarios conectados
+     */
+    Set<ConnectedUser> getConnectedUsers();
 
 }
