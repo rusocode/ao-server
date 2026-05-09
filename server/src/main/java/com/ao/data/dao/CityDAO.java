@@ -1,5 +1,6 @@
 package com.ao.data.dao;
 
+import com.ao.data.dao.exception.DAOException;
 import com.ao.model.map.City;
 
 /**
@@ -13,6 +14,6 @@ public interface CityDAO {
      *
      * @return the array of cities
      */
-    City[] load(); // TODO DAOException?
+    City[] load() throws DAOException;
 
 }

@@ -1,5 +1,6 @@
 package com.ao.service;
 
+import com.ao.data.dao.exception.DAOException;
 import com.ao.model.character.Character;
 import com.ao.model.map.City;
 import com.ao.model.map.Heading;
@@ -28,7 +29,7 @@ public interface MapService {
     /**
      * Loads all cities.
      */
-    void loadCities();
+    void loadCities() throws DAOException;
 
     /**
      * Retrieves the city with the given id.

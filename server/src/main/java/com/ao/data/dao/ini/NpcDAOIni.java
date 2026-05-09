@@ -141,7 +141,7 @@ public final class NpcDAOIni implements NpcCharacterDAO {
             ini.read(reader);
             Logger.info("Npcs loaded successfully!");
         } catch (IOException | ConfigurationException e) {
-            throw new DAOException("Error loading npcs!/n" + e);
+            throw new DAOException("Error loading npcs!\n" + e);
         }
 
         // Required key

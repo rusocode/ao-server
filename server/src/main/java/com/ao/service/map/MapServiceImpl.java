@@ -3,6 +3,7 @@ package com.ao.service.map;
 import com.ao.action.ActionExecutor;
 import com.ao.data.dao.CityDAO;
 import com.ao.data.dao.MapDAO;
+import com.ao.data.dao.exception.DAOException;
 import com.ao.model.character.Character;
 import com.ao.model.map.City;
 import com.ao.model.map.Heading;
@@ -44,7 +45,7 @@ public class MapServiceImpl extends ActionExecutor<MapService> implements MapSer
     }
 
     @Override
-    public void loadCities() {
+    public void loadCities() throws DAOException {
         cities = cityDAO.load();
     }
 

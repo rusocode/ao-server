@@ -1,6 +1,7 @@
 package com.ao.data.dao.ini;
 
 import com.ao.data.dao.CityDAO;
+import com.ao.data.dao.exception.DAOException;
 import com.ao.model.map.City;
 import com.ao.utils.IniUtils;
 import com.ao.utils.ResourceUtils;
@@ -42,8 +43,8 @@ public final class CityDAOIni implements CityDAO {
     }
 
     @Override
-    public City[] load() {
-        INIConfiguration ini = null;
+    public City[] load() throws DAOException {
+        INIConfiguration ini;
         InputStream inputStream = ResourceUtils.getStream(citiesFilePath);
         if (inputStream == null)
             throw new IllegalArgumentException("The file '" + citiesFilePath + "' was not found!");
@@ -52,8 +53,7 @@ public final class CityDAOIni implements CityDAO {
             ini.read(reader);
             Logger.info("Cities loaded successfully!");
         } catch (IOException | ConfigurationException e) {
-            Logger.error("Error loading citites!", e);
-            System.exit(-1);
+            throw new DAOException("Error loading cities!\n" + e);
         }
 
         // Required key

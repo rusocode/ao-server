@@ -22,7 +22,7 @@ public class CityDAOIniTest {
     }
 
     @Test
-    public void testLoad() {
+    public void testLoad() throws DAOException {
         City[] cities = cityDAOIni.load();
         assertThat(cities.length).isEqualTo(7); // Se asegura que el valor actual sea igual al valor esperado
     }
