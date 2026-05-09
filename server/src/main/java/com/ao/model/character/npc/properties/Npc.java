@@ -77,7 +77,7 @@ public class Npc {
         return attackStrategy;
     }
 
-    public Class<? extends MovementStrategy> getmovementStrategy() {
+    public Class<? extends MovementStrategy> getMovementStrategy() {
         return movementStrategy;
     }
 

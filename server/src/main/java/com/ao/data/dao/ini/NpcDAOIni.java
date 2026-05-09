@@ -54,10 +54,7 @@ import java.util.*;
  * TODO Creo que no se esta inyectando WorldObjectFactory
  */
 
-public record NpcDAOIni(String npcsFilePath,
-                        ObjectDAO objectDAO,
-                        ObjectFactory objectFactory,
-                        MapService mapService) implements NpcCharacterDAO {
+public final class NpcDAOIni implements NpcCharacterDAO {
 
     private static final String INIT_HEADER = "INIT";
     private static final String NPC_COUNT_KEY = "npc_count";
@@ -72,7 +69,6 @@ public record NpcDAOIni(String npcsFilePath,
     private static final String SOUND_PREFIX = "sound"; // SND
     private static final String CREATURE_ID_PREFIX = "creature_id"; // CI
     private static final String CREATURE_NAME_PREFIX = "creature_name"; // CN
-
     /** Ini file keys. */
     private static final String NAME_KEY = "name";
     private static final String NPC_TYPE_KEY = "npc_type"; // NpcType
@@ -108,6 +104,11 @@ public record NpcDAOIni(String npcsFilePath,
     private static final String OBJECT_COUNT_KEY = "object_count"; // NROITEMS
     private static final String RESTOCKABLE_KEY = "restockable"; // InvReSpawn
 
+    private final String npcsFilePath;
+    private final ObjectDAO objectDAO;
+    private final ObjectFactory objectFactory;
+    private final MapService mapService;
+
     /**
      * Creates a new NpcDAOIni instance using DI.
      * <p>
@@ -130,7 +131,7 @@ public record NpcDAOIni(String npcsFilePath,
 
     @Override
     public Npc[] load() throws DAOException {
-        INIConfiguration ini = null;
+        INIConfiguration ini;
         InputStream inputStream = ResourceUtils.getStream(npcsFilePath);
         if (inputStream == null)
             throw new IllegalArgumentException("The file '" + npcsFilePath + "' was not found!");
@@ -139,8 +140,7 @@ public record NpcDAOIni(String npcsFilePath,
             ini.read(reader);
             Logger.info("Npcs loaded successfully!");
         } catch (IOException | ConfigurationException e) {
-            Logger.error("Error loading npcs!", e);
-            System.exit(-1);
+            throw new DAOException("Error loading npcs!/n" + e);
         }
 
         // Required key
@@ -274,18 +274,23 @@ public record NpcDAOIni(String npcsFilePath,
     private List<Spell> getSpells(SubnodeConfiguration section, String sectionName) {
         int spellCount = IniUtils.getInt(section, SPELL_COUNT_KEY, 0);
         if (spellCount <= 0) {
-            Logger.warn("No spells found for npc [{}]", sectionName);
+            Logger.info("No spells found for npc [{}]", sectionName);
             return null;
         }
 
-        List<Spell> spells = null;
-        for (int i = 1; i <= spellCount; i++) {
-            String spellKey = SPELL_PREFIX + i;
-            if (!section.containsKey(spellKey)) continue;
-            int value = IniUtils.getInt(section, spellKey, -1);
-            // if (value != -1) spells.add(new Spell(value, ));
-        }
-        return spells;
+        Logger.warn("Spell loading not implemented for section [{}]: {} spell(s) ignored", sectionName, spellCount);
+
+        // TODO Implement
+//        List<Spell> spells = null;
+//        for (int i = 1; i <= spellCount; i++) {
+//            String spellKey = SPELL_PREFIX + i;
+//            if (!section.containsKey(spellKey)) continue;
+//            int value = IniUtils.getInt(section, spellKey, -1);
+//            // if (value != -1) spells.add(new Spell(value, ));
+//        }
+//        return spells;
+
+        return null;
     }
 
     /**
@@ -320,7 +325,11 @@ public record NpcDAOIni(String npcsFilePath,
                 String[] slotInfo = slot.split("-");
                 // In every step except the last one, leave a 10% chance for the next level
                 float currentChance = i == objectCount ? chance : chance * 0.9f;
-                dropables.add(new Dropable(Integer.parseInt(slotInfo[0]), Integer.parseInt(slotInfo[1]), currentChance));
+                try {
+                    dropables.add(new Dropable(Integer.parseInt(slotInfo[0]), Integer.parseInt(slotInfo[1]), currentChance));
+                } catch (NumberFormatException e) {
+                    Logger.warn("Malformed drop slot '{}' in section [{}], skipping", slot, sectionName);
+                }
             }
 
             // The chance for the next step is 10% of the current one
@@ -348,8 +357,15 @@ public record NpcDAOIni(String npcsFilePath,
             String slot = IniUtils.getString(section, OBJECT_INVENTORY_PREFIX + i, "");
             if (!slot.isEmpty()) {
                 String[] slotInfo = slot.split("-");
-                int objId = Integer.parseInt(slotInfo[0]);
-                int amount = Integer.parseInt(slotInfo[1]);
+                int objId;
+                int amount;
+                try {
+                    objId = Integer.parseInt(slotInfo[0]);
+                    amount = Integer.parseInt(slotInfo[1]);
+                } catch (NumberFormatException e) {
+                    Logger.warn("Malformed inventory slot '{}', skipping", slot);
+                    continue;
+                }
                 ObjectProperties objectProperties = objectDAO.getObjectProperties(objId);
                 Item item;
                 try {

@@ -22,16 +22,15 @@ public final class IniUtils {
     public static int getRequiredInt(Configuration config, String key) {
         if (!config.containsKey(key)) {
             Logger.error("Missing required key '{}'!", key);
-            System.exit(-1);
+            throw new IllegalStateException("Missing required INI key: " + key);
         }
-        Integer value = 0;
         try {
-            value = config.getInteger(key, null);
+            Integer value = config.getInteger(key, null);
+            return value == null ? 0 : value;
         } catch (ConversionException e) {
             Logger.error("{}", e.getMessage());
-            System.exit(-1);
+            throw new IllegalStateException("Invalid value for required INI key: " + key, e);
         }
-        return value;
     }
 
     public static int getInt(Configuration config, String key, int defaultValue) {
