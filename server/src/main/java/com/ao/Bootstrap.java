@@ -13,8 +13,7 @@ import com.ao.service.MapService;
 import com.ao.service.NpcService;
 import com.ao.service.ObjectService;
 import com.ao.service.UserService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.tinylog.Logger;
 
 import java.io.IOException;
 import java.net.Inet4Address;
@@ -29,8 +28,6 @@ import java.util.concurrent.TimeUnit;
 
 public class Bootstrap {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(Bootstrap.class);
-
     public static void main(String[] args) {
 
         AOServer server;
@@ -38,12 +35,12 @@ public class Bootstrap {
         try {
             server = Bootstrap.bootstrap();
         } catch (Exception e) {
-            LOGGER.error("Server bootstrapping failed: {}", e.getMessage(), e);
+            Logger.error("Server bootstrapping failed: {}", e.getMessage(), e);
             System.exit(-1);
             return;
         }
 
-        LOGGER.info("\u001B[1;32mServer ready!\u001B[0m");
+        Logger.info("\u001B[1;32mServer ready!\u001B[0m");
         server.run();
     }
 
@@ -58,12 +55,12 @@ public class Bootstrap {
 
         long start = System.currentTimeMillis();
 
-        LOGGER.info("Initializing AO Server...");
+        Logger.info("Initializing AO Server...");
         loadApplicationContext(server);
         startTimers(server);
         configureNetworking(server);
 
-        LOGGER.info("\u001B[1;32mServer initialized in {} ms\u001B[0m", System.currentTimeMillis() - start);
+        Logger.info("\u001B[1;32mServer initialized in {} ms\u001B[0m", System.currentTimeMillis() - start);
 
         return server;
     }
@@ -74,11 +71,10 @@ public class Bootstrap {
      * @param server server on which to configure networking
      */
     private static void configureNetworking(AOServer server) throws IOException {
-        byte[] addr = { 0, 0, 0, 0 };
-        LOGGER.info("Initializing server socket configuration...");
+        byte[] addr = {0, 0, 0, 0};
+        Logger.info("Initializing server socket configuration...");
         ServerConfig config = ApplicationContext.getInstance(ServerConfig.class);
-        InetSocketAddress endpoint = new InetSocketAddress(Inet4Address.getByAddress(addr),
-                config.getServerListeningPort());
+        InetSocketAddress endpoint = new InetSocketAddress(Inet4Address.getByAddress(addr), config.getServerListeningPort());
         server.setListeningAddr(endpoint);
         server.setBacklog(config.getListeningBacklog());
     }
@@ -90,7 +86,7 @@ public class Bootstrap {
      */
     private static void startTimers(AOServer server) {
 
-        LOGGER.info("Starting up game timers...");
+        Logger.info("Starting up game timers...");
 
         IntervalsConfig intervals = ApplicationContext.getInstance(IntervalsConfig.class);
 
@@ -179,20 +175,20 @@ public class Bootstrap {
      */
     private static void loadApplicationContext(AOServer server) throws DAOException {
 
-        LOGGER.info("Loading application context...");
+        Logger.info("Loading application context...");
 
-        LOGGER.info("Loading maps...");
-        MapService mapService = ApplicationContext.getInstance(MapService.class);
+        Logger.info("Loading maps...");
+        MapService mapService = ApplicationContext.getInstance(MapService.class); // Sin DI tendria que hardcodear la creacion del objeto -> new MapServiceImpl();
         mapService.loadMaps();
 
-        LOGGER.info("Loading cities...");
+        Logger.info("Loading cities...");
         mapService.loadCities();
 
-        LOGGER.info("Loading objects...");
+        Logger.info("Loading objects...");
         ObjectService objectService = ApplicationContext.getInstance(ObjectService.class);
         objectService.loadObjects();
 
-        LOGGER.info("Loading npcs...");
+        Logger.info("Loading npcs...");
         NpcService npcService = ApplicationContext.getInstance(NpcService.class);
         npcService.loadNpcs();
     }

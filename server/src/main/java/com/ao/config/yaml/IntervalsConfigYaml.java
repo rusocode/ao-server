@@ -7,25 +7,23 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.tinylog.Logger;
+
 import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * Implementación de la configuración de intervalos que carga los datos desde un
- * archivo YAML usando Jackson.
+ * Implementacion de la configuracion de intervalos que carga los datos desde un archivo YAML usando Jackson.
  */
-public class IntervalsConfigYaml implements IntervalsConfig {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(IntervalsConfigYaml.class);
+public class IntervalsConfigYaml implements IntervalsConfig {
 
     @JsonProperty("intervals")
     private IntervalsData intervals;
 
     /**
-     * El constructor usa Guice (@Inject) para recibir la ruta del archivo.
-     * Jackson se encarga de "parsear" el archivo y rellenar esta misma clase.
+     * El constructor usa Guice (@Inject) para recibir la ruta del archivo. Jackson se encarga de "parsear" el archivo y rellenar
+     * esta misma clase.
      */
     @Inject
     public IntervalsConfigYaml(@Named("IntervalsConfigYaml") String configPath) {
@@ -36,18 +34,16 @@ public class IntervalsConfigYaml implements IntervalsConfig {
                 throw new IllegalArgumentException("¡No se encontró el archivo de intervalos: " + configPath);
             }
 
-            // Aquí ocurre la magia: Jackson lee el InputStream y "mapea" el contenido a
-            // 'this'
+            // Aqui ocurre la magia: Jackson lee el InputStream y "mapea" el contenido a 'this'
             mapper.readerForUpdating(this).readValue(is);
-            LOGGER.info("Intervalos de juego cargados correctamente desde {}", configPath);
+            Logger.info("Intervalos de juego cargados correctamente desde {}", configPath);
 
         } catch (IOException e) {
-            LOGGER.error("Error al cargar los intervalos desde YAML", e);
+            Logger.error("Error al cargar los intervalos desde YAML", e);
             throw new RuntimeException(e);
         }
     }
 
-    // --- Implementación de la Interfaz ---
     @Override
     public RegenerationConfig getRegeneration() {
         return intervals.regeneration;
@@ -93,8 +89,12 @@ public class IntervalsConfigYaml implements IntervalsConfig {
         return intervals.system;
     }
 
-    // --- Clases de Datos Internas (POJOs) ---
-    // Estas clases sirven para que Jackson sepa dónde meter cada valor del YAML.
+    /**
+     * Clases de Datos Internas (POJOs).
+     * <p>
+     * Estas clases sirven para que Jackson sepa donde meter cada valor del YAML.
+     */
+
     public static class IntervalsData {
         public RegenerationData regeneration;
         public SurvivalData survival;
@@ -330,4 +330,5 @@ public class IntervalsConfigYaml implements IntervalsConfig {
             return autoRestart;
         }
     }
+
 }
