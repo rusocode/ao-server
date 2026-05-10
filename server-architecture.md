@@ -433,28 +433,28 @@ pie title Estado de Implementación
 ### ✅ Lo que FUNCIONA (o está muy avanzado)
 
 - **Modelo de dominio completo**: Personajes, NPCs, objetos (~30 tipos), hechizos, mapas, inventario
-- **Capa de datos**: Lectura de archivos INI y mapas binarios legacy
+- **Capa de datos**: Lectura de archivos INI y mapas binarios legacy. Se ha estabilizado la carga tolerando huecos (`objects.dat`) e ignorando falsos errores de NPCs.
 - **Infraestructura de red**: Pipeline Netty con cifrado/descifrado, decodificación/codificación
 - **Inyección de dependencias**: 5 módulos Guice configurados
 - **CI/CD**: Pipeline completo con tests y cobertura
 - **Paquetes básicos**: Login (existente + nuevo), chat (talk/yell/whisper), movimiento
+- **Game Loops**: Se ha estabilizado el loop principal de lógica y timers asíncronos.
 
 ### ⚠️ Lo que está INCOMPLETO (TODOs del código)
 
-1. **Game timers** (`Bootstrap.java:87`): `startTimers()` está vacío — no hay game loop
+1. ~~**Game timers** (`Bootstrap.java:87`): `startTimers()` está vacío — no hay game loop~~ (Implementado y estabilizado)
 2. **Servicios pendientes** (`Bootstrap.java:114`): `TODO Load other services`
 3. **Service Locator** (`ApplicationContext.java:9`): Eliminar Injector estático
-4. **Combate**: Sin implementación de game loop de combate
-5. **Paquetes entrantes**: Solo 7 de ~50+ del protocolo original
-6. **Paquetes salientes**: 22 definidos pero no todos integrados
+4. **Combate**: Sin implementación de game loop de combate completo (aún en desarrollo)
+5. **Paquetes entrantes**: Solo 7 de ~129 del protocolo original
+6. **Paquetes salientes**: 22 de ~104 definidos pero no todos integrados
 7. **Sistema de persistencia**: Sin guardado (solo lectura de datos)
 8. **Cifrado real**: `DefaultSecurityManager` no cifra nada
 9. **Chat de guild**: Paquete definido pero sin lógica
-10. **Spawning de NPCs**: Servicio de NPC carga datos pero no spawnea
+10. **Spawning de NPCs**: Servicio de NPC carga datos pero no spawnea completamente
 
 ### 🔴 Lo que FALTA implementar
 
-- Game loop principal (tick-based)
 - Sistema de combate PvP y PvE
 - Sistema de comercio (NPCs y entre jugadores)
 - Sistema de crafting
@@ -463,7 +463,44 @@ pie title Estado de Implementación
 - Administración en runtime (comandos GM)
 - Persistencia de personajes (escritura)
 - Cifrado real del tráfico
-- Muchos paquetes del protocolo AO
+- **Implementar paquetes prioritarios para la jugabilidad (ver Roadmap Prioritario)**
+
+---
+
+## 🚀 Roadmap Prioritario: Paquetes de Red (MVP Jugable)
+
+Dado que el cliente ya tiene implementados 129 paquetes de entrada y 104 de salida, pero el servidor apenas tiene una fracción, la prioridad para lograr una versión **jugable (MVP)** es implementar la siguiente lista de paquetes. No es necesario tener todo perfecto en una primera iteración, sino lograr el feedback visual y mecánico base.
+
+### 📥 Paquetes Entrantes (Cliente -> Servidor) Prioritarios
+1. **Acciones y Combate**
+   - `Attack` (Golpe físico con arma o puño)
+   - `CastSpell` (Lanzar hechizo a un target seleccionado)
+2. **Interacción con Objetos e Inventario**
+   - `EquipItem` (Equipar/Desequipar arma, armadura, escudo, casco)
+   - `UseItem` (Beber pociones de HP/Mana, comer)
+   - `Drop` (Tirar objetos del inventario al mapa)
+   - `Take` (Agarrar objetos del mapa con tecla Q)
+3. **Mundo y NPCs**
+   - `CommerceStart` / `CommerceBuy` / `CommerceSell` (Comprar y vender a NPCs)
+   - `Resurrect` (Pedir resurrección a un Priest NPC)
+4. **Heartbeat**
+   - `Ping` / `Pong` (Mantener viva la conexión con el cliente y sincronizar el game loop)
+
+### 📤 Paquetes Salientes (Servidor -> Cliente) Prioritarios
+1. **Sincronización de Entidades (Para ver a los demás)**
+   - `CharacterCreate` / `CharacterRemove` / `CharacterMove` (Sincronizar el spawn, movimiento y desaparición de otros usuarios y NPCs en el área visible)
+   - `ObjectCreate` / `ObjectDelete` (Ver los items que se caen o se agarran del suelo)
+2. **Feedback Visual y Combate**
+   - `UpdateHP` / `UpdateMana` / `UpdateStamina` (Reflejar el cambio de estado al usar pociones o recibir daño)
+   - `UpdateGold` / `UpdateExp` (Al matar NPCs o comerciar)
+   - `CreateFX` / `Blood` (Sangre y efectos visuales de hechizos)
+   - `PlayWave` (Sonidos de golpes, hechizos, fallos)
+3. **Feedback de Interfaz**
+   - `ConsoleMessage` (Mensajes de sistema: "Fallas el golpe", "No tienes suficiente maná", etc.)
+   - `ChatOverHead` (Textos flotantes encima de la cabeza de los personajes para daño, palabras mágicas, chat normal)
+   - `UpdateInventorySlot` / `ChangeSpellSlot` (Refrescar inventario tras comprar, agarrar o tirar items)
+
+Implementar esta lista de paquetes conectará el motor del servidor (que ya tiene los datos cargados de items y NPCs) con las capacidades visuales que ya soporta el cliente LWJGL3, dando lugar a una experiencia de juego interactiva.
 
 ---
 
