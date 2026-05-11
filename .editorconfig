@@ -14,17 +14,10 @@ trim_trailing_whitespace = true
 [*.java]
 max_line_length = 130
 
-[{*.bash,*.sh,*.zsh}]
-indent_size = 2
-tab_width = 2
-
-[{*.har,*.jsb2,*.jsb3,*.json,*.jsonc,*.postman_collection,*.postman_environment,.babelrc,.eslintrc,.prettierrc,.stylelintrc,.ws-context,jest.config}]
-indent_size = 2
-
-[{*.markdown,*.md}]
+[*.md]
 trim_trailing_whitespace = false
 
-[{*.yaml,*.yml}]
+[*.yml]
 indent_size = 2
 
 [*.map]
