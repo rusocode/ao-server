@@ -5,12 +5,16 @@
 
 <img align="right" width="100" src="logo.png"/>
 
-Servidor de [Argentum Online](https://es.wikipedia.org/wiki/Argentum_Online) escrito en Java compatible con el [cliente](https://github.com/gasti-jm/argentum-online-lwjgl3/tree/network-java) en Java.
-> IMPORTANTE: Verificar que la rama seleccionada en el cliente sea <b><i>network-java</i></b> ya que es la que mantiene compatibilidad con este servidor, la rama <b><i>main</i></b> del cliente SOLO es compatible con el servidor de VB6.
+Servidor de [Argentum Online](https://es.wikipedia.org/wiki/Argentum_Online) escrito en Java compatible con
+el [cliente](https://github.com/gasti-jm/argentum-online-lwjgl3/tree/network-java) en Java.
+> IMPORTANTE: Verificar que la rama seleccionada en el cliente sea <b><i>network-java</i></b> ya que es la que mantiene
+> compatibilidad con este servidor, la rama <b><i>main</i></b> del cliente SOLO es compatible con el servidor de VB6.
 
-El objetivo del servidor es aprovechar el multithreading y las características que ofrece Java (APIs, librerías y frameworks) para mejorar el rendimiento del juego.
+El objetivo del servidor es aprovechar el multithreading y las características que ofrece Java (APIs, librerías y
+frameworks) para mejorar el rendimiento del juego.
 
-<b>AO-Server está basado en [AOXP-Server](https://github.com/aoxp/AOXP-Server) dado que la implementación original dejó de mantenerse.</b>
+<b>AO-Server está basado en [AOXP-Server](https://github.com/aoxp/AOXP-Server) dado que la implementación original dejó
+de mantenerse.</b>
 
 ## ✨ Características
 
@@ -25,7 +29,9 @@ El objetivo del servidor es aprovechar el multithreading y las características 
 - 📊 **CI/CD** con GitHub Actions y reportes de cobertura.
 
 > [!TIP]
-> Para un análisis técnico profundo de la arquitectura de red (Netty), inyección de dependencias (Guice) y modelo de dominio, consulta la documentación de la [arquitectura del servidor](https://github.com/rusocode/ao-server/blob/main/server-architecture.md).
+> Para un análisis técnico profundo de la arquitectura de red (Netty), inyección de dependencias (Guice) y modelo de
+> dominio, consulta la documentación de
+> la [arquitectura del servidor](https://github.com/rusocode/ao-server/blob/main/server-architecture.md).
 
 ---
 
@@ -39,17 +45,17 @@ aoserver (POM padre)
 
 ### Stack Tecnológico
 
-| Componente | Tecnología |
-|-----------|-----------|
-| Lenguaje | Java 17 |
-| Build | Maven (multi-módulo) |
-| Networking | Netty 4.1.119.Final |
-| IoC/DI | Google Guice 7.0.0 |
-| Logging | SLF4J 2.0.17 + Logback 1.5.18 |
-| Configuración | Apache Commons Configuration2 |
-| Validación | Hibernate Validator 9.0.0 |
-| Testing | JUnit 5.13.4 · AssertJ 3.27.3 · Mockito 5.18.0 |
-| Cobertura | JaCoCo 0.8.13 |
+| Componente    | Tecnología                                     |
+|---------------|------------------------------------------------|
+| Lenguaje      | Java 17                                        |
+| Build         | Maven (multi-módulo)                           |
+| Networking    | Netty 4.1.119.Final                            |
+| IoC/DI        | Google Guice 7.0.0                             |
+| Logging       | SLF4J 2.0.17 + Logback 1.5.18                  |
+| Configuración | Apache Commons Configuration2                  |
+| Validación    | Hibernate Validator 9.0.0                      |
+| Testing       | JUnit 5.13.4 · AssertJ 3.27.3 · Mockito 5.18.0 |
+| Cobertura     | JaCoCo 0.8.13                                  |
 
 ### Pipeline de Red (Netty)
 
@@ -130,7 +136,8 @@ ServerSoloGMs = 0
 
 ### `project.properties` — Rutas y configuración interna
 
-Define rutas a archivos de datos (`objects.dat`, `npcs.dat`, `cities.dat`, mapas), configuración de razas (heads y bodies), y otros parámetros internos.
+Define rutas a archivos de datos (`objects.dat`, `npcs.dat`, `cities.dat`, mapas), configuración de razas (heads y
+bodies), y otros parámetros internos.
 
 ---
 
@@ -144,22 +151,23 @@ mvn test
 # Abrir: server/target/site/jacoco/index.html
 ```
 
-| Capa | Tests | Estado |
-|------|-------|--------|
-| Objetos (~30 tipos) | 35 | ✅ Excelente |
-| Efectos de hechizo | 7 | ✅ Buena |
-| DAOs | 5 | ✅ Buena |
-| Servicios | 4 | ⚠️ Parcial |
-| Personajes | 4 | ⚠️ Parcial |
-| Red (paquetes) | 2 | ⚠️ Básica |
-| Mapas | 2 | ✅ Buena |
-| Usuarios | 1 | ⚠️ Básica |
+| Capa                | Tests | Estado      |
+|---------------------|-------|-------------|
+| Objetos (~30 tipos) | 35    | ✅ Excelente |
+| Efectos de hechizo  | 7     | ✅ Buena     |
+| DAOs                | 5     | ✅ Buena     |
+| Servicios           | 4     | ⚠️ Parcial  |
+| Personajes          | 4     | ⚠️ Parcial  |
+| Red (paquetes)      | 2     | ⚠️ Básica   |
+| Mapas               | 2     | ✅ Buena     |
+| Usuarios            | 1     | ⚠️ Básica   |
 
 ---
 
 ## 📋 Estado del Proyecto
 
 ### ✅ Implementado
+
 - Modelo de dominio completo (personajes, objetos, hechizos, mapas)
 - Lectura de datos legacy (archivos INI y mapas binarios)
 - Infraestructura de red con Netty
@@ -170,6 +178,7 @@ mvn test
 - CI/CD con GitHub Actions
 
 ### 🔧 En progreso / Pendiente
+
 - Game loop (timers del juego)
 - Sistema de combate PvP/PvE
 - Sistema de comercio
@@ -185,15 +194,15 @@ mvn test
 
 ## 📁 Datos del Juego
 
-| Recurso | Ubicación | Formato |
-|---------|-----------|---------|
-| Mapas (290) | `resources/maps/` | Binario (`.map`, `.inf`, `.dat`) |
-| Objetos | `resources/data/objects.dat` | INI |
-| NPCs | `resources/data/npcs.dat` | INI |
-| Ciudades | `resources/data/cities.dat` | INI |
-| Arquetipos | `resources/data/balances.dat` | INI |
-| Personajes | `charfiles/` | INI |
-| Servidor | `resources/server.ini` | INI |
+| Recurso     | Ubicación                     | Formato                          |
+|-------------|-------------------------------|----------------------------------|
+| Mapas (290) | `resources/maps/`             | Binario (`.map`, `.inf`, `.dat`) |
+| Objetos     | `resources/data/objects.dat`  | INI                              |
+| NPCs        | `resources/data/npcs.dat`     | INI                              |
+| Ciudades    | `resources/data/cities.dat`   | INI                              |
+| Arquetipos  | `resources/data/balances.dat` | INI                              |
+| Personajes  | `charfiles/`                  | INI                              |
+| Servidor    | `resources/server.ini`        | INI                              |
 
 ---
 
@@ -201,9 +210,14 @@ mvn test
 
 1. Fork del repositorio
 2. Crear branch de feature (`git checkout -b feature/mi-feature`)
-3. Commit de cambios (`git commit -m 'Agregar mi feature'`)
-4. Push al branch (`git push origin feature/mi-feature`)
-5. Abrir un Pull Request
+3. Aplicar formateo de código antes de commitear:
+   ```bash
+   mvn spotless:apply
+   ```
+   > El CI rechaza automáticamente los PRs que no cumplan con las reglas de formateo definidas en `formatter.xml`.
+4. Commit de cambios (`git commit -m 'Agregar mi feature'`)
+5. Push al branch (`git push origin feature/mi-feature`)
+6. Abrir un Pull Request
 
 ---
 

@@ -1,4 +1,4 @@
-# Este workflow de GitHub Actions automatiza el proceso de integracion continua (CI) para un proyecto Maven de Java. Se 
+# Este workflow de GitHub Actions automatiza el proceso de integracion continua (CI) para un proyecto Maven de Java. Se
 # ejecuta automaticamente cada vez que se hace push o pull request a la rama main, realizando una secuencia de pasos
 # esenciales: primero obtiene el codigo fuente del repositorio, luego configura el entorno con Java 17 y cache de Maven,
 # despues compila y empaqueta el proyecto en un JAR usando Maven, ejecuta todas las pruebas unitarias y genera reportes
@@ -20,65 +20,71 @@ name: Java CI with Maven
 
 # Disparadores (triggers) de la GitHub Action
 on:
-  # Cuando se hace un push a la rama "main"
-  push:
-    branches: [ "main" ]
-  # Cuando se hace un pr a la rama "main"
-  pull_request:
-    branches: [ "main" ]
+    # Cuando se hace un push a la rama "main"
+    push:
+        branches: [ "main" ]
+    # Cuando se hace un pr a la rama "main"
+    pull_request:
+        branches: [ "main" ]
 
 # Trabajos a realizar (conjuto de pasos a ejecutar)
 jobs:
 
-  # Indica el proceso de construccion del artefacto/JAR
-  build:
+    # Indica el proceso de construccion del artefacto/JAR
+    build:
 
-    # Indica en que tipo de maquina virtual va a ejecutar este job del workflow
-    runs-on: ubuntu-latest # Maquina virtual de Ubuntu mas reciente
+        # Indica en que tipo de maquina virtual va a ejecutar este job del workflow
+        runs-on: ubuntu-latest # Maquina virtual de Ubuntu mas reciente
 
-    # Otorga permisos de escritura al contenido del repositorio para enviar el grafo de dependencias a GitHub para Dependabot
-    permissions:
-      contents: write
+        # Otorga permisos de escritura al contenido del repositorio para enviar el grafo de dependencias a GitHub para Dependabot
+        permissions:
+            contents: write
 
-    # Pasos a ejecutar
-    steps:
+        # Pasos a ejecutar
+        steps:
 
-      # Step 1: Obtiene el codigo de nuestro repositorio usando (uses:) la action "checkout" creada por GitHub Actions
-      # que permite clonar el codigo fuente en el entorno de ejecucion de los workflows. Las actions ya creadas nos
-      # permiten usar "aplicaciones" predefinidas en lugar de programar todo desde cero. Repo de la action: https://github.com/actions/checkout
-      - name: Checkout sources
-        uses: actions/checkout@v4
+            # Step 1: Obtiene el codigo de nuestro repositorio usando (uses:) la action "checkout" creada por GitHub Actions
+            # que permite clonar el codigo fuente en el entorno de ejecucion de los workflows. Las actions ya creadas nos
+            # permiten usar "aplicaciones" predefinidas en lugar de programar todo desde cero. Repo de la action: https://github.com/actions/checkout
+            -   name: Checkout sources
+                uses: actions/checkout@v4
 
-      # Step 2: Configura Java utilizando la action "setup-java". Repo de la action: https://github.com/actions/setup-java
-      - name: Setup Java
-        uses: actions/setup-java@v4
-        # Parametros
-        with:
-          distribution: 'temurin'
-          java-version: '17' # Podria usar una varias versiones con una matrix (ver ejemplo https://github.com/apache/commons-configuration/blob/master/.github/workflows/maven.yml)
-          cache: maven # Habilita cache para dependencias Maven, lo cual es excelente para acelerar builds futuras
-          # Util para monorepos ya que permite un cache mas granular basado en archivos especificos
-          cache-dependency-path: |
-            pom.xml
-            ao-server/pom.xml
-            ao-server-security/pom.xml
+            # Step 2: Configura Java utilizando la action "setup-java". Repo de la action: https://github.com/actions/setup-java
+            -   name: Setup Java
+                uses: actions/setup-java@v4
+                # Parametros
+                with:
+                    distribution: 'temurin'
+                    java-version: '17' # Podria usar una varias versiones con una matrix (ver ejemplo https://github.com/apache/commons-configuration/blob/master/.github/workflows/maven.yml)
+                    cache: maven # Habilita cache para dependencias Maven, lo cual es excelente para acelerar builds futuras
+                    # Util para monorepos ya que permite un cache mas granular basado en archivos especificos
+                    cache-dependency-path: |
+                        pom.xml
+                        ao-server/pom.xml
+                        ao-server-security/pom.xml
 
-      # Step 3: Compila con Maven PROGRAMANDO la action desde cero (run:) ya que no esta (o no la encontre) en el Marketplace de GitHub
-      - name: Build with Maven
-        run: mvn -B package --file pom.xml # Compila y empaqueta el proyecto en modo batch (no interactivo) usando el pom.xml
+            # Step 3: Verifica que el codigo Java cumpla con las reglas de formateo definidas en formatter.xml (Eclipse JDT),
+            # mas los lineEndings (LF) y encoding (UTF-8) configurados en el pom.xml. Falla el build si algun archivo no cumple.
+            # Los contribuidores deben correr "mvn spotless:apply" localmente para corregir el formateo y volver a hacer push.
+            -   name: Check code formatting
+                run: mvn spotless:check
 
-      # Step 4: Genera reportes de cobertura con JaCoCo
-      - name: Generate coverage reports
-        if: success() # Si el paso anterior fue exitoso...
-        run: mvn clean test jacoco:report # Limpia el proyecto, ejecuta las pruebas unitarias y genera el reporte de cobertura de codigo con JaCoCo
+            # Step 4: Compila con Maven PROGRAMANDO la action desde cero (run:) ya que no esta (o no la encontre) en el Marketplace de GitHub
+            -   name: Build with Maven
+                run: mvn -B package --file pom.xml # Compila y empaqueta el proyecto en modo batch (no interactivo) usando el pom.xml
 
-      # Step 5: Envia los reportes de cobertura a Coveralls.io
-      - name: Send coverage reports to Coveralls
-        if: success()
-        uses: coverallsapp/github-action@v2 # https://github.com/marketplace/actions/coveralls-github-action
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }} # Proporciona el token de autenticacion de GitHub para que Coveralls acceda al repositorio
+            # Step 5: Genera reportes de cobertura con JaCoCo
+            -   name: Generate coverage reports
+                if: success() # Si el paso anterior fue exitoso...
+                run: mvn clean test jacoco:report # Limpia el proyecto, ejecuta las pruebas unitarias y genera el reporte de cobertura de codigo con JaCoCo
 
-      # Step 6: Envia el arbol de dependencias Maven a GitHub para alertas de seguridad automaticas via Dependabot
-      - name: Maven Dependency Tree Dependency Submission
-        uses: advanced-security/maven-dependency-submission-action@v5
+            # Step 6: Envia los reportes de cobertura a Coveralls.io
+            -   name: Send coverage reports to Coveralls
+                if: success()
+                uses: coverallsapp/github-action@v2 # https://github.com/marketplace/actions/coveralls-github-action
+                with:
+                    github-token: ${{ secrets.GITHUB_TOKEN }} # Proporciona el token de autenticacion de GitHub para que Coveralls acceda al repositorio
+
+            # Step 7: Envia el arbol de dependencias Maven a GitHub para alertas de seguridad automaticas via Dependabot
+            -   name: Maven Dependency Tree Dependency Submission
+                uses: advanced-security/maven-dependency-submission-action@v5

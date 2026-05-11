@@ -49,6 +49,7 @@
         <!-- Plugin versions -->
         <maven.compiler.plugin.version>3.14.0</maven.compiler.plugin.version>
         <jacoco.plugin.version>0.8.13</jacoco.plugin.version>
+        <spotless.plugin.version>2.44.0</spotless.plugin.version>
         <!-- YAML support -->
         <jackson.version>2.18.2</jackson.version>
     </properties>
@@ -159,6 +160,27 @@
                     <source>${java.version}</source>
                     <target>${java.version}</target>
                     <encoding>${project.build.sourceEncoding}</encoding>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>com.diffplug.spotless</groupId>
+                <artifactId>spotless-maven-plugin</artifactId>
+                <version>${spotless.plugin.version}</version>
+                <configuration>
+                    <!-- end_of_line = lf del .editorconfig -->
+                    <lineEndings>UNIX</lineEndings>
+                    <!-- charset = utf-8 del .editorconfig -->
+                    <encoding>UTF-8</encoding>
+                    <java>
+                        <!-- formatter.xml traduce los ij_java_* del .editorconfig a Eclipse JDT.
+                             maven.multiModuleProjectDirectory apunta siempre al root del proyecto,
+                             independientemente del modulo que se este compilando. -->
+                        <eclipse>
+                            <file>${maven.multiModuleProjectDirectory}/formatter.xml</file>
+                        </eclipse>
+                        <removeUnusedImports/>
+                    </java>
                 </configuration>
             </plugin>
 
