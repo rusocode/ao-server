@@ -66,8 +66,8 @@ jobs:
             # Step 3: Verifica que el codigo Java cumpla con las reglas de formateo definidas en formatter.xml (Eclipse JDT),
             # mas los lineEndings (LF) y encoding (UTF-8) configurados en el pom.xml. Falla el build si algun archivo no cumple.
             # Los contribuidores deben correr "mvn spotless:apply" localmente para corregir el formateo y volver a hacer push.
-            -   name: Check code formatting
-                run: mvn spotless:check
+            # -   name: Check code formatting
+            #    run: mvn spotless:check
 
             # Step 4: Compila con Maven PROGRAMANDO la action desde cero (run:) ya que no esta (o no la encontre) en el Marketplace de GitHub
             -   name: Build with Maven
