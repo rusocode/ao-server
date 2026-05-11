@@ -11,9 +11,6 @@ max_line_length = 120
 tab_width = 4
 trim_trailing_whitespace = true
 
-[*.java]
-max_line_length = 130
-
 [*.md]
 trim_trailing_whitespace = false
 
