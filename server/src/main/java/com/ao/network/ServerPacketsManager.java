@@ -127,7 +127,7 @@ public class ServerPacketsManager {
         BANK_OK(null),
         CHANGE_USER_TRADE_SLOT(null),
         SEND_NIGHT(null),
-        PONG(null),
+        PONG(PongPacket.class),
         UPDATE_TAG_AND_STATUS(null),
         SPAWN_LIST(null),
         SHOW_SOS_FORM(null),

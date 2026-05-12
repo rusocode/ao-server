@@ -9,7 +9,8 @@ import java.io.UnsupportedEncodingException;
  * Packet to tell the client their new hunger and thirst values.
  */
 
-public record UpdateHungerAndThirstPacket(int minHunger, int maxHunger, int minThirst, int maxThirst) implements OutgoingPacket {
+public record UpdateHungerAndThirstPacket(int minHunger, int maxHunger, int minThirst, int maxThirst)
+        implements OutgoingPacket {
 
     @Override
     public void write(DataBuffer buffer) throws UnsupportedEncodingException {
