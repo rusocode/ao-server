@@ -44,7 +44,7 @@ public class LoginNewCharacterPacket implements IncomingPacket {
         String mail = buffer.getUTF8String();
         byte cityId = buffer.get();
 
-        Logger.info("nick={}, password={}, version={}, clientHash={}, raceId={}, genderId={}, archetypeId={}, headId={}, mail={}, cityId={}", nick, password, version, clientHash, raceId, genderId, archetypeId, headId, mail, cityId);
+        Logger.info("nick={}, version={}, raceId={}, genderId={}, archetypeId={}, headId={}, mail={}, cityId={}", nick, version, raceId, genderId, archetypeId, headId, mail, cityId);
 
         try {
             service.connectNewCharacter((ConnectedUser) connection.getUser(), nick, password, raceId, genderId, archetypeId, headId, mail, cityId, clientHash, version);
@@ -73,15 +73,15 @@ public class LoginNewCharacterPacket implements IncomingPacket {
 
     private int calculateMinRequiredBytes() {
         return MIN_NICK_BYTES
-                + security.getPasswordHashLength()
-                + VERSION_BYTES
-                + security.getClientHashLength()
-                + RACE_BYTES
-                + GENDER_BYTES
-                + ARCHETYPE_BYTES
-                + HEAD_BYTES
-                + MIN_MAIL_BYTES
-                + CITY_ID_BYTES;
+            + security.getPasswordHashLength()
+            + VERSION_BYTES
+            + security.getClientHashLength()
+            + RACE_BYTES
+            + GENDER_BYTES
+            + ARCHETYPE_BYTES
+            + HEAD_BYTES
+            + MIN_MAIL_BYTES
+            + CITY_ID_BYTES;
     }
 
 }
