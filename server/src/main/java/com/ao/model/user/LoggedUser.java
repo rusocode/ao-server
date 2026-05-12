@@ -660,8 +660,8 @@ public class LoggedUser extends ConnectedUser implements UserCharacter {
     }
 
     private int getDefaultHeadForRace(Race race, Gender gender) {
-        // Devolver una cabeza por defecto según la raza
-        // Estos son los primeros índices válidos de cada raza
+        // Devolver una cabeza por defecto segun la raza
+        // Estos son los primeros indices validos de cada raza
         return switch (race) {
             case HUMAN -> gender == Gender.MALE ? 1 : 70;
             case ELF -> gender == Gender.MALE ? 101 : 170;

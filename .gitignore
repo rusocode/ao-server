@@ -20,7 +20,7 @@ Thumbs.db
 !.gitattributes
 !.editorconfig
 
-# Datos dinámicos de usuarios
+# Datos dinamicos de usuarios
 charfiles/*
 !charfiles/.gitkeep
 server/charfiles/*

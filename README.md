@@ -10,27 +10,27 @@ el [cliente](https://github.com/gasti-jm/argentum-online-lwjgl3/tree/network-jav
 > IMPORTANTE: Verificar que la rama seleccionada en el cliente sea <b><i>network-java</i></b> ya que es la que mantiene
 > compatibilidad con este servidor, la rama <b><i>main</i></b> del cliente SOLO es compatible con el servidor de VB6.
 
-El objetivo del servidor es aprovechar el multithreading y las características que ofrece Java (APIs, librerías y
+El objetivo del servidor es aprovechar el multithreading y las caracteristicas que ofrece Java (APIs, librerias y
 frameworks) para mejorar el rendimiento del juego.
 
-<b>AO-Server está basado en [AOXP-Server](https://github.com/aoxp/AOXP-Server) dado que la implementación original dejó
+<b>AO-Server esta basado en [AOXP-Server](https://github.com/aoxp/AOXP-Server) dado que la implementacion original dejo
 de mantenerse.</b>
 
-## ✨ Características
+## ✨ Caracteristicas
 
-- 🔌 **Networking asíncrono** con [Netty](https://netty.io/) (NIO, patrón Reactor)
-- 💉 **Inyección de dependencias** con [Google Guice](https://github.com/google/guice)
+- 🔌 **Networking asincrono** con [Netty](https://netty.io/) (NIO, patron Reactor)
+- 💉 **Inyeccion de dependencias** con [Google Guice](https://github.com/google/guice)
 - 🗺️ **290 mapas** cargados desde formato binario legacy (100×100 tiles)
-- 🎭 **14 arquetipos** de personaje (Guerrero, Mago, Paladín, Clérigo, etc.)
+- 🎭 **14 arquetipos** de personaje (Guerrero, Mago, Paladin, Clerigo, etc.)
 - 🧬 **5 razas** (Humano, Elfo, Elfo Oscuro, Enano, Gnomo)
 - 🗡️ **~30 tipos de objetos** (armas, armaduras, pociones, botes, instrumentos...)
-- ✨ **8 efectos de hechizo** (curación, veneno, parálisis, invisibilidad...)
+- ✨ **8 efectos de hechizo** (curacion, veneno, paralisis, invisibilidad...)
 - 🧪 **64 tests unitarios** con JUnit 5 + AssertJ + Mockito
 - 📊 **CI/CD** con GitHub Actions y reportes de cobertura.
 
 > [!TIP]
-> Para un análisis técnico profundo de la arquitectura de red (Netty), inyección de dependencias (Guice) y modelo de
-> dominio, consulta la documentación de
+> Para un analisis tecnico profundo de la arquitectura de red (Netty), inyeccion de dependencias (Guice) y modelo de
+> dominio, consulta la documentacion de
 > la [arquitectura del servidor](https://github.com/rusocode/ao-server/blob/main/server-architecture.md).
 
 ---
@@ -39,21 +39,21 @@ de mantenerse.</b>
 
 ```
 aoserver (POM padre)
-├── server/            → Módulo principal: red, modelo, servicios, datos
-└── server-security/   → Módulo de seguridad: cifrado/descifrado de tráfico
+├── server/            → Modulo principal: red, modelo, servicios, datos
+└── server-security/   → Modulo de seguridad: cifrado/descifrado de trafico
 ```
 
-### Stack Tecnológico
+### Stack Tecnologico
 
-| Componente    | Tecnología                                     |
+| Componente    | Tecnologia                                     |
 |---------------|------------------------------------------------|
 | Lenguaje      | Java 17                                        |
-| Build         | Maven (multi-módulo)                           |
+| Build         | Maven (multi-modulo)                           |
 | Networking    | Netty 4.1.119.Final                            |
 | IoC/DI        | Google Guice 7.0.0                             |
 | Logging       | SLF4J 2.0.17 + Logback 1.5.18                  |
-| Configuración | Apache Commons Configuration2                  |
-| Validación    | Hibernate Validator 9.0.0                      |
+| Configuracion | Apache Commons Configuration2                  |
+| Validacion    | Hibernate Validator 9.0.0                      |
 | Testing       | JUnit 5.13.4 · AssertJ 3.27.3 · Mockito 5.18.0 |
 | Cobertura     | JaCoCo 0.8.13                                  |
 
@@ -73,11 +73,11 @@ Outbound (Servidor → Cliente):
 com.ao
 ├── Bootstrap          ← Punto de entrada
 ├── AOServer           ← Servidor Netty
-├── action/            ← Executor asíncrono de acciones
-├── config/            ← Configuración (INI)
-├── context/           ← Contexto de aplicación (Guice)
+├── action/            ← Executor asincrono de acciones
+├── config/            ← Configuracion (INI)
+├── context/           ← Contexto de aplicacion (Guice)
 ├── data/dao/          ← DAOs para archivos legacy
-├── ioc/module/        ← 5 módulos Guice
+├── ioc/module/        ← 5 modulos Guice
 ├── model/
 │   ├── character/     ← Personajes, NPCs, arquetipos, comportamientos
 │   ├── inventory/     ← Sistema de inventario
@@ -97,7 +97,7 @@ com.ao
 - **Java 17** o superior
 - **Maven 3.8+**
 
-## 📦 Compilación
+## 📦 Compilacion
 
 ```bash
 # Compilar y empaquetar
@@ -110,7 +110,7 @@ mvn clean test jacoco:report
 mvn -B package -pl server -am
 ```
 
-## ▶️ Ejecución
+## ▶️ Ejecucion
 
 ```bash
 java -jar server/target/server-1.0-SNAPSHOT-jar-with-dependencies.jar
@@ -120,9 +120,9 @@ El servidor se inicia en `127.0.0.1:7666` por defecto.
 
 ---
 
-## ⚙️ Configuración
+## ⚙️ Configuracion
 
-### `server.ini` — Configuración principal del servidor
+### `server.ini` — Configuracion principal del servidor
 
 ```ini
 [INIT]
@@ -134,10 +134,10 @@ PuedeCrearPersonajes = 1
 ServerSoloGMs = 0
 ```
 
-### `project.properties` — Rutas y configuración interna
+### `project.properties` — Rutas y configuracion interna
 
-Define rutas a archivos de datos (`objects.dat`, `npcs.dat`, `cities.dat`, mapas), configuración de razas (heads y
-bodies), y otros parámetros internos.
+Define rutas a archivos de datos (`objects.dat`, `npcs.dat`, `cities.dat`, mapas), configuracion de razas (heads y
+bodies), y otros parametros internos.
 
 ---
 
@@ -147,7 +147,7 @@ bodies), y otros parámetros internos.
 # Ejecutar todos los tests
 mvn test
 
-# Ver reporte de cobertura (después de ejecutar tests)
+# Ver reporte de cobertura (despues de ejecutar tests)
 # Abrir: server/target/site/jacoco/index.html
 ```
 
@@ -158,9 +158,9 @@ mvn test
 | DAOs                | 5     | ✅ Buena     |
 | Servicios           | 4     | ⚠️ Parcial  |
 | Personajes          | 4     | ⚠️ Parcial  |
-| Red (paquetes)      | 2     | ⚠️ Básica   |
+| Red (paquetes)      | 2     | ⚠️ Basica   |
 | Mapas               | 2     | ✅ Buena     |
-| Usuarios            | 1     | ⚠️ Básica   |
+| Usuarios            | 1     | ⚠️ Basica   |
 
 ---
 
@@ -171,7 +171,7 @@ mvn test
 - Modelo de dominio completo (personajes, objetos, hechizos, mapas)
 - Lectura de datos legacy (archivos INI y mapas binarios)
 - Infraestructura de red con Netty
-- Inyección de dependencias con Guice
+- Inyeccion de dependencias con Guice
 - Login (personaje existente y nuevo)
 - Chat (hablar, gritar, susurrar)
 - Movimiento de personajes
@@ -185,16 +185,16 @@ mvn test
 - Crafting
 - Guilds/Clanes
 - Persistencia de personajes (escritura)
-- Cifrado real de tráfico
-- Más paquetes del protocolo AO (~43 pendientes)
+- Cifrado real de trafico
+- Mas paquetes del protocolo AO (~43 pendientes)
 - Spawning de NPCs
-- Administración en runtime (comandos GM)
+- Administracion en runtime (comandos GM)
 
 ---
 
 ## 📁 Datos del Juego
 
-| Recurso     | Ubicación                     | Formato                          |
+| Recurso     | Ubicacion                     | Formato                          |
 |-------------|-------------------------------|----------------------------------|
 | Mapas (290) | `resources/maps/`             | Binario (`.map`, `.inf`, `.dat`) |
 | Objetos     | `resources/data/objects.dat`  | INI                              |

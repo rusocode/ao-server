@@ -61,7 +61,7 @@ public class TimedEventsServiceImplTest {
 
         service.removeCharacterEvents(chara);
 
-        // El primer evento debería haberse ejecutado al menos 3 veces
+        // El primer evento deberia haberse ejecutado al menos 3 veces
         verify(event, atLeast(2)).execute();
         // Estos no deberian haberse ejecutado (cancelados antes de tiempo)
         verifyNoInteractions(event2, event3);

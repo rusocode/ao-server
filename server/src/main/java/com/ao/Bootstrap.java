@@ -94,7 +94,7 @@ public class Bootstrap {
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(4);
         server.setScheduler(scheduler);
 
-        // 1a. REGENERACIÓN de Vida y Maná
+        // 1a. REGENERACION de Vida y Mana
         scheduler.scheduleAtFixedRate(() -> {
             try {
                 for (ConnectedUser connectedUser : userService.getConnectedUsers()) {
@@ -126,7 +126,7 @@ public class Bootstrap {
             }
         }, 0, intervals.getRegeneration().getHp(), TimeUnit.MILLISECONDS);
 
-        // 1b. REGENERACIÓN de Stamina (intervalo propio, más corto)
+        // 1b. REGENERACION de Stamina (intervalo propio, mas corto)
         scheduler.scheduleAtFixedRate(() -> {
             try {
                 for (ConnectedUser connectedUser : userService.getConnectedUsers()) {
@@ -199,26 +199,26 @@ public class Bootstrap {
         // 3. IA DE NPCs (Movimiento y ataque de criaturas)
         scheduler.scheduleAtFixedRate(() -> {
             try {
-                // TODO: Lógica NPCs
+                // TODO: Logica NPCs
             } catch (Exception e) {
                 Logger.error("NPC AI loop failed, skipping tick", e);
             }
         }, 0, intervals.getNpc().getAiTick(), TimeUnit.MILLISECONDS);
 
-        // 4. WORLD SAVE (Guardado automático de personajes)
+        // 4. WORLD SAVE (Guardado automatico de personajes)
         int saveIntervalMinutes = intervals.getWorld().getSaveInterval();
         scheduler.scheduleAtFixedRate(() -> {
             try {
-                // TODO: Lógica de guardado masivo
+                // TODO: Logica de guardado masivo
             } catch (Exception e) {
                 Logger.error("World save loop failed, skipping tick", e);
             }
         }, saveIntervalMinutes, saveIntervalMinutes, TimeUnit.MINUTES);
 
-        // 5. EFECTOS TEMPORALES (Veneno, Parálisis, Invisibilidad)
+        // 5. EFECTOS TEMPORALES (Veneno, Paralisis, Invisibilidad)
         scheduler.scheduleAtFixedRate(() -> {
             try {
-                // TODO: Lógica de limpieza de estados temporales
+                // TODO: Logica de limpieza de estados temporales
             } catch (Exception e) {
                 Logger.error("Temp effects loop failed, skipping tick", e);
             }

@@ -42,7 +42,7 @@ public class LoginServiceImpl implements LoginService {
     public static final String ONLY_ADMINS_ERROR = "Servidor restringido a administradores. Consulte la pagina oficial o el foro oficial para mas informacion.";
     public static final String MUST_THROW_DICES_BEFORE_ERROR = "Debe tirar los dados antes de poder crear un personaje.";
     public static final String INVALID_RACE_ERROR = "La raza seleccionada no es valida.";
-    public static final String INVALID_GENDER_ERROR = "El género seleccionado no es valido.";
+    public static final String INVALID_GENDER_ERROR = "El genero seleccionado no es valido.";
     public static final String INVALID_ARCHETYPE_ERROR = "La clase seleccionada no es valida.";
     public static final String INVALID_SKILLS_POINTS_ERROR = "Los skills asignados no son validos.";
     public static final String ACCOUNT_NAME_TAKEN_ERROR = "Ya existe el personaje.";
