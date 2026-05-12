@@ -268,6 +268,9 @@ public class AOServer implements Runnable {
                                     byte id = in.getByte(in.readerIndex()); // Lee el ID sin consumirlo (peek)
                                     if (!ClientPacketsManager.isKnownPacket(id)) {
                                         Logger.warn("ID de paquete desconocido ({}), cerrando conexion", id & 0xFF);
+                                        /* En un protocolo binario sin delimitadores de trama no hay forma de resincronizar el
+                                         * stream despues de un ID desconocido — el payload de ese paquete tiene longitud
+                                         * desconocida — asi que cerrar la conexion es la unica respuesta segura. */
                                         ctx.close();
                                         return;
                                     }
