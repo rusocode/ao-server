@@ -3,54 +3,93 @@ package com.ao.network;
 import com.ao.network.packet.IncomingPacket;
 import com.ao.network.packet.incoming.*;
 
+import org.tinylog.Logger;
+
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * Manager for client-side packets.
+ * Administrador para los paquetes entrantes del cliente.
  */
 
 public class ClientPacketsManager {
 
-    /**
-     * Handles new data in the connection's incoming buffer.
-     *
-     * @param connection connection's container
-     * @param buffer     buffer from which to read data
-     * @return true if a packet could be processed, false otherwise
-     */
-    public static boolean handle(DataBuffer buffer, Connection connection) throws UnsupportedEncodingException, ArrayIndexOutOfBoundsException {
-        // Leer el ID del paquete sin avanzar el indice del buffer
-//        byte packetId = buffer.getBuffer().getByte(buffer.getBuffer().readerIndex());
-//        System.out.println("Client packet: " + packetId);
+    private static final Map<Integer, ClientPackets> PACKETS_BY_ID = new HashMap<>();
 
-        byte id = buffer.get();
-        System.out.println("Client id: " + id);
-
-        return ClientPackets.values()[id].handler.handle(buffer, connection);
+    static {
+        for (ClientPackets packet : ClientPackets.values())
+            PACKETS_BY_ID.put(packet.id, packet);
     }
 
     /**
-     * Enumerates client packets.
+     * Indica si el ID de paquete es conocido por el servidor.
+     *
+     * @param id ID del paquete a verificar
+     * @return true si el ID está registrado
+     */
+    public static boolean isKnownPacket(byte id) {
+        return PACKETS_BY_ID.containsKey(id & 0xFF);
+    }
+
+    /**
+     * Devuelve el tamaño del payload del paquete (sin contar el byte de ID).
+     *
+     * @param id ID del paquete
+     * @return tamaño en bytes del payload, o -1 si es de longitud variable
+     */
+    public static int getPayloadSize(byte id) {
+        ClientPackets packet = PACKETS_BY_ID.get(id & 0xFF);
+        return packet != null ? packet.payloadSize : -1;
+    }
+
+    /**
+     * Procesa un único paquete entrante.
+     *
+     * @param id         ID del paquete a procesar (ya consumido del buffer)
+     * @param buffer     buffer desde el que leer el payload del paquete
+     * @param connection conexión del cliente
+     * @return true si el paquete fue procesado; false si faltan bytes (paquete incompleto)
+     */
+    public static boolean handle(byte id, DataBuffer buffer, Connection connection) throws UnsupportedEncodingException {
+        ClientPackets packet = PACKETS_BY_ID.get(id & 0xFF);
+        if (packet != null) {
+            Logger.debug("Procesando paquete entrante ID: {} ({})", id & 0xFF, packet.name());
+            return packet.handler.handle(buffer, connection);
+        }
+        return false;
+    }
+
+    /**
+     * Enumeración de los paquetes entrantes del cliente. payloadSize indica los bytes del payload sin contar el ID (-1 = longitud
+     * variable).
      */
     private enum ClientPackets {
-        LOGIN_EXISTING_CHARACTER(LoginExistingCharacterPacket.class),
-        THROW_DICE(ThrowDicesPacket.class),
-        LOGIN_NEW_CHARACTER(LoginNewCharacterPacket.class),
-        TALK(TalkPacket.class),
-        YELL(YellPacket.class),
-        WHISPER(WhisperPacket.class),
-        WALK(WalkPacket.class);
+        LOGIN_EXISTING_CHARACTER(0, LoginExistingCharacterPacket.class, -1),
+        THROW_DICE(1, ThrowDicesPacket.class, 0),
+        LOGIN_NEW_CHARACTER(2, LoginNewCharacterPacket.class, -1),
+        TALK(3, TalkPacket.class, -1),
+        YELL(4, YellPacket.class, -1),
+        WHISPER(5, WhisperPacket.class, -1),
+        WALK(6, WalkPacket.class, 1),
+        LEFT_CLICK(26, LeftClickPacket.class, 2),
+        CHANGE_HEADING(37, ChangeHeadingPacket.class, 1),
+        PING(119, PingPacket.class, 0);
 
         private final IncomingPacket handler;
+        private final int id;
+        /** Bytes del payload sin contar el ID. -1 indica longitud variable. */
+        private final int payloadSize;
 
-        ClientPackets(Class<? extends IncomingPacket> handler) {
+        ClientPackets(int id, Class<? extends IncomingPacket> handler, int payloadSize) {
             try {
                 this.handler = handler.getConstructor().newInstance();
+                this.id = id;
+                this.payloadSize = payloadSize;
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         }
-
     }
 
 }

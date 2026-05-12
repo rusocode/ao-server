@@ -44,7 +44,7 @@ public class LoginNewCharacterPacket implements IncomingPacket {
         String mail = buffer.getUTF8String();
         byte cityId = buffer.get();
 
-        Logger.info("nick={}, password={}, version={}, clientHash={}, raceId={}, genderId={}, archetypeId={}, headId={}, mail={}, cityId={}", nick, password, version, clientHash, raceId, genderId, archetypeId, headId, mail, cityId);
+        Logger.info("nick={}, version={}, raceId={}, genderId={}, archetypeId={}, headId={}, mail={}, cityId={}", nick, version, raceId, genderId, archetypeId, headId, mail, cityId);
 
         try {
             service.connectNewCharacter((ConnectedUser) connection.getUser(), nick, password, raceId, genderId, archetypeId, headId, mail, cityId, clientHash, version);

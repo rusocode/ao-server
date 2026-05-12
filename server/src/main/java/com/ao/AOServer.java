@@ -18,6 +18,7 @@ import io.netty.handler.codec.ByteToMessageDecoder;
 import io.netty.handler.codec.MessageToMessageDecoder;
 import io.netty.handler.codec.MessageToMessageEncoder;
 import io.netty.util.AttributeKey;
+import org.tinylog.Logger;
 
 import java.net.InetSocketAddress;
 import java.util.List;
@@ -261,24 +262,46 @@ public class AOServer implements Runnable {
 
                             @Override
                             protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
-                                // Mark the current reading position in the buffer (save a "restauration position")
-                                in.markReaderIndex();
-                                boolean processed = false;
+                                Connection connection = ctx.channel().attr(CONNECTION_KEY).get();
 
-                                try {
-                                    Connection connection = ctx.channel().attr(CONNECTION_KEY).get();
-                                    processed = ClientPacketsManager.handle(new DataBuffer(in), connection);
-                                } catch (IndexOutOfBoundsException e) {
-                                    // Not enough data, ignore it
+                                while (in.readableBytes() > 0) {
+                                    byte id = in.getByte(in.readerIndex()); // Lee el ID sin consumirlo (peek)
+                                    if (!ClientPacketsManager.isKnownPacket(id)) {
+                                        Logger.warn("ID de paquete desconocido ({}), cerrando conexion", id & 0xFF);
+                                        /* En un protocolo binario sin delimitadores de trama no hay forma de resincronizar el
+                                         * stream despues de un ID desconocido — el payload de ese paquete tiene longitud
+                                         * desconocida — asi que cerrar la conexion es la unica respuesta segura. */
+                                        ctx.close();
+                                        return;
+                                    }
+
+                                    int payloadSize = ClientPacketsManager.getPayloadSize(id);
+
+                                    // Marcar SIEMPRE antes de consumir el ID para poder restaurar en caso de error
+                                    in.markReaderIndex();
+
+                                    if (payloadSize >= 0) {
+                                        // Paquete de longitud fija: verificar que tenemos ID + payload completo
+                                        if (in.readableBytes() < 1 + payloadSize)
+                                            return; // Faltan bytes: Netty los acumulara y volvera a llamar a decode()
+                                    }
+
+                                    in.skipBytes(1); // Consume el ID
+
+                                    try {
+                                        boolean handled = ClientPacketsManager.handle(id, new DataBuffer(in), connection);
+                                        if (!handled) {
+                                            // Handler señalo paquete incompleto: restaurar y esperar mas datos
+                                            in.resetReaderIndex();
+                                            return;
+                                        }
+                                    } catch (IndexOutOfBoundsException e) {
+                                        // Seguridad: lectura inesperada fuera de rango, restaurar y esperar
+                                        Logger.warn("IndexOutOfBounds en handler de paquete ID {}: {}", id & 0xFF, e.getMessage());
+                                        in.resetReaderIndex();
+                                        return;
+                                    }
                                 }
-
-                                if (!processed) {
-                                    // If the packet is incomplete, reset the reader index and wait for more data
-                                    in.resetReaderIndex();
-                                    return; // Wait for more data
-                                }
-
-                                out.add(in.readBytes(in.readableBytes())); // Pass any remaining data along
                             }
                         });
 

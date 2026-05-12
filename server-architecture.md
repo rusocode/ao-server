@@ -1,25 +1,25 @@
-# 📖 Documentacion Tecnica — AO-Server
+# 📖 Documentación Técnica — AO-Server
 
-> **Analisis completo del servidor de Argentum Online en Java**
-> Fecha: 2026-05-05 · Generada automaticamente por analisis de codigo fuente
+> **Análisis completo del servidor de Argentum Online en Java**
+> Fecha: 2026-05-05 · Generada automáticamente por análisis de código fuente
 
 ---
 
 ## 📌 Resumen General
 
-**AO-Server** es una reimplementacion del servidor del MMORPG *Argentum Online* (originalmente en Visual Basic 6), escrita en **Java 17** con un enfoque moderno basado en:
+**AO-Server** es una reimplementación del servidor del MMORPG *Argentum Online* (originalmente en Visual Basic 6), escrita en **Java 17** con un enfoque moderno basado en:
 
-- **Netty** para networking asincrono de alto rendimiento
-- **Google Guice** para inyeccion de dependencias (IoC)
-- **Maven** como build system multi-modulo
+- **Netty** para networking asíncrono de alto rendimiento
+- **Google Guice** para inyección de dependencias (IoC)
+- **Maven** como build system multi-módulo
 - **JUnit 5 + AssertJ + Mockito** para testing
 - **SLF4J + Logback** para logging
 
-El proyecto esta basado en [AOXP-Server](https://github.com/aoxp/AOXP-Server) (commit `daa8d10`) ya que la implementacion original dejo de mantenerse.
+El proyecto está basado en [AOXP-Server](https://github.com/aoxp/AOXP-Server) (commit `daa8d10`) ya que la implementación original dejó de mantenerse.
 
 ---
 
-## 🏗️ Arquitectura de Modulos
+## 🏗️ Arquitectura de Módulos
 
 ```mermaid
 graph TD
@@ -28,17 +28,17 @@ graph TD
     B -->|depende de| C
 ```
 
-| Modulo | Artifact | Descripcion |
+| Módulo | Artifact | Descripción |
 |--------|----------|-------------|
-| `aoserver` | `com.ao:aoserver:1.0-SNAPSHOT` | POM padre con gestion de dependencias y plugins |
-| `server` | `com.ao:server` | Modulo principal: logica de juego, red, datos, servicios |
-| `server-security` | `com.ao:server-security` | Modulo de seguridad: cifrado/descifrado de trafico de red |
+| `aoserver` | `com.ao:aoserver:1.0-SNAPSHOT` | POM padre con gestión de dependencias y plugins |
+| `server` | `com.ao:server` | Módulo principal: lógica de juego, red, datos, servicios |
+| `server-security` | `com.ao:server-security` | Módulo de seguridad: cifrado/descifrado de tráfico de red |
 
 ---
 
-## 📦 Stack Tecnologico
+## 📦 Stack Tecnológico
 
-| Categoria | Tecnologia | Version |
+| Categoría | Tecnología | Versión |
 |-----------|-----------|---------|
 | **Lenguaje** | Java | 17 |
 | **Build** | Maven | - |
@@ -46,33 +46,33 @@ graph TD
 | **IoC/DI** | Google Guice | 7.0.0 |
 | **Utilidades** | Google Guava | 32.0.1-jre |
 | **Logging** | SLF4J + Logback | 2.0.17 / 1.5.18 |
-| **Configuracion** | Apache Commons Configuration2 | 2.12.0 |
-| **Validacion** | Hibernate Validator + Expressly | 9.0.0 / 6.0.0 |
+| **Configuración** | Apache Commons Configuration2 | 2.12.0 |
+| **Validación** | Hibernate Validator + Expressly | 9.0.0 / 6.0.0 |
 | **Testing** | JUnit 5 + AssertJ + Mockito | 5.13.4 / 3.27.3 / 5.18.0 |
 | **Cobertura** | JaCoCo + Coveralls | 0.8.13 |
 | **CI/CD** | GitHub Actions | - |
 
 ---
 
-## 📂 Estructura de Paquetes (Modulo `server`)
+## 📂 Estructura de Paquetes (Módulo `server`)
 
 ```
 com.ao
 ├── Bootstrap.java              ← Punto de entrada (main)
 ├── AOServer.java               ← Servidor Netty (Runnable)
 │
-├── action/                     ← Sistema de acciones asincronas
+├── action/                     ← Sistema de acciones asíncronas
 │   ├── Action.java
 │   └── ActionExecutor.java     ← Executor de single-thread con cola
 │
-├── config/                     ← Configuracion del servidor
+├── config/                     ← Configuración del servidor
 │   ├── ArchetypeConfiguration.java
-│   ├── ServerConfig.java       ← Interfaz de configuracion
+│   ├── ServerConfig.java       ← Interfaz de configuración
 │   └── ini/
 │       ├── ArchetypeConfigurationIni.java
-│       └── ServerConfigIni.java ← Implementacion basada en INI
+│       └── ServerConfigIni.java ← Implementación basada en INI
 │
-├── context/                    ← Contexto de aplicacion (Service Locator)
+├── context/                    ← Contexto de aplicación (Service Locator)
 │   ├── ApplicationContext.java
 │   └── ApplicationProperties.java
 │
@@ -95,9 +95,9 @@ com.ao
 │   └── map/
 │       └── MapDAOImpl.java     ← Lectura de mapas binarios
 │
-├── ioc/                        ← Modulos Guice (DI)
+├── ioc/                        ← Módulos Guice (DI)
 │   ├── ArchetypeLocator.java
-│   ├── InjectorFactory.java    ← Fabrica central del Injector
+│   ├── InjectorFactory.java    ← Fábrica central del Injector
 │   └── module/
 │       ├── ArchetypeModule.java
 │       ├── BootstrapModule.java
@@ -126,13 +126,13 @@ com.ao
 │   │   └── InventoryImpl.java
 │   │
 │   ├── map/                    ← Sistema de mapas
-│   │   ├── Map.java            ← 100x100 tiles, busqueda de caminos
+│   │   ├── Map.java            ← 100x100 tiles, búsqueda de caminos
 │   │   ├── Tile.java           ← Celda del mapa
 │   │   ├── Position.java       ← Coordenadas (mapa, x, y)
 │   │   ├── City.java           ← Ciudades
 │   │   ├── Heading.java        ← Direcciones (N/S/E/W)
 │   │   ├── Trigger.java        ← Triggers de tiles
-│   │   └── area/AreaInfo.java  ← Info de area visible
+│   │   └── area/AreaInfo.java  ← Info de área visible
 │   │
 │   ├── object/                 ← ~30 tipos de objetos del juego
 │   │   ├── Object.java         ← Interfaz base
@@ -160,11 +160,12 @@ com.ao
 │   └── packet/
 │       ├── IncomingPacket.java  ← Interfaz para paquetes cliente→servidor
 │       ├── OutgoingPacket.java  ← Interfaz para paquetes servidor→cliente
-│       ├── incoming/           ← 7 paquetes entrantes implementados
+│       ├── incoming/           ← 8 paquetes entrantes implementados
 │       │   ├── LoginExistingCharacterPacket
 │       │   ├── LoginNewCharacterPacket
 │       │   ├── TalkPacket, YellPacket, WhisperPacket
 │       │   ├── WalkPacket
+│       │   ├── PingPacket
 │       │   └── ThrowDicesPacket
 │       └── outgoing/           ← 22 paquetes salientes implementados
 │           ├── AreaChangedPacket, BlockPositionPacket
@@ -188,22 +189,22 @@ com.ao
 │
 └── utils/                      ← Utilidades
     ├── IniUtils.java           ← Lectura de archivos INI legacy
-    └── RangeParser.java        ← Parser de rangos numericos (ej: "1-40")
+    └── RangeParser.java        ← Parser de rangos numéricos (ej: "1-40")
 ```
 
-### Modulo `server-security` (3 archivos)
+### Módulo `server-security` (3 archivos)
 
 ```
 com.ao.security
 ├── Hashing.java                ← Utilidad de hashing MD5
 ├── SecurityManager.java        ← Interfaz de seguridad (encrypt/decrypt)
 └── impl/
-    └── DefaultSecurityManager.java ← Implementacion sin cifrado (desarrollo)
+    └── DefaultSecurityManager.java ← Implementación sin cifrado (desarrollo)
 ```
 
 ---
 
-## 🔄 Flujo de Ejecucion
+## 🔄 Flujo de Ejecución
 
 ```mermaid
 sequenceDiagram
@@ -215,7 +216,7 @@ sequenceDiagram
 
     Main->>Ctx: loadApplicationContext()
     Ctx->>Guice: InjectorFactory.get(properties)
-    Guice-->>Ctx: Injector con 5 modulos
+    Guice-->>Ctx: Injector con 5 módulos
 
     Main->>Services: MapService.loadMaps()
     Main->>Services: MapService.loadCities()
@@ -233,7 +234,7 @@ sequenceDiagram
 
 ## 🌐 Pipeline de Red (Netty)
 
-El servidor usa **Netty** con el patron **Reactor** (boss/worker event loop groups):
+El servidor usa **Netty** con el patrón **Reactor** (boss/worker event loop groups):
 
 ```mermaid
 graph LR
@@ -250,9 +251,9 @@ graph LR
     end
 ```
 
-### Paquetes Entrantes Implementados (7)
+### Paquetes Entrantes Implementados (8)
 
-| ID | Paquete | Descripcion |
+| ID | Paquete | Descripción |
 |----|---------|-------------|
 | 0 | `LoginExistingCharacterPacket` | Login con personaje existente |
 | 1 | `ThrowDicesPacket` | Tirar dados para atributos |
@@ -261,10 +262,11 @@ graph LR
 | 4 | `YellPacket` | Gritar (chat amplio) |
 | 5 | `WhisperPacket` | Susurro (chat privado) |
 | 6 | `WalkPacket` | Movimiento del personaje |
+| 119 | `PingPacket` | Heartbeat para latencia |
 
 ### Paquetes Salientes Implementados (22)
 
-Entre los mas relevantes: `CharacterCreate`, `ChangeMap`, `UpdateUserStats`, `ConsoleMessage`, `ErrorMessage`, `DiceRoll`, `PlayMidi`, `PlayWave`, `ChangeInventorySlot`, `ChangeSpellSlot`, etc.
+Entre los más relevantes: `CharacterCreate`, `ChangeMap`, `UpdateUserStats`, `ConsoleMessage`, `ErrorMessage`, `DiceRoll`, `PlayMidi`, `PlayWave`, `ChangeInventorySlot`, `ChangeSpellSlot`, etc.
 
 ---
 
@@ -314,7 +316,7 @@ classDiagram
 
 Warrior, Mage, Paladin, Cleric, Assasin, Bard, Druid, Bandit, Thief, Pirate, Hunter, Fisher, Lumberjack, Miner, Blacksmith, Carpenter, Worker.
 
-### Razas y Generos
+### Razas y Géneros
 
 Definidos como enums: `Race` (Human, Elf, DarkElf, Dwarf, Gnome) y `Gender` (Male, Female).
 
@@ -327,8 +329,8 @@ Creature, Guard, Merchant, Trainer, Governor, Noble (cada uno en `npc.properties
 ## 🗺️ Sistema de Mapas
 
 - **Grilla**: 100×100 tiles por mapa
-- **Area visible**: 8×6 tiles (VISIBLE_AREA_WIDTH × VISIBLE_AREA_HEIGHT)
-- **Distancia maxima**: 12 tiles
+- **Área visible**: 8×6 tiles (VISIBLE_AREA_WIDTH × VISIBLE_AREA_HEIGHT)
+- **Distancia máxima**: 12 tiles
 - **Total de mapas configurados**: 290 (archivos `.map`, `.inf`, `.dat`)
 - **Archivos de mapa en resources**: 870 archivos
 - **Formato**: Binario (legacy del AO original en VB6)
@@ -336,20 +338,20 @@ Creature, Guard, Merchant, Trainer, Governor, Noble (cada uno en `npc.properties
 
 ---
 
-## 💉 Sistema de Inyeccion de Dependencias
+## 💉 Sistema de Inyección de Dependencias
 
-El IoC usa **Google Guice** con 5 modulos:
+El IoC usa **Google Guice** con 5 módulos:
 
-| Modulo | Bindings principales |
+| Módulo | Bindings principales |
 |--------|---------------------|
 | `BootstrapModule` | `ServerConfig` → `ServerConfigIni` |
 | `ConfigurationModule` | `ArchetypeConfiguration` → INI |
 | `DaoModule` | `MapDAO`, `AccountDAO`, `ObjectDAO`, `CityDAO`, `NpcCharacterDAO` → Impl INI |
 | `ServiceModule` | `LoginService`, `MapService`, `ObjectService`, `UserService`, `NpcService`, etc. → Impls |
-| `SecurityModule` | `SecurityManager` → cargado dinamicamente por reflection |
+| `SecurityModule` | `SecurityManager` → cargado dinámicamente por reflection |
 
 > [!WARNING]
-> El `ApplicationContext` usa un **patron Service Locator estatico** que los propios desarrolladores marcan como TODO para eliminar. Esto dificulta la testabilidad y acopla el codigo.
+> El `ApplicationContext` usa un **patrón Service Locator estático** que los propios desarrolladores marcan como TODO para eliminar. Esto dificulta la testabilidad y acopla el código.
 
 ---
 
@@ -370,33 +372,33 @@ La capa de datos lee formatos **legacy INI** del AO original:
 
 ---
 
-## ⚙️ Configuracion
+## ⚙️ Configuración
 
-### `project.properties` — Configuracion del contexto de aplicacion
-Rutas a archivos de datos, configuracion de razas (heads y bodies), inventario, seguridad.
+### `project.properties` — Configuración del contexto de aplicación
+Rutas a archivos de datos, configuración de razas (heads y bodies), inventario, seguridad.
 
-### `server.ini` — Configuracion del servidor en formato INI
+### `server.ini` — Configuración del servidor en formato INI
 - **Puerto**: 7666 (por defecto)
-- **Version del cliente**: 0.13.0
+- **Versión del cliente**: 0.13.0
 - **Max usuarios**: 550
-- **Creacion de personajes**: Activada
+- **Creación de personajes**: Activada
 - **Staff**: Listas de Dioses, Semidioses, Consejeros, RolesMasters
-- **Intervalos de juego**: Regeneracion, hambre, sed, veneno, movimiento, ataque, etc.
-- **MD5 Hashes**: Verificacion de integridad del cliente
+- **Intervalos de juego**: Regeneración, hambre, sed, veneno, movimiento, ataque, etc.
+- **MD5 Hashes**: Verificación de integridad del cliente
 
 ---
 
 ## 🧪 Testing
 
-| Metrica | Valor |
+| Métrica | Valor |
 |---------|-------|
 | **Archivos de test** | 64 |
-| **Archivos de produccion** | 254 (+3 security) |
+| **Archivos de producción** | 254 (+3 security) |
 | **Ratio test/src** | ~25% |
 
 ### Cobertura por capa:
 
-| Capa | Tests | Observacion |
+| Capa | Tests | Observación |
 |------|-------|-------------|
 | **Model (objects)** | ✅ 35 tests | Excelente cobertura de ~30 tipos de objeto |
 | **Model (spell effects)** | ✅ 7 tests | Buena cobertura |
@@ -413,7 +415,7 @@ GitHub Actions ejecuta en cada push/PR a `main`:
 1. Checkout + Setup Java 17 (Temurin)
 2. `mvn -B package`
 3. `mvn clean test jacoco:report`
-4. Envio de cobertura a Coveralls
+4. Envío de cobertura a Coveralls
 5. Dependency submission para Dependabot
 
 ---
@@ -421,36 +423,37 @@ GitHub Actions ejecuta en cada push/PR a `main`:
 ## 📊 Estado de Madurez del Servidor
 
 ```mermaid
-pie title Estado de Implementacion
+pie title Estado de Implementación
     "Modelo de dominio" : 40
     "Capa de datos (DAOs)" : 15
     "Red (Netty + paquetes)" : 15
     "Servicios" : 15
     "Testing" : 10
-    "Configuracion + IoC" : 5
+    "Configuración + IoC" : 5
 ```
 
-### ✅ Lo que FUNCIONA (o esta muy avanzado)
+### ✅ Lo que FUNCIONA (o está muy avanzado)
 
 - **Modelo de dominio completo**: Personajes, NPCs, objetos (~30 tipos), hechizos, mapas, inventario
-- **Capa de datos**: Lectura de archivos INI y mapas binarios legacy
-- **Infraestructura de red**: Pipeline Netty con cifrado/descifrado, decodificacion/codificacion
-- **Inyeccion de dependencias**: 5 modulos Guice configurados
+- **Capa de datos**: Lectura de archivos INI y mapas binarios legacy. Se ha estabilizado la carga tolerando huecos (`objects.dat`) e ignorando falsos errores de NPCs.
+- **Infraestructura de red**: Pipeline Netty con cifrado/descifrado, decodificación/codificación
+- **Inyección de dependencias**: 5 módulos Guice configurados
 - **CI/CD**: Pipeline completo con tests y cobertura
-- **Paquetes basicos**: Login (existente + nuevo), chat (talk/yell/whisper), movimiento
+- **Paquetes básicos**: Login (existente + nuevo), chat (talk/yell/whisper), movimiento
+- **Game Loops**: Se ha estabilizado el loop principal de lógica y timers asíncronos.
 
-### ⚠️ Lo que esta INCOMPLETO (TODOs del codigo)
+### ⚠️ Lo que está INCOMPLETO (TODOs del código)
 
-1. **Game timers** (`Bootstrap.java:87`): `startTimers()` esta vacio — no hay game loop
+1. ~~**Game timers** (`Bootstrap.java:87`): `startTimers()` está vacío — no hay game loop~~ (Implementado y estabilizado)
 2. **Servicios pendientes** (`Bootstrap.java:114`): `TODO Load other services`
-3. **Service Locator** (`ApplicationContext.java:9`): Eliminar Injector estatico
-4. **Combate**: Sin implementacion de game loop de combate
-5. **Paquetes entrantes**: Solo 7 de ~50+ del protocolo original
-6. **Paquetes salientes**: 22 definidos pero no todos integrados
+3. **Service Locator** (`ApplicationContext.java:9`): Eliminar Injector estático
+4. **Combate**: Sin implementación de game loop de combate completo (aún en desarrollo)
+5. **Paquetes entrantes**: Solo 8 de ~129 del protocolo original
+6. **Paquetes salientes**: 22 de ~104 definidos pero no todos integrados
 7. **Sistema de persistencia**: Sin guardado (solo lectura de datos)
 8. **Cifrado real**: `DefaultSecurityManager` no cifra nada
-9. **Chat de guild**: Paquete definido pero sin logica
-10. **Spawning de NPCs**: Servicio de NPC carga datos pero no spawnea
+9. **Chat de guild**: Paquete definido pero sin lógica
+10. **Spawning de NPCs**: Servicio de NPC carga datos pero no spawnea completamente
 
 ### 🔴 Lo que FALTA implementar
 
@@ -460,10 +463,45 @@ pie title Estado de Implementacion
 - Sistema de crafting
 - Sistema de guilds/clanes completo
 - Sistema de misiones/quests
-- Administracion en runtime (comandos GM)
+- Administración en runtime (comandos GM)
 - Persistencia de personajes (escritura)
-- Cifrado real del trafico
-- Muchos paquetes del protocolo AO
+- Cifrado real del tráfico
+- **Implementar paquetes prioritarios para la jugabilidad (ver Roadmap Prioritario)**
+
+---
+
+## 🚀 Roadmap Prioritario: Paquetes de Red (MVP Jugable)
+
+Dado que el cliente ya tiene implementados 129 paquetes de entrada y 104 de salida, pero el servidor apenas tiene una fracción, la prioridad para lograr una versión **jugable (MVP)** es implementar la siguiente lista de paquetes. No es necesario tener todo perfecto en una primera iteración, sino lograr el feedback visual y mecánico base.
+
+### 📥 Paquetes Entrantes (Cliente -> Servidor) Prioritarios
+1. **Acciones y Combate**
+   - `Attack` (Golpe físico con arma o puño)
+   - `CastSpell` (Lanzar hechizo a un target seleccionado)
+2. **Interacción con Objetos e Inventario**
+   - `EquipItem` (Equipar/Desequipar arma, armadura, escudo, casco)
+   - `UseItem` (Beber pociones de HP/Mana, comer)
+   - `Drop` (Tirar objetos del inventario al mapa)
+   - `Take` (Agarrar objetos del mapa con tecla Q)
+3. **Mundo y NPCs**
+   - `CommerceStart` / `CommerceBuy` / `CommerceSell` (Comprar y vender a NPCs)
+   - `Resurrect` (Pedir resurrección a un Priest NPC)
+
+### 📤 Paquetes Salientes (Servidor -> Cliente) Prioritarios
+1. **Sincronización de Entidades (Para ver a los demás)**
+   - `CharacterCreate` / `CharacterRemove` / `CharacterMove` (Sincronizar el spawn, movimiento y desaparición de otros usuarios y NPCs en el área visible)
+   - `ObjectCreate` / `ObjectDelete` (Ver los items que se caen o se agarran del suelo)
+2. **Feedback Visual y Combate**
+   - `UpdateHP` / `UpdateMana` / `UpdateStamina` (Reflejar el cambio de estado al usar pociones o recibir daño)
+   - `UpdateGold` / `UpdateExp` (Al matar NPCs o comerciar)
+   - `CreateFX` / `Blood` (Sangre y efectos visuales de hechizos)
+   - `PlayWave` (Sonidos de golpes, hechizos, fallos)
+3. **Feedback de Interfaz**
+   - `ConsoleMessage` (Mensajes de sistema: "Fallas el golpe", "No tienes suficiente maná", etc.)
+   - `ChatOverHead` (Textos flotantes encima de la cabeza de los personajes para daño, palabras mágicas, chat normal)
+   - `UpdateInventorySlot` / `ChangeSpellSlot` (Refrescar inventario tras comprar, agarrar o tirar items)
+
+Implementar esta lista de paquetes conectará el motor del servidor (que ya tiene los datos cargados de items y NPCs) con las capacidades visuales que ya soporta el cliente LWJGL3, dando lugar a una experiencia de juego interactiva.
 
 ---
 
@@ -471,4 +509,4 @@ pie title Estado de Implementacion
 
 - **Repositorio original**: [AOXP-Server](https://github.com/aoxp/AOXP-Server)
 - **Commit base**: `daa8d10b83b762a0072dd022e99fdfab1c57bb6b`
-- **Argentum Online**: MMORPG argentino desarrollado en 1999 por Pablo Marquez
+- **Argentum Online**: MMORPG argentino desarrollado en 1999 por Pablo Márquez

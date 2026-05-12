@@ -19,9 +19,8 @@ public class LoginExistingCharacterPacket implements IncomingPacket {
 
     @Override
     public boolean handle(DataBuffer buffer, Connection connection) throws IndexOutOfBoundsException, UnsupportedEncodingException {
-        // Check if there is enough data to attempt to read...
-        if (buffer.getReadableBytes() < 5 + security.getPasswordHashLength() + security.getClientHashLength())
-            return false;
+        // Check if there are enough bytes to read....
+        if (buffer.getReadableBytes() < 5 + security.getPasswordHashLength() + security.getClientHashLength()) return false;
 
         String username = buffer.getUTF8String();
         String password = buffer.getUTF8StringFixed(security.getPasswordHashLength());
