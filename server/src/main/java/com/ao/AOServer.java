@@ -266,11 +266,10 @@ public class AOServer implements Runnable {
 
                                 while (in.readableBytes() > 0) {
                                     byte id = in.getByte(in.readerIndex()); // Lee el ID sin consumirlo (peek)
-                                    // Si el ID es desconocido, descarta solo ese byte y continua
                                     if (!ClientPacketsManager.isKnownPacket(id)) {
-                                        in.skipBytes(1);
-                                        Logger.warn("ID de paquete entrante desconocido, descartado: {}", id & 0xFF);
-                                        continue;
+                                        Logger.warn("ID de paquete desconocido ({}), cerrando conexion", id & 0xFF);
+                                        ctx.close();
+                                        return;
                                     }
 
                                     int payloadSize = ClientPacketsManager.getPayloadSize(id);
