@@ -84,7 +84,7 @@
                 <artifactId>tinylog-impl</artifactId>
                 <version>${tinylog.version}</version>
             </dependency>
-    
+
             <!-- Utilities -->
             <dependency>
                 <groupId>org.apache.commons</groupId>
@@ -160,27 +160,6 @@
                     <source>${java.version}</source>
                     <target>${java.version}</target>
                     <encoding>${project.build.sourceEncoding}</encoding>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>com.diffplug.spotless</groupId>
-                <artifactId>spotless-maven-plugin</artifactId>
-                <version>${spotless.plugin.version}</version>
-                <configuration>
-                    <!-- end_of_line = lf del .editorconfig -->
-                    <lineEndings>UNIX</lineEndings>
-                    <!-- charset = utf-8 del .editorconfig -->
-                    <encoding>UTF-8</encoding>
-                    <java>
-                        <!-- formatter.xml traduce los ij_java_* del .editorconfig a Eclipse JDT.
-                             maven.multiModuleProjectDirectory apunta siempre al root del proyecto,
-                             independientemente del modulo que se este compilando. -->
-                        <eclipse>
-                            <file>${maven.multiModuleProjectDirectory}/formatter.xml</file>
-                        </eclipse>
-                        <removeUnusedImports/>
-                    </java>
                 </configuration>
             </plugin>
 

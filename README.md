@@ -210,11 +210,7 @@ mvn test
 
 1. Fork del repositorio
 2. Crear branch de feature (`git checkout -b feature/mi-feature`)
-3. Aplicar formateo de código antes de commitear:
-   ```bash
-   mvn spotless:apply
-   ```
-   > El CI rechaza automáticamente los PRs que no cumplan con las reglas de formateo definidas en `formatter.xml`.
+3. Aplicar los cambios necesarios
 4. Commit de cambios (`git commit -m 'Agregar mi feature'`)
 5. Push al branch (`git push origin feature/mi-feature`)
 6. Abrir un Pull Request
