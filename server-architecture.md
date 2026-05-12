@@ -160,11 +160,12 @@ com.ao
 │   └── packet/
 │       ├── IncomingPacket.java  ← Interfaz para paquetes cliente→servidor
 │       ├── OutgoingPacket.java  ← Interfaz para paquetes servidor→cliente
-│       ├── incoming/           ← 7 paquetes entrantes implementados
+│       ├── incoming/           ← 8 paquetes entrantes implementados
 │       │   ├── LoginExistingCharacterPacket
 │       │   ├── LoginNewCharacterPacket
 │       │   ├── TalkPacket, YellPacket, WhisperPacket
 │       │   ├── WalkPacket
+│       │   ├── PingPacket
 │       │   └── ThrowDicesPacket
 │       └── outgoing/           ← 22 paquetes salientes implementados
 │           ├── AreaChangedPacket, BlockPositionPacket
@@ -250,7 +251,7 @@ graph LR
     end
 ```
 
-### Paquetes Entrantes Implementados (7)
+### Paquetes Entrantes Implementados (8)
 
 | ID | Paquete | Descripción |
 |----|---------|-------------|
@@ -261,6 +262,7 @@ graph LR
 | 4 | `YellPacket` | Gritar (chat amplio) |
 | 5 | `WhisperPacket` | Susurro (chat privado) |
 | 6 | `WalkPacket` | Movimiento del personaje |
+| 119 | `PingPacket` | Heartbeat para latencia |
 
 ### Paquetes Salientes Implementados (22)
 
@@ -446,7 +448,7 @@ pie title Estado de Implementación
 2. **Servicios pendientes** (`Bootstrap.java:114`): `TODO Load other services`
 3. **Service Locator** (`ApplicationContext.java:9`): Eliminar Injector estático
 4. **Combate**: Sin implementación de game loop de combate completo (aún en desarrollo)
-5. **Paquetes entrantes**: Solo 7 de ~129 del protocolo original
+5. **Paquetes entrantes**: Solo 8 de ~129 del protocolo original
 6. **Paquetes salientes**: 22 de ~104 definidos pero no todos integrados
 7. **Sistema de persistencia**: Sin guardado (solo lectura de datos)
 8. **Cifrado real**: `DefaultSecurityManager` no cifra nada
@@ -483,8 +485,6 @@ Dado que el cliente ya tiene implementados 129 paquetes de entrada y 104 de sali
 3. **Mundo y NPCs**
    - `CommerceStart` / `CommerceBuy` / `CommerceSell` (Comprar y vender a NPCs)
    - `Resurrect` (Pedir resurrección a un Priest NPC)
-4. **Heartbeat**
-   - `Ping` / `Pong` (Mantener viva la conexión con el cliente y sincronizar el game loop)
 
 ### 📤 Paquetes Salientes (Servidor -> Cliente) Prioritarios
 1. **Sincronización de Entidades (Para ver a los demás)**

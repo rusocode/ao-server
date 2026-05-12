@@ -12,8 +12,6 @@ public class PingPacket implements IncomingPacket {
     @Override
     public boolean handle(DataBuffer buffer, Connection connection) {
 
-        connection.send(new ConsoleMessagePacket("[SERVIDOR] Ping packet received", Font.SERVER));
-
         connection.send(new PongPacket());
 
         return true;
