@@ -1,6 +1,10 @@
 # Maven
 target/
 *.log
+hs_err_pid*.log
+
+# Compiled Java
+*.class
 
 # IDEs y archivos de sistema
 .idea/
@@ -19,16 +23,15 @@ Thumbs.db
 !.gitignore
 !.gitattributes
 !.editorconfig
+!.github/
 
 # Datos dinamicos de usuarios
 charfiles/*
 !charfiles/.gitkeep
-server/charfiles/*
 
 # Logs y volcados de salida
 logs/
 test_output.txt
-*.txt
 
 # Qodana
 qodana.yaml
