@@ -1,6 +1,19 @@
 # Maven
 target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.restoreBackup
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+# Logs y volcados de salida
+logs/
 *.log
+test_output.txt
 
 # IDEs y archivos de sistema
 .idea/
@@ -13,22 +26,17 @@ target/
 .settings/
 .DS_Store
 Thumbs.db
+.nb-gradle/
 
-# Ignorar archivos ocultos (excepto configuraciones esenciales)
-.*
-!.gitignore
-!.gitattributes
-!.editorconfig
+# IA Agents y Skills
+.agents/
+.gemini/
+skills-lock.json
 
-# Datos dinámicos de usuarios
+# Datos dinámicos de usuarios (No subir personajes de prueba)
 charfiles/*
 !charfiles/.gitkeep
 server/charfiles/*
-
-# Logs y volcados de salida
-logs/
-test_output.txt
-*.txt
 
 # Qodana
 qodana.yaml

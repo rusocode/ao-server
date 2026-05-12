@@ -18,9 +18,16 @@ public class WalkPacket implements IncomingPacket {
     private final MapService marService = ApplicationContext.getInstance(MapService.class);
 
     @Override
-    public boolean handle(DataBuffer buffer, Connection connection) throws IndexOutOfBoundsException, UnsupportedEncodingException {
+    public boolean handle(DataBuffer buffer, Connection connection)
+            throws IndexOutOfBoundsException, UnsupportedEncodingException {
 
-        if (buffer.getReadableBytes() < 1) return false;
+        if (buffer.getReadableBytes() < 1)
+            return false;
+
+        // El cliente envía direcciones en base 1 (herencia VB6: 1=Norte, 2=Este, 3=Sur, 4=Oeste)
+        // Restamos 1 para convertir al índice base 0 del enum Heading del servidor
+        byte rawDirection = buffer.get();
+        Heading heading = Heading.get((byte) (rawDirection - 1));
 
         LoggedUser user = ((LoggedUser) connection.getUser());
 
@@ -33,21 +40,24 @@ public class WalkPacket implements IncomingPacket {
 
                 connection.send(new ConsoleMessagePacket("Dejas de meditar.", Font.INFO));
 
-                /* TODO
+                /*
+                 * TODO
                  * .Char.FX = 0
                  * .Char.loops = 0
                  * Call WriteMeditateToggle(UserIndex)
-                 * Call SendData(SendTa rget.ToPCArea, UserIndex, PrepareMessageCreateFX(.Char.CharIndex, 0, 0))
+                 * Call SendData(SendTa rget.ToPCArea, UserIndex,
+                 * PrepareMessageCreateFX(.Char.CharIndex, 0, 0))
                  */
 
             } else {
-                Heading heading = Heading.get(buffer.get());
+
                 if (heading != null) {
                     // Move user
                     marService.moveCharacterTo(user, heading);
                     // TODO Stop resting if needed
 
-                } else return true;
+                } else
+                    return true;
 
             }
         } else { // If paralized
@@ -62,20 +72,22 @@ public class WalkPacket implements IncomingPacket {
                 // TODO Find a nicer way to do this...
                 if (user.getArchetype() instanceof PirateArchetype) {
 
-//	                    ' Pierde la apariencia de fragata fantasmal
-//	                    Call ToggleBoatBody(UserIndex)
+                    // ' Pierde la apariencia de fragata fantasmal
+                    // Call ToggleBoatBody(UserIndex)
 
                     connection.send(new ConsoleMessagePacket("¡Has recuperado tu apariencia normal!", Font.INFO));
-//	                    Call WriteConsoleMsg(UserIndex, "¡Has recuperado tu apariencia normal!", FontTypeNames.FONTTYPE_INFO)
+                    // Call WriteConsoleMsg(UserIndex, "¡Has recuperado tu apariencia normal!",
+                    // FontTypeNames.FONTTYPE_INFO)
 
-//	                    Call ChangeUserChar(UserIndex, .Char.body, .Char.Head, .Char.heading, NingunArma, _
-//	                                    NingunEscudo, NingunCasco)
+                    // Call ChangeUserChar(UserIndex, .Char.body, .Char.Head, .Char.heading,
+                    // NingunArma, _
+                    // NingunEscudo, NingunCasco)
                 }
 
             } else if (user.isInvisible()) {
                 // If not under a spell effect, show character
                 connection.send(new ConsoleMessagePacket("Has vuelto a ser visible.", Font.INFO));
-//                    Call UsUaRiOs.SetInvisible(UserIndex, .Char.CharIndex, False)
+                // Call UsUaRiOs.SetInvisible(UserIndex, .Char.CharIndex, False)
             }
         }
 

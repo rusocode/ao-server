@@ -12,7 +12,9 @@ public enum Heading {
     WEST;
 
     public static Heading get(byte index) {
-        return Heading.values()[index];
+        Heading[] values = Heading.values();
+        if (index < 0 || index >= values.length) return null;
+        return values[index];
     }
 
 }

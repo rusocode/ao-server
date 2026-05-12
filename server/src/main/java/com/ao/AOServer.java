@@ -20,6 +20,7 @@ import io.netty.handler.codec.MessageToMessageEncoder;
 import io.netty.util.AttributeKey;
 
 import java.net.InetSocketAddress;
+import org.tinylog.Logger;
 import java.util.List;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -261,24 +262,42 @@ public class AOServer implements Runnable {
 
                                 @Override
                                 protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
-                                    // Mark the current reading position in the buffer (save a "restauration position")
-                                    in.markReaderIndex();
-                                    boolean processed = false;
+                                    Connection connection = ctx.channel().attr(CONNECTION_KEY).get();
 
-                                    try {
-                                        Connection connection = ctx.channel().attr(CONNECTION_KEY).get();
-                                        processed = ClientPacketsManager.handle(new DataBuffer(in), connection);
-                                    } catch (IndexOutOfBoundsException e) {
-                                        // Not enough data, ignore it
+                                    while (in.readableBytes() > 0) {
+                                        // Leer el ID sin consumirlo (peek)
+                                        byte id = in.getByte(in.readerIndex());
+
+                                        if (!ClientPacketsManager.isKnownPacket(id)) {
+                                            // ID desconocido: descartar solo ese byte y continuar
+                                            in.skipBytes(1);
+                                            Logger.warn("ID de paquete entrante desconocido, descartado: {}", id & 0xFF);
+                                            continue;
+                                        }
+
+                                        int payloadSize = ClientPacketsManager.getPayloadSize(id);
+
+                                        // Marcar SIEMPRE antes de consumir el ID para poder restaurar en caso de error
+                                        in.markReaderIndex();
+
+                                        if (payloadSize >= 0) {
+                                            // Paquete de longitud fija: verificar que tenemos ID + payload completo
+                                            if (in.readableBytes() < 1 + payloadSize) {
+                                                // Faltan bytes: Netty los acumulará y volverá a llamar a decode()
+                                                return;
+                                            }
+                                        }
+
+                                        in.skipBytes(1); // Consumir el ID
+
+                                        try {
+                                            ClientPacketsManager.handle(id, new DataBuffer(in), connection);
+                                        } catch (IndexOutOfBoundsException e) {
+                                            // Paquete incompleto o handler fallido: restaurar y esperar más datos
+                                            in.resetReaderIndex();
+                                            return;
+                                        }
                                     }
-
-                                    if (!processed) {
-                                        // If the packet is incomplete, reset the reader index and wait for more data
-                                        in.resetReaderIndex();
-                                        return; // Wait for more data
-                                    }
-
-                                    out.add(in.readBytes(in.readableBytes())); // Pass any remaining data along
                                 }
                             });
 
