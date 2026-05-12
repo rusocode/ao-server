@@ -337,7 +337,7 @@ public class ObjectDAOIni implements ObjectDAO {
 
     private ObjectProperties loadWood(ObjectType type, int id, String name, int graphic, WoodType woodType, INIConfiguration ini, String section) {
         return new WoodProperties(type, id, name, graphic, getValue(ini, section), getForbiddenArchetypes(ini, section), getForbiddenRaces(ini, section),
-                isNewbie(ini, section), getNoLog(ini, section), isDroppable(ini, section), isRespawnable(ini, section), woodType);
+            isNewbie(ini, section), getNoLog(ini, section), isDroppable(ini, section), isRespawnable(ini, section), woodType);
     }
 
     private ObjectProperties loadResourceSource(ObjectType type, int id, String name, int graphic, LegacyObjectType legactType, INIConfiguration ini, String section) {
@@ -351,8 +351,8 @@ public class ObjectDAOIni implements ObjectDAO {
 
     private ObjectProperties loadDefensiveItem(ObjectType type, int id, String name, int graphic, INIConfiguration ini, String section) {
         return new DefensiveItemProperties(type, id, name, graphic, getValue(ini, section), getCraftingSkillPoints(ini, section), getForbiddenArchetypes(ini, section),
-                getForbiddenRaces(ini, section), isNewbie(ini, section), getNoLog(ini, section), isDroppable(ini, section), isRespawnable(ini, section),
-                getEquippedGraphic(ini, section), getMinArmorDefense(ini, section), getMaxArmorDefense(ini, section), getMinMagicDefense(ini, section), getMaxMagicDefense(ini, section));
+            getForbiddenRaces(ini, section), isNewbie(ini, section), getNoLog(ini, section), isDroppable(ini, section), isRespawnable(ini, section),
+            getEquippedGraphic(ini, section), getMinArmorDefense(ini, section), getMaxArmorDefense(ini, section), getMinMagicDefense(ini, section), getMaxMagicDefense(ini, section));
     }
 
     private ObjectProperties loadTeleport(ObjectType type, int id, String name, int graphic, INIConfiguration ini, String section) {
@@ -366,7 +366,7 @@ public class ObjectDAOIni implements ObjectDAO {
 
     private ObjectProperties loadGenericItem(ObjectType type, int id, String name, int graphic, INIConfiguration ini, String section) {
         return new ItemProperties(type, id, name, graphic, getValue(ini, section), getForbiddenArchetypes(ini, section), getForbiddenRaces(ini, section),
-                isNewbie(ini, section), getNoLog(ini, section), isDroppable(ini, section), isRespawnable(ini, section));
+            isNewbie(ini, section), getNoLog(ini, section), isDroppable(ini, section), isRespawnable(ini, section));
     }
 
     private ObjectProperties loadPotion(int id, String name, int graphic, INIConfiguration ini, String section) {
@@ -408,21 +408,21 @@ public class ObjectDAOIni implements ObjectDAO {
 
     private ObjectProperties loadMusicalInstrument(ObjectType type, int id, String name, int graphic, INIConfiguration ini, String section) {
         return new MusicalInstrumentProperties(type, id, name, graphic, getValue(ini, section), getForbiddenArchetypes(ini, section), getForbiddenRaces(ini, section),
-                isNewbie(ini, section), getNoLog(ini, section), isDroppable(ini, section), isRespawnable(ini, section), getEquippedGraphic(ini, section), getSounds(ini, section));
+            isNewbie(ini, section), getNoLog(ini, section), isDroppable(ini, section), isRespawnable(ini, section), getEquippedGraphic(ini, section), getSounds(ini, section));
     }
 
     private ObjectProperties loadBoat(ObjectType type, int id, String name, int graphic, INIConfiguration ini, String section) {
         return new BoatProperties(type, id, name, graphic, getValue(ini, section), getNavigationSkill(ini, section), getCraftingSkillPoints(ini, section),
-                getForbiddenArchetypes(ini, section), getForbiddenRaces(ini, section), isNewbie(ini, section), getNoLog(ini, section), isDroppable(ini, section),
-                isRespawnable(ini, section), getEquippedGraphic(ini, section), getMinArmorDefense(ini, section), getMaxArmorDefense(ini, section),
-                getMinMagicDefense(ini, section), getMaxMagicDefense(ini, section), getMinHit(ini, section), getMaxHit(ini, section));
+            getForbiddenArchetypes(ini, section), getForbiddenRaces(ini, section), isNewbie(ini, section), getNoLog(ini, section), isDroppable(ini, section),
+            isRespawnable(ini, section), getEquippedGraphic(ini, section), getMinArmorDefense(ini, section), getMaxArmorDefense(ini, section),
+            getMinMagicDefense(ini, section), getMaxMagicDefense(ini, section), getMinHit(ini, section), getMaxHit(ini, section));
     }
 
     private ObjectProperties loadFood(ObjectType type, int id, String name, int graphic, INIConfiguration ini, String section) {
         int hungerPoints = getHungerPoints(ini, section);
         // TODO Por que se pasa "hungerPoints" dos veces?
         return new StatModifyingItemProperties(type, id, name, graphic, getValue(ini, section), getForbiddenArchetypes(ini, section), getForbiddenRaces(ini, section),
-                isNewbie(ini, section), getNoLog(ini, section), isDroppable(ini, section), isRespawnable(ini, section), hungerPoints, hungerPoints);
+            isNewbie(ini, section), getNoLog(ini, section), isDroppable(ini, section), isRespawnable(ini, section), hungerPoints, hungerPoints);
     }
 
     private ObjectProperties loadDrink(ObjectType type, int id, String name, int graphic, INIConfiguration ini, String section) {
@@ -487,20 +487,20 @@ public class ObjectDAOIni implements ObjectDAO {
 
     private ObjectProperties loadAmmunition(ObjectType type, int id, String name, int graphic, INIConfiguration ini, String section) {
         return new AmmunitionProperties(type, id, name, graphic, getValue(ini, section), getForbiddenArchetypes(ini, section), getForbiddenRaces(ini, section),
-                isNewbie(ini, section), getNoLog(ini, section), isDroppable(ini, section), isRespawnable(ini, section), getEquippedGraphic(ini, section),
-                getMinHit(ini, section), getMaxHit(ini, section));
+            isNewbie(ini, section), getNoLog(ini, section), isDroppable(ini, section), isRespawnable(ini, section), getEquippedGraphic(ini, section),
+            getMinHit(ini, section), getMaxHit(ini, section));
     }
 
     private ObjectProperties loadParchment(ObjectType type, int id, String name, int graphic, INIConfiguration ini, String section) {
         int spellIndex = getSpellIndex(ini, section);
         // TODO Create the Spell implementation
         return new ParchmentProperties(type, id, name, graphic, getValue(ini, section), getForbiddenArchetypes(ini, section), getForbiddenRaces(ini, section),
-                isNewbie(ini, section), getNoLog(ini, section), isDroppable(ini, section), isRespawnable(ini, section), null);
+            isNewbie(ini, section), getNoLog(ini, section), isDroppable(ini, section), isRespawnable(ini, section), null);
     }
 
     private ObjectProperties loadKey(ObjectType type, int id, String name, int graphic, INIConfiguration ini, String section) {
         return new KeyProperties(type, id, name, graphic, getValue(ini, section), getCraftingSkillPoints(ini, section), getForbiddenArchetypes(ini, section),
-                getForbiddenRaces(ini, section), isNewbie(ini, section), getNoLog(ini, section), isDroppable(ini, section), isRespawnable(ini, section), getKey(ini, section));
+            getForbiddenRaces(ini, section), isNewbie(ini, section), getNoLog(ini, section), isDroppable(ini, section), isRespawnable(ini, section), getKey(ini, section));
     }
 
     private ObjectProperties loadDoor(ObjectType type, int id, String name, int graphic, INIConfiguration ini, String section) {
@@ -536,18 +536,18 @@ public class ObjectDAOIni implements ObjectDAO {
 
     private ObjectProperties loadBackpack(ObjectType type, int id, String name, int graphic, INIConfiguration ini, String section) {
         return new BackpackProperties(type, id, name, graphic, getValue(ini, section), getForbiddenArchetypes(ini, section), getForbiddenRaces(ini, section),
-                isNewbie(ini, section), getNoLog(ini, section), isDroppable(ini, section), isRespawnable(ini, section), getEquippedGraphic(ini, section),
-                getAmountForBackpackType(getBackpackType(ini, section)));
+            isNewbie(ini, section), getNoLog(ini, section), isDroppable(ini, section), isRespawnable(ini, section), getEquippedGraphic(ini, section),
+            getAmountForBackpackType(getBackpackType(ini, section)));
     }
 
     private ObjectProperties loadMineral(ObjectType type, int id, String name, int graphic, INIConfiguration ini, String section) {
         return new MineralProperties(type, id, name, graphic, getValue(ini, section), getForbiddenArchetypes(ini, section), getForbiddenRaces(ini, section),
-                isNewbie(ini, section), getNoLog(ini, section), isDroppable(ini, section), isRespawnable(ini, section), getIngotIndex(ini, section));
+            isNewbie(ini, section), getNoLog(ini, section), isDroppable(ini, section), isRespawnable(ini, section), getIngotIndex(ini, section));
     }
 
     private ObjectProperties loadIngot(int id, String name, int graphic, INIConfiguration ini, String section) {
         return new ItemProperties(ObjectType.INGOT, id, name, graphic, getValue(ini, section), getForbiddenArchetypes(ini, section),
-                getForbiddenRaces(ini, section), isNewbie(ini, section), getNoLog(ini, section), isDroppable(ini, section), isRespawnable(ini, section));
+            getForbiddenRaces(ini, section), isNewbie(ini, section), getNoLog(ini, section), isDroppable(ini, section), isRespawnable(ini, section));
     }
 
     private ObjectProperties loadGem(int id, String name, int graphic, INIConfiguration ini, String section) {
@@ -602,10 +602,10 @@ public class ObjectDAOIni implements ObjectDAO {
     private List<Integer> getSounds(INIConfiguration ini, String section) {
         int soundCount = 3;
         return IntStream.rangeClosed(1, soundCount)
-                .map(i -> IniUtils.getInt(ini, section + "." + SOUND_PREFIX + i, -1))
-                .filter(value -> value != -1)
-                .boxed()
-                .toList();
+            .map(i -> IniUtils.getInt(ini, section + "." + SOUND_PREFIX + i, -1))
+            .filter(value -> value != -1)
+            .boxed()
+            .toList();
     }
 
     /**

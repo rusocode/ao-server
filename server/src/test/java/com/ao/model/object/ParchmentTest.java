@@ -2,9 +2,9 @@ package com.ao.model.object;
 
 import com.ao.model.character.Character;
 import com.ao.model.inventory.Inventory;
+import com.ao.model.object.properties.ParchmentProperties;
 import com.ao.model.spell.Spell;
 import com.ao.model.spell.effect.Effect;
-import com.ao.model.object.properties.ParchmentProperties;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

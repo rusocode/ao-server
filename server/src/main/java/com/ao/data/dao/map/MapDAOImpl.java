@@ -1,10 +1,10 @@
 package com.ao.data.dao.map;
 
 import com.ao.data.dao.MapDAO;
+import com.ao.model.map.Map;
 import com.ao.model.map.Position;
 import com.ao.model.map.Tile;
 import com.ao.model.map.Trigger;
-import com.ao.model.map.Map;
 import com.ao.utils.RangeParser;
 import com.ao.utils.ResourceUtils;
 import com.google.inject.Inject;

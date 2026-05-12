@@ -79,7 +79,7 @@ public enum UserArchetype {
     }
 
     public int getId() {
-    	return id;
+        return id;
     }
 
 }

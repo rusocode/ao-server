@@ -1,4 +1,3 @@
-
 package com.ao.data.dao;
 
 import com.ao.data.dao.exception.DAOException;
@@ -39,18 +38,19 @@ public interface UserCharacterDAO {
                          int initialAvailableSkills, int body) throws DAOException, NameAlreadyTakenException;
 
     AccountAndCharacter createAccountAndCharacter(
-            ConnectedUser user, String nick, String password, String mail,
-            Race race, Gender gender, UserArchetype archetype, int head,
-            City city, byte strength, byte dexterity, byte intelligence,
-            byte charisma, byte constitution, int initialAvailableSkills, int body
+        ConnectedUser user, String nick, String password, String mail,
+        Race race, Gender gender, UserArchetype archetype, int head,
+        City city, byte strength, byte dexterity, byte intelligence,
+        byte charisma, byte constitution, int initialAvailableSkills, int body
     ) throws DAOException;
 
     boolean exists(String username);
 
     /**
-     * Record that holds both an Account and a UserCharacter.
-     * Used to return both entities from {@link #createAccountAndCharacter}.
+     * Record that holds both an Account and a UserCharacter. Used to return both entities from
+     * {@link #createAccountAndCharacter}.
      */
-    record AccountAndCharacter(Account account, UserCharacter character) {}
+    record AccountAndCharacter(Account account, UserCharacter character) {
+    }
 
 }

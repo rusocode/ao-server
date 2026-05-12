@@ -73,15 +73,15 @@ public class LoginNewCharacterPacket implements IncomingPacket {
 
     private int calculateMinRequiredBytes() {
         return MIN_NICK_BYTES
-                + security.getPasswordHashLength()
-                + VERSION_BYTES
-                + security.getClientHashLength()
-                + RACE_BYTES
-                + GENDER_BYTES
-                + ARCHETYPE_BYTES
-                + HEAD_BYTES
-                + MIN_MAIL_BYTES
-                + CITY_ID_BYTES;
+            + security.getPasswordHashLength()
+            + VERSION_BYTES
+            + security.getClientHashLength()
+            + RACE_BYTES
+            + GENDER_BYTES
+            + ARCHETYPE_BYTES
+            + HEAD_BYTES
+            + MIN_MAIL_BYTES
+            + CITY_ID_BYTES;
     }
 
 }

@@ -1,8 +1,8 @@
 package com.ao.model.spell;
 
 import com.ao.model.character.Character;
-import com.ao.model.spell.effect.Effect;
 import com.ao.model.object.Object;
+import com.ao.model.spell.effect.Effect;
 
 public class Spell {
 

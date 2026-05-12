@@ -1,8 +1,8 @@
 package com.ao.model.object;
 
 import com.ao.model.character.Character;
-import com.ao.model.spell.Spell;
 import com.ao.model.object.properties.ParchmentProperties;
+import com.ao.model.spell.Spell;
 
 public class Parchment extends ConsumableItem {
 

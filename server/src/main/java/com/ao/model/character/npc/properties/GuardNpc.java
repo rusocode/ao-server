@@ -24,7 +24,7 @@ public class GuardNpc extends CreatureNpc {
                     short dodge, List<Spell> spells, boolean canSwim, boolean attackable, boolean poison, boolean paralyzable,
                     boolean hostile, boolean tameable, Drop drop, boolean originalPosition) {
         super(type, id, name, body, head, heading, respawn, description, behavior, attackStrategy, movementStrategy, experience, gold, minHP, maxHP, minDamage,
-                maxDamage, defense, magicDefense, accuracy, dodge, spells, canSwim, attackable, poison, paralyzable, hostile, tameable, drop);
+            maxDamage, defense, magicDefense, accuracy, dodge, spells, canSwim, attackable, poison, paralyzable, hostile, tameable, drop);
         this.originalPosition = originalPosition;
     }
 

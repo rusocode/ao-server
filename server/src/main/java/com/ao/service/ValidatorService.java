@@ -64,9 +64,9 @@ public class ValidatorService {
      * DTO ("Data Transfer Object") is a design pattern for data transfer, grouping of related information, and data validation.
      */
     public record CharacterNameDto(
-            @NotBlank(message = "Character name cannot be empty")
-            @Size(min = 1, max = MAX_NAME_LENGTH, message = "Character name must be between 1 and 30 characters")
-            @Pattern(regexp = "^[A-Za-z][A-Za-z ]*", message = "Character name must start with letter and contain only letters and spaces") String name) {
+        @NotBlank(message = "Character name cannot be empty")
+        @Size(min = 1, max = MAX_NAME_LENGTH, message = "Character name must be between 1 and 30 characters")
+        @Pattern(regexp = "^[A-Za-z][A-Za-z ]*", message = "Character name must start with letter and contain only letters and spaces") String name) {
 
         public CharacterNameDto(String name) {
             this.name = name;

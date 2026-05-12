@@ -37,11 +37,11 @@ public class InjectorFactory {
      */
     public static Injector get(Properties properties) {
         return Guice.createInjector(
-                new BootstrapModule(properties),
-                new ConfigurationModule(properties),
-                new DaoModule(properties),
-                new ServiceModule(properties),
-                new SecurityModule(properties)
+            new BootstrapModule(properties),
+            new ConfigurationModule(properties),
+            new DaoModule(properties),
+            new ServiceModule(properties),
+            new SecurityModule(properties)
         );
     }
 

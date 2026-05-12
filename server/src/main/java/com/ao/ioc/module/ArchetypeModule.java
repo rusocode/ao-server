@@ -113,15 +113,15 @@ public class ArchetypeModule extends AbstractModule {
         Class[] args = new Class[]{float.class, float.class, float.class, float.class, float.class, float.class, float.class};
 
         return archetype.getConstructor(args)
-                .newInstance(
-                        config.getEvasionModifier(archetype),
-                        config.getMeleeAccuracyModifier(archetype),
-                        config.getRangedAccuracyModifier(archetype),
-                        config.getMeleeDamageModifier(archetype),
-                        config.getRangedDamageModifier(archetype),
-                        config.getWrestlingDamageModifier(archetype),
-                        config.getBlockPowerModifier(archetype)
-                );
+            .newInstance(
+                config.getEvasionModifier(archetype),
+                config.getMeleeAccuracyModifier(archetype),
+                config.getRangedAccuracyModifier(archetype),
+                config.getMeleeDamageModifier(archetype),
+                config.getRangedDamageModifier(archetype),
+                config.getWrestlingDamageModifier(archetype),
+                config.getBlockPowerModifier(archetype)
+            );
     }
 
 }

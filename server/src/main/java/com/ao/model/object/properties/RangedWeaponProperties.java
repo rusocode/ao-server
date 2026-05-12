@@ -42,7 +42,7 @@ public class RangedWeaponProperties extends WeaponProperties {
                                   boolean falls, boolean respawnable, int equippedGraphic, boolean stabs, int piercingDamage,
                                   int minHit, int maxHit, boolean needsAmmunition) {
         super(type, id, name, graphic, value, manufactureDifficulty, forbiddenArchetypes, forbiddenRaces, newbie, noLog, falls, respawnable, equippedGraphic,
-                stabs, piercingDamage, minHit, maxHit);
+            stabs, piercingDamage, minHit, maxHit);
         this.needsAmmunition = needsAmmunition;
     }
 

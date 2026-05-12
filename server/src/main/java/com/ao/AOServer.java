@@ -208,96 +208,96 @@ public class AOServer implements Runnable {
             // Step 2: ServerBootstrap Configuration
             ServerBootstrap bootstrap = new ServerBootstrap(); // Netty helper class for configuring the server
             bootstrap.group(bossGroup, workerGroup) // Assign the previously created event groups
-                    .channel(NioServerSocketChannel.class) // Specifies that NIO (Non-blocking I/O) channels will be used
-                    .option(ChannelOption.SO_BACKLOG, backlog) // Configure the backlog (maximum number pending connections in the queue)
-                    // Step 3: ChildHandler Configuration (Pipeline). This is the heart of data processing. It runs for each new client connection.
-                    .childHandler(new ChannelInitializer<SocketChannel>() {
-                        @Override
-                        public void initChannel(SocketChannel ch) throws Exception {
-                            ChannelPipeline pipeline = ch.pipeline();
+                .channel(NioServerSocketChannel.class) // Specifies that NIO (Non-blocking I/O) channels will be used
+                .option(ChannelOption.SO_BACKLOG, backlog) // Configure the backlog (maximum number pending connections in the queue)
+                // Step 3: ChildHandler Configuration (Pipeline). This is the heart of data processing. It runs for each new client connection.
+                .childHandler(new ChannelInitializer<SocketChannel>() {
+                    @Override
+                    public void initChannel(SocketChannel ch) throws Exception {
+                        ChannelPipeline pipeline = ch.pipeline();
 
-                            /*
-                             * Netty processes data by running it through a pipe that works both
-                             * for incoming and outgoing data. Decoders are applied to incoming data,
-                             * encoders to outgoing.
-                             *
-                             * The order of elements is important since it impacts on the order of execution.
-                             * This scheme allows for better separation of concerns and to add/remove
-                             * steps easily and free of side effects. For instance, we may want to add
-                             * inflate/deflate a step using zlib, and that is independent of encryption
-                             * and the AO protocol itself.
-                             */
+                        /*
+                         * Netty processes data by running it through a pipe that works both
+                         * for incoming and outgoing data. Decoders are applied to incoming data,
+                         * encoders to outgoing.
+                         *
+                         * The order of elements is important since it impacts on the order of execution.
+                         * This scheme allows for better separation of concerns and to add/remove
+                         * steps easily and free of side effects. For instance, we may want to add
+                         * inflate/deflate a step using zlib, and that is independent of encryption
+                         * and the AO protocol itself.
+                         */
 
-                            // Step 3.1: Encryptor Configuration
-                            // Encrypts all outgoing data (server → client). Last to be processed for outgoing data.
-                            pipeline.addLast("encrypter", new MessageToMessageEncoder<ByteBuf>() {
-                                @Override
-                                protected void encode(ChannelHandlerContext ctx, ByteBuf msg, List<Object> out) throws Exception {
-                                    ByteBuf buffer = msg.copy(); // Create a copy to avoid modifying the original
-                                    security.encrypt(buffer, ctx.channel());
-                                    out.add(buffer);
+                        // Step 3.1: Encryptor Configuration
+                        // Encrypts all outgoing data (server → client). Last to be processed for outgoing data.
+                        pipeline.addLast("encrypter", new MessageToMessageEncoder<ByteBuf>() {
+                            @Override
+                            protected void encode(ChannelHandlerContext ctx, ByteBuf msg, List<Object> out) throws Exception {
+                                ByteBuf buffer = msg.copy(); // Create a copy to avoid modifying the original
+                                security.encrypt(buffer, ctx.channel());
+                                out.add(buffer);
+                            }
+                        });
+
+                        // Step 3.2: Decryptor Configuration
+                        // Decrypts all incoming data (client → server). First to be processed for incoming data.
+                        pipeline.addLast("decrypter", new MessageToMessageDecoder<ByteBuf>() {
+                            @Override
+                            protected void decode(ChannelHandlerContext ctx, ByteBuf msg, List<Object> out) throws Exception {
+                                security.decrypt(msg, ctx.channel());
+                                out.add(msg.retain()); // Retain the reference since we're passing it along
+                            }
+                        });
+
+                        // Step 3.3: Protocol Decoder Configuration
+                        // Processes the data stream and converts bytes into AO protocol messages. Runs when a new connection is established.
+                        pipeline.addLast("decoder", new ByteToMessageDecoder() {
+                            @Override
+                            public void channelActive(ChannelHandlerContext ctx) throws Exception {
+                                super.channelActive(ctx);
+                                // New user is connected, get it ready for action!
+                                ctx.channel().attr(CONNECTION_KEY).set(new Connection(ctx.channel()));
+                            }
+
+                            @Override
+                            protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
+                                // Mark the current reading position in the buffer (save a "restauration position")
+                                in.markReaderIndex();
+                                boolean processed = false;
+
+                                try {
+                                    Connection connection = ctx.channel().attr(CONNECTION_KEY).get();
+                                    processed = ClientPacketsManager.handle(new DataBuffer(in), connection);
+                                } catch (IndexOutOfBoundsException e) {
+                                    // Not enough data, ignore it
                                 }
-                            });
 
-                            // Step 3.2: Decryptor Configuration
-                            // Decrypts all incoming data (client → server). First to be processed for incoming data.
-                            pipeline.addLast("decrypter", new MessageToMessageDecoder<ByteBuf>() {
-                                @Override
-                                protected void decode(ChannelHandlerContext ctx, ByteBuf msg, List<Object> out) throws Exception {
-                                    security.decrypt(msg, ctx.channel());
-                                    out.add(msg.retain()); // Retain the reference since we're passing it along
-                                }
-                            });
-
-                            // Step 3.3: Protocol Decoder Configuration
-                            // Processes the data stream and converts bytes into AO protocol messages. Runs when a new connection is established.
-                            pipeline.addLast("decoder", new ByteToMessageDecoder() {
-                                @Override
-                                public void channelActive(ChannelHandlerContext ctx) throws Exception {
-                                    super.channelActive(ctx);
-                                    // New user is connected, get it ready for action!
-                                    ctx.channel().attr(CONNECTION_KEY).set(new Connection(ctx.channel()));
+                                if (!processed) {
+                                    // If the packet is incomplete, reset the reader index and wait for more data
+                                    in.resetReaderIndex();
+                                    return; // Wait for more data
                                 }
 
-                                @Override
-                                protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
-                                    // Mark the current reading position in the buffer (save a "restauration position")
-                                    in.markReaderIndex();
-                                    boolean processed = false;
+                                out.add(in.readBytes(in.readableBytes())); // Pass any remaining data along
+                            }
+                        });
 
-                                    try {
-                                        Connection connection = ctx.channel().attr(CONNECTION_KEY).get();
-                                        processed = ClientPacketsManager.handle(new DataBuffer(in), connection);
-                                    } catch (IndexOutOfBoundsException e) {
-                                        // Not enough data, ignore it
-                                    }
+                        // Step 3.4: Protocol Encoder Configuration
+                        pipeline.addLast("encoder", new MessageToMessageEncoder<OutgoingPacket>() {
+                            @Override
+                            protected void encode(ChannelHandlerContext ctx, OutgoingPacket packet, List<Object> out) throws Exception {
+                                // Create a dinamic byte buffer with a typical capacity of 256 bytes
+                                ByteBuf byteBuf = Unpooled.buffer();
 
-                                    if (!processed) {
-                                        // If the packet is incomplete, reset the reader index and wait for more data
-                                        in.resetReaderIndex();
-                                        return; // Wait for more data
-                                    }
+                                // Wrap the ByteBuf in our data buffer and write the packet into it
+                                DataBuffer buffer = new DataBuffer(byteBuf);
+                                ServerPacketsManager.write(packet, buffer);
 
-                                    out.add(in.readBytes(in.readableBytes())); // Pass any remaining data along
-                                }
-                            });
-
-                            // Step 3.4: Protocol Encoder Configuration
-                            pipeline.addLast("encoder", new MessageToMessageEncoder<OutgoingPacket>() {
-                                @Override
-                                protected void encode(ChannelHandlerContext ctx, OutgoingPacket packet, List<Object> out) throws Exception {
-                                    // Create a dinamic byte buffer with a typical capacity of 256 bytes
-                                    ByteBuf byteBuf = Unpooled.buffer();
-
-                                    // Wrap the ByteBuf in our data buffer and write the packet into it
-                                    DataBuffer buffer = new DataBuffer(byteBuf);
-                                    ServerPacketsManager.write(packet, buffer);
-
-                                    out.add(byteBuf);
-                                }
-                            });
-                        }
-                    });
+                                out.add(byteBuf);
+                            }
+                        });
+                    }
+                });
 
             // Step 4: Bind and start to accept incoming connections
             // bind(): Binds the server to the configured IP address and port

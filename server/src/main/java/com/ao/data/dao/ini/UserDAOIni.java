@@ -319,8 +319,8 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
         String description = "";
 
         return new LoggedUser(user, reputation, race, gender, archetype, poisoned, paralyzed, immobilized, invisible, mimetized,
-                dumbed, hidden, maxMana, mana, maxHitPoints, hitpoints, maxThirstiness, thirstiness, maxHunger, hunger, lvl, nick,
-                description, position, body, head);
+            dumbed, hidden, maxMana, mana, maxHitPoints, hitpoints, maxThirstiness, thirstiness, maxHunger, hunger, lvl, nick,
+            description, position, body, head);
     }
 
     @Override

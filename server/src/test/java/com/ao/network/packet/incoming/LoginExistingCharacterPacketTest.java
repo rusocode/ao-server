@@ -82,8 +82,8 @@ public class LoginExistingCharacterPacketTest {
         packet.handle(inputBuffer, connection);
         verify(connection).send(errPacket.capture());
         assertThat(errPacket.getValue().getMessage())
-                .isEqualTo(String.format(LoginServiceImpl.CLIENT_OUT_OF_DATE_ERROR_FORMAT,
-                        CLIENT_MAJOR + "." + CLIENT_MINOR + "." + CLIENT_REVISION));
+            .isEqualTo(String.format(LoginServiceImpl.CLIENT_OUT_OF_DATE_ERROR_FORMAT,
+                CLIENT_MAJOR + "." + CLIENT_MINOR + "." + CLIENT_REVISION));
     }
 
     @Test
@@ -95,9 +95,9 @@ public class LoginExistingCharacterPacketTest {
     }
 
     private void writeLogin(String charName, String password, byte major, byte minor, byte version, String hash)
-            throws Exception {
+        throws Exception {
         when(inputBuffer.getReadableBytes()).thenReturn(
-                charName.length() + 2 + security.getPasswordHashLength() + 6 + security.getClientHashLength());
+            charName.length() + 2 + security.getPasswordHashLength() + 6 + security.getClientHashLength());
         when(inputBuffer.getUTF8String()).thenReturn(charName);
         when(inputBuffer.getUTF8StringFixed(security.getPasswordHashLength())).thenReturn(password);
         when(inputBuffer.get()).thenReturn(major).thenReturn(minor).thenReturn(version);

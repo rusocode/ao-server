@@ -23,7 +23,8 @@ public class NpcCharacterImpl implements NpcCharacter {
     // ===== Propiedades del NPC =====
     private final int npcId; // ID del tipo de NPC (equivalente a .Numero en VB6)
     private final Npc npc; // Propiedades estaticas desde npcs.dat
-
+    // Privileges (todos los NPCs tienen privilegios de usuario normal)
+    private final Privileges privileges = new Privileges((byte) 0);
     // ===== Estado del Character =====
     private short charIndex; // CharIndex asignado
     private String name;
@@ -35,7 +36,6 @@ public class NpcCharacterImpl implements NpcCharacter {
     private Position position;
     private Heading heading;
     private AreaInfo areaInfo;
-
     // ===== Stats =====
     private int currentHP;
     private int maxHP;
@@ -46,7 +46,6 @@ public class NpcCharacterImpl implements NpcCharacter {
     private byte level;
     private int gold;
     private int experience;
-
     // ===== Flags =====
     private boolean poisoned;
     private boolean paralyzed;
@@ -58,7 +57,6 @@ public class NpcCharacterImpl implements NpcCharacter {
     private boolean adminHidden;
     private boolean sailing;
     private boolean dumb;
-
     // ===== Equipment =====
     private Weapon weapon;
     private Helmet helmet;
@@ -66,13 +64,9 @@ public class NpcCharacterImpl implements NpcCharacter {
     private Armor armor;
     private Accessory accessory;
     private Fx fx;
-
     // ===== NPC-specific =====
     private Character master; // Amo del NPC si esta domado
     private Inventory inventory;
-
-    // Privileges (todos los NPCs tienen privilegios de usuario normal)
-    private final Privileges privileges = new Privileges((byte) 0);
     private int nickColor; // Color del nombre (0 = blanco por defecto)
 
     public NpcCharacterImpl(Npc npc, Position position, short charIndex) {

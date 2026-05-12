@@ -8,7 +8,7 @@ public class WarriorArchetype extends DefaultArchetype {
 
     public WarriorArchetype(float evasionModifier, float meleeAccuracyModifier, float rangedAccuracyModifier, float meleeDamageModifier,
                             float rangedDamageModifier, float wrestlingDamageModifier, float blockPowerModifier) {
-        super(evasionModifier, meleeAccuracyModifier, rangedAccuracyModifier,  meleeDamageModifier, rangedDamageModifier, wrestlingDamageModifier, blockPowerModifier);
+        super(evasionModifier, meleeAccuracyModifier, rangedAccuracyModifier, meleeDamageModifier, rangedDamageModifier, wrestlingDamageModifier, blockPowerModifier);
     }
 
     @Override

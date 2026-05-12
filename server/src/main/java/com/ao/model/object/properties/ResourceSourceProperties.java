@@ -1,7 +1,7 @@
 package com.ao.model.object.properties;
 
-import com.ao.model.object.ResourceSourceType;
 import com.ao.model.object.ObjectType;
+import com.ao.model.object.ResourceSourceType;
 
 /**
  * Defines a ResourceSourceProperties property. Allows a lightweight pattern implementation.

@@ -141,14 +141,14 @@ public class LoginServiceImpl implements LoginService {
         UserCharacterDAO.AccountAndCharacter result;
         try {
             result = charDAO.createAccountAndCharacter(
-                    user, nick, password, mail,
-                    race, gender, archetype, head, city,
-                    user.getAttribute(Attribute.STRENGTH),
-                    user.getAttribute(Attribute.DEXTERITY),
-                    user.getAttribute(Attribute.INTELLIGENCE),
-                    user.getAttribute(Attribute.CHARISMA),
-                    user.getAttribute(Attribute.CONSTITUTION),
-                    initialAvailableSkills, body);
+                user, nick, password, mail,
+                race, gender, archetype, head, city,
+                user.getAttribute(Attribute.STRENGTH),
+                user.getAttribute(Attribute.DEXTERITY),
+                user.getAttribute(Attribute.INTELLIGENCE),
+                user.getAttribute(Attribute.CHARISMA),
+                user.getAttribute(Attribute.CONSTITUTION),
+                initialAvailableSkills, body);
         } catch (NameAlreadyTakenException e) {
             throw new LoginErrorException(ACCOUNT_NAME_TAKEN_ERROR);
         } catch (DAOException e) {

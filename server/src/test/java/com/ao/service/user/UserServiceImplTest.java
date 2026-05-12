@@ -73,7 +73,7 @@ public class UserServiceImplTest {
         Set<ConnectedUser> snapshot = userService.getConnectedUsers();
 
         assertThatThrownBy(() -> snapshot.add(new ConnectedUser(connection)))
-                .isInstanceOf(UnsupportedOperationException.class);
+            .isInstanceOf(UnsupportedOperationException.class);
     }
 
     @Test

@@ -13,8 +13,8 @@ public class AssasinArchetype extends DefaultArchetype {
                             float meleeDamageModifier, float rangedDamageModifier,
                             float wrestlingDamageModifier, float blockPowerModifier) {
         super(evasionModifier, meleeAccuracyModifier, rangedAccuracyModifier,
-                meleeDamageModifier, rangedDamageModifier, wrestlingDamageModifier,
-                blockPowerModifier);
+            meleeDamageModifier, rangedDamageModifier, wrestlingDamageModifier,
+            blockPowerModifier);
     }
 
     @Override

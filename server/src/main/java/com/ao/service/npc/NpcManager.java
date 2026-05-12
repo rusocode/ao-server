@@ -7,7 +7,6 @@ import com.ao.model.map.Position;
 import com.ao.service.CharacterIndexManager;
 import com.ao.service.NpcService;
 import com.google.inject.Inject;
-import org.hibernate.validator.internal.util.logging.LoggerFactory;
 import org.tinylog.Logger;
 
 import java.util.HashMap;
@@ -76,8 +75,8 @@ public class NpcManager {
             activeNpcsCount++;
 
             Logger.debug("Spawned NPC '{}' (ID: {}) at position ({}, {}, {}) with CharIndex {}",
-                    npc.getName(), npcId, position.getX(), position.getY(),
-                    position.getMap(), charIndex);
+                npc.getName(), npcId, position.getX(), position.getY(),
+                position.getMap(), charIndex);
 
             return npcCharacter;
 

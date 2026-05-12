@@ -23,10 +23,10 @@ public class MultiMessagePacket implements OutgoingPacket {
      */
     public MultiMessagePacket(Message message) {
         if (message == Message.NPC_HIT_USER || message == Message.USER_HIT_NPC
-                || message == Message.USER_HITTED_BY_USER || message == Message.USER_HITTED_USER
-                || message == Message.WORK_REQUEST_TARGET || message == Message.USER_ATTACKED_SWING
-                || message == Message.USER_KILL || message == Message.HAVE_KILLED_USER
-                || message == Message.HOME) {
+            || message == Message.USER_HITTED_BY_USER || message == Message.USER_HITTED_USER
+            || message == Message.WORK_REQUEST_TARGET || message == Message.USER_ATTACKED_SWING
+            || message == Message.USER_KILL || message == Message.HAVE_KILLED_USER
+            || message == Message.HOME) {
             throw new IllegalArgumentException("This constructor is invalid for the given type: " + message);
         }
         this.message = message;

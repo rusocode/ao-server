@@ -241,8 +241,8 @@ public class UserCharacterBuilder implements Builder<UserCharacter> {
         // TODO Set everything!
 
         return new LoggedUser(user, reputation, race, gender, archetype.getArchetype(), poisoned,
-                paralyzed, immobilized, mimetized, invisible, dumbed, hidden, maxMana, minMana, maxHp, minHp,
-                maxThirstiness, minThirstiness, maxHunger, minHunger, lvl, name, description, position, body, head);
+            paralyzed, immobilized, mimetized, invisible, dumbed, hidden, maxMana, minMana, maxHp, minHp,
+            maxThirstiness, minThirstiness, maxHunger, minHunger, lvl, name, description, position, body, head);
     }
 
 }

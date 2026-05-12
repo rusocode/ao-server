@@ -165,8 +165,8 @@ public class Bootstrap {
                         }
 
                         connectedUser.getConnection().send(new UpdateHungerAndThirstPacket(
-                                character.getHunger(), UserCharacter.MAX_HUNGER,
-                                character.getThirstiness(), UserCharacter.MAX_THIRSTINESS));
+                            character.getHunger(), UserCharacter.MAX_HUNGER,
+                            character.getThirstiness(), UserCharacter.MAX_THIRSTINESS));
                     }
                 }
             } catch (Exception e) {
@@ -187,8 +187,8 @@ public class Bootstrap {
                         }
 
                         connectedUser.getConnection().send(new UpdateHungerAndThirstPacket(
-                                character.getHunger(), UserCharacter.MAX_HUNGER,
-                                character.getThirstiness(), UserCharacter.MAX_THIRSTINESS));
+                            character.getHunger(), UserCharacter.MAX_HUNGER,
+                            character.getThirstiness(), UserCharacter.MAX_THIRSTINESS));
                     }
                 }
             } catch (Exception e) {

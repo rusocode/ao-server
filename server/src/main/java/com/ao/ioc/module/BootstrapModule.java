@@ -16,15 +16,12 @@ import java.util.Properties;
  * <b>The <i>Module</i> is the basic unit of the definition of bindings</b> (or
  * wiring, as it’s known in Spring).
  * <p>
- * A <b>binding</b> is an object that corresponds to an entry in the Guice map.
- * With bindings, we <b>define how Guice is going to
+ * A <b>binding</b> is an object that corresponds to an entry in the Guice map. With bindings, we <b>define how Guice is going to
  * inject dependencies</b> into a class.
  * <p>
- * A binding is defined in an implementation of
- * {@code com.google.inject.AbstractModule}.
+ * A binding is defined in an implementation of {@code com.google.inject.AbstractModule}.
  * <p>
- * This module implementation specifies that an instance of
- * {@code ServerConfigIni} is to be injected wherever a
+ * This module implementation specifies that an instance of {@code ServerConfigIni} is to be injected wherever a
  * {@code ServerConfig} variable is found.
  */
 
@@ -46,13 +43,13 @@ public class BootstrapModule extends AbstractModule {
         // string with the name ServerConfigIni and asigned the value of the property
         // config.path.server
         bind(String.class).annotatedWith(Names.named("ServerConfigIni"))
-                .toInstance(properties.getProperty("config.path.server"));
+            .toInstance(properties.getProperty("config.path.server"));
 
         bind(IntervalsConfig.class).to(IntervalsConfigYaml.class).in(Singleton.class);
 
         bind(String.class)
-                .annotatedWith(Names.named("IntervalsConfigYaml"))
-                .toInstance(properties.getProperty("config.path.intervals"));
+            .annotatedWith(Names.named("IntervalsConfigYaml"))
+            .toInstance(properties.getProperty("config.path.intervals"));
     }
 
 }

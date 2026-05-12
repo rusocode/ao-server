@@ -2,12 +2,12 @@ package com.ao.mock;
 
 import com.ao.exception.InvalidTargetException;
 import com.ao.model.character.Character;
-import com.ao.model.spell.effect.Effect;
-import com.ao.model.user.ConnectedUser;
-import com.ao.model.user.User;
 import com.ao.model.object.AbstractItem;
 import com.ao.model.object.Item;
 import com.ao.model.object.Object;
+import com.ao.model.spell.effect.Effect;
+import com.ao.model.user.ConnectedUser;
+import com.ao.model.user.User;
 import com.ao.network.Connection;
 import com.ao.service.timedevents.TimedEvent;
 import org.mockito.stubbing.Answer;

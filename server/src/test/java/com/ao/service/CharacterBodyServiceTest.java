@@ -49,10 +49,10 @@ public class CharacterBodyServiceTest {
     @BeforeEach
     public void setUp() throws Exception {
         characterBodyService = new CharacterBodyServiceImpl(headsDarkelfMale, headsDarkelfFemale,
-                headsDwarfMale, headsDwarfFemale, headsElfMale, headsElfFemale, headsGnomeMale,
-                headsGnomeFemale, headsHumanMale, headsHumanFemale, darkelfMaleBody, darkelfFemaleBody,
-                dwarfMaleBody, dwarfFemaleBody, elfMaleBody, elfFemaleBody, gnomeMaleBody,
-                gnomeFemaleBody, humanMaleBody, humanFemaleBody);
+            headsDwarfMale, headsDwarfFemale, headsElfMale, headsElfFemale, headsGnomeMale,
+            headsGnomeFemale, headsHumanMale, headsHumanFemale, darkelfMaleBody, darkelfFemaleBody,
+            dwarfMaleBody, dwarfFemaleBody, elfMaleBody, elfFemaleBody, gnomeMaleBody,
+            gnomeFemaleBody, humanMaleBody, humanFemaleBody);
     }
 
     @Test

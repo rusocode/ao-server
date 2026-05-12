@@ -51,8 +51,8 @@ public class IntervalsConfigYamlTest {
     @Test
     void load_missingFile_throwsIllegalArgumentException() {
         assertThatThrownBy(() -> new IntervalsConfigYaml(MISSING_CONFIG))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining(MISSING_CONFIG);
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining(MISSING_CONFIG);
     }
 
 }
