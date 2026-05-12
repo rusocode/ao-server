@@ -18,23 +18,18 @@ public class LoginExistingCharacterPacket implements IncomingPacket {
     private static final SecurityManager security = ApplicationContext.getInstance(SecurityManager.class);
 
     @Override
-    public boolean handle(DataBuffer buffer, Connection connection)
-            throws IndexOutOfBoundsException, UnsupportedEncodingException {
-        // Check if there is enough data to attempt to read...
-        if (buffer.getReadableBytes() < 5 + security.getPasswordHashLength()) // + security.getClientHashLength())
-            return false;
+    public boolean handle(DataBuffer buffer, Connection connection) throws IndexOutOfBoundsException, UnsupportedEncodingException {
+        // Check if there are enough bytes to read....
+        if (buffer.getReadableBytes() < 5 + security.getPasswordHashLength() + security.getClientHashLength()) return false;
 
         String username = buffer.getUTF8String();
         String password = buffer.getUTF8StringFixed(security.getPasswordHashLength());
 
         String version = buffer.get() + "." + buffer.get() + "." + buffer.get();
-        // String clientHash =
-        // buffer.getASCIIStringFixed(security.getClientHashLength());
-        String clientHash = "00000000000000000000000000000000";
+        String clientHash = buffer.getASCIIStringFixed(security.getClientHashLength());
 
         try {
-            loginService.connectExistingCharacter((ConnectedUser) connection.getUser(), username, password, version,
-                    clientHash);
+            loginService.connectExistingCharacter((ConnectedUser) connection.getUser(), username, password, version, clientHash);
         } catch (LoginErrorException e) {
             loginError(connection, e.getMessage());
         }
