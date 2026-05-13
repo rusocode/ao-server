@@ -27,14 +27,14 @@ public class Map {
 
     // .dat properties
     private final String name;
-    private int musicNum;
-    private boolean noMagic;
-    private boolean noEncryptMP;
-    private String terrain;
-    private String zone;
-    private boolean restrict;
-    private int backup;
-    private boolean pk;
+    private final int musicNum;
+    private final boolean noMagic;
+    private final boolean noEncryptMP;
+    private final String terrain;
+    private final String zone;
+    private final boolean restrict;
+    private final int backup;
+    private final boolean pk;
 
     // We don't use jagged arrays, they are inefficient in Java!
     private final Tile[] tiles;
@@ -42,18 +42,18 @@ public class Map {
     /**
      * Creates a new Map.
      *
-     * @param name          name of the map
-     * @param id            unique id of the map
-     * @param version       map's version
-     * @param tiles         array of tiles composing the map
-     * @param musicNum      music number
-     * @param noMagic       if magic is disabled
-     * @param noEncryptMP   if MP encryption is disabled
-     * @param terrain       terrain type
-     * @param zone          zone type
-     * @param restrict      if map is restricted
-     * @param backup        backup value
-     * @param pk            if PK is enabled
+     * @param name        name of the map
+     * @param id          unique id of the map
+     * @param version     map's version
+     * @param tiles       array of tiles composing the map
+     * @param musicNum    music number
+     * @param noMagic     if magic is disabled
+     * @param noEncryptMP if MP encryption is disabled
+     * @param terrain     terrain type
+     * @param zone        zone type
+     * @param restrict    if map is restricted
+     * @param backup      backup value
+     * @param pk          if PK is enabled
      */
     public Map(String name, int id, short version, Tile[] tiles, int musicNum, boolean noMagic, boolean noEncryptMP,
                String terrain, String zone, boolean restrict, int backup, boolean pk) {
@@ -103,64 +103,32 @@ public class Map {
         return pk;
     }
 
-    public void setPk(boolean pk) {
-        this.pk = pk;
-    }
-
     public int getMusicNum() {
         return musicNum;
-    }
-
-    public void setMusicNum(int musicNum) {
-        this.musicNum = musicNum;
     }
 
     public boolean isNoMagic() {
         return noMagic;
     }
 
-    public void setNoMagic(boolean noMagic) {
-        this.noMagic = noMagic;
-    }
-
     public boolean isNoEncryptMP() {
         return noEncryptMP;
-    }
-
-    public void setNoEncryptMP(boolean noEncryptMP) {
-        this.noEncryptMP = noEncryptMP;
     }
 
     public String getTerrain() {
         return terrain;
     }
 
-    public void setTerrain(String terrain) {
-        this.terrain = terrain;
-    }
-
     public String getZone() {
         return zone;
-    }
-
-    public void setZone(String zone) {
-        this.zone = zone;
     }
 
     public boolean isRestrict() {
         return restrict;
     }
 
-    public void setRestrict(boolean restrict) {
-        this.restrict = restrict;
-    }
-
     public int getBackup() {
         return backup;
-    }
-
-    public void setBackup(int backup) {
-        this.backup = backup;
     }
 
     public List<Character> getCharactersNearby(int x, int y) {
