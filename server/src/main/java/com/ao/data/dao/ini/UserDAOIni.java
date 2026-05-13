@@ -246,13 +246,10 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
     }
 
     @Override
-    public void delete(String username) {
+    public void delete(String username) throws DAOException {
         File charfile = new File(getCharFilePath(username));
-        if (!charfile.exists())
-            return;
-        boolean success = charfile.delete();
-        if (!success)
-            Logger.error("{} deletion failed.", username);
+        if (!charfile.exists()) return;
+        if (!charfile.delete()) throw new DAOException("Failed to delete character file for: " + username);
     }
 
     @Override
