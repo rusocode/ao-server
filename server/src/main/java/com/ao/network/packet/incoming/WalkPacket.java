@@ -17,7 +17,7 @@ import java.io.UnsupportedEncodingException;
 
 public class WalkPacket implements IncomingPacket {
 
-    private final MapService marService = ApplicationContext.getInstance(MapService.class);
+    private final MapService mapService = ApplicationContext.getInstance(MapService.class);
     private final TimedEventsService timedEventsService = ApplicationContext.getInstance(TimedEventsService.class);
 
 
@@ -56,7 +56,7 @@ public class WalkPacket implements IncomingPacket {
                     timedEventsService.removeCharacterEvents(user);
 
                     // Move user
-                    marService.moveCharacterTo(user, heading);
+                    mapService.moveCharacterTo(user, heading);
 
                     // TODO Stop resting if needed
 
