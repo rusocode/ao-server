@@ -1,11 +1,11 @@
 package com.ao.network.packet.incoming;
 
+import com.ao.context.ApplicationContext;
 import com.ao.network.Connection;
 import com.ao.network.DataBuffer;
 import com.ao.network.packet.IncomingPacket;
 import org.tinylog.Logger;
 
-import com.ao.context.ApplicationContext;
 import com.ao.model.character.Alignment;
 import com.ao.model.character.Character;
 import com.ao.model.fonts.Font;
@@ -17,6 +17,16 @@ import com.ao.model.character.UserCharacter;
 import com.ao.service.MapService;
 
 public class LeftClickPacket implements IncomingPacket {
+
+    private final MapService mapService;
+
+    public LeftClickPacket() {
+        this(ApplicationContext.getInstance(MapService.class));
+    }
+
+    LeftClickPacket(MapService mapService) {
+        this.mapService = mapService;
+    }
 
     @Override
     public boolean handle(DataBuffer buffer, Connection connection) {
@@ -33,7 +43,6 @@ public class LeftClickPacket implements IncomingPacket {
 
         if (userIndex instanceof LoggedUser user) {
 
-            MapService mapService = ApplicationContext.getInstance(MapService.class);
             Map map = mapService.getMap(user.getPosition().getMap());
             if (map == null) return true;
 

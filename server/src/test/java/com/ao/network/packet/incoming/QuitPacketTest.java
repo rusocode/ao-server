@@ -1,7 +1,6 @@
 package com.ao.network.packet.incoming;
 
 import com.ao.config.IntervalsConfig;
-import com.ao.context.ApplicationContext;
 import com.ao.model.character.Privileges;
 import com.ao.model.character.UserCharacter;
 import com.ao.model.map.Map;
@@ -19,7 +18,6 @@ import com.ao.service.timedevents.TimedEvent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
-import org.mockito.MockedStatic;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
@@ -39,7 +37,6 @@ class QuitPacketTest {
 
     @BeforeEach
     void setUp() {
-        packet = new QuitPacket();
         buffer = mock(DataBuffer.class);
         connection = mock(Connection.class);
         character = mock(LoggedUser.class);
@@ -49,6 +46,8 @@ class QuitPacketTest {
         networkConfig = mock(IntervalsConfig.NetworkConfig.class);
         map = mock(Map.class);
         tile = mock(Tile.class);
+
+        packet = new QuitPacket(mapService, intervals, timedEventsService);
 
         when(connection.getUser()).thenReturn(character);
         when(character.getPrivileges()).thenReturn(new Privileges(0x01)); // user, not GM
@@ -124,124 +123,88 @@ class QuitPacketTest {
     void handle_nullMap_disconnectsImmediately() {
         when(mapService.getMap(1)).thenReturn(null);
 
-        try (MockedStatic<ApplicationContext> ctx = mockStatic(ApplicationContext.class)) {
-            ctx.when(() -> ApplicationContext.getInstance(MapService.class)).thenReturn(mapService);
+        boolean result = packet.handle(buffer, connection);
 
-            boolean result = packet.handle(buffer, connection);
-
-            verify(connection).send(any(DisconnectPacket.class));
-            verify(connection).disconnect();
-            assertThat(result).isTrue();
-        }
+        verify(connection).send(any(DisconnectPacket.class));
+        verify(connection).disconnect();
+        assertThat(result).isTrue();
     }
 
     @Test
     void handle_safeZone_disconnectsImmediately() {
         when(tile.isSafeZone()).thenReturn(true);
 
-        try (MockedStatic<ApplicationContext> ctx = mockStatic(ApplicationContext.class)) {
-            ctx.when(() -> ApplicationContext.getInstance(MapService.class)).thenReturn(mapService);
+        boolean result = packet.handle(buffer, connection);
 
-            boolean result = packet.handle(buffer, connection);
-
-            verify(connection).send(any(DisconnectPacket.class));
-            verify(connection).disconnect();
-            assertThat(result).isTrue();
-        }
+        verify(connection).send(any(DisconnectPacket.class));
+        verify(connection).disconnect();
+        assertThat(result).isTrue();
     }
 
     @Test
     void handle_nonPkMap_disconnectsImmediately() {
         when(map.isPk()).thenReturn(false);
 
-        try (MockedStatic<ApplicationContext> ctx = mockStatic(ApplicationContext.class)) {
-            ctx.when(() -> ApplicationContext.getInstance(MapService.class)).thenReturn(mapService);
+        boolean result = packet.handle(buffer, connection);
 
-            boolean result = packet.handle(buffer, connection);
-
-            verify(connection).send(any(DisconnectPacket.class));
-            verify(connection).disconnect();
-            assertThat(result).isTrue();
-        }
+        verify(connection).send(any(DisconnectPacket.class));
+        verify(connection).disconnect();
+        assertThat(result).isTrue();
     }
 
     @Test
     void handle_pkMapUnsafeTile_startsCountdown() {
-        try (MockedStatic<ApplicationContext> ctx = mockStatic(ApplicationContext.class)) {
-            ctx.when(() -> ApplicationContext.getInstance(MapService.class)).thenReturn(mapService);
-            ctx.when(() -> ApplicationContext.getInstance(IntervalsConfig.class)).thenReturn(intervals);
-            ctx.when(() -> ApplicationContext.getInstance(TimedEventsService.class)).thenReturn(timedEventsService);
+        boolean result = packet.handle(buffer, connection);
 
-            boolean result = packet.handle(buffer, connection);
-
-            verify(timedEventsService).addEvent(eq((UserCharacter) character), any(TimedEvent.class), eq(1000L), eq(1000L), eq(10_000L));
-            verify(connection, never()).disconnect();
-            assertThat(result).isTrue();
-        }
+        verify(timedEventsService).addEvent(eq((UserCharacter) character), any(TimedEvent.class), eq(1000L), eq(1000L), eq(10_000L));
+        verify(connection, never()).disconnect();
+        assertThat(result).isTrue();
     }
 
     @Test
     void logoutEvent_execute_connectionDisconnected_doesNothing() {
-        try (MockedStatic<ApplicationContext> ctx = mockStatic(ApplicationContext.class)) {
-            ctx.when(() -> ApplicationContext.getInstance(MapService.class)).thenReturn(mapService);
-            ctx.when(() -> ApplicationContext.getInstance(IntervalsConfig.class)).thenReturn(intervals);
-            ctx.when(() -> ApplicationContext.getInstance(TimedEventsService.class)).thenReturn(timedEventsService);
+        packet.handle(buffer, connection);
 
-            packet.handle(buffer, connection);
+        ArgumentCaptor<TimedEvent> eventCaptor = ArgumentCaptor.forClass(TimedEvent.class);
+        verify(timedEventsService).addEvent(eq((UserCharacter) character), eventCaptor.capture(), anyLong(), anyLong(), anyLong());
 
-            ArgumentCaptor<TimedEvent> eventCaptor = ArgumentCaptor.forClass(TimedEvent.class);
-            verify(timedEventsService).addEvent(eq((UserCharacter) character), eventCaptor.capture(), anyLong(), anyLong(), anyLong());
+        when(connection.isConnected()).thenReturn(false);
+        eventCaptor.getValue().execute();
 
-            when(connection.isConnected()).thenReturn(false);
-            eventCaptor.getValue().execute();
-
-            verify(connection, never()).disconnect();
-        }
+        verify(connection, never()).disconnect();
     }
 
     @Test
     void logoutEvent_execute_lastTick_disconnects() {
         when(networkConfig.getCloseConnection()).thenReturn(1);
 
-        try (MockedStatic<ApplicationContext> ctx = mockStatic(ApplicationContext.class)) {
-            ctx.when(() -> ApplicationContext.getInstance(MapService.class)).thenReturn(mapService);
-            ctx.when(() -> ApplicationContext.getInstance(IntervalsConfig.class)).thenReturn(intervals);
-            ctx.when(() -> ApplicationContext.getInstance(TimedEventsService.class)).thenReturn(timedEventsService);
+        packet.handle(buffer, connection);
 
-            packet.handle(buffer, connection);
+        ArgumentCaptor<TimedEvent> eventCaptor = ArgumentCaptor.forClass(TimedEvent.class);
+        verify(timedEventsService).addEvent(eq((UserCharacter) character), eventCaptor.capture(), anyLong(), anyLong(), anyLong());
 
-            ArgumentCaptor<TimedEvent> eventCaptor = ArgumentCaptor.forClass(TimedEvent.class);
-            verify(timedEventsService).addEvent(eq((UserCharacter) character), eventCaptor.capture(), anyLong(), anyLong(), anyLong());
+        eventCaptor.getValue().execute(); // remainingSeconds: 1 → 0
 
-            eventCaptor.getValue().execute(); // remainingSeconds: 1 → 0
-
-            verify(connection).send(any(DisconnectPacket.class));
-            verify(connection).disconnect();
-        }
+        verify(connection).send(any(DisconnectPacket.class));
+        verify(connection).disconnect();
     }
 
     @Test
     void logoutEvent_execute_intermediateTick_sendsCountdownMessage() {
         when(networkConfig.getCloseConnection()).thenReturn(3);
 
-        try (MockedStatic<ApplicationContext> ctx = mockStatic(ApplicationContext.class)) {
-            ctx.when(() -> ApplicationContext.getInstance(MapService.class)).thenReturn(mapService);
-            ctx.when(() -> ApplicationContext.getInstance(IntervalsConfig.class)).thenReturn(intervals);
-            ctx.when(() -> ApplicationContext.getInstance(TimedEventsService.class)).thenReturn(timedEventsService);
+        packet.handle(buffer, connection);
 
-            packet.handle(buffer, connection);
+        ArgumentCaptor<TimedEvent> eventCaptor = ArgumentCaptor.forClass(TimedEvent.class);
+        verify(timedEventsService).addEvent(eq((UserCharacter) character), eventCaptor.capture(), anyLong(), anyLong(), anyLong());
 
-            ArgumentCaptor<TimedEvent> eventCaptor = ArgumentCaptor.forClass(TimedEvent.class);
-            verify(timedEventsService).addEvent(eq((UserCharacter) character), eventCaptor.capture(), anyLong(), anyLong(), anyLong());
+        reset(connection);
+        when(connection.isConnected()).thenReturn(true);
+        eventCaptor.getValue().execute(); // remainingSeconds: 3 → 2
 
-            reset(connection);
-            when(connection.isConnected()).thenReturn(true);
-            eventCaptor.getValue().execute(); // remainingSeconds: 3 → 2
-
-            ArgumentCaptor<ConsoleMessagePacket> msgCaptor = ArgumentCaptor.forClass(ConsoleMessagePacket.class);
-            verify(connection).send(msgCaptor.capture());
-            assertThat(msgCaptor.getValue().message()).contains("2");
-            verify(connection, never()).disconnect();
-        }
+        ArgumentCaptor<ConsoleMessagePacket> msgCaptor = ArgumentCaptor.forClass(ConsoleMessagePacket.class);
+        verify(connection).send(msgCaptor.capture());
+        assertThat(msgCaptor.getValue().message()).contains("2");
+        verify(connection, never()).disconnect();
     }
 }

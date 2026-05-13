@@ -1,6 +1,5 @@
 package com.ao.network.packet.incoming;
 
-import com.ao.context.ApplicationContext;
 import com.ao.model.character.Alignment;
 import com.ao.model.character.Reputation;
 import com.ao.model.character.UserCharacter;
@@ -21,7 +20,6 @@ import com.ao.model.character.Race;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
-import org.mockito.MockedStatic;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
@@ -38,13 +36,14 @@ class LeftClickPacketTest {
 
     @BeforeEach
     void setUp() {
-        packet = new LeftClickPacket();
         buffer = mock(DataBuffer.class);
         connection = mock(Connection.class);
         user = mock(LoggedUser.class);
         mapService = mock(MapService.class);
         map = mock(Map.class);
         tile = mock(Tile.class);
+
+        packet = new LeftClickPacket(mapService);
 
         when(buffer.getReadableBytes()).thenReturn(2);
         when(buffer.get()).thenReturn((byte) 5).thenReturn((byte) 10);
@@ -93,26 +92,18 @@ class LeftClickPacketTest {
     void handle_mapIsNull_returnsTrueWithoutSendingMessage() {
         when(mapService.getMap(1)).thenReturn(null);
 
-        try (MockedStatic<ApplicationContext> ctx = mockStatic(ApplicationContext.class)) {
-            ctx.when(() -> ApplicationContext.getInstance(MapService.class)).thenReturn(mapService);
+        boolean result = packet.handle(buffer, connection);
 
-            boolean result = packet.handle(buffer, connection);
-
-            assertThat(result).isTrue();
-            verify(connection, never()).send(any());
-        }
+        assertThat(result).isTrue();
+        verify(connection, never()).send(any());
     }
 
     @Test
     void handle_noCharacterAtTile_returnsTrueWithoutSendingMessage() {
-        try (MockedStatic<ApplicationContext> ctx = mockStatic(ApplicationContext.class)) {
-            ctx.when(() -> ApplicationContext.getInstance(MapService.class)).thenReturn(mapService);
+        boolean result = packet.handle(buffer, connection);
 
-            boolean result = packet.handle(buffer, connection);
-
-            assertThat(result).isTrue();
-            verify(connection, never()).send(any());
-        }
+        assertThat(result).isTrue();
+        verify(connection, never()).send(any());
     }
 
     @Test
@@ -125,16 +116,12 @@ class LeftClickPacketTest {
         when(target.getName()).thenReturn("Hero");
         when(target.getLevel()).thenReturn((byte) 5);
 
-        try (MockedStatic<ApplicationContext> ctx = mockStatic(ApplicationContext.class)) {
-            ctx.when(() -> ApplicationContext.getInstance(MapService.class)).thenReturn(mapService);
+        packet.handle(buffer, connection);
 
-            packet.handle(buffer, connection);
-
-            ArgumentCaptor<ConsoleMessagePacket> captor = ArgumentCaptor.forClass(ConsoleMessagePacket.class);
-            verify(connection).send(captor.capture());
-            assertThat(captor.getValue().message()).contains("Hero").contains("Ciudadano");
-            assertThat(captor.getValue().font()).isEqualTo(Font.CITIZEN);
-        }
+        ArgumentCaptor<ConsoleMessagePacket> captor = ArgumentCaptor.forClass(ConsoleMessagePacket.class);
+        verify(connection).send(captor.capture());
+        assertThat(captor.getValue().message()).contains("Hero").contains("Ciudadano");
+        assertThat(captor.getValue().font()).isEqualTo(Font.CITIZEN);
     }
 
     @Test
@@ -147,16 +134,12 @@ class LeftClickPacketTest {
         when(target.getName()).thenReturn("Villain");
         when(target.getLevel()).thenReturn((byte) 10);
 
-        try (MockedStatic<ApplicationContext> ctx = mockStatic(ApplicationContext.class)) {
-            ctx.when(() -> ApplicationContext.getInstance(MapService.class)).thenReturn(mapService);
+        packet.handle(buffer, connection);
 
-            packet.handle(buffer, connection);
-
-            ArgumentCaptor<ConsoleMessagePacket> captor = ArgumentCaptor.forClass(ConsoleMessagePacket.class);
-            verify(connection).send(captor.capture());
-            assertThat(captor.getValue().message()).contains("Villain").contains("Criminal");
-            assertThat(captor.getValue().font()).isEqualTo(Font.FIGHT);
-        }
+        ArgumentCaptor<ConsoleMessagePacket> captor = ArgumentCaptor.forClass(ConsoleMessagePacket.class);
+        verify(connection).send(captor.capture());
+        assertThat(captor.getValue().message()).contains("Villain").contains("Criminal");
+        assertThat(captor.getValue().font()).isEqualTo(Font.FIGHT);
     }
 
     @Test
@@ -173,15 +156,11 @@ class LeftClickPacketTest {
         when(target.getRace()).thenReturn(Race.ELF);
         when(target.getArchetype()).thenReturn(archetype);
 
-        try (MockedStatic<ApplicationContext> ctx = mockStatic(ApplicationContext.class)) {
-            ctx.when(() -> ApplicationContext.getInstance(MapService.class)).thenReturn(mapService);
+        packet.handle(buffer, connection);
 
-            packet.handle(buffer, connection);
-
-            ArgumentCaptor<ConsoleMessagePacket> captor = ArgumentCaptor.forClass(ConsoleMessagePacket.class);
-            verify(connection).send(captor.capture());
-            String message = captor.getValue().message();
-            assertThat(message).contains("Mago").contains("ELF").contains("Mage");
-        }
+        ArgumentCaptor<ConsoleMessagePacket> captor = ArgumentCaptor.forClass(ConsoleMessagePacket.class);
+        verify(connection).send(captor.capture());
+        String message = captor.getValue().message();
+        assertThat(message).contains("Mago").contains("ELF").contains("Mage");
     }
 }

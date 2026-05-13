@@ -23,6 +23,22 @@ import com.ao.service.timedevents.TimedEvent;
  */
 public class QuitPacket implements IncomingPacket {
 
+    private final MapService mapService;
+    private final IntervalsConfig intervals;
+    private final TimedEventsService timedEventsService;
+
+    public QuitPacket() {
+        this(ApplicationContext.getInstance(MapService.class),
+                ApplicationContext.getInstance(IntervalsConfig.class),
+                ApplicationContext.getInstance(TimedEventsService.class));
+    }
+
+    QuitPacket(MapService mapService, IntervalsConfig intervals, TimedEventsService timedEventsService) {
+        this.mapService = mapService;
+        this.intervals = intervals;
+        this.timedEventsService = timedEventsService;
+    }
+
     @Override
     public boolean handle(DataBuffer buffer, Connection connection) {
         User userIndex = connection.getUser();
@@ -51,7 +67,6 @@ public class QuitPacket implements IncomingPacket {
 
         // 3. Obtener información del mapa y posición
         Position pos = character.getPosition();
-        MapService mapService = ApplicationContext.getInstance(MapService.class);
         Map map = mapService.getMap(pos.getMap());
         if (map == null) {
             connection.send(new ConsoleMessagePacket("Gracias por jugar a Argentum Online Java!", Font.INFO));
@@ -68,12 +83,9 @@ public class QuitPacket implements IncomingPacket {
             connection.disconnect();
         } else {
             // Salida con cuenta regresiva en zona insegura
-            IntervalsConfig intervals = ApplicationContext.getInstance(IntervalsConfig.class);
             int seconds = intervals.getNetwork().getCloseConnection();
 
             connection.send(new ConsoleMessagePacket("Saliendo en " + seconds + " segundos...", Font.INFO));
-
-            TimedEventsService timedEventsService = ApplicationContext.getInstance(TimedEventsService.class);
 
             // Registramos el evento: inicia en 1s, se repite cada 1s, durante el tiempo
             // total configurado
