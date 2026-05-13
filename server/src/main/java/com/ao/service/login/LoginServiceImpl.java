@@ -8,7 +8,7 @@ import com.ao.data.dao.AccountDAO;
 import com.ao.data.dao.UserCharacterDAO;
 import com.ao.data.dao.exception.DAOException;
 import com.ao.data.dao.exception.NameAlreadyTakenException;
-import com.ao.model.builder.UserCharacterBuilder;
+import com.ao.model.user.UserCharacterBuilder;
 import com.ao.model.character.*;
 import com.ao.model.character.Character;
 import com.ao.model.character.archetype.UserArchetype;

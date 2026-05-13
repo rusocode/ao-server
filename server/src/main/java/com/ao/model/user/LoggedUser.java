@@ -69,8 +69,7 @@ public class LoggedUser extends ConnectedUser implements UserCharacter {
 
     private short charIndex;
 
-    // TODO Prohibit building this class without a builder (Effective Java, item 2)
-    public LoggedUser(ConnectedUser user, Reputation reputation, Race race, Gender gender, Archetype archetype,
+    LoggedUser(ConnectedUser user, Reputation reputation, Race race, Gender gender, Archetype archetype,
             boolean poisoned, boolean paralyzed,
             boolean immobilized, boolean invisible, boolean mimetized, boolean dumbed, boolean hidden, int maxMana,
             int minMana, int maxHp, int minHp, int maxStamina, int minStamina, int maxThirstiness, int minThirstiness,

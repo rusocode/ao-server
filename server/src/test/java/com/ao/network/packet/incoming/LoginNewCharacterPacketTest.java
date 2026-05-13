@@ -5,7 +5,7 @@ import com.ao.context.ApplicationContext;
 import com.ao.context.ApplicationProperties;
 import com.ao.data.dao.AccountDAO;
 import com.ao.mock.MockFactory;
-import com.ao.model.builder.UserCharacterBuilder;
+import com.ao.model.user.UserCharacterBuilder;
 import com.ao.model.character.Attribute;
 import com.ao.model.character.Gender;
 import com.ao.model.character.Race;
