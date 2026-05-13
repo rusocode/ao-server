@@ -29,6 +29,7 @@ public class UserCharacterBuilder implements Builder<UserCharacter> {
 
     protected Integer minHp, maxHp;
     protected Integer minMana, maxMana;
+    protected Integer minStamina, maxStamina;
 
     protected Integer head;
     protected Integer body;
@@ -171,6 +172,13 @@ public class UserCharacterBuilder implements Builder<UserCharacter> {
         return this;
     }
 
+    public UserCharacterBuilder withStamina(int minStamina, int maxStamina) {
+        if (maxStamina < 0 || minStamina > maxStamina) throw new IllegalArgumentException();
+        this.minStamina = minStamina;
+        this.maxStamina = maxStamina;
+        return this;
+    }
+
     public UserCharacterBuilder withSkills(Map<Skill, Byte> skills) throws InvalidAttributeValueException {
         for (Skill skill : Skill.values()) {
             if (skills.containsKey(skill)) Objects.requireNonNull(skills.get(skill));
@@ -212,7 +220,6 @@ public class UserCharacterBuilder implements Builder<UserCharacter> {
         return this;
     }
 
-
     @Override
     public UserCharacter build() {
         Objects.requireNonNull(user);
@@ -220,6 +227,8 @@ public class UserCharacterBuilder implements Builder<UserCharacter> {
         Objects.requireNonNull(minHp);
         Objects.requireNonNull(maxMana);
         Objects.requireNonNull(minMana);
+        Objects.requireNonNull(maxStamina);
+        Objects.requireNonNull(minStamina);
         Objects.requireNonNull(name);
         Objects.requireNonNull(email);
         Objects.requireNonNull(race);
@@ -242,7 +251,7 @@ public class UserCharacterBuilder implements Builder<UserCharacter> {
 
         return new LoggedUser(user, reputation, race, gender, archetype.getArchetype(), poisoned,
             paralyzed, immobilized, mimetized, invisible, dumbed, hidden, maxMana, minMana, maxHp, minHp,
-            0, 0, maxThirstiness, minThirstiness, maxHunger, minHunger, lvl, name, description, position, body, head);
+            maxStamina, minStamina, maxThirstiness, minThirstiness, maxHunger, minHunger, lvl, name, description, position, body, head);
     }
 
 }
