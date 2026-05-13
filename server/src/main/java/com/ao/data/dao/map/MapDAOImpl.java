@@ -255,6 +255,8 @@ public class MapDAOImpl implements MapDAO {
                 pk = "0".equals(prop.getProperty("Pk", "1").trim());
             }
 
+        } catch (NumberFormatException e) {
+            Logger.warn("Valor numérico inválido en metadatos .dat del mapa {}, usando valores por defecto. Detalle: {}", id, e.getMessage());
         } catch (Exception e) {
             Logger.warn("Error cargando metadatos para el mapa {}, usando valores por defecto.", id, e);
         }
