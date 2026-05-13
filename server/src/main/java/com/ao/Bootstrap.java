@@ -65,11 +65,7 @@ public class Bootstrap {
         return server;
     }
 
-    /**
-     * Configures networking on the given server.
-     *
-     * @param server server on which to configure networking
-     */
+    /** Configures networking on the given server. */
     private static void configureNetworking(AOServer server) throws IOException {
         byte[] addr = {0, 0, 0, 0};
         Logger.info("Initializing server socket configuration...");
@@ -79,11 +75,7 @@ public class Bootstrap {
         server.setBacklog(config.getListeningBacklog());
     }
 
-    /**
-     * Starts the game timers on the given server.
-     *
-     * @param server server on which to start the timers
-     */
+    /** Starts the game timers on the given server. */
     private static void startTimers(AOServer server) {
 
         Logger.info("Starting up game timers...");
@@ -94,7 +86,7 @@ public class Bootstrap {
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(4);
         server.setScheduler(scheduler);
 
-        // 1a. REGENERACION de Vida y Mana
+        // Regeneracion de vida y mana
         scheduler.scheduleAtFixedRate(() -> {
             try {
                 for (ConnectedUser connectedUser : userService.getConnectedUsers()) {
@@ -108,7 +100,7 @@ public class Bootstrap {
             }
         }, 0, intervals.getRegeneration().getHp(), TimeUnit.MILLISECONDS);
 
-        // 1b. REGENERACION de Stamina (intervalo propio, mas corto)
+        // Regeneracion de stamina
         scheduler.scheduleAtFixedRate(() -> {
             try {
                 for (ConnectedUser connectedUser : userService.getConnectedUsers()) {
@@ -122,7 +114,7 @@ public class Bootstrap {
             }
         }, 0, intervals.getRegeneration().getStamina(), TimeUnit.MILLISECONDS);
 
-        // 2a. Hambre
+        // Hambre
         scheduler.scheduleAtFixedRate(() -> {
             try {
                 for (ConnectedUser connectedUser : userService.getConnectedUsers()) {
@@ -140,7 +132,7 @@ public class Bootstrap {
             }
         }, 0, intervals.getSurvival().getHunger(), TimeUnit.MILLISECONDS);
 
-        // 2b. Sed (intervalo propio)
+        // Sed
         scheduler.scheduleAtFixedRate(() -> {
             try {
                 for (ConnectedUser connectedUser : userService.getConnectedUsers()) {
@@ -158,7 +150,7 @@ public class Bootstrap {
             }
         }, 0, intervals.getSurvival().getThirst(), TimeUnit.MILLISECONDS);
 
-        // 3. IA DE NPCs (Movimiento y ataque de criaturas)
+        // IA de NPCs
         scheduler.scheduleAtFixedRate(() -> {
             try {
                 // TODO: Logica NPCs
@@ -167,7 +159,7 @@ public class Bootstrap {
             }
         }, 0, intervals.getNpc().getAiTick(), TimeUnit.MILLISECONDS);
 
-        // 4. WORLD SAVE (Guardado automatico de personajes)
+        // World save
         int saveIntervalMinutes = intervals.getWorld().getSaveInterval();
         scheduler.scheduleAtFixedRate(() -> {
             try {
@@ -177,7 +169,7 @@ public class Bootstrap {
             }
         }, saveIntervalMinutes, saveIntervalMinutes, TimeUnit.MINUTES);
 
-        // 5. EFECTOS TEMPORALES (Veneno, Paralisis, Invisibilidad)
+        // Efectos temporales (veneno, paralisis, invisibilidad, etc.)
         scheduler.scheduleAtFixedRate(() -> {
             try {
                 // TODO: Logica de limpieza de estados temporales
@@ -188,13 +180,8 @@ public class Bootstrap {
 
     }
 
-    /**
-     * Loads the application context on the given server.
-     *
-     * @param server the server on which to load the application context
-     */
+    /** Loads the application context on the given server. */
     private static void loadApplicationContext(AOServer server) throws DAOException {
-
         Logger.info("Loading application context...");
 
         Logger.info("Loading maps...");
