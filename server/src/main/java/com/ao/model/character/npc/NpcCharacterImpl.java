@@ -37,6 +37,7 @@ public class NpcCharacterImpl implements NpcCharacter {
     private Heading heading;
     private AreaInfo areaInfo;
     // ===== Stats =====
+    private int minStamina, maxStamina;
     private int minHP;
     private int maxHP;
     private int minMana;
@@ -126,20 +127,22 @@ public class NpcCharacterImpl implements NpcCharacter {
 
     @Override
     public int getMinStamina() {
-        return 0;
+        return minStamina;
     }
 
     @Override
     public void addToMinStamina(int points) {
+        this.minStamina += points;
     }
 
     @Override
     public int getMaxStamina() {
-        return 0;
+        return maxStamina;
     }
 
     @Override
     public void addToMaxStamina(int points) {
+        this.maxStamina += points;
     }
 
     @Override
