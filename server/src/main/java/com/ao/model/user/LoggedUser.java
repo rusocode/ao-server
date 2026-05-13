@@ -643,13 +643,21 @@ public class LoggedUser extends ConnectedUser implements UserCharacter {
     }
 
     @Override
-    public synchronized void tickHunger() {
-        if (minHunger > 0) addToHunger(-1);
+    public synchronized boolean tickHunger() {
+        if (minHunger > 0) {
+            addToHunger(-1);
+            return true;
+        }
+        return false;
     }
 
     @Override
-    public synchronized void tickThirst() {
-        if (minThirstiness > 0) addToThirstiness(-1);
+    public synchronized boolean tickThirst() {
+        if (minThirstiness > 0) {
+            addToThirstiness(-1);
+            return true;
+        }
+        return false;
     }
 
     @Override

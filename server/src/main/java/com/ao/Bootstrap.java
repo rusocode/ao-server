@@ -119,12 +119,9 @@ public class Bootstrap {
             try {
                 for (ConnectedUser connectedUser : userService.getConnectedUsers()) {
                     User user = connectedUser.getConnection().getUser();
-
                     if (user instanceof UserCharacter character && !character.isDead()) {
-                        character.tickHunger();
-                        connectedUser.getConnection().send(new UpdateHungerAndThirstPacket(
-                            character.getHunger(), UserCharacter.MAX_HUNGER,
-                            character.getThirstiness(), UserCharacter.MAX_THIRSTINESS));
+                        if (character.tickHunger())
+                            connectedUser.getConnection().send(new UpdateHungerAndThirstPacket(character.getHunger(), UserCharacter.MAX_HUNGER, character.getThirstiness(), UserCharacter.MAX_THIRSTINESS));
                     }
                 }
             } catch (Exception e) {
@@ -137,12 +134,9 @@ public class Bootstrap {
             try {
                 for (ConnectedUser connectedUser : userService.getConnectedUsers()) {
                     User user = connectedUser.getConnection().getUser();
-
                     if (user instanceof UserCharacter character && !character.isDead()) {
-                        character.tickThirst();
-                        connectedUser.getConnection().send(new UpdateHungerAndThirstPacket(
-                            character.getHunger(), UserCharacter.MAX_HUNGER,
-                            character.getThirstiness(), UserCharacter.MAX_THIRSTINESS));
+                        if (character.tickThirst())
+                            connectedUser.getConnection().send(new UpdateHungerAndThirstPacket(character.getHunger(), UserCharacter.MAX_HUNGER, character.getThirstiness(), UserCharacter.MAX_THIRSTINESS));
                     }
                 }
             } catch (Exception e) {

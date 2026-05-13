@@ -56,8 +56,8 @@ public interface UserCharacter extends Character {
 
     boolean regenStamina();
 
-    void tickHunger();
+    boolean tickHunger();
 
-    void tickThirst();
+    boolean tickThirst();
 
 }
