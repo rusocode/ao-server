@@ -166,38 +166,38 @@ public class LoggedUser extends ConnectedUser implements UserCharacter {
     }
 
     @Override
-    public void addToMinHitPoints(int points) {
+    public synchronized void addToMinHitPoints(int points) {
         minHp += points; // TODO Check for overflows and underflows
         if (minHp > maxHp)
             minHp = maxHp;
     }
 
     @Override
-    public void addToMinHunger(int points) {
+    public synchronized void addToMinHunger(int points) {
         minHunger += points; // TODO Check for overflows and underflows
         if (minHunger > maxHunger)
             minHunger = maxHunger;
     }
 
     @Override
-    public void addToMinMana(int points) {
+    public synchronized void addToMinMana(int points) {
         minMana += points; // TODO Check for overflows and underflows
         if (minMana > maxMana)
             minMana = maxMana;
     }
 
     @Override
-    public void addToMaxHitPoints(int points) {
+    public synchronized void addToMaxHitPoints(int points) {
         maxHp += points; // TODO Check for overflows and underflows
     }
 
     @Override
-    public void addToMaxMana(int points) {
+    public synchronized void addToMaxMana(int points) {
         maxMana += points; // TODO Check for overflows and underflows
     }
 
     @Override
-    public void addToMinThirstiness(int points) {
+    public synchronized void addToMinThirstiness(int points) {
         minThirstiness += points; // TODO Check for overflows and underflows
         if (minThirstiness > maxThirstiness)
             minThirstiness = maxThirstiness;
@@ -224,14 +224,14 @@ public class LoggedUser extends ConnectedUser implements UserCharacter {
     }
 
     @Override
-    public void addToMinStamina(int points) {
+    public synchronized void addToMinStamina(int points) {
         minStamina += points;
         if (minStamina > maxStamina)
             minStamina = maxStamina;
     }
 
     @Override
-    public void addToMaxStamina(int points) {
+    public synchronized void addToMaxStamina(int points) {
         maxStamina += points;
     }
 
