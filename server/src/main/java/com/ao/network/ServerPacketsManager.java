@@ -43,7 +43,7 @@ public class ServerPacketsManager {
         REMOVE_ALL_DIALOGS(null),
         REMOVE_CHR_DIALOG(null),
         TOGGLE_NAVIGATE(null),
-        DISCONNECT(null),
+        DISCONNECT(DisconnectPacket.class),
         COMMERCE_END(null),
         BANKING_END(null),
         COMMERCE_INIT(null),

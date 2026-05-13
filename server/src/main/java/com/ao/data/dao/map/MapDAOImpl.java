@@ -44,7 +44,8 @@ public class MapDAOImpl implements MapDAO {
     private final Set<Short> lavaGrhs = new HashSet<>();
 
     @Inject
-    public MapDAOImpl(@Named("mapsPath") String mapsPath, @Named("mapsAmount") int mapsAmount, @Named("mapsConfigFile") String mapsConfigFile) {
+    public MapDAOImpl(@Named("mapsPath") String mapsPath, @Named("mapsAmount") int mapsAmount,
+            @Named("mapsConfigFile") String mapsConfigFile) {
         this.mapsPath = mapsPath;
         this.mapsAmount = mapsAmount;
         loadMapsConfig(mapsConfigFile);
@@ -94,7 +95,8 @@ public class MapDAOImpl implements MapDAO {
         ByteBuffer infBuffer = ByteBuffer.wrap(bufInf);
         ByteBuffer mapBuffer = ByteBuffer.wrap(bufMap);
 
-        // The map files are written with Little-Endian, and the default byte order in Java is Big Endian
+        // The map files are written with Little-Endian, and the default byte order in
+        // Java is Big Endian
         infBuffer.order(ByteOrder.LITTLE_ENDIAN);
         mapBuffer.order(ByteOrder.LITTLE_ENDIAN);
 
@@ -105,8 +107,10 @@ public class MapDAOImpl implements MapDAO {
         mapBuffer.get(description);
 
         // Never actually implemented
-        @SuppressWarnings("unused") int crc = mapBuffer.getInt();
-        @SuppressWarnings("unused") int magicWord = mapBuffer.getInt();
+        @SuppressWarnings("unused")
+        int crc = mapBuffer.getInt();
+        @SuppressWarnings("unused")
+        int magicWord = mapBuffer.getInt();
 
         // Unused header value
         mapBuffer.getLong();
@@ -137,20 +141,21 @@ public class MapDAOImpl implements MapDAO {
                 flag = mapBuffer.get();
 
                 // If the first bitflag is set, the tile is blocked.
-                if ((flag & BITFLAG_BLOCKED) == BITFLAG_BLOCKED) blocked = true;
-
+                if ((flag & BITFLAG_BLOCKED) == BITFLAG_BLOCKED)
+                    blocked = true;
 
                 // Every tile must have the first layer
                 floor = mapBuffer.getShort();
 
                 // Are we on water?
-                if (waterGrhs.contains(floor)) isWater = true;
-                else if (lavaGrhs.contains(floor)) isLava = true;// Are we on lava?
+                if (waterGrhs.contains(floor))
+                    isWater = true;
+                else if (lavaGrhs.contains(floor))
+                    isLava = true;// Are we on lava?
 
                 // In this layer goes stuff that should appear over the floor
                 if ((flag & BITFLAG_LAYER2) == BITFLAG_LAYER2)
                     mapBuffer.getShort(); // Remove the short from the buffer so we can fetch the next value.
-
 
                 // In this layer goes stuff over the chars but is not a roof.
                 if ((flag & BITFLAG_LAYER3) == BITFLAG_LAYER3)
@@ -159,7 +164,8 @@ public class MapDAOImpl implements MapDAO {
                 // This layer determines the roof, if any
                 if ((flag & BITFLAG_LAYER4) == BITFLAG_LAYER4) {
                     /*
-                     * Don't really care whether the tile has a roof or not is determined by the trigger.
+                     * Don't really care whether the tile has a roof or not is determined by the
+                     * trigger.
                      * Remove the short from the buffer so we can fetch the next value.
                      */
                     mapBuffer.getShort();
@@ -172,7 +178,8 @@ public class MapDAOImpl implements MapDAO {
                     try {
                         trigger = Trigger.get(triggerIndex);
                     } catch (ArrayIndexOutOfBoundsException e) {
-                        Logger.warn(String.format("The position (%d, %d, %d) has an invalid trigger: %d.", id, x, y, triggerIndex));
+                        Logger.warn(String.format("The position (%d, %d, %d) has an invalid trigger: %d.", id, x, y,
+                                triggerIndex));
                         trigger = Trigger.NONE;
                     }
                 }
@@ -187,8 +194,11 @@ public class MapDAOImpl implements MapDAO {
                     byte toY = (byte) infBuffer.getShort();
 
                     if (toMap < 1 || toMap > mapsAmount)
-                        Logger.error(String.format("The position (%d, %d, %d) has an invalid tile exit to a non-existant map (%d). Omitting.", id, x, y, toMap));
-                    else tileExit = new Position(toX, toY, toMap);
+                        Logger.error(String.format(
+                                "The position (%d, %d, %d) has an invalid tile exit to a non-existant map (%d). Omitting.",
+                                id, x, y, toMap));
+                    else
+                        tileExit = new Position(toX, toY, toMap);
 
                 }
 
@@ -213,8 +223,45 @@ public class MapDAOImpl implements MapDAO {
             }
         }
 
+        // ------ CARGA DEL ARCHIVO .DAT ------
+
+        String datFileName = mapsPath + String.format("Mapa%d.dat", id);
+
+        // Valores por defecto
+        String name = "Default";
+        int musicNum = 0;
+        boolean noMagic = false;
+        boolean noEncryptMP = false;
+        String terrain = "BOSQUE";
+        String zone = "CAMPO";
+        boolean restrict = false;
+        int backup = 0;
+        boolean pk = false;
+
+        try (InputStream datStream = ResourceUtils.getStream(datFileName)) {
+
+            if (datStream != null) {
+                Properties prop = new Properties();
+                prop.load(datStream);
+
+                name = prop.getProperty("Name", name);
+                musicNum = Integer.parseInt(prop.getProperty("MusicNum", "0").trim());
+                noMagic = "1".equals(prop.getProperty("MagiaSinefecto", "0").trim());
+                noEncryptMP = "1".equals(prop.getProperty("NoEncriptarMP", "0").trim());
+                terrain = prop.getProperty("Terreno", terrain);
+                zone = prop.getProperty("Zona", zone);
+                restrict = "Si".equalsIgnoreCase(prop.getProperty("Restringir", "No").trim());
+                backup = Integer.parseInt(prop.getProperty("BackUp", "0").trim());
+                pk = "0".equals(prop.getProperty("Pk", "1").trim());
+            }
+
+        } catch (Exception e) {
+            Logger.warn("Error cargando metadatos para el mapa {}, usando valores por defecto.", id, e);
+        }
+
         // Fill the map with the loaded data
-        return new Map(null, id, mapVersion, tiles);
+        return new Map(name, id, mapVersion, tiles, musicNum, noMagic, noEncryptMP, terrain, zone, restrict, backup,
+                pk);
     }
 
     /**

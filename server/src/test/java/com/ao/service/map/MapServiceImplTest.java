@@ -26,7 +26,7 @@ public class MapServiceImplTest {
     @Test
     public void testGetMap() {
         int mapId = 1;
-        Map map = new Map(null, mapId, (short) 1, new Tile[]{});
+        Map map = new Map(null, mapId, (short) 1, new Tile[]{}, 0, false, false, "BOSQUE", "CAMPO", false, 0, false);
         MapDAO dao = mock(MapDAO.class);
         CityDAO cityDao = mock(CityDAO.class);
         AreaService areaService = mock(AreaService.class);

@@ -52,7 +52,7 @@ intervals:
   # Network and Connection management
   network:
     connection_retry: 3000
-    close_connection: 5     # In seconds (IntervaloCerrarConexion)
+    close_connection: 10     # In seconds (IntervaloCerrarConexion)
 
   # Core Engine timings
   system:

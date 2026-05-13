@@ -15,7 +15,8 @@ public class MapTest {
 
     @BeforeEach
     public void setUp() {
-        map = new Map("foo", 1, (short) 1, new Tile[]{});
+        map = new Map("foo", 1, (short) 1, new Tile[]{}, 0, false, false, "BOSQUE", "CAMPO", false, 0, false);
+
     }
 
     @Test
@@ -24,7 +25,8 @@ public class MapTest {
         Tile t2 = new Tile(false, true, false, Trigger.NONE, null, null, null);
         Tile t3 = new Tile(true, true, false, Trigger.NONE, null, null, null);
 
-        map = new Map("foo", 1, (short) 1, new Tile[]{t, t2, t3});
+        map = new Map("foo", 1, (short) 1, new Tile[]{t, t2, t3}, 0, false, false, "BOSQUE", "CAMPO", false, 0, false);
+
 
         assertThat(t).isEqualTo(map.getTile(0, 0));
         assertThat(t2).isEqualTo(map.getTile(1, 0));
@@ -33,11 +35,12 @@ public class MapTest {
 
     @Test
     public void testEquals() {
-        Map map2 = new Map("foo", 1, (short) 1, new Tile[]{});
-        Map map3 = new Map("foo", 2, (short) 1, new Tile[]{});
-        Map map4 = new Map("asd", 1, (short) 1, new Tile[]{});
-        Map map5 = new Map("asd", 3, (short) 1, new Tile[]{null});
-        Map map6 = new Map(null, 4, (short) 1, new Tile[]{});
+        Map map2 = new Map("foo", 1, (short) 1, new Tile[]{}, 0, false, false, "BOSQUE", "CAMPO", false, 0, false);
+        Map map3 = new Map("foo", 2, (short) 1, new Tile[]{}, 0, false, false, "BOSQUE", "CAMPO", false, 0, false);
+        Map map4 = new Map("asd", 1, (short) 1, new Tile[]{}, 0, false, false, "BOSQUE", "CAMPO", false, 0, false);
+        Map map5 = new Map("asd", 3, (short) 1, new Tile[]{null}, 0, false, false, "BOSQUE", "CAMPO", false, 0, false);
+        Map map6 = new Map(null, 4, (short) 1, new Tile[]{}, 0, false, false, "BOSQUE", "CAMPO", false, 0, false);
+
 
         assertThat(map).isEqualTo(map);
         assertThat(map).isEqualTo(map2);
@@ -66,7 +69,7 @@ public class MapTest {
         for (int i = 0; i < 2600; i++)
             tiles[i] = new Tile(true, true, false, Trigger.NONE, null, null, null);
 
-        map = new Map("foo", 1, (short) 1, tiles);
+        map = new Map("foo", 1, (short) 1, tiles, 0, false, false, "BOSQUE", "CAMPO", false, 0, false);
 
         map.getTile(8, 8).setCharacter(mock(Character.class));
         map.getTile(15, 8).setCharacter(mock(Character.class));

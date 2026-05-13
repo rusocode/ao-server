@@ -9,7 +9,6 @@ import java.util.List;
 /**
  * A game's map.
  */
-
 public class Map {
 
     public static final int MAP_WIDTH = 100;
@@ -24,8 +23,18 @@ public class Map {
     public static final int MIN_Y = 0;
 
     private final int id;
-    private final String name;
     private final short version;
+
+    // .dat properties
+    private final String name;
+    private int musicNum;
+    private boolean noMagic;
+    private boolean noEncryptMP;
+    private String terrain;
+    private String zone;
+    private boolean restrict;
+    private int backup;
+    private boolean pk;
 
     // We don't use jagged arrays, they are inefficient in Java!
     private final Tile[] tiles;
@@ -33,17 +42,34 @@ public class Map {
     /**
      * Creates a new Map.
      *
-     * @param name    name of the map
-     * @param id      unique id of the map
-     * @param version map's version
-     * @param tiles   array of tiles composing the map
+     * @param name          name of the map
+     * @param id            unique id of the map
+     * @param version       map's version
+     * @param tiles         array of tiles composing the map
+     * @param musicNum      music number
+     * @param noMagic       if magic is disabled
+     * @param noEncryptMP   if MP encryption is disabled
+     * @param terrain       terrain type
+     * @param zone          zone type
+     * @param restrict      if map is restricted
+     * @param backup        backup value
+     * @param pk            if PK is enabled
      */
-    public Map(String name, int id, short version, Tile[] tiles) {
+    public Map(String name, int id, short version, Tile[] tiles, int musicNum, boolean noMagic, boolean noEncryptMP,
+               String terrain, String zone, boolean restrict, int backup, boolean pk) {
         super();
         this.name = name;
         this.id = id;
         this.version = version;
         this.tiles = tiles;
+        this.musicNum = musicNum;
+        this.noMagic = noMagic;
+        this.noEncryptMP = noEncryptMP;
+        this.terrain = terrain;
+        this.zone = zone;
+        this.restrict = restrict;
+        this.backup = backup;
+        this.pk = pk;
     }
 
     /**
@@ -57,63 +83,97 @@ public class Map {
         return y * MAP_WIDTH + x;
     }
 
-    /**
-     * Retrieves the map's version.
-     *
-     * @return the map's version
-     */
     public short getVersion() {
         return version;
     }
 
-    /**
-     * Retrieves the tile at the given coordinates.
-     *
-     * @param x coordinate along the x vertex (zero is at the left)
-     * @param y coordinate along the y vertex (zero is at the top)
-     * @return the tile at the given coordinates
-     */
     public Tile getTile(int x, int y) {
         return tiles[Map.getTileKey(x, y)];
     }
 
-    /**
-     * Retrieves the map's name.
-     *
-     * @return the map's name
-     */
     public String getName() {
         return name;
     }
 
-    /**
-     * Retrieves the map's unique id.
-     *
-     * @return the map's unique id
-     */
     public int getId() {
         return id;
     }
 
-    /**
-     * Retrieves a list with the characters in the given position vision range.
-     *
-     * @param x coordinate along the x vertex (zero is at the left)
-     * @param y coordinate along the y vertex (zero is at the top)
-     * @return a list of the characters found without the character in the given position if there is any
-     */
+    public boolean isPk() {
+        return pk;
+    }
+
+    public void setPk(boolean pk) {
+        this.pk = pk;
+    }
+
+    public int getMusicNum() {
+        return musicNum;
+    }
+
+    public void setMusicNum(int musicNum) {
+        this.musicNum = musicNum;
+    }
+
+    public boolean isNoMagic() {
+        return noMagic;
+    }
+
+    public void setNoMagic(boolean noMagic) {
+        this.noMagic = noMagic;
+    }
+
+    public boolean isNoEncryptMP() {
+        return noEncryptMP;
+    }
+
+    public void setNoEncryptMP(boolean noEncryptMP) {
+        this.noEncryptMP = noEncryptMP;
+    }
+
+    public String getTerrain() {
+        return terrain;
+    }
+
+    public void setTerrain(String terrain) {
+        this.terrain = terrain;
+    }
+
+    public String getZone() {
+        return zone;
+    }
+
+    public void setZone(String zone) {
+        this.zone = zone;
+    }
+
+    public boolean isRestrict() {
+        return restrict;
+    }
+
+    public void setRestrict(boolean restrict) {
+        this.restrict = restrict;
+    }
+
+    public int getBackup() {
+        return backup;
+    }
+
+    public void setBackup(int backup) {
+        this.backup = backup;
+    }
+
     public List<Character> getCharactersNearby(int x, int y) {
         List<Character> charList = new LinkedList<>();
         Character character;
 
-        int yy;
         int toX = Math.min(x + Map.VISIBLE_AREA_WIDTH * 2, MAX_X);
         int toY = Math.min(y + Map.VISIBLE_AREA_HEIGHT * 2, MAX_Y);
         int fromY = Math.max(y - Map.VISIBLE_AREA_HEIGHT, MIN_Y);
         int fromX = Math.max(x - Map.VISIBLE_AREA_WIDTH, MIN_X);
 
         for (int xx = fromX; xx < toX; xx++) {
-            for (yy = fromY; yy < toY; yy++) {
+            for (int yy = fromY; yy < toY; yy++) {
                 character = getTile(xx, yy).getCharacter();
                 if (character != null && (xx != x && yy != y)) charList.add(character);
             }
@@ -122,24 +182,15 @@ public class Map {
         return charList;
     }
 
-    /**
-     * Puts the given character at the given position. If the tile is unavailable, this will look around for an available one.
-     *
-     * @param character character to put.
-     */
     public void putCharacterAtPos(Character character, byte x, byte y) {
         synchronized (tiles) {
             Tile tile = getTile(x, y);
             if (tile.getCharacter() != null)
-                // TODO Check if getNearestAvailableTile instead shouldn't be used instead of this
                 tile = getEmptyTileAround(x, y, character.canWalkInWater(), !character.canWalkInWater());
             tile.setCharacter(character);
         }
     }
 
-    /* (non-Javadoc)
-     * @see java.lang.Object#hashCode()
-     */
     @Override
     public int hashCode() {
         int prime = 31;
@@ -151,9 +202,6 @@ public class Map {
         return result;
     }
 
-    /* (non-Javadoc)
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
@@ -169,30 +217,15 @@ public class Map {
         return true;
     }
 
-    /**
-     * Returns the nearest available tile (using Manhattan norm) searching in a rhomb order, if no tile is available within the
-     * maxDistance null is returned. This method should be called from a synchronized block.
-     *
-     * @param x                  x coordinate of the center of the rhomb
-     * @param y                  y coordinate of the center of the rhomb
-     * @param maxDistance        max acceptable distance for searching
-     * @param includeGroundTiles whether to include ground tiles in the search or not
-     * @param includeWaterTiles  whether to include water tiles in the search or not
-     * @param includeLavaTiles   whether to include lava tiles in the search or not
-     * @param includeExitTiles   whether to include exit tiles in the search or not
-     * @return the nearest available tile to the center of the rhomb
-     */
     public Tile getNearestAvailableTile(byte x, byte y, byte maxDistance, boolean includeGroundTiles, boolean includeWaterTiles, boolean includeLavaTiles, boolean includeExitTiles) {
 
         if (isTileAvailable(x, y, includeGroundTiles, includeWaterTiles, includeLavaTiles, includeExitTiles))
             return getTile(x, y);
 
         for (int currentDistance = 1; currentDistance <= maxDistance; currentDistance += 1) {
-
             byte currentX;
             byte currentY;
 
-            // Upper tiles with dx in [-1, currentDistances - 1] except dx=0 and dy=0
             for (byte dx = -1; dx <= currentDistance - 1; dx += 1) {
                 byte dy = (byte) (currentDistance - Math.abs(dx));
                 if ((dx == 0) || (dy == 0)) continue;
@@ -202,7 +235,6 @@ public class Map {
                     return getTile(currentX, currentY);
             }
 
-            // Lower tiles with dx in [currentDistances - 1, -(currentDistance - 1)] except dx=0 and dy=0
             for (byte dx = (byte) (currentDistance - 1); dx >= -(currentDistance - 1); dx -= 1) {
                 byte dy = (byte) (currentDistance - Math.abs(dx));
                 if ((dx == 0) || (dy == 0)) continue;
@@ -212,7 +244,6 @@ public class Map {
                     return getTile(currentX, currentY);
             }
 
-            // Upper tiles with dx in [-(currentDistance - 1), -1) except dx=0 and dy=0
             for (byte dx = (byte) -(currentDistance - 1); dx < -1; dx += 1) {
                 byte dy = (byte) (currentDistance - Math.abs(dx));
                 if ((dx == 0) || (dy == 0)) continue;
@@ -245,23 +276,11 @@ public class Map {
             currentY = y;
             if (isTileAvailable(currentX, currentY, includeGroundTiles, includeWaterTiles, includeLavaTiles, includeExitTiles))
                 return getTile(currentX, currentY);
-
         }
 
         return null;
     }
 
-    /**
-     * Returns whether the tile is available or not.
-     *
-     * @param x             x coordinate of the tile
-     * @param y             y coordinate of the tile
-     * @param canBeGround   whether the tile can be ground or not
-     * @param canBeWater    whether the tile can be water or not
-     * @param canBeLava     whether the tile can be lava or not
-     * @param canBeExitTile whether the tile can be an exit tile or not
-     * @return whether the tile is available or not
-     */
     public boolean isTileAvailable(byte x, byte y, boolean canBeGround, boolean canBeWater, boolean canBeLava, boolean canBeExitTile) {
         if ((x < MIN_X) || (x > MAX_X)) return false;
         if ((y < MIN_Y) || (y > MAX_Y)) return false;
@@ -283,29 +302,16 @@ public class Map {
         getTile(x, y).setCharacter(character);
     }
 
-    /**
-     * Searchs for an empty tile around the given one and retrieves it. If there is no empty tile around the given one, this will
-     * continue searching in the next "row" of tiles, starting at a top left. This method should be called from a synchronized
-     * block.
-     *
-     * @param lookAroundX tile's x value
-     * @param lookAroundY tile's Y value
-     * @param canBeWater  whether the found tile can be water, or not
-     * @param canBeLand   whether the found tile can be land, or not
-     * @return the empty tile
-     */
-    // TODO Check if this shouldn't be removed and use getNearestAvailableTile instead.
     private Tile getEmptyTileAround(byte lookAroundX, byte lookAroundY, boolean canBeWater, boolean canBeLand) {
         byte distance = 1;
         Tile t;
         while (distance < MAX_DISTANCE) {
             for (int x = Math.max(lookAroundX - distance, 1); x < lookAroundX + distance && x <= MAP_HEIGHT; x++) {
                 for (int y = Math.max(lookAroundY - distance, 1); y < lookAroundY + distance && y <= MAP_WIDTH; y++) {
-                    // Don't look on the tile we're supposed to look around or on tiles already checked
                     if (Math.abs(x - lookAroundX) != distance && Math.abs(y - lookAroundY) != distance) continue;
                     t = getTile(x, y);
                     if (t.getCharacter() == null && !t.isBlocked() && t.getTileExit() == null && ((t.isWater() && canBeWater) || (!t.isWater() && canBeLand)))
-                        return t; // Found it!
+                        return t;
                 }
             }
             distance++;
