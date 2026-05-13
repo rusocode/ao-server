@@ -21,6 +21,7 @@ import java.net.InetSocketAddress;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Bootstraps the application.
@@ -83,7 +84,8 @@ public class Bootstrap {
         IntervalsConfig intervals = ApplicationContext.getInstance(IntervalsConfig.class);
         UserService userService = ApplicationContext.getInstance(UserService.class);
 
-        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(4);
+        AtomicInteger threadCounter = new AtomicInteger(0);
+        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(4, r -> new Thread(r, "game-timer-" + threadCounter.getAndIncrement()));
         server.setScheduler(scheduler);
 
         // Regeneracion de vida y mana
