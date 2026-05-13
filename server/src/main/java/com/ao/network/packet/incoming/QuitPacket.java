@@ -88,6 +88,7 @@ public class QuitPacket implements IncomingPacket {
      * Evento temporizado para la cuenta regresiva y desconexión.
      */
     private static class LogoutEvent extends TimedEvent {
+
         private final Connection connection;
         private int remainingSeconds;
 
@@ -99,17 +100,15 @@ public class QuitPacket implements IncomingPacket {
 
         @Override
         public void execute() {
+            if (!connection.isConnected()) return;
             remainingSeconds--;
-
             if (remainingSeconds <= 0) {
                 connection.send(new ConsoleMessagePacket("Gracias por jugar a Argentum Online Java!", Font.INFO));
                 connection.send(new DisconnectPacket());
                 connection.disconnect();
-            } else {
-                // Enviamos el mensaje de progreso cada segundo
-                connection
-                        .send(new ConsoleMessagePacket("Saliendo en " + remainingSeconds + " segundos...", Font.INFO));
-            }
+            } else connection.send(new ConsoleMessagePacket("Saliendo en " + remainingSeconds + " segundos...", Font.INFO));
         }
+
     }
+
 }

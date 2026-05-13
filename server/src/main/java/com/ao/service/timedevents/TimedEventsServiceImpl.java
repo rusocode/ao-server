@@ -103,8 +103,13 @@ public class TimedEventsServiceImpl implements TimedEventsService {
 
         @Override
         public void run() {
-            event.execute();
-            // Stop the event repetition once the event's lifetime ends
+            try {
+                event.execute();
+            } catch (Exception e) {
+                getOuterType().removeEvent(event);
+                cancel();
+                return;
+            }
             if (--executionTimes == 0) getOuterType().removeEvent(event);
         }
 
