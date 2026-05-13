@@ -10,12 +10,16 @@ import com.ao.network.DataBuffer;
 import com.ao.network.packet.IncomingPacket;
 import com.ao.network.packet.outgoing.ConsoleMessagePacket;
 import com.ao.service.MapService;
+import com.ao.service.TimedEventsService;
+
 
 import java.io.UnsupportedEncodingException;
 
 public class WalkPacket implements IncomingPacket {
 
-    private final MapService marService = ApplicationContext.getInstance(MapService.class);
+    private final MapService mapService = ApplicationContext.getInstance(MapService.class);
+    private final TimedEventsService timedEventsService = ApplicationContext.getInstance(TimedEventsService.class);
+
 
     @Override
     public boolean handle(DataBuffer buffer, Connection connection) throws IndexOutOfBoundsException, UnsupportedEncodingException {
@@ -48,8 +52,12 @@ public class WalkPacket implements IncomingPacket {
             } else {
 
                 if (heading != null) {
+                    // Si el usuario se mueve, cancelamos eventos temporizados (como la salida)
+                    timedEventsService.removeCharacterEvents(user);
+
                     // Move user
-                    marService.moveCharacterTo(user, heading);
+                    mapService.moveCharacterTo(user, heading);
+
                     // TODO Stop resting if needed
 
                 } else

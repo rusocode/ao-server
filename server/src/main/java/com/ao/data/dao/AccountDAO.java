@@ -14,7 +14,7 @@ public interface AccountDAO {
 
     Account create(String username, String password, String mail) throws DAOException, NameAlreadyTakenException;
 
-    void delete(String username);
+    void delete(String username) throws DAOException;
 
     boolean exists(String username);
 

@@ -11,11 +11,11 @@ public record UpdateUserStatsPacket(UserCharacter user) implements OutgoingPacke
     @Override
     public void write(DataBuffer buffer) throws UnsupportedEncodingException {
         buffer.putShort((short) user.getMaxHitPoints());
-        buffer.putShort((short) user.getHitPoints());
+        buffer.putShort((short) user.getMinHitPoints());
         buffer.putShort((short) user.getMaxMana());
-        buffer.putShort((short) user.getMana());
+        buffer.putShort((short) user.getMinMana());
         buffer.putShort((short) user.getMaxStamina());
-        buffer.putShort((short) user.getStamina());
+        buffer.putShort((short) user.getMinStamina());
         buffer.putInt(user.getMoney());
         buffer.put(user.getLevel());
         buffer.putInt(user.getExperienceForLeveUp());

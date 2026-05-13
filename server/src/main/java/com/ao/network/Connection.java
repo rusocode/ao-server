@@ -23,6 +23,10 @@ public class Connection {
         return user;
     }
 
+    public boolean isConnected() {
+        return socket.isActive();
+    }
+
     public void disconnect() {
         socket.close();
     }

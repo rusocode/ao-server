@@ -1,4 +1,4 @@
-package com.ao.model.builder;
+package com.ao.model.user;
 
 import com.ao.model.character.*;
 import com.ao.model.character.archetype.UserArchetype;
@@ -6,9 +6,7 @@ import com.ao.model.inventory.Inventory;
 import com.ao.model.map.City;
 import com.ao.model.map.Position;
 import com.ao.model.spell.Spell;
-import com.ao.model.user.ConnectedUser;
-import com.ao.model.user.Guild;
-import com.ao.model.user.LoggedUser;
+import com.ao.model.builder.Builder;
 import com.ao.service.ValidatorService;
 
 import javax.management.InvalidAttributeValueException;
@@ -29,11 +27,12 @@ public class UserCharacterBuilder implements Builder<UserCharacter> {
 
     protected Integer minHp, maxHp;
     protected Integer minMana, maxMana;
+    protected Integer minStamina, maxStamina;
 
     protected Integer head;
     protected Integer body;
     protected Map<Skill, Byte> skills;
-    protected String description;
+    protected String description = "";
     protected boolean paralyzed, dumbed, hidden, mimetized, immobilized, invisible, poisoned;
     protected byte lvl = 1;
     protected Guild guild;
@@ -103,7 +102,6 @@ public class UserCharacterBuilder implements Builder<UserCharacter> {
         return this;
     }
 
-
     public UserCharacterBuilder withHunger(int minHunger, int maxHunger) {
         this.minHunger = minHunger;
         this.maxHunger = maxHunger;
@@ -114,14 +112,12 @@ public class UserCharacterBuilder implements Builder<UserCharacter> {
         if (!ValidatorService.validDescription(description)) throw new IllegalArgumentException();
         this.description = description;
         return this;
-
     }
 
     public UserCharacterBuilder withGender(Gender gender) {
         this.gender = Objects.requireNonNull(gender);
         return this;
     }
-
 
     public UserCharacterBuilder withName(String name) {
         if (!ValidatorService.validCharacterName(name)) throw new IllegalArgumentException(INVALID_NAME_ERROR);
@@ -171,6 +167,13 @@ public class UserCharacterBuilder implements Builder<UserCharacter> {
         return this;
     }
 
+    public UserCharacterBuilder withStamina(int minStamina, int maxStamina) {
+        if (maxStamina < 0 || minStamina > maxStamina) throw new IllegalArgumentException();
+        this.minStamina = minStamina;
+        this.maxStamina = maxStamina;
+        return this;
+    }
+
     public UserCharacterBuilder withSkills(Map<Skill, Byte> skills) throws InvalidAttributeValueException {
         for (Skill skill : Skill.values()) {
             if (skills.containsKey(skill)) Objects.requireNonNull(skills.get(skill));
@@ -212,7 +215,6 @@ public class UserCharacterBuilder implements Builder<UserCharacter> {
         return this;
     }
 
-
     @Override
     public UserCharacter build() {
         Objects.requireNonNull(user);
@@ -220,29 +222,22 @@ public class UserCharacterBuilder implements Builder<UserCharacter> {
         Objects.requireNonNull(minHp);
         Objects.requireNonNull(maxMana);
         Objects.requireNonNull(minMana);
+        Objects.requireNonNull(maxStamina);
+        Objects.requireNonNull(minStamina);
         Objects.requireNonNull(name);
-        Objects.requireNonNull(email);
         Objects.requireNonNull(race);
         Objects.requireNonNull(gender);
-        Objects.requireNonNull(user);
-        Objects.requireNonNull(city);
         Objects.requireNonNull(archetype);
         Objects.requireNonNull(head);
         Objects.requireNonNull(body);
-        Objects.requireNonNull(skills);
-        Objects.requireNonNull(description);
-        Objects.requireNonNull(guild);
-        Objects.requireNonNull(exp);
-        Objects.requireNonNull(inventory);
-        Objects.requireNonNull(spells);
         Objects.requireNonNull(reputation);
         Objects.requireNonNull(position);
 
-        // TODO Set everything!
+        // TODO Set everything! (email, city, skills, guild, exp, inventory, spells)
 
         return new LoggedUser(user, reputation, race, gender, archetype.getArchetype(), poisoned,
             paralyzed, immobilized, mimetized, invisible, dumbed, hidden, maxMana, minMana, maxHp, minHp,
-            maxThirstiness, minThirstiness, maxHunger, minHunger, lvl, name, description, position, body, head);
+            maxStamina, minStamina, maxThirstiness, minThirstiness, maxHunger, minHunger, lvl, name, description, position, body, head);
     }
 
 }

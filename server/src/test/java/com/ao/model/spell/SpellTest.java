@@ -36,19 +36,22 @@ public class SpellTest {
         effects[0] = MockFactory.mockEffect(true, false);
         effects[1] = MockFactory.mockEffect(true, false);
 
-        spellNoStaff = new Spell(1, effects, 0, REQUIRED_SKILL, REQUIRED_MANA, SPELL_NAME, SPELL_DESCRIPTION, IS_NEGATIVE, SPELL_FX, SPELL_SOUND, SPELL_MAGIC_WORDS);
+        spellNoStaff = new Spell(1, effects, 0, REQUIRED_SKILL, REQUIRED_MANA, SPELL_NAME, SPELL_DESCRIPTION,
+                IS_NEGATIVE, SPELL_FX, SPELL_SOUND, SPELL_MAGIC_WORDS);
 
         Effect[] effects2 = new Effect[2];
         effects2[0] = MockFactory.mockEffect(true, false);
         effects2[1] = MockFactory.mockEffect(true, false);
 
-        spellWithStaff = new Spell(1, effects2, REQUIRED_STAFF_POWER, REQUIRED_SKILL, REQUIRED_MANA, SPELL_NAME, SPELL_DESCRIPTION, IS_NEGATIVE, SPELL_FX, SPELL_SOUND, SPELL_MAGIC_WORDS);
+        spellWithStaff = new Spell(1, effects2, REQUIRED_STAFF_POWER, REQUIRED_SKILL, REQUIRED_MANA, SPELL_NAME,
+                SPELL_DESCRIPTION, IS_NEGATIVE, SPELL_FX, SPELL_SOUND, SPELL_MAGIC_WORDS);
 
         Effect[] effects3 = new Effect[2];
         effects3[0] = MockFactory.mockEffect(false, true);
         effects3[1] = MockFactory.mockEffect(false, true);
 
-        spellNoStaffObject = new Spell(1, effects3, 0, REQUIRED_SKILL, REQUIRED_MANA, SPELL_NAME, SPELL_DESCRIPTION, IS_NEGATIVE, SPELL_FX, SPELL_SOUND, SPELL_MAGIC_WORDS);
+        spellNoStaffObject = new Spell(1, effects3, 0, REQUIRED_SKILL, REQUIRED_MANA, SPELL_NAME, SPELL_DESCRIPTION,
+                IS_NEGATIVE, SPELL_FX, SPELL_SOUND, SPELL_MAGIC_WORDS);
     }
 
     @Test
@@ -115,7 +118,7 @@ public class SpellTest {
         }
 
         // Check mana cost
-        verify(caster, times(2)).addToMana(-REQUIRED_MANA);
+        verify(caster, times(2)).addToMinMana(-REQUIRED_MANA);
     }
 
     @Test
@@ -143,7 +146,7 @@ public class SpellTest {
         spellNoStaffObject.apply(caster, target);
 
         // Check mana cost
-        verify(caster).addToMana(-REQUIRED_MANA);
+        verify(caster).addToMinMana(-REQUIRED_MANA);
     }
 
     @Test

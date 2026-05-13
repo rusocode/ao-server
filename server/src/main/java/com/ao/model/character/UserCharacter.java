@@ -40,13 +40,9 @@ public interface UserCharacter extends Character {
 
     Archetype getArchetype();
 
-    public int getStamina();
+    void setMinStamina(int stamina);
 
-    public void setStamina(int stamina);
-
-    public int getMaxStamina();
-
-    public void setMaxStamina(int maxStamina);
+    void setMaxStamina(int maxStamina);
 
     boolean isMeditating();
 

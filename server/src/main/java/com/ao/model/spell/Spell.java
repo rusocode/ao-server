@@ -32,7 +32,7 @@ public class Spell {
     protected Effect[] effects;
 
     public Spell(int id, Effect[] effects, int requiredStaffPower, int requiredSkill, int requiredMana, String name,
-                 String description, boolean negative, int fx, int sound, String magicWords) {
+            String description, boolean negative, int fx, int sound, String magicWords) {
         this.id = id;
         this.effects = effects;
         this.requiredStaffPower = requiredStaffPower;
@@ -63,7 +63,8 @@ public class Spell {
     }
 
     /**
-     * Checks whether the spell can be applied to the given target when is cast by the given caster.
+     * Checks whether the spell can be applied to the given target when is cast by
+     * the given caster.
      *
      * @param caster spell's caster.
      * @param target spell's target.
@@ -77,7 +78,8 @@ public class Spell {
     }
 
     /**
-     * Checks whether the spell can be applied to the given target when is casted by the given caster.
+     * Checks whether the spell can be applied to the given target when is casted by
+     * the given caster.
      *
      * @param caster spell's caster
      * @param target spell's target
@@ -99,7 +101,7 @@ public class Spell {
     public void apply(Character caster, Character target) {
         for (int i = 0; i < effects.length; i++)
             effects[i].apply(caster, target);
-        caster.addToMana(-requiredMana);
+        caster.addToMinMana(-requiredMana);
     }
 
     /**
@@ -111,7 +113,7 @@ public class Spell {
     public void apply(Character caster, Object target) {
         for (int i = 0; i < effects.length; i++)
             effects[i].apply(caster, target);
-        caster.addToMana(-requiredMana);
+        caster.addToMinMana(-requiredMana);
     }
 
     public String getName() {

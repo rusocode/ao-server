@@ -22,7 +22,7 @@ public class DeathPotion extends ConsumableItem {
     public void use(Character character) {
         super.use(character);
         // Remove all his HP points!
-        character.addToHitPoints(-character.getHitPoints());
+        character.addToMinHitPoints(-character.getMinHitPoints());
     }
 
 }

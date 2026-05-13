@@ -18,10 +18,12 @@ public class DeathPotionTest extends AbstractItemTest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        ItemProperties props1 = new ItemProperties(ObjectType.DEATH_POTION, 1, "Black Potion", 1, 1, null, null, false, false, false, true);
+        ItemProperties props1 = new ItemProperties(ObjectType.DEATH_POTION, 1, "Black Potion", 1, 1, null, null, false,
+                false, false, true);
         potion1 = new DeathPotion(props1, 5);
 
-        ItemProperties props2 = new ItemProperties(ObjectType.DEATH_POTION, 1, "Black Potion", 1, 1, null, null, false, true, true, false);
+        ItemProperties props2 = new ItemProperties(ObjectType.DEATH_POTION, 1, "Black Potion", 1, 1, null, null, false,
+                true, true, false);
         potion2 = new DeathPotion(props2, 1);
 
         object = potion2;
@@ -34,13 +36,13 @@ public class DeathPotionTest extends AbstractItemTest {
         Inventory inventory = mock(Inventory.class);
         Character character = mock(Character.class);
         when(character.getInventory()).thenReturn(inventory);
-        when(character.getHitPoints()).thenReturn(USER_HP);
+        when(character.getMinHitPoints()).thenReturn(USER_HP);
 
         potion2.use(character);
 
         // Consumption of potion2 requires these 2 calls.
         verify(inventory).cleanup();
-        verify(character).addToHitPoints(-USER_HP);
+        verify(character).addToMinHitPoints(-USER_HP);
     }
 
     @Test
@@ -48,12 +50,12 @@ public class DeathPotionTest extends AbstractItemTest {
         Inventory inventory = mock(Inventory.class);
         Character character = mock(Character.class);
         when(character.getInventory()).thenReturn(inventory);
-        when(character.getHitPoints()).thenReturn(USER_HP);
+        when(character.getMinHitPoints()).thenReturn(USER_HP);
 
         potion1.use(character);
 
         // Consumption of potion1 requires just a call to addToHitPoints.
-        verify(character).addToHitPoints(-USER_HP);
+        verify(character).addToMinHitPoints(-USER_HP);
     }
 
     @Test
@@ -66,7 +68,6 @@ public class DeathPotionTest extends AbstractItemTest {
 
         // Make sure the object itself is different
         assertThat(clone).isNotSameAs(potion1);
-
 
         DeathPotion clone2 = (DeathPotion) potion2.clone();
 

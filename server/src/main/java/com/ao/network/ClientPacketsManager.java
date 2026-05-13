@@ -49,9 +49,11 @@ public class ClientPacketsManager {
      * @param id         ID del paquete a procesar (ya consumido del buffer)
      * @param buffer     buffer desde el que leer el payload del paquete
      * @param connection conexión del cliente
-     * @return true si el paquete fue procesado; false si faltan bytes (paquete incompleto)
+     * @return true si el paquete fue procesado; false si faltan bytes (paquete
+     *         incompleto)
      */
-    public static boolean handle(byte id, DataBuffer buffer, Connection connection) throws UnsupportedEncodingException {
+    public static boolean handle(byte id, DataBuffer buffer, Connection connection)
+            throws UnsupportedEncodingException {
         ClientPackets packet = PACKETS_BY_ID.get(id & 0xFF);
         if (packet != null) {
             Logger.debug("Procesando paquete entrante ID: {} ({})", id & 0xFF, packet.name());
@@ -61,7 +63,8 @@ public class ClientPacketsManager {
     }
 
     /**
-     * Enumeración de los paquetes entrantes del cliente. payloadSize indica los bytes del payload sin contar el ID (-1 = longitud
+     * Enumeración de los paquetes entrantes del cliente. payloadSize indica los
+     * bytes del payload sin contar el ID (-1 = longitud
      * variable).
      */
     private enum ClientPackets {
@@ -74,6 +77,7 @@ public class ClientPacketsManager {
         WALK(6, WalkPacket.class, 1),
         LEFT_CLICK(26, LeftClickPacket.class, 2),
         CHANGE_HEADING(37, ChangeHeadingPacket.class, 1),
+        QUIT(71, QuitPacket.class, 0),
         PING(119, PingPacket.class, 0);
 
         private final IncomingPacket handler;

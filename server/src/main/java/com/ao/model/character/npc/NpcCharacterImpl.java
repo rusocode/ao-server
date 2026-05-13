@@ -37,12 +37,13 @@ public class NpcCharacterImpl implements NpcCharacter {
     private Heading heading;
     private AreaInfo areaInfo;
     // ===== Stats =====
-    private int currentHP;
+    private int minStamina, maxStamina;
+    private int minHP;
     private int maxHP;
-    private int currentMana;
+    private int minMana;
     private int maxMana;
-    private int thirstiness;
-    private int hunger;
+    private int minThirstiness;
+    private int minHunger;
     private byte level;
     private int gold;
     private int experience;
@@ -83,63 +84,85 @@ public class NpcCharacterImpl implements NpcCharacter {
     }
 
     @Override
-    public int getHitPoints() {
-        return 0;
+    public int getMinHitPoints() {
+        return this.minHP;
     }
 
     @Override
-    public void addToHitPoints(int points) {
-
+    public void addToMinHitPoints(int points) {
+        this.minHP += points;
+        if (this.minHP > this.maxHP) this.minHP = this.maxHP;
     }
 
     @Override
     public int getMaxHitPoints() {
-        return 0;
+        return this.maxHP;
     }
 
     @Override
     public void addToMaxHitPoints(int points) {
-
+        this.maxHP += points;
     }
 
     @Override
-    public int getMana() {
-        return 0;
+    public int getMinMana() {
+        return this.minMana;
     }
 
     @Override
-    public void addToMana(int points) {
-
+    public void addToMinMana(int points) {
+        this.minMana += points;
+        if (this.minMana > this.maxMana) this.minMana = this.maxMana;
     }
 
     @Override
     public int getMaxMana() {
-        return 0;
+        return this.maxMana;
     }
 
     @Override
     public void addToMaxMana(int points) {
-
+        this.maxMana += points;
     }
 
     @Override
-    public int getThirstiness() {
-        return 0;
+    public int getMinStamina() {
+        return minStamina;
     }
 
     @Override
-    public void addToThirstiness(int points) {
-
+    public void addToMinStamina(int points) {
+        this.minStamina += points;
     }
 
     @Override
-    public int getHunger() {
-        return 0;
+    public int getMaxStamina() {
+        return maxStamina;
     }
 
     @Override
-    public void addToHunger(int points) {
+    public void addToMaxStamina(int points) {
+        this.maxStamina += points;
+    }
 
+    @Override
+    public int getMinThirstiness() {
+        return this.minThirstiness;
+    }
+
+    @Override
+    public void addToMinThirstiness(int points) {
+        this.minThirstiness += points;
+    }
+
+    @Override
+    public int getMinHunger() {
+        return this.minHunger;
+    }
+
+    @Override
+    public void addToMinHunger(int points) {
+        this.minHunger += points;
     }
 
     @Override

@@ -14,34 +14,42 @@ public interface Character {
     int MAX_THIRSTINESS = 100;
     int MAX_HUNGER = 100;
 
-    int getHitPoints();
+    int getMinHitPoints();
 
     /**
      * Adds (or subtracts if the given number is negative) points to the character's hit points.
      *
      * @param points points to add
      */
-    void addToHitPoints(int points);
+    void addToMinHitPoints(int points);
 
     int getMaxHitPoints();
 
     void addToMaxHitPoints(int points);
 
-    int getMana();
+    int getMinMana();
 
-    void addToMana(int points);
+    void addToMinMana(int points);
 
     int getMaxMana();
 
     void addToMaxMana(int points);
 
-    int getThirstiness();
+    int getMinStamina();
 
-    void addToThirstiness(int points);
+    void addToMinStamina(int points);
 
-    int getHunger();
+    int getMaxStamina();
 
-    void addToHunger(int points);
+    void addToMaxStamina(int points);
+
+    int getMinThirstiness();
+
+    void addToMinThirstiness(int points);
+
+    int getMinHunger();
+
+    void addToMinHunger(int points);
 
     boolean isParalyzed();
 

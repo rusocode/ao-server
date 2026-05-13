@@ -68,10 +68,11 @@ public class Bootstrap {
 
     /** Configures networking on the given server. */
     private static void configureNetworking(AOServer server) throws IOException {
-        byte[] addr = {0, 0, 0, 0};
+        byte[] addr = { 0, 0, 0, 0 };
         Logger.info("Initializing server socket configuration...");
         ServerConfig config = ApplicationContext.getInstance(ServerConfig.class);
-        InetSocketAddress endpoint = new InetSocketAddress(Inet4Address.getByAddress(addr), config.getServerListeningPort());
+        InetSocketAddress endpoint = new InetSocketAddress(Inet4Address.getByAddress(addr),
+                config.getServerListeningPort());
         server.setListeningAddr(endpoint);
         server.setBacklog(config.getListeningBacklog());
     }
@@ -85,7 +86,8 @@ public class Bootstrap {
         UserService userService = ApplicationContext.getInstance(UserService.class);
 
         AtomicInteger threadCounter = new AtomicInteger(0);
-        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(4, r -> new Thread(r, "game-timer-" + threadCounter.getAndIncrement()));
+        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(4,
+                r -> new Thread(r, "game-timer-" + threadCounter.getAndIncrement()));
         server.setScheduler(scheduler);
 
         // Regeneracion de vida y mana
@@ -94,7 +96,8 @@ public class Bootstrap {
                 for (ConnectedUser connectedUser : userService.getConnectedUsers()) {
                     User user = connectedUser.getConnection().getUser();
                     if (user instanceof UserCharacter character && !character.isDead()) {
-                        if (character.regenHpAndMana()) connectedUser.getConnection().send(new UpdateUserStatsPacket(character));
+                        if (character.regenHpAndMana())
+                            connectedUser.getConnection().send(new UpdateUserStatsPacket(character));
                     }
                 }
             } catch (Exception e) {
@@ -108,7 +111,8 @@ public class Bootstrap {
                 for (ConnectedUser connectedUser : userService.getConnectedUsers()) {
                     User user = connectedUser.getConnection().getUser();
                     if (user instanceof UserCharacter character && !character.isDead()) {
-                        if (character.regenStamina()) connectedUser.getConnection().send(new UpdateUserStatsPacket(character));
+                        if (character.regenStamina())
+                            connectedUser.getConnection().send(new UpdateUserStatsPacket(character));
                     }
                 }
             } catch (Exception e) {
@@ -123,7 +127,10 @@ public class Bootstrap {
                     User user = connectedUser.getConnection().getUser();
                     if (user instanceof UserCharacter character && !character.isDead()) {
                         if (character.tickHunger())
-                            connectedUser.getConnection().send(new UpdateHungerAndThirstPacket(character.getHunger(), UserCharacter.MAX_HUNGER, character.getThirstiness(), UserCharacter.MAX_THIRSTINESS));
+                            connectedUser.getConnection()
+                                    .send(new UpdateHungerAndThirstPacket(character.getMinHunger(),
+                                            UserCharacter.MAX_HUNGER, character.getMinThirstiness(),
+                                            UserCharacter.MAX_THIRSTINESS));
                     }
                 }
             } catch (Exception e) {
@@ -138,7 +145,10 @@ public class Bootstrap {
                     User user = connectedUser.getConnection().getUser();
                     if (user instanceof UserCharacter character && !character.isDead()) {
                         if (character.tickThirst())
-                            connectedUser.getConnection().send(new UpdateHungerAndThirstPacket(character.getHunger(), UserCharacter.MAX_HUNGER, character.getThirstiness(), UserCharacter.MAX_THIRSTINESS));
+                            connectedUser.getConnection()
+                                    .send(new UpdateHungerAndThirstPacket(character.getMinHunger(),
+                                            UserCharacter.MAX_HUNGER, character.getMinThirstiness(),
+                                            UserCharacter.MAX_THIRSTINESS));
                     }
                 }
             } catch (Exception e) {
@@ -181,7 +191,9 @@ public class Bootstrap {
         Logger.info("Loading application context...");
 
         Logger.info("Loading maps...");
-        MapService mapService = ApplicationContext.getInstance(MapService.class); // Sin DI tendria que hardcodear la creacion del objeto -> new MapServiceImpl();
+        MapService mapService = ApplicationContext.getInstance(MapService.class); // Sin DI tendria que hardcodear la
+                                                                                  // creacion del objeto -> new
+                                                                                  // MapServiceImpl();
         mapService.loadMaps();
 
         Logger.info("Loading cities...");

@@ -20,10 +20,12 @@ public class HPPotionTest extends AbstractItemTest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        StatModifyingItemProperties props1 = new StatModifyingItemProperties(ObjectType.HP_POTION, 1, "Red Potion", 1, 1, null, null, false, false, false, false, MIN_HP, MAX_HP);
+        StatModifyingItemProperties props1 = new StatModifyingItemProperties(ObjectType.HP_POTION, 1, "Red Potion", 1,
+                1, null, null, false, false, false, false, MIN_HP, MAX_HP);
         potion1 = new HPPotion(props1, 5);
 
-        StatModifyingItemProperties props2 = new StatModifyingItemProperties(ObjectType.HP_POTION, 1, "Big Red Potion", 1, 1, null, null, false, false, false, false, MAX_HP, MAX_HP);
+        StatModifyingItemProperties props2 = new StatModifyingItemProperties(ObjectType.HP_POTION, 1, "Big Red Potion",
+                1, 1, null, null, false, false, false, false, MAX_HP, MAX_HP);
         potion2 = new HPPotion(props2, 1);
 
         object = potion2;
@@ -41,7 +43,7 @@ public class HPPotionTest extends AbstractItemTest {
 
         // Consumption of potion2 requires these 2 calls.
         verify(inventory).cleanup();
-        verify(character).addToHitPoints(MAX_HP);
+        verify(character).addToMinHitPoints(MAX_HP);
     }
 
     @Test
@@ -54,7 +56,7 @@ public class HPPotionTest extends AbstractItemTest {
 
         // Consumption of potion1 requires just a call to addToHitPoints.
         ArgumentCaptor<Integer> capture = ArgumentCaptor.forClass(Integer.class);
-        verify(character).addToHitPoints(capture.capture());
+        verify(character).addToMinHitPoints(capture.capture());
         /// Make sure the value is in the correct range
         assertThat(capture.getValue()).isBetween(MIN_HP, MAX_HP);
     }

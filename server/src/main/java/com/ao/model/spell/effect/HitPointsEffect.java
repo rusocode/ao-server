@@ -34,7 +34,7 @@ public class HitPointsEffect implements Effect {
     public void apply(Character caster, Character target) {
         int points = minPoints + randomGenerator.nextInt(deltaPoints);
         points += Math.round(points * EFFECT_MULTIPLIER * caster.getLevel());
-        target.addToHitPoints(points);
+        target.addToMinHitPoints(points);
     }
 
     @Override

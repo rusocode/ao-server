@@ -12,8 +12,8 @@ intervals:
 
   # Survival mechanics
   survival:
-    thirst: 6000
-    hunger: 6500
+    thirst: 30000
+    hunger: 30000
 
   # Periodic state updates
   states:
@@ -52,7 +52,7 @@ intervals:
   # Network and Connection management
   network:
     connection_retry: 3000
-    close_connection: 5     # In seconds (IntervaloCerrarConexion)
+    close_connection: 10     # In seconds (IntervaloCerrarConexion)
 
   # Core Engine timings
   system:

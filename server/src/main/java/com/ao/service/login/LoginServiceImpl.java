@@ -8,7 +8,7 @@ import com.ao.data.dao.AccountDAO;
 import com.ao.data.dao.UserCharacterDAO;
 import com.ao.data.dao.exception.DAOException;
 import com.ao.data.dao.exception.NameAlreadyTakenException;
-import com.ao.model.builder.UserCharacterBuilder;
+import com.ao.model.user.UserCharacterBuilder;
 import com.ao.model.character.*;
 import com.ao.model.character.Character;
 import com.ao.model.character.archetype.UserArchetype;
@@ -172,6 +172,10 @@ public class LoginServiceImpl implements LoginService {
         Position initialPosition = new Position(city.x(), city.y(), city.map());
         character.setPosition(initialPosition);
 
+        // Assign privileges
+        Privileges privileges = new Privileges(privilegesService.getPrivilegeFlags(nick));
+        character.setPrivileges(privileges);
+
         // 2. Envia estado inicial al cliente (inventario, spells, etc.)
         sendInitialState(user, character);
 
@@ -308,7 +312,7 @@ public class LoginServiceImpl implements LoginService {
 
         // TODO these lines can be moved further up, but I want to be sure other TODOs don't mess with that...
         connection.send(new UpdateUserStatsPacket(character));
-        connection.send(new UpdateHungerAndThirstPacket(character.getHunger(), Character.MAX_HUNGER, character.getThirstiness(), Character.MAX_THIRSTINESS));
+        connection.send(new UpdateHungerAndThirstPacket(character.getMinHunger(), Character.MAX_HUNGER, character.getMinThirstiness(), Character.MAX_THIRSTINESS));
         connection.send(new UpdateStrengthAndDexterityPacket(character.getStrength(), character.getDexterity()));
 
         // TODO Other (continue from TCP.bas line 1296)
