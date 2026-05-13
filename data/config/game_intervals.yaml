@@ -12,8 +12,8 @@ intervals:
 
   # Survival mechanics
   survival:
-    thirst: 6000
-    hunger: 6500
+    thirst: 30000
+    hunger: 30000
 
   # Periodic state updates
   states:

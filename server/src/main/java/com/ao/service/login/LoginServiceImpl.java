@@ -172,6 +172,10 @@ public class LoginServiceImpl implements LoginService {
         Position initialPosition = new Position(city.x(), city.y(), city.map());
         character.setPosition(initialPosition);
 
+        // Assign privileges
+        Privileges privileges = new Privileges(privilegesService.getPrivilegeFlags(nick));
+        character.setPrivileges(privileges);
+
         // 2. Envia estado inicial al cliente (inventario, spells, etc.)
         sendInitialState(user, character);
 
