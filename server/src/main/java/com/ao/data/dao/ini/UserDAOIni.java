@@ -181,11 +181,6 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
 
         INIConfiguration ini = readCharFile(username);
 
-        if (ini == null) {
-            Logger.debug("Character '{}' not found!", username);
-            return null;
-        }
-
         try {
 
             // Required keys
@@ -262,11 +257,6 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
             throw new DAOException("Nick cannot be null or empty.");
 
         INIConfiguration ini = readCharFile(nick);
-
-        if (ini == null) {
-            Logger.debug("Character '{}' not found", nick);
-            return null;
-        }
 
         int assassinPoints = IniUtils.getInt(ini, REPUTATION_HEADER + "." + ASSASSIN_POINTS_KEY, 0);
         int banditPoints = IniUtils.getInt(ini, REPUTATION_HEADER + "." + BANDIT_POINTS_KEY, 0);
@@ -527,8 +517,7 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
             InputStream inputStream = ResourceUtils.getStream("charfiles/" + username + FILE_EXTENSION);
 
             // The file does exist in the file system and classpath
-            if (inputStream == null)
-                return null;
+            if (inputStream == null) throw new DAOException("Character file not found: " + username);
 
             try (BufferedReader reader = new BufferedReader(
                     new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
