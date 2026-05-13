@@ -23,7 +23,7 @@ public class FilledBottle extends ConsumableItem {
     public void use(Character character) {
         super.use(character);
         RefillableStatModifyingItemProperties itemProperties = (RefillableStatModifyingItemProperties) properties;
-        character.addToThirstiness(itemProperties.getMaxModifier());
+        character.addToMinThirstiness(itemProperties.getMaxModifier());
         EmptyBottle emptyBottle = new EmptyBottle(itemProperties.getOtherStateProperties(), 1);
         character.getInventory().addItem(emptyBottle);
     }

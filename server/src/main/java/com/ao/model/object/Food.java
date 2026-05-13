@@ -23,7 +23,7 @@ public class Food extends ConsumableItem {
         super.use(character);
         int minModifier = ((StatModifyingItemProperties) properties).getMinModifier();
         int maxModifier = ((StatModifyingItemProperties) properties).getMaxModifier();
-        character.addToHunger((int) (Math.random() * (maxModifier - minModifier + 1)) + minModifier);
+        character.addToMinHunger((int) (Math.random() * (maxModifier - minModifier + 1)) + minModifier);
     }
 
     public int getMinHun() {

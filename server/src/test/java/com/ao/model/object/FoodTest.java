@@ -20,10 +20,12 @@ public class FoodTest extends AbstractItemTest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        StatModifyingItemProperties props1 = new StatModifyingItemProperties(ObjectType.FOOD, 1, "Apple", 1, 1, null, null, false, false, false, false, MIN_HUN, MAX_HUN);
+        StatModifyingItemProperties props1 = new StatModifyingItemProperties(ObjectType.FOOD, 1, "Apple", 1, 1, null,
+                null, false, false, false, false, MIN_HUN, MAX_HUN);
         food1 = new Food(props1, 5);
 
-        StatModifyingItemProperties props2 = new StatModifyingItemProperties(ObjectType.FOOD, 1, "Green Apple", 1, 1, null, null, false, false, false, false, MAX_HUN, MAX_HUN);
+        StatModifyingItemProperties props2 = new StatModifyingItemProperties(ObjectType.FOOD, 1, "Green Apple", 1, 1,
+                null, null, false, false, false, false, MAX_HUN, MAX_HUN);
         food2 = new Food(props2, 1);
 
         object = food2;
@@ -41,7 +43,7 @@ public class FoodTest extends AbstractItemTest {
 
         // Consumption of food2 requires these 2 calls.
         verify(inventory).cleanup();
-        verify(character).addToHunger(MAX_HUN);
+        verify(character).addToMinHunger(MAX_HUN);
     }
 
     @Test
@@ -54,7 +56,7 @@ public class FoodTest extends AbstractItemTest {
 
         // Consumption of food1 requires just a call to addToHunger.
         ArgumentCaptor<Integer> capture = ArgumentCaptor.forClass(Integer.class);
-        verify(character).addToHunger(capture.capture());
+        verify(character).addToMinHunger(capture.capture());
 
         /// Make sure the value is in the correct range
         assertThat(capture.getValue()).isBetween(MIN_HUN, MAX_HUN);

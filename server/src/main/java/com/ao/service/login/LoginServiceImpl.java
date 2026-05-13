@@ -308,7 +308,7 @@ public class LoginServiceImpl implements LoginService {
 
         // TODO these lines can be moved further up, but I want to be sure other TODOs don't mess with that...
         connection.send(new UpdateUserStatsPacket(character));
-        connection.send(new UpdateHungerAndThirstPacket(character.getHunger(), Character.MAX_HUNGER, character.getThirstiness(), Character.MAX_THIRSTINESS));
+        connection.send(new UpdateHungerAndThirstPacket(character.getMinHunger(), Character.MAX_HUNGER, character.getMinThirstiness(), Character.MAX_THIRSTINESS));
         connection.send(new UpdateStrengthAndDexterityPacket(character.getStrength(), character.getDexterity()));
 
         // TODO Other (continue from TCP.bas line 1296)

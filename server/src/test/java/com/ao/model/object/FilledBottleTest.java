@@ -17,11 +17,14 @@ public class FilledBottleTest extends AbstractItemTest {
     private FilledBottle bottle1;
     private FilledBottle bottle2;
 
-
     @BeforeEach
     public void setUp() throws Exception {
-        RefillableStatModifyingItemProperties emptyProps = new RefillableStatModifyingItemProperties(ObjectType.EMPTY_BOTTLE, 1, "Water Bottle", 1, 1, null, null, false, false, false, false, 0, 0, false, null);
-        RefillableStatModifyingItemProperties props = new RefillableStatModifyingItemProperties(ObjectType.FILLED_BOTTLE, 1, "Water Bottle", 1, 1, null, null, false, false, false, false, THIRST, THIRST, true, emptyProps);
+        RefillableStatModifyingItemProperties emptyProps = new RefillableStatModifyingItemProperties(
+                ObjectType.EMPTY_BOTTLE, 1, "Water Bottle", 1, 1, null, null, false, false, false, false, 0, 0, false,
+                null);
+        RefillableStatModifyingItemProperties props = new RefillableStatModifyingItemProperties(
+                ObjectType.FILLED_BOTTLE, 1, "Water Bottle", 1, 1, null, null, false, false, false, false, THIRST,
+                THIRST, true, emptyProps);
         bottle1 = new FilledBottle(props, 5);
 
         bottle2 = new FilledBottle(props, 1);
@@ -44,11 +47,12 @@ public class FilledBottleTest extends AbstractItemTest {
 
         // Consumption of bottle2 requires these 2 calls
         verify(inventory).cleanup();
-        verify(character).addToThirstiness(THIRST);
+        verify(character).addToMinThirstiness(THIRST);
 
         assertThat(addedItem.getValue()).isInstanceOf(EmptyBottle.class);
         EmptyBottle emptyBottle = (EmptyBottle) addedItem.getValue();
-        assertThat(emptyBottle.properties).isEqualTo(((RefillableStatModifyingItemProperties) bottle2.properties).getOtherStateProperties());
+        assertThat(emptyBottle.properties)
+                .isEqualTo(((RefillableStatModifyingItemProperties) bottle2.properties).getOtherStateProperties());
         assertThat(emptyBottle.amount).isEqualTo(1);
     }
 
@@ -63,11 +67,12 @@ public class FilledBottleTest extends AbstractItemTest {
         bottle1.use(character);
 
         // Consumption of bottle1 requires just a call to addToThirstiness
-        verify(character).addToThirstiness(THIRST);
+        verify(character).addToMinThirstiness(THIRST);
 
         assertThat(addedItem.getValue()).isInstanceOf(EmptyBottle.class);
         EmptyBottle emptyBottle = (EmptyBottle) addedItem.getValue();
-        assertThat(emptyBottle.properties).isEqualTo(((RefillableStatModifyingItemProperties) bottle1.properties).getOtherStateProperties());
+        assertThat(emptyBottle.properties)
+                .isEqualTo(((RefillableStatModifyingItemProperties) bottle1.properties).getOtherStateProperties());
         assertThat(emptyBottle.amount).isEqualTo(1);
     }
 

@@ -19,7 +19,7 @@ public class HPPotion extends ConsumableItem {
         super.use(character);
         int minModifier = ((StatModifyingItemProperties) properties).getMinModifier();
         int maxModifier = ((StatModifyingItemProperties) properties).getMaxModifier();
-        character.addToHitPoints((int) (Math.random() * (maxModifier - minModifier + 1)) + minModifier);
+        character.addToMinHitPoints((int) (Math.random() * (maxModifier - minModifier + 1)) + minModifier);
     }
 
     public int getMinHP() {

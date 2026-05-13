@@ -57,7 +57,7 @@ public class LoggedUser extends ConnectedUser implements UserCharacter {
     private int maxHunger;
     private int minHunger;
     private int maxStamina;
-    private int stamina;
+    private int minStamina;
     private byte level;
     private String name;
     private String description;
@@ -70,10 +70,12 @@ public class LoggedUser extends ConnectedUser implements UserCharacter {
     private short charIndex;
 
     // TODO Prohibit building this class without a builder (Effective Java, item 2)
-    public LoggedUser(ConnectedUser user, Reputation reputation, Race race, Gender gender, Archetype archetype, boolean poisoned, boolean paralyzed,
-                      boolean immobilized, boolean invisible, boolean mimetized, boolean dumbed, boolean hidden, int maxMana,
-                      int minMana, int maxHp, int minHp, int maxThirstiness, int minThirstiness, int maxHunger, int minHunger, byte lvl,
-                      String name, String description, Position position, int body, int head) {
+    public LoggedUser(ConnectedUser user, Reputation reputation, Race race, Gender gender, Archetype archetype,
+            boolean poisoned, boolean paralyzed,
+            boolean immobilized, boolean invisible, boolean mimetized, boolean dumbed, boolean hidden, int maxMana,
+            int minMana, int maxHp, int minHp, int maxStamina, int minStamina, int maxThirstiness, int minThirstiness,
+            int maxHunger, int minHunger, byte lvl, String name, String description, Position position, int body,
+            int head) {
         super(user.getConnection());
         this.reputation = reputation;
         this.race = race;
@@ -87,14 +89,16 @@ public class LoggedUser extends ConnectedUser implements UserCharacter {
         this.dumbed = dumbed;
         this.hidden = hidden;
         this.maxMana = maxMana;
+        this.minMana = minMana;
         this.maxHp = maxHp;
-        this.maxMana = maxMana;
         this.minHp = minHp;
+        this.maxStamina = maxStamina;
+        this.minStamina = minStamina;
         this.maxThirstiness = maxThirstiness;
-        this.maxHunger = maxHunger;
         this.minThirstiness = minThirstiness;
+        this.maxHunger = maxHunger;
         this.minHunger = minHunger;
-        level = lvl;
+        this.level = lvl;
         this.name = name;
         this.description = description;
         this.position = position;
@@ -162,21 +166,24 @@ public class LoggedUser extends ConnectedUser implements UserCharacter {
     }
 
     @Override
-    public void addToHitPoints(int points) {
+    public void addToMinHitPoints(int points) {
         minHp += points; // TODO Check for overflows and underflows
-        if (minHp > maxHp) minHp = maxHp;
+        if (minHp > maxHp)
+            minHp = maxHp;
     }
 
     @Override
-    public void addToHunger(int points) {
+    public void addToMinHunger(int points) {
         minHunger += points; // TODO Check for overflows and underflows
-        if (minHunger > maxHunger) minHunger = maxHunger;
+        if (minHunger > maxHunger)
+            minHunger = maxHunger;
     }
 
     @Override
-    public void addToMana(int points) {
+    public void addToMinMana(int points) {
         minMana += points; // TODO Check for overflows and underflows
-        if (minMana > maxMana) minMana = maxMana;
+        if (minMana > maxMana)
+            minMana = maxMana;
     }
 
     @Override
@@ -190,9 +197,42 @@ public class LoggedUser extends ConnectedUser implements UserCharacter {
     }
 
     @Override
-    public void addToThirstiness(int points) {
+    public void addToMinThirstiness(int points) {
         minThirstiness += points; // TODO Check for overflows and underflows
-        if (minThirstiness > maxThirstiness) minThirstiness = maxThirstiness;
+        if (minThirstiness > maxThirstiness)
+            minThirstiness = maxThirstiness;
+    }
+
+    @Override
+    public int getMinStamina() {
+        return minStamina;
+    }
+
+    @Override
+    public void setMinStamina(int minStamina) {
+        this.minStamina = minStamina;
+    }
+
+    @Override
+    public int getMaxStamina() {
+        return maxStamina;
+    }
+
+    @Override
+    public void setMaxStamina(int maxStamina) {
+        this.maxStamina = maxStamina;
+    }
+
+    @Override
+    public void addToMinStamina(int points) {
+        minStamina += points;
+        if (minStamina > maxStamina)
+            minStamina = maxStamina;
+    }
+
+    @Override
+    public void addToMaxStamina(int points) {
+        maxStamina += points;
     }
 
     @Override
@@ -272,12 +312,12 @@ public class LoggedUser extends ConnectedUser implements UserCharacter {
     }
 
     @Override
-    public int getHitPoints() {
+    public int getMinHitPoints() {
         return minHp;
     }
 
     @Override
-    public int getHunger() {
+    public int getMinHunger() {
         return minHunger;
     }
 
@@ -292,7 +332,7 @@ public class LoggedUser extends ConnectedUser implements UserCharacter {
     }
 
     @Override
-    public int getMana() {
+    public int getMinMana() {
         return minMana;
     }
 
@@ -308,26 +348,29 @@ public class LoggedUser extends ConnectedUser implements UserCharacter {
 
     @Override
     public String getName() {
-        // TODO If we shouldn't show the name (.showName is False), return an empty string
+        // TODO If we shouldn't show the name (.showName is False), return an empty
+        // string
 
         StringBuilder builder = new StringBuilder(name);
 
         // TODO Translate this code from VB
-//        If .flags.EnConsulta Then
-//	        UserName = UserName & " " & TAG_CONSULT_MODE
-//	    Else
-//	        If UserList(sndIndex).flags.Privilegios And (PlayerType.User Or PlayerType.Consejero Or PlayerType.RoleMaster) Then
-//	            If LenB(ClanTag) <> 0 Then _
-//	                UserName = UserName & " <" & ClanTag & ">"
-//	        Else
-//	            If (.flags.invisible Or .flags.Oculto) And (Not .flags.AdminInvisible = 1) Then
-//	                UserName = UserName & " " & TAG_USER_INVISIBLE
-//	            Else
-//	                If LenB(ClanTag) <> 0 Then _
-//	                    UserName = UserName & " <" & ClanTag & ">"
-//	            End If
-//	        End If
-//	    End If
+        // If .flags.EnConsulta Then
+        // UserName = UserName & " " & TAG_CONSULT_MODE
+        // Else
+        // If UserList(sndIndex).flags.Privilegios And (PlayerType.User Or
+        // PlayerType.Consejero Or PlayerType.RoleMaster) Then
+        // If LenB(ClanTag) <> 0 Then _
+        // UserName = UserName & " <" & ClanTag & ">"
+        // Else
+        // If (.flags.invisible Or .flags.Oculto) And (Not .flags.AdminInvisible = 1)
+        // Then
+        // UserName = UserName & " " & TAG_USER_INVISIBLE
+        // Else
+        // If LenB(ClanTag) <> 0 Then _
+        // UserName = UserName & " <" & ClanTag & ">"
+        // End If
+        // End If
+        // End If
 
         return builder.toString();
     }
@@ -363,7 +406,7 @@ public class LoggedUser extends ConnectedUser implements UserCharacter {
     }
 
     @Override
-    public int getThirstiness() {
+    public int getMinThirstiness() {
         return minThirstiness;
     }
 
@@ -483,7 +526,8 @@ public class LoggedUser extends ConnectedUser implements UserCharacter {
     @Override
     public Privileges getPrivileges() {
         return privileges;
-        // return new Privileges(1); // TODO Siempre devuelve 1 independientemente de si es admin o no
+        // return new Privileges(1); // TODO Siempre devuelve 1 independientemente de si
+        // es admin o no
     }
 
     @Override
@@ -566,26 +610,6 @@ public class LoggedUser extends ConnectedUser implements UserCharacter {
     }
 
     @Override
-    public int getStamina() {
-        return stamina;
-    }
-
-    @Override
-    public void setStamina(int stamina) {
-        this.stamina = stamina;
-    }
-
-    @Override
-    public int getMaxStamina() {
-        return maxStamina;
-    }
-
-    @Override
-    public void setMaxStamina(int maxStamina) {
-        this.maxStamina = maxStamina;
-    }
-
-    @Override
     public boolean isMeditating() {
         return meditating;
     }
@@ -623,11 +647,11 @@ public class LoggedUser extends ConnectedUser implements UserCharacter {
     public synchronized boolean regenHpAndMana() {
         boolean changed = false;
         if (minHp < maxHp) {
-            addToHitPoints(1);
+            addToMinHitPoints(1);
             changed = true;
         }
         if (minMana < maxMana) {
-            addToMana(1);
+            addToMinMana(1);
             changed = true;
         }
         return changed;
@@ -635,8 +659,8 @@ public class LoggedUser extends ConnectedUser implements UserCharacter {
 
     @Override
     public synchronized boolean regenStamina() {
-        if (stamina < maxStamina) {
-            stamina = Math.min(maxStamina, stamina + 5);
+        if (minStamina < maxStamina) {
+            addToMinStamina(5);
             return true;
         }
         return false;
@@ -645,7 +669,7 @@ public class LoggedUser extends ConnectedUser implements UserCharacter {
     @Override
     public synchronized boolean tickHunger() {
         if (minHunger > 0) {
-            addToHunger(-1);
+            addToMinHunger(-1);
             return true;
         }
         return false;
@@ -654,7 +678,7 @@ public class LoggedUser extends ConnectedUser implements UserCharacter {
     @Override
     public synchronized boolean tickThirst() {
         if (minThirstiness > 0) {
-            addToThirstiness(-1);
+            addToMinThirstiness(-1);
             return true;
         }
         return false;

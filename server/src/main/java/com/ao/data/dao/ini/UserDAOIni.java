@@ -176,7 +176,8 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
     @Override
     public Account get(String username) throws DAOException {
 
-        if (username == null || username.isBlank()) throw new DAOException("Username cannot be null or blank.");
+        if (username == null || username.isBlank())
+            throw new DAOException("Username cannot be null or blank.");
 
         INIConfiguration ini = readCharFile(username);
 
@@ -193,7 +194,8 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
             String banned = IniUtils.getString(ini, FLAGS_HEADER + "." + BANNED_KEY, "");
 
             if (password.isBlank() || mail.isBlank() || banned.isBlank()) {
-                Logger.warn("Missing required fields for '{}': password={}, mail={}, banned={}", username, password, mail, banned);
+                Logger.warn("Missing required fields for '{}': password={}, mail={}, banned={}", username, password,
+                        mail, banned);
                 throw new DAOException("Character file is missing required data.");
             }
 
@@ -217,7 +219,8 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
     public Account create(String username, String password, String mail) throws DAOException {
 
         // Throws exception if the username already exists
-        if (exists(username)) throw new NameAlreadyTakenException();
+        if (exists(username))
+            throw new NameAlreadyTakenException();
 
         INIConfiguration ini = new INIConfiguration();
         ini.setProperty(INIT_HEADER + "." + PASSWORD_KEY, password);
@@ -230,7 +233,8 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
             file.getParentFile().mkdirs();
         }
 
-        try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8))) {
+        try (Writer writer = new BufferedWriter(
+                new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8))) {
             ini.write(writer);
             Logger.debug("Charfile '{}' created successfully!", username);
         } catch (IOException | ConfigurationException e) {
@@ -244,15 +248,18 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
     @Override
     public void delete(String username) {
         File charfile = new File(getCharFilePath(username));
-        if (!charfile.exists()) return;
+        if (!charfile.exists())
+            return;
         boolean success = charfile.delete();
-        if (!success) Logger.error("{} deletion failed.", username);
+        if (!success)
+            Logger.error("{} deletion failed.", username);
     }
 
     @Override
     public UserCharacter load(ConnectedUser user, String nick) throws DAOException {
 
-        if (nick == null || nick.isBlank()) throw new DAOException("Nick cannot be null or empty.");
+        if (nick == null || nick.isBlank())
+            throw new DAOException("Nick cannot be null or empty.");
 
         INIConfiguration ini = readCharFile(nick);
 
@@ -266,18 +273,23 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
         int bourgeoisPoints = IniUtils.getInt(ini, REPUTATION_HEADER + "." + BOURGEOIS_POINTS_KEY, 0);
         int thiefPoints = IniUtils.getInt(ini, REPUTATION_HEADER + "." + THIEF_POINTS_KEY, 0);
         int noblePoints = IniUtils.getInt(ini, REPUTATION_HEADER + "." + NOBLE_POINTS_KEY, 0);
-        boolean belongsToFaction = IniUtils.getInt(ini, FACTIONS_HEADER + "." + BELONGS_TO_CHAOS_KEY, 0) == 1 || IniUtils.getInt(ini, FACTIONS_HEADER + "." + BELONGS_TO_ARMY_KEY, 0) == 1;
+        boolean belongsToFaction = IniUtils.getInt(ini, FACTIONS_HEADER + "." + BELONGS_TO_CHAOS_KEY, 0) == 1
+                || IniUtils.getInt(ini, FACTIONS_HEADER + "." + BELONGS_TO_ARMY_KEY, 0) == 1;
 
-        Reputation reputation = new ReputationImpl(assassinPoints, banditPoints, bourgeoisPoints, thiefPoints, noblePoints, belongsToFaction);
+        Reputation reputation = new ReputationImpl(assassinPoints, banditPoints, bourgeoisPoints, thiefPoints,
+                noblePoints, belongsToFaction);
 
         // TODO Por que necesita obtener el valor de la clave a traves del getString()?
         Race race = Race.findById(Byte.parseByte(IniUtils.getString(ini, INIT_HEADER + "." + RACE_KEY, "0")));
         Gender gender = Gender.findById(Byte.parseByte(IniUtils.getString(ini, INIT_HEADER + "." + GENDER_KEY, "0")));
-        Archetype archetype = UserArchetype.findById(Byte.parseByte(IniUtils.getString(ini, INIT_HEADER + "." + ARCHETYPE_KEY, "0"))).getArchetype();
+        Archetype archetype = UserArchetype
+                .findById(Byte.parseByte(IniUtils.getString(ini, INIT_HEADER + "." + ARCHETYPE_KEY, "0")))
+                .getArchetype();
         boolean poisoned = IniUtils.getInt(ini, FLAGS_HEADER + "." + POISONED_KEY, 0) == 1;
         boolean paralyzed = IniUtils.getInt(ini, FLAGS_HEADER + "." + PARALYZED_KEY, 0) == 1;
 
-        // TODO Check what to do, immobilized/invisible/mimetized/dumbed state isn't saved in charfile
+        // TODO Check what to do, immobilized/invisible/mimetized/dumbed state isn't
+        // saved in charfile
         boolean immobilized = false;
         boolean invisible = false;
         boolean mimetized = false;
@@ -285,14 +297,16 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
 
         boolean hidden = IniUtils.getInt(ini, FLAGS_HEADER + "." + HIDDEN_KEY, 0) == 1;
 
-        int mana = IniUtils.getInt(ini, STATS_HEADER + "." + MIN_MANA_KEY, 0);
+        int minMana = IniUtils.getInt(ini, STATS_HEADER + "." + MIN_MANA_KEY, 0);
         int maxMana = IniUtils.getInt(ini, STATS_HEADER + "." + MAX_MANA_KEY, 0);
-        int hitpoints = IniUtils.getInt(ini, STATS_HEADER + "." + MIN_HIT_KEY, 0);
-        int maxHitPoints = IniUtils.getInt(ini, STATS_HEADER + "." + MAX_HIT_KEY, 0);
-        int thirstiness = IniUtils.getInt(ini, STATS_HEADER + "." + MIN_THIRSTINESS_KEY, 0);
+        int minHp = IniUtils.getInt(ini, STATS_HEADER + "." + MIN_HP_KEY, 0);
+        int maxHp = IniUtils.getInt(ini, STATS_HEADER + "." + MAX_HP_KEY, 0);
+        int minThirstiness = IniUtils.getInt(ini, STATS_HEADER + "." + MIN_THIRSTINESS_KEY, 0);
         int maxThirstiness = IniUtils.getInt(ini, STATS_HEADER + "." + MAX_THIRSTINESS_KEY, 0);
-        int hunger = IniUtils.getInt(ini, STATS_HEADER + "." + MIN_HUNGER_KEY, 0);
+        int minHunger = IniUtils.getInt(ini, STATS_HEADER + "." + MIN_HUNGER_KEY, 0);
         int maxHunger = IniUtils.getInt(ini, STATS_HEADER + "." + MAX_HUNGER_KEY, 0);
+        int maxStamina = IniUtils.getInt(ini, STATS_HEADER + "." + MAX_STAMINA_KEY, 0);
+        int minStamina = IniUtils.getInt(ini, STATS_HEADER + "." + MIN_STAMINA_KEY, 0);
         byte lvl = Byte.parseByte(IniUtils.getString(ini, STATS_HEADER + "." + LEVEL_KEY, "0"));
 
         int body = IniUtils.getInt(ini, INIT_HEADER + "." + BODY_KEY, 0);
@@ -312,19 +326,26 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
                 } catch (NumberFormatException e) {
                     Logger.error("Invalid position data for '{}': {}", nick, positionString);
                 }
-            } else Logger.error("Malformed POSITION for '{}': {}", nick, positionString);
-        } else Logger.error("Position not set for '{}'", nick);
+            } else
+                Logger.error("Malformed POSITION for '{}': {}", nick, positionString);
+        } else
+            Logger.error("Position not set for '{}'", nick);
 
         // TODO Complete description
         String description = "";
 
-        return new LoggedUser(user, reputation, race, gender, archetype, poisoned, paralyzed, immobilized, invisible, mimetized,
-            dumbed, hidden, maxMana, mana, maxHitPoints, hitpoints, maxThirstiness, thirstiness, maxHunger, hunger, lvl, nick,
-            description, position, body, head);
+        return new LoggedUser(user, reputation, race, gender, archetype, poisoned, paralyzed, immobilized, invisible,
+                mimetized,
+                dumbed, hidden, maxMana, minMana, maxHp, minHp, maxThirstiness, minThirstiness, maxHunger,
+                minHunger, maxStamina, minStamina, lvl, nick,
+                description, position, body, head);
     }
 
     @Override
-    public UserCharacter create(ConnectedUser user, String name, String password, String mail, Race race, Gender gender, UserArchetype archetype, int head, City city, byte strength, byte dexterity, byte intelligence, byte charisma, byte constitution, int initialAvailableSkills, int body) throws DAOException, NameAlreadyTakenException {
+    public UserCharacter create(ConnectedUser user, String name, String password, String mail, Race race, Gender gender,
+            UserArchetype archetype, int head, City city, byte strength, byte dexterity, byte intelligence,
+            byte charisma, byte constitution, int initialAvailableSkills, int body)
+            throws DAOException, NameAlreadyTakenException {
         return null;
     }
 
@@ -334,9 +355,13 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
     }
 
     @Override
-    public AccountAndCharacter createAccountAndCharacter(ConnectedUser user, String nick, String password, String mail, Race race, Gender gender, UserArchetype archetype, int head, City city, byte strength, byte dexterity, byte intelligence, byte charisma, byte constitution, int initialAvailableSkills, int body) throws DAOException {
+    public AccountAndCharacter createAccountAndCharacter(ConnectedUser user, String nick, String password, String mail,
+            Race race, Gender gender, UserArchetype archetype, int head, City city, byte strength, byte dexterity,
+            byte intelligence, byte charisma, byte constitution, int initialAvailableSkills, int body)
+            throws DAOException {
 
-        if (exists(nick)) throw new NameAlreadyTakenException();
+        if (exists(nick))
+            throw new NameAlreadyTakenException();
 
         // Crear el archivo .chr
         String charFilePath = getCharFilePath(nick);
@@ -453,7 +478,8 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
             if (file.getParentFile() != null) {
                 file.getParentFile().mkdirs();
             }
-            try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8))) {
+            try (Writer writer = new BufferedWriter(
+                    new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8))) {
                 character.write(writer);
                 Logger.info("Created new character file: {}", charFilePath);
             }
@@ -461,7 +487,8 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
         } catch (Exception e) {
             Logger.error("Error creating character file for '{}'", nick, e);
             // Limpiar archivo si algo salio mal
-            if (charFile.exists()) charFile.delete();
+            if (charFile.exists())
+                charFile.delete();
             throw new DAOException();
         }
 
@@ -487,24 +514,24 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
     }
 
     private int calculateMaxMana(byte intelligence, UserArchetype archetype) {
-        // Implementa la logica segun tus reglas
-        // Los magos deberian tener mas mana
-        // return archetype.canCastSpells() ? intelligence * 3 : 0;
-        return 0;
+        return archetype.getArchetype().getInitialMana(intelligence);
     }
 
     private INIConfiguration readCharFile(String username) throws DAOException {
         INIConfiguration ini;
         File file = new File(getCharFilePath(username));
 
-        // If the file does exist in the dynamic directory, try searching for it in the classpath (for test files)
+        // If the file does exist in the dynamic directory, try searching for it in the
+        // classpath (for test files)
         if (!file.exists()) {
             InputStream inputStream = ResourceUtils.getStream("charfiles/" + username + FILE_EXTENSION);
 
             // The file does exist in the file system and classpath
-            if (inputStream == null) return null;
+            if (inputStream == null)
+                return null;
 
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
+            try (BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
                 ini = new INIConfiguration();
                 ini.read(reader);
                 Logger.info("Charfile loaded successfully from classpath!");
@@ -514,7 +541,8 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
             }
         } else {
             // Read from the file system
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8))) {
+            try (BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8))) {
                 ini = new INIConfiguration();
                 ini.read(reader);
                 Logger.info("Charfile loaded successfully from filesystem!");
