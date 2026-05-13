@@ -1,8 +1,8 @@
 package com.ao.model.map.area;
 
 import com.ao.model.map.Heading;
-import com.ao.model.map.Position;
 import com.ao.model.map.Map;
+import com.ao.model.map.Position;
 
 public class AreaInfo {
 

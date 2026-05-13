@@ -2,8 +2,8 @@ package com.ao.model.object.properties;
 
 import com.ao.model.character.Race;
 import com.ao.model.character.archetype.UserArchetype;
-import com.ao.model.spell.Spell;
 import com.ao.model.object.ObjectType;
+import com.ao.model.spell.Spell;
 
 import java.util.List;
 

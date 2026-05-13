@@ -457,6 +457,7 @@ pie title Estado de Implementación
 
 ### 🔴 Lo que FALTA implementar
 
+- Game loop principal (tick-based)
 - Sistema de combate PvP y PvE
 - Sistema de comercio (NPCs y entre jugadores)
 - Sistema de crafting

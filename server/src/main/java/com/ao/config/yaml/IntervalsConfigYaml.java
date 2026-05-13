@@ -30,9 +30,7 @@ public class IntervalsConfigYaml implements IntervalsConfig {
         ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
 
         try (InputStream is = ResourceUtils.getStream(configPath)) {
-            if (is == null) {
-                throw new IllegalArgumentException("¡No se encontró el archivo de intervalos: " + configPath);
-            }
+            if (is == null) throw new IllegalArgumentException("¡No se encontro el archivo de intervalos: " + configPath);
 
             // Aqui ocurre la magia: Jackson lee el InputStream y "mapea" el contenido a 'this'
             mapper.readerForUpdating(this).readValue(is);
@@ -146,8 +144,7 @@ public class IntervalsConfigYaml implements IntervalsConfig {
     }
 
     public static class SurvivalData implements SurvivalConfig {
-        private int thirst;
-        private int hunger;
+        private int thirst, hunger;
 
         @Override
         public int getThirst() {

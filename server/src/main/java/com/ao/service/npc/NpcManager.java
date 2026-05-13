@@ -7,7 +7,6 @@ import com.ao.model.map.Position;
 import com.ao.service.CharacterIndexManager;
 import com.ao.service.NpcService;
 import com.google.inject.Inject;
-import org.hibernate.validator.internal.util.logging.LoggerFactory;
 import org.tinylog.Logger;
 
 import java.util.HashMap;
@@ -45,12 +44,12 @@ public class NpcManager {
     }
 
     /**
-     * Crea (spawn) un NPC en una posición específica del mapa.
+     * Crea (spawn) un NPC en una posicion especifica del mapa.
      * <p>
      * Equivalente a OpenNPC + MakeNPCChar de VB6.
      *
      * @param npcId    ID del tipo de NPC (del archivo npcs.dat)
-     * @param position Posición donde crear el NPC
+     * @param position Posicion donde crear el NPC
      * @return La instancia del NPC creado, o null si no se pudo crear
      */
     public NpcCharacter spawnNpc(int npcId, Position position) {
@@ -76,8 +75,8 @@ public class NpcManager {
             activeNpcsCount++;
 
             Logger.debug("Spawned NPC '{}' (ID: {}) at position ({}, {}, {}) with CharIndex {}",
-                    npc.getName(), npcId, position.getX(), position.getY(),
-                    position.getMap(), charIndex);
+                npc.getName(), npcId, position.getX(), position.getY(),
+                position.getMap(), charIndex);
 
             return npcCharacter;
 
@@ -143,7 +142,7 @@ public class NpcManager {
     }
 
     /**
-     * Limpia todos los NPCs del mundo. Útil para reinicios o limpieza de mapas.
+     * Limpia todos los NPCs del mundo. Util para reinicios o limpieza de mapas.
      */
     public void clearAllNpcs() {
         for (NpcCharacter npc : npcsByCharIndex.values()) {

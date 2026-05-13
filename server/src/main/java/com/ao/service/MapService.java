@@ -4,8 +4,8 @@ import com.ao.data.dao.exception.DAOException;
 import com.ao.model.character.Character;
 import com.ao.model.map.City;
 import com.ao.model.map.Heading;
-import com.ao.model.map.Position;
 import com.ao.model.map.Map;
+import com.ao.model.map.Position;
 
 /**
  * Map Service interface.

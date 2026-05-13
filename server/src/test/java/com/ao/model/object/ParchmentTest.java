@@ -2,9 +2,9 @@ package com.ao.model.object;
 
 import com.ao.model.character.Character;
 import com.ao.model.inventory.Inventory;
+import com.ao.model.object.properties.ParchmentProperties;
 import com.ao.model.spell.Spell;
 import com.ao.model.spell.effect.Effect;
-import com.ao.model.object.properties.ParchmentProperties;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -21,7 +21,7 @@ public class ParchmentTest extends AbstractItemTest {
     @BeforeEach
     public void setUp() throws Exception {
         spell1 = new Spell(1, new Effect[]{}, 0, 0, 0, "foo", "foo", false, 1, 2, "OHL VOR PEK");
-        ParchmentProperties props1 = new ParchmentProperties(ObjectType.PARCHMENT, 1, "Dardo Mágico", 1, 300, null, null, false, false, false, false, spell1);
+        ParchmentProperties props1 = new ParchmentProperties(ObjectType.PARCHMENT, 1, "Dardo Magico", 1, 300, null, null, false, false, false, false, spell1);
         parchment1 = new Parchment(props1, 1);
 
         spell2 = new Spell(2, new Effect[]{}, 0, 0, 0, "foo", "foo", false, 1, 2, "Rahma Nañarak O'al");

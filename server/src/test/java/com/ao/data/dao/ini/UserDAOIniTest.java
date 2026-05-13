@@ -96,7 +96,7 @@ public class UserDAOIniTest {
 
         // TODO Use constants!!
         UserCharacter userCharacter = userDAOIni.createAccountAndCharacter(mock(ConnectedUser.class), "test", "password", "mail", Race.HUMAN, Gender.FEMALE, UserArchetype.ASSASIN,
-                75, city, (byte) 18, (byte) 18, (byte) 18, (byte) 18, (byte) 18, 10, 1).character();
+            75, city, (byte) 18, (byte) 18, (byte) 18, (byte) 18, (byte) 18, 10, 1).character();
 
         File file = new File(userDAOIni.getCharFilePath(NEW_CHARACTER_NICK));
 

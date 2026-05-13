@@ -187,21 +187,21 @@ public final class NpcDAOIni implements NpcCharacterDAO {
 
         return switch (npcType) {
             case COMMON ->
-                    loadCreature(NpcType.COMMON, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, aiType, section, sectionName);
+                loadCreature(NpcType.COMMON, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, aiType, section, sectionName);
             case DRAGON, PRETORIAN ->
-                    loadCreature(npcType, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, aiType, section, sectionName);
+                loadCreature(npcType, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, aiType, section, sectionName);
             case TRAINER ->
-                    loadTrainer(npcType, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, section, sectionName);
+                loadTrainer(npcType, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, section, sectionName);
             case GOVERNOR ->
-                    loadGovernor(npcType, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, section, sectionName);
+                loadGovernor(npcType, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, section, sectionName);
             case ROYAL_GUARD, CHAOS_GUARD ->
-                    loadGuard(npcType, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, aiType, section, sectionName);
+                loadGuard(npcType, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, aiType, section, sectionName);
             case NOBLE ->
-                    loadNoble(npcType, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, section);
+                loadNoble(npcType, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, section);
             case NEWBIE_RESUCITATOR, RESUCITATOR, GAMBLER, BANKER ->
-                    loadBasicNpc(npcType, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy);
+                loadBasicNpc(npcType, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy);
             case MERCHANT ->
-                    loadMerchant(npcType, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, section, sectionName);
+                loadMerchant(npcType, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, section, sectionName);
         };
 
     }
@@ -209,36 +209,31 @@ public final class NpcDAOIni implements NpcCharacterDAO {
     private Npc loadNoble(NpcType type, int id, String name, short body, short head, Heading heading, boolean respawnable,
                           String description, Class<? extends Behavior> behavior, Class<? extends AttackStrategy> attackStrategy,
                           Class<? extends MovementStrategy> movementStrategy, SubnodeConfiguration section) {
-
         return new NobleNpc(type, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, getAlignment(section));
     }
 
     private Npc loadBasicNpc(NpcType type, int id, String name, short body, short head, Heading heading, boolean respawnable,
                              String description, Class<? extends Behavior> behavior, Class<? extends AttackStrategy> attackStrategy,
                              Class<? extends MovementStrategy> movementStrategy) {
-
         return new Npc(type, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy);
     }
 
     private Npc loadGovernor(NpcType type, int id, String name, short body, short head, Heading heading, boolean respawnable,
                              String description, Class<? extends Behavior> behavior, Class<? extends AttackStrategy> attackStrategy,
                              Class<? extends MovementStrategy> movementStrategy, SubnodeConfiguration section, String sectionName) {
-
         return new GovernorNpc(type, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, getCity(section, sectionName));
     }
 
     private Npc loadMerchant(NpcType type, int id, String name, short body, short head, Heading heading, boolean respawnable,
                              String description, Class<? extends Behavior> behavior, Class<? extends AttackStrategy> attackStrategy,
                              Class<? extends MovementStrategy> movementStrategy, SubnodeConfiguration section, String sectionName) {
-
         return new MerchantNpc(type, id, name, body, head, heading, respawnable, behavior, attackStrategy, movementStrategy,
-                description, getInventory(section), isRestockable(section), getAcceptedObjectTypes(section, sectionName));
+            description, getInventory(section), isRestockable(section), getAcceptedObjectTypes(section, sectionName));
     }
 
     private Npc loadTrainer(NpcType type, int id, String name, short body, short head, Heading heading, boolean respawnable,
                             String description, Class<? extends Behavior> behavior, Class<? extends AttackStrategy> attackStrategy,
                             Class<? extends MovementStrategy> movementStrategy, SubnodeConfiguration section, String sectionName) {
-
         return new TrainerNpc(type, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy, getCreatures(section, sectionName));
     }
 
@@ -246,23 +241,21 @@ public final class NpcDAOIni implements NpcCharacterDAO {
     private Npc loadCreature(NpcType type, int id, String name, short body, short head, Heading heading, boolean respawnable,
                              String description, Class<? extends Behavior> behavior, Class<? extends AttackStrategy> attackStrategy,
                              Class<? extends MovementStrategy> movementStrategy, AIType aiType, SubnodeConfiguration section, String sectionName) {
-
         return new CreatureNpc(type, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy,
-                getExperience(section), getGold(section), getMinHP(section), getMaxHP(section),
-                getMinHit(section), getMaxHit(section), getDefense(section), getMagicDefense(section), getAttack(section),
-                getEvasion(section), getSpells(section, sectionName), isAquatic(section), isAttackable(section),
-                isPoisonous(section), isUnparalyzable(section), isHostile(section), isTameable(section), getDrops(aiType, section, sectionName));
+            getExperience(section), getGold(section), getMinHP(section), getMaxHP(section),
+            getMinHit(section), getMaxHit(section), getDefense(section), getMagicDefense(section), getAttack(section),
+            getEvasion(section), getSpells(section, sectionName), isAquatic(section), isAttackable(section),
+            isPoisonous(section), isUnparalyzable(section), isHostile(section), isTameable(section), getDrops(aiType, section, sectionName));
     }
 
     private Npc loadGuard(NpcType type, int id, String name, short body, short head, Heading heading, boolean respawnable,
                           String description, Class<? extends Behavior> behavior, Class<? extends AttackStrategy> attackStrategy,
                           Class<? extends MovementStrategy> movementStrategy, AIType aiType, SubnodeConfiguration section, String sectionName) {
-
         return new GuardNpc(type, id, name, body, head, heading, respawnable, description, behavior, attackStrategy, movementStrategy,
-                getExperience(section), getGold(section), getMinHP(section), getMaxHP(section), getMinHit(section),
-                getMaxHit(section), getDefense(section), getMagicDefense(section), getAttack(section), getEvasion(section),
-                getSpells(section, sectionName), isAquatic(section), isAttackable(section), isPoisonous(section),
-                isUnparalyzable(section), isHostile(section), isTameable(section), getDrops(aiType, section, sectionName), isReturning(section));
+            getExperience(section), getGold(section), getMinHP(section), getMaxHP(section), getMinHit(section),
+            getMaxHit(section), getDefense(section), getMagicDefense(section), getAttack(section), getEvasion(section),
+            getSpells(section, sectionName), isAquatic(section), isAttackable(section), isPoisonous(section),
+            isUnparalyzable(section), isHostile(section), isTameable(section), getDrops(aiType, section, sectionName), isReturning(section));
     }
 
     /**

@@ -18,9 +18,9 @@ import io.netty.handler.codec.ByteToMessageDecoder;
 import io.netty.handler.codec.MessageToMessageDecoder;
 import io.netty.handler.codec.MessageToMessageEncoder;
 import io.netty.util.AttributeKey;
+import org.tinylog.Logger;
 
 import java.net.InetSocketAddress;
-import org.tinylog.Logger;
 import java.util.List;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -209,114 +209,118 @@ public class AOServer implements Runnable {
             // Step 2: ServerBootstrap Configuration
             ServerBootstrap bootstrap = new ServerBootstrap(); // Netty helper class for configuring the server
             bootstrap.group(bossGroup, workerGroup) // Assign the previously created event groups
-                    .channel(NioServerSocketChannel.class) // Specifies that NIO (Non-blocking I/O) channels will be used
-                    .option(ChannelOption.SO_BACKLOG, backlog) // Configure the backlog (maximum number pending connections in the queue)
-                    // Step 3: ChildHandler Configuration (Pipeline). This is the heart of data processing. It runs for each new client connection.
-                    .childHandler(new ChannelInitializer<SocketChannel>() {
-                        @Override
-                        public void initChannel(SocketChannel ch) throws Exception {
-                            ChannelPipeline pipeline = ch.pipeline();
+                .channel(NioServerSocketChannel.class) // Specifies that NIO (Non-blocking I/O) channels will be used
+                .option(ChannelOption.SO_BACKLOG, backlog) // Configure the backlog (maximum number pending connections in the queue)
+                // Step 3: ChildHandler Configuration (Pipeline). This is the heart of data processing. It runs for each new client connection.
+                .childHandler(new ChannelInitializer<SocketChannel>() {
+                    @Override
+                    public void initChannel(SocketChannel ch) throws Exception {
+                        ChannelPipeline pipeline = ch.pipeline();
 
-                            /*
-                             * Netty processes data by running it through a pipe that works both
-                             * for incoming and outgoing data. Decoders are applied to incoming data,
-                             * encoders to outgoing.
-                             *
-                             * The order of elements is important since it impacts on the order of execution.
-                             * This scheme allows for better separation of concerns and to add/remove
-                             * steps easily and free of side effects. For instance, we may want to add
-                             * inflate/deflate a step using zlib, and that is independent of encryption
-                             * and the AO protocol itself.
-                             */
+                        /*
+                         * Netty processes data by running it through a pipe that works both
+                         * for incoming and outgoing data. Decoders are applied to incoming data,
+                         * encoders to outgoing.
+                         *
+                         * The order of elements is important since it impacts on the order of execution.
+                         * This scheme allows for better separation of concerns and to add/remove
+                         * steps easily and free of side effects. For instance, we may want to add
+                         * inflate/deflate a step using zlib, and that is independent of encryption
+                         * and the AO protocol itself.
+                         */
 
-                            // Step 3.1: Encryptor Configuration
-                            // Encrypts all outgoing data (server → client). Last to be processed for outgoing data.
-                            pipeline.addLast("encrypter", new MessageToMessageEncoder<ByteBuf>() {
-                                @Override
-                                protected void encode(ChannelHandlerContext ctx, ByteBuf msg, List<Object> out) throws Exception {
-                                    ByteBuf buffer = msg.copy(); // Create a copy to avoid modifying the original
-                                    security.encrypt(buffer, ctx.channel());
-                                    out.add(buffer);
-                                }
-                            });
+                        // Step 3.1: Encryptor Configuration
+                        // Encrypts all outgoing data (server → client). Last to be processed for outgoing data.
+                        pipeline.addLast("encrypter", new MessageToMessageEncoder<ByteBuf>() {
+                            @Override
+                            protected void encode(ChannelHandlerContext ctx, ByteBuf msg, List<Object> out) throws Exception {
+                                ByteBuf buffer = msg.copy(); // Create a copy to avoid modifying the original
+                                security.encrypt(buffer, ctx.channel());
+                                out.add(buffer);
+                            }
+                        });
 
-                            // Step 3.2: Decryptor Configuration
-                            // Decrypts all incoming data (client → server). First to be processed for incoming data.
-                            pipeline.addLast("decrypter", new MessageToMessageDecoder<ByteBuf>() {
-                                @Override
-                                protected void decode(ChannelHandlerContext ctx, ByteBuf msg, List<Object> out) throws Exception {
-                                    security.decrypt(msg, ctx.channel());
-                                    out.add(msg.retain()); // Retain the reference since we're passing it along
-                                }
-                            });
+                        // Step 3.2: Decryptor Configuration
+                        // Decrypts all incoming data (client → server). First to be processed for incoming data.
+                        pipeline.addLast("decrypter", new MessageToMessageDecoder<ByteBuf>() {
+                            @Override
+                            protected void decode(ChannelHandlerContext ctx, ByteBuf msg, List<Object> out) throws Exception {
+                                security.decrypt(msg, ctx.channel());
+                                out.add(msg.retain()); // Retain the reference since we're passing it along
+                            }
+                        });
 
-                            // Step 3.3: Protocol Decoder Configuration
-                            // Processes the data stream and converts bytes into AO protocol messages. Runs when a new connection is established.
-                            pipeline.addLast("decoder", new ByteToMessageDecoder() {
-                                @Override
-                                public void channelActive(ChannelHandlerContext ctx) throws Exception {
-                                    super.channelActive(ctx);
-                                    // New user is connected, get it ready for action!
-                                    ctx.channel().attr(CONNECTION_KEY).set(new Connection(ctx.channel()));
-                                }
+                        // Step 3.3: Protocol Decoder Configuration
+                        // Processes the data stream and converts bytes into AO protocol messages. Runs when a new connection is established.
+                        pipeline.addLast("decoder", new ByteToMessageDecoder() {
+                            @Override
+                            public void channelActive(ChannelHandlerContext ctx) throws Exception {
+                                super.channelActive(ctx);
+                                // New user is connected, get it ready for action!
+                                ctx.channel().attr(CONNECTION_KEY).set(new Connection(ctx.channel()));
+                            }
 
-                                @Override
-                                protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
-                                    Connection connection = ctx.channel().attr(CONNECTION_KEY).get();
+                            @Override
+                            protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
+                                Connection connection = ctx.channel().attr(CONNECTION_KEY).get();
 
-                                    while (in.readableBytes() > 0) {
-                                        // Leer el ID sin consumirlo (peek)
-                                        byte id = in.getByte(in.readerIndex());
+                                while (in.readableBytes() > 0) {
+                                    byte id = in.getByte(in.readerIndex()); // Lee el ID sin consumirlo (peek)
+                                    if (!ClientPacketsManager.isKnownPacket(id)) {
+                                        Logger.warn("ID de paquete desconocido ({}), cerrando conexion", id & 0xFF);
+                                        /* En un protocolo binario sin delimitadores de trama no hay forma de resincronizar el
+                                         * stream despues de un ID desconocido — el payload de ese paquete tiene longitud
+                                         * desconocida — asi que cerrar la conexion es la unica respuesta segura. */
+                                        ctx.close();
+                                        return;
+                                    }
 
-                                        if (!ClientPacketsManager.isKnownPacket(id)) {
-                                            // ID desconocido: descartar solo ese byte y continuar
-                                            in.skipBytes(1);
-                                            Logger.warn("ID de paquete entrante desconocido, descartado: {}", id & 0xFF);
-                                            continue;
-                                        }
+                                    int payloadSize = ClientPacketsManager.getPayloadSize(id);
 
-                                        int payloadSize = ClientPacketsManager.getPayloadSize(id);
+                                    // Marcar SIEMPRE antes de consumir el ID para poder restaurar en caso de error
+                                    in.markReaderIndex();
 
-                                        // Marcar SIEMPRE antes de consumir el ID para poder restaurar en caso de error
-                                        in.markReaderIndex();
+                                    if (payloadSize >= 0) {
+                                        // Paquete de longitud fija: verificar que tenemos ID + payload completo
+                                        if (in.readableBytes() < 1 + payloadSize)
+                                            return; // Faltan bytes: Netty los acumulara y volvera a llamar a decode()
+                                    }
 
-                                        if (payloadSize >= 0) {
-                                            // Paquete de longitud fija: verificar que tenemos ID + payload completo
-                                            if (in.readableBytes() < 1 + payloadSize) {
-                                                // Faltan bytes: Netty los acumulará y volverá a llamar a decode()
-                                                return;
-                                            }
-                                        }
+                                    in.skipBytes(1); // Consume el ID
 
-                                        in.skipBytes(1); // Consumir el ID
-
-                                        try {
-                                            ClientPacketsManager.handle(id, new DataBuffer(in), connection);
-                                        } catch (IndexOutOfBoundsException e) {
-                                            // Paquete incompleto o handler fallido: restaurar y esperar más datos
+                                    try {
+                                        boolean handled = ClientPacketsManager.handle(id, new DataBuffer(in), connection);
+                                        if (!handled) {
+                                            // Handler señalo paquete incompleto: restaurar y esperar mas datos
                                             in.resetReaderIndex();
                                             return;
                                         }
+                                    } catch (IndexOutOfBoundsException e) {
+                                        // Seguridad: lectura inesperada fuera de rango, restaurar y esperar
+                                        Logger.warn("IndexOutOfBounds en handler de paquete ID {}: {}", id & 0xFF, e.getMessage());
+                                        in.resetReaderIndex();
+                                        return;
                                     }
                                 }
-                            });
+                            }
+                        });
 
-                            // Step 3.4: Protocol Encoder Configuration
-                            pipeline.addLast("encoder", new MessageToMessageEncoder<OutgoingPacket>() {
-                                @Override
-                                protected void encode(ChannelHandlerContext ctx, OutgoingPacket packet, List<Object> out) throws Exception {
-                                    // Create a dinamic byte buffer with a typical capacity of 256 bytes
-                                    ByteBuf byteBuf = Unpooled.buffer();
+                        // Step 3.4: Protocol Encoder Configuration
+                        pipeline.addLast("encoder", new MessageToMessageEncoder<OutgoingPacket>() {
+                            @Override
+                            protected void encode(ChannelHandlerContext ctx, OutgoingPacket packet, List<Object> out) throws Exception {
+                                // Create a dinamic byte buffer with a typical capacity of 256 bytes
+                                ByteBuf byteBuf = Unpooled.buffer();
 
-                                    // Wrap the ByteBuf in our data buffer and write the packet into it
-                                    DataBuffer buffer = new DataBuffer(byteBuf);
-                                    ServerPacketsManager.write(packet, buffer);
+                                // Wrap the ByteBuf in our data buffer and write the packet into it
+                                DataBuffer buffer = new DataBuffer(byteBuf);
+                                ServerPacketsManager.write(packet, buffer);
 
-                                    out.add(byteBuf);
-                                }
-                            });
-                        }
-                    });
+                                out.add(byteBuf);
+                            }
+                        });
+                    }
+                });
 
             // Step 4: Bind and start to accept incoming connections
             // bind(): Binds the server to the configured IP address and port

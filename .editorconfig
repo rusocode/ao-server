@@ -4,30 +4,14 @@ root = true
 [*]
 charset = utf-8
 end_of_line = lf
-indent_size = 4
 indent_style = space
-insert_final_newline = false
-max_line_length = 120
-tab_width = 4
+indent_size = 4
+insert_final_newline = true
 trim_trailing_whitespace = true
 
 [*.java]
 max_line_length = 130
 
-[{*.bash,*.sh,*.zsh}]
-indent_size = 2
-tab_width = 2
-
-[{*.har,*.jsb2,*.jsb3,*.json,*.jsonc,*.postman_collection,*.postman_environment,.babelrc,.eslintrc,.prettierrc,.stylelintrc,.ws-context,jest.config}]
-indent_size = 2
-
-[{*.markdown,*.md}]
+[*.md]
+insert_final_newline = false
 trim_trailing_whitespace = false
-
-[{*.yaml,*.yml}]
-indent_size = 2
-
-[*.map]
-charset = unset
-trim_trailing_whitespace = unset
-insert_final_newline = unset

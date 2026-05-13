@@ -13,6 +13,10 @@ buildNumber.properties
 # Logs y volcados de salida
 logs/
 *.log
+hs_err_pid*.log
+
+# Compiled Java
+*.class
 test_output.txt
 
 # IDEs y archivos de sistema
@@ -32,11 +36,22 @@ Thumbs.db
 .agents/
 .gemini/
 skills-lock.json
+# Ignorar archivos ocultos (excepto configuraciones esenciales)
+.*
+!.gitignore
+!.gitattributes
+!.editorconfig
+!.github/
 
 # Datos dinámicos de usuarios (No subir personajes de prueba)
+# Datos dinamicos de usuarios
 charfiles/*
 !charfiles/.gitkeep
 server/charfiles/*
+
+# Logs y volcados de salida
+logs/
+test_output.txt
 
 # Qodana
 qodana.yaml

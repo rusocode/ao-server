@@ -44,7 +44,7 @@ public class StaffProperties extends WeaponProperties {
                            List<UserArchetype> forbiddenArchetypes, List<Race> forbiddenRaces, boolean newbie, boolean noLog, boolean falls, boolean respawnable,
                            int equippedGraphic, boolean stabs, int piercingDamage, int minHit, int maxHit, int magicPower, int damageBonus) {
         super(type, id, name, graphic, value, manufactureDifficulty, forbiddenArchetypes, forbiddenRaces, newbie, noLog, falls, respawnable,
-                equippedGraphic, stabs, piercingDamage, minHit, maxHit);
+            equippedGraphic, stabs, piercingDamage, minHit, maxHit);
         this.damageBonus = damageBonus;
         this.magicPower = magicPower;
     }

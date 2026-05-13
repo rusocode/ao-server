@@ -1,9 +1,9 @@
 package com.ao.data.dao.map;
 
 import com.ao.data.dao.MapDAO;
+import com.ao.model.map.Map;
 import com.ao.model.map.Position;
 import com.ao.model.map.Trigger;
-import com.ao.model.map.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

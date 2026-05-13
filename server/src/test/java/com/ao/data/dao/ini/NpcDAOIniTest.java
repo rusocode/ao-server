@@ -67,7 +67,7 @@ public class NpcDAOIniTest {
             return;
         }
 
-        Npc zombie = npcProperties[COMMON_NPC_INDEX - 1]; // Le resta 1 ya que el índice comienza en 1 y el array en 0
+        Npc zombie = npcProperties[COMMON_NPC_INDEX - 1]; // Le resta 1 ya que el indice comienza en 1 y el array en 0
         assertThat(zombie).isInstanceOf(CreatureNpc.class);
         assertThat(zombie.getType()).isEqualTo(NpcType.COMMON);
 

@@ -18,11 +18,7 @@ public class WalkPacket implements IncomingPacket {
     private final MapService marService = ApplicationContext.getInstance(MapService.class);
 
     @Override
-    public boolean handle(DataBuffer buffer, Connection connection)
-            throws IndexOutOfBoundsException, UnsupportedEncodingException {
-
-        if (buffer.getReadableBytes() < 1)
-            return false;
+    public boolean handle(DataBuffer buffer, Connection connection) throws IndexOutOfBoundsException, UnsupportedEncodingException {
 
         // El cliente envía direcciones en base 1 (herencia VB6: 1=Norte, 2=Este, 3=Sur, 4=Oeste)
         // Restamos 1 para convertir al índice base 0 del enum Heading del servidor

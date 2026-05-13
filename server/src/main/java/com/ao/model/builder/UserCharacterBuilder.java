@@ -17,8 +17,8 @@ import java.util.Objects;
 
 public class UserCharacterBuilder implements Builder<UserCharacter> {
 
-    public static final String INVALID_NAME_ERROR = "El nombre ingresado no es válido.";
-    public static final String INVALID_EMAIL_ERROR = "La dirección de e-mail ingresada no es válida.";
+    public static final String INVALID_NAME_ERROR = "El nombre ingresado no es valido.";
+    public static final String INVALID_EMAIL_ERROR = "La direccion de e-mail ingresada no es valida.";
 
     protected String name, email;
     protected Race race;
@@ -241,8 +241,8 @@ public class UserCharacterBuilder implements Builder<UserCharacter> {
         // TODO Set everything!
 
         return new LoggedUser(user, reputation, race, gender, archetype.getArchetype(), poisoned,
-                paralyzed, immobilized, mimetized, invisible, dumbed, hidden, maxMana, minMana, maxHp, minHp,
-                maxThirstiness, minThirstiness, maxHunger, minHunger, lvl, name, description, position, body, head);
+            paralyzed, immobilized, mimetized, invisible, dumbed, hidden, maxMana, minMana, maxHp, minHp,
+            maxThirstiness, minThirstiness, maxHunger, minHunger, lvl, name, description, position, body, head);
     }
 
 }

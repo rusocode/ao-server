@@ -1,8 +1,8 @@
 package com.ao.service;
 
-import java.util.Set;
-
 import com.ao.model.user.ConnectedUser;
+
+import java.util.Set;
 
 public interface UserService {
 

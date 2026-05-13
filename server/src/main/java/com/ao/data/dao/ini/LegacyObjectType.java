@@ -64,8 +64,8 @@ public enum LegacyObjectType {
         ID = Arrays.stream(values()).collect(Collectors.toMap(LegacyObjectType::getId, type -> type));
 
         TYPE = Arrays.stream(values())
-                .flatMap(legacyType -> legacyType.mappedTypes.stream().map(objectType -> Map.entry(objectType, legacyType)))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (existing, replacement) -> existing));
+            .flatMap(legacyType -> legacyType.mappedTypes.stream().map(objectType -> Map.entry(objectType, legacyType)))
+            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (existing, replacement) -> existing));
     }
 
     private final int id;

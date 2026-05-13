@@ -319,8 +319,8 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
         String description = "";
 
         return new LoggedUser(user, reputation, race, gender, archetype, poisoned, paralyzed, immobilized, invisible, mimetized,
-                dumbed, hidden, maxMana, mana, maxHitPoints, hitpoints, maxThirstiness, thirstiness, maxHunger, hunger, lvl, nick,
-                description, position, body, head);
+            dumbed, hidden, maxMana, mana, maxHitPoints, hitpoints, maxThirstiness, thirstiness, maxHunger, hunger, lvl, nick,
+            description, position, body, head);
     }
 
     @Override
@@ -346,7 +346,7 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
 
         try {
             // ============================================
-            // SECCIÓN [INIT] - Datos básicos y de cuenta
+            // SECCION [INIT] - Datos basicos y de cuenta
             // ============================================
             character.setProperty(INIT_HEADER + "." + PASSWORD_KEY, password);
             character.setProperty(INIT_HEADER + "." + GENDER_KEY, gender.getId());
@@ -368,12 +368,12 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
             character.setProperty(INIT_HEADER + "." + UPTIME_KEY, 0);
 
             // ============================================
-            // SECCIÓN [CONTACTO] - Email
+            // SECCION [CONTACTO] - Email
             // ============================================
             character.setProperty(CONTACT_HEADER + "." + MAIL_KEY, mail);
 
             // ============================================
-            // SECCIÓN [FLAGS] - Estados del personaje
+            // SECCION [FLAGS] - Estados del personaje
             // ============================================
             character.setProperty(FLAGS_HEADER + "." + BANNED_KEY, 0);
             character.setProperty(FLAGS_HEADER + "." + DEAD_KEY, 0);
@@ -385,7 +385,7 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
             character.setProperty(FLAGS_HEADER + "." + PARALYZED_KEY, 0);
 
             // ============================================
-            // SECCIÓN [ATRIBUTOS] - Stats básicos
+            // SECCION [ATRIBUTOS] - Stats basicos
             // ============================================
             character.setProperty(ATTRIBUTES_HEADER + "." + String.format(ATTRIBUTE_FORMAT_KEY, 1), strength);
             character.setProperty(ATTRIBUTES_HEADER + "." + String.format(ATTRIBUTE_FORMAT_KEY, 2), dexterity);
@@ -394,14 +394,14 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
             character.setProperty(ATTRIBUTES_HEADER + "." + String.format(ATTRIBUTE_FORMAT_KEY, 5), constitution);
 
             // ============================================
-            // SECCIÓN [SKILLS] - Inicializar skills en 0
+            // SECCION [SKILLS] - Inicializar skills en 0
             // ============================================
-            for (int i = 1; i <= 20; i++) { // Ajusta según la cantidad de skills
+            for (int i = 1; i <= 20; i++) { // Ajusta segun la cantidad de skills
                 character.setProperty(SKILLS_HEADER + "." + String.format(SKILL_KEY_FORMAT, i), 0);
             }
 
             // ============================================
-            // SECCIÓN [STATS] - Stats del personaje
+            // SECCION [STATS] - Stats del personaje
             // ============================================
             int maxHP = calculateMaxHP(constitution, archetype);
             int maxStamina = calculateMaxStamina(constitution);
@@ -427,7 +427,7 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
             character.setProperty(STATS_HEADER + "." + DEPOSITED_GOLD_KEY, 0);
 
             // ============================================
-            // SECCIÓN [REP] - Reputación inicial
+            // SECCION [REP] - Reputacion inicial
             // ============================================
             character.setProperty(REPUTATION_HEADER + "." + ASSASSIN_POINTS_KEY, 0);
             character.setProperty(REPUTATION_HEADER + "." + BANDIT_POINTS_KEY, 0);
@@ -436,7 +436,7 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
             character.setProperty(REPUTATION_HEADER + "." + NOBLE_POINTS_KEY, INITIAL_NOBLE_POINTS);
 
             // ============================================
-            // SECCIÓN [INVENTORY] - Inventario vacío
+            // SECCION [INVENTORY] - Inventario vacio
             // ============================================
             character.setProperty(INVENTORY_HEADER + "." + ITEMS_AMOUNT_KEY, 0);
             character.setProperty(INVENTORY_HEADER + "." + EQUIPPED_WEAPON_SLOT_KEY, 0);
@@ -460,7 +460,7 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
 
         } catch (Exception e) {
             Logger.error("Error creating character file for '{}'", nick, e);
-            // Limpiar archivo si algo salió mal
+            // Limpiar archivo si algo salio mal
             if (charFile.exists()) charFile.delete();
             throw new DAOException();
         }
@@ -475,20 +475,20 @@ public record UserDAOIni(String charfilesPath) implements AccountDAO, UserCharac
         return Paths.get(charfilesPath).resolve(username + FILE_EXTENSION).toString();
     }
 
-    // Métodos auxiliares para calcular stats iniciales
+    // Metodos auxiliares para calcular stats iniciales
     private int calculateMaxHP(byte constitution, UserArchetype archetype) {
-        // Implementa la lógica según tus reglas
+        // Implementa la logica segun tus reglas
         return 15 + constitution / 3;
     }
 
     private int calculateMaxStamina(byte constitution) {
-        // Implementa la lógica según tus reglas
+        // Implementa la logica segun tus reglas
         return 15 + constitution / 3;
     }
 
     private int calculateMaxMana(byte intelligence, UserArchetype archetype) {
-        // Implementa la lógica según tus reglas
-        // Los magos deberían tener más maná
+        // Implementa la logica segun tus reglas
+        // Los magos deberian tener mas mana
         // return archetype.canCastSpells() ? intelligence * 3 : 0;
         return 0;
     }

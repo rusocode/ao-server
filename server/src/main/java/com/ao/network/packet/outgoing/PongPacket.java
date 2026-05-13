@@ -7,7 +7,7 @@ public class PongPacket implements OutgoingPacket {
 
     @Override
     public void write(DataBuffer buffer) {
-        buffer.put((byte) 0);
+        // PONG has no payload; the ID byte is written by ServerPacketsManager.
     }
 
 }

@@ -81,7 +81,7 @@ public class Tile {
     @Override
     public String toString() {
         return "Tile [character=" + character + ", object=" + object + ", trigger=" + trigger + ", blocked=" + blocked
-                + ", isWater=" + isWater + ", isLava=" + isLava + ", tileExit=" + tileExit + "]";
+            + ", isWater=" + isWater + ", isLava=" + isLava + ", tileExit=" + tileExit + "]";
     }
 
 }
