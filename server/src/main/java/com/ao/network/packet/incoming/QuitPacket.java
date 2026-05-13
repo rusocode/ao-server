@@ -27,6 +27,8 @@ public class QuitPacket implements IncomingPacket {
     private final IntervalsConfig intervals;
     private final TimedEventsService timedEventsService;
 
+    private final String MSG_GOODBYE = "¡Gracias por jugar a Argentum Online Java!";
+
     public QuitPacket() {
         this(ApplicationContext.getInstance(MapService.class),
                 ApplicationContext.getInstance(IntervalsConfig.class),
@@ -52,7 +54,7 @@ public class QuitPacket implements IncomingPacket {
 
         // 1. Los GMs salen instantáneamente sin importar su estado
         if (character.getPrivileges().isGameMaster()) {
-            connection.send(new ConsoleMessagePacket("¡Gracias por jugar a Argentum Online Java!", Font.INFO));
+            connection.send(new ConsoleMessagePacket(MSG_GOODBYE, Font.INFO));
             connection.send(new DisconnectPacket());
             connection.disconnect();
             return true;
@@ -69,7 +71,7 @@ public class QuitPacket implements IncomingPacket {
         Position pos = character.getPosition();
         Map map = mapService.getMap(pos.getMap());
         if (map == null) {
-            connection.send(new ConsoleMessagePacket("Gracias por jugar a Argentum Online Java!", Font.INFO));
+            connection.send(new ConsoleMessagePacket(MSG_GOODBYE, Font.INFO));
             connection.send(new DisconnectPacket());
             connection.disconnect();
             return true;
@@ -78,7 +80,7 @@ public class QuitPacket implements IncomingPacket {
 
         if (tile.isSafeZone() || !map.isPk()) {
             // Salida Instantánea en zona segura
-            connection.send(new ConsoleMessagePacket("Gracias por jugar a Argentum Online Java!", Font.INFO));
+            connection.send(new ConsoleMessagePacket(MSG_GOODBYE, Font.INFO));
             connection.send(new DisconnectPacket());
             connection.disconnect();
         } else {
