@@ -12,7 +12,7 @@ import io.netty.channel.Channel;
 public class Connection {
 
     private final Channel socket;
-    private User user;
+    private volatile User user;
 
     public Connection(Channel socket) {
         this.socket = socket;
