@@ -99,26 +99,8 @@ public class Bootstrap {
             try {
                 for (ConnectedUser connectedUser : userService.getConnectedUsers()) {
                     User user = connectedUser.getConnection().getUser();
-
                     if (user instanceof UserCharacter character && !character.isDead()) {
-                        boolean changed = false;
-
-                        /* synchronized protege la secuencia read-modify-write de cada stat entre los game loops.
-                         * La sincronizacion completa con los handlers de Netty queda pendiente. */
-                        synchronized (character) {
-                            if (character.getHitPoints() < character.getMaxHitPoints()) {
-                                character.addToHitPoints(1);
-                                changed = true;
-                            }
-                            if (character.getMana() < character.getMaxMana()) {
-                                character.addToMana(1);
-                                changed = true;
-                            }
-                        }
-
-                        if (changed) {
-                            connectedUser.getConnection().send(new UpdateUserStatsPacket(character));
-                        }
+                        if (character.regenHpAndMana()) connectedUser.getConnection().send(new UpdateUserStatsPacket(character));
                     }
                 }
             } catch (Exception e) {
@@ -131,20 +113,8 @@ public class Bootstrap {
             try {
                 for (ConnectedUser connectedUser : userService.getConnectedUsers()) {
                     User user = connectedUser.getConnection().getUser();
-
                     if (user instanceof UserCharacter character && !character.isDead()) {
-                        boolean changed = false;
-
-                        synchronized (character) {
-                            if (character.getStamina() < character.getMaxStamina()) {
-                                character.setStamina(Math.min(character.getMaxStamina(), character.getStamina() + 5));
-                                changed = true;
-                            }
-                        }
-
-                        if (changed) {
-                            connectedUser.getConnection().send(new UpdateUserStatsPacket(character));
-                        }
+                        if (character.regenStamina()) connectedUser.getConnection().send(new UpdateUserStatsPacket(character));
                     }
                 }
             } catch (Exception e) {
@@ -159,11 +129,7 @@ public class Bootstrap {
                     User user = connectedUser.getConnection().getUser();
 
                     if (user instanceof UserCharacter character && !character.isDead()) {
-                        synchronized (character) {
-                            if (character.getHunger() > 0)
-                                character.addToHunger(-1);
-                        }
-
+                        character.tickHunger();
                         connectedUser.getConnection().send(new UpdateHungerAndThirstPacket(
                             character.getHunger(), UserCharacter.MAX_HUNGER,
                             character.getThirstiness(), UserCharacter.MAX_THIRSTINESS));
@@ -181,11 +147,7 @@ public class Bootstrap {
                     User user = connectedUser.getConnection().getUser();
 
                     if (user instanceof UserCharacter character && !character.isDead()) {
-                        synchronized (character) {
-                            if (character.getThirstiness() > 0)
-                                character.addToThirstiness(-1);
-                        }
-
+                        character.tickThirst();
                         connectedUser.getConnection().send(new UpdateHungerAndThirstPacket(
                             character.getHunger(), UserCharacter.MAX_HUNGER,
                             character.getThirstiness(), UserCharacter.MAX_THIRSTINESS));
