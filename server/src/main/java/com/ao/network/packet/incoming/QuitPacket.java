@@ -53,6 +53,12 @@ public class QuitPacket implements IncomingPacket {
         Position pos = character.getPosition();
         MapService mapService = ApplicationContext.getInstance(MapService.class);
         Map map = mapService.getMap(pos.getMap());
+        if (map == null) {
+            connection.send(new ConsoleMessagePacket("Gracias por jugar a Argentum Online Java!", Font.INFO));
+            connection.send(new DisconnectPacket());
+            connection.disconnect();
+            return true;
+        }
         Tile tile = map.getTile(pos.getX(), pos.getY());
 
         if (tile.isSafeZone() || !map.isPk()) {

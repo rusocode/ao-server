@@ -35,6 +35,8 @@ public class LeftClickPacket implements IncomingPacket {
 
             MapService mapService = ApplicationContext.getInstance(MapService.class);
             Map map = mapService.getMap(user.getPosition().getMap());
+            if (map == null) return true;
+
             Character target = map.getTile(x, y).getCharacter();
 
             if (target != null) {
