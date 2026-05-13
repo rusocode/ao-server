@@ -56,22 +56,14 @@ public class ConnectedUser implements User {
 
     @Override
     public int hashCode() {
-        int prime = 31;
-        int result = 1;
-        result = prime * result + ((account == null) ? 0 : account.hashCode());
-        return result;
+        return connection.hashCode();
     }
 
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
-        if (obj == null) return false;
-        if (getClass() != obj.getClass()) return false;
-        ConnectedUser other = (ConnectedUser) obj;
-        if (account == null) {
-            if (other.account != null) return false;
-        } else if (!account.equals(other.account)) return false;
-        return true;
+        if (!(obj instanceof ConnectedUser other)) return false;
+        return connection.equals(other.connection);
     }
 
 }

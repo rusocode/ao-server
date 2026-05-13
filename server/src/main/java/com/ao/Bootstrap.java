@@ -21,6 +21,7 @@ import java.net.InetSocketAddress;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Bootstraps the application.
@@ -65,11 +66,7 @@ public class Bootstrap {
         return server;
     }
 
-    /**
-     * Configures networking on the given server.
-     *
-     * @param server server on which to configure networking
-     */
+    /** Configures networking on the given server. */
     private static void configureNetworking(AOServer server) throws IOException {
         byte[] addr = {0, 0, 0, 0};
         Logger.info("Initializing server socket configuration...");
@@ -79,11 +76,7 @@ public class Bootstrap {
         server.setBacklog(config.getListeningBacklog());
     }
 
-    /**
-     * Starts the game timers on the given server.
-     *
-     * @param server server on which to start the timers
-     */
+    /** Starts the game timers on the given server. */
     private static void startTimers(AOServer server) {
 
         Logger.info("Starting up game timers...");
@@ -91,34 +84,17 @@ public class Bootstrap {
         IntervalsConfig intervals = ApplicationContext.getInstance(IntervalsConfig.class);
         UserService userService = ApplicationContext.getInstance(UserService.class);
 
-        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(4);
+        AtomicInteger threadCounter = new AtomicInteger(0);
+        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(4, r -> new Thread(r, "game-timer-" + threadCounter.getAndIncrement()));
         server.setScheduler(scheduler);
 
-        // 1a. REGENERACION de Vida y Mana
+        // Regeneracion de vida y mana
         scheduler.scheduleAtFixedRate(() -> {
             try {
                 for (ConnectedUser connectedUser : userService.getConnectedUsers()) {
                     User user = connectedUser.getConnection().getUser();
-
                     if (user instanceof UserCharacter character && !character.isDead()) {
-                        boolean changed = false;
-
-                        /* synchronized protege la secuencia read-modify-write de cada stat entre los game loops.
-                         * La sincronizacion completa con los handlers de Netty queda pendiente. */
-                        synchronized (character) {
-                            if (character.getHitPoints() < character.getMaxHitPoints()) {
-                                character.addToHitPoints(1);
-                                changed = true;
-                            }
-                            if (character.getMana() < character.getMaxMana()) {
-                                character.addToMana(1);
-                                changed = true;
-                            }
-                        }
-
-                        if (changed) {
-                            connectedUser.getConnection().send(new UpdateUserStatsPacket(character));
-                        }
+                        if (character.regenHpAndMana()) connectedUser.getConnection().send(new UpdateUserStatsPacket(character));
                     }
                 }
             } catch (Exception e) {
@@ -126,25 +102,13 @@ public class Bootstrap {
             }
         }, 0, intervals.getRegeneration().getHp(), TimeUnit.MILLISECONDS);
 
-        // 1b. REGENERACION de Stamina (intervalo propio, mas corto)
+        // Regeneracion de stamina
         scheduler.scheduleAtFixedRate(() -> {
             try {
                 for (ConnectedUser connectedUser : userService.getConnectedUsers()) {
                     User user = connectedUser.getConnection().getUser();
-
                     if (user instanceof UserCharacter character && !character.isDead()) {
-                        boolean changed = false;
-
-                        synchronized (character) {
-                            if (character.getStamina() < character.getMaxStamina()) {
-                                character.setStamina(Math.min(character.getMaxStamina(), character.getStamina() + 5));
-                                changed = true;
-                            }
-                        }
-
-                        if (changed) {
-                            connectedUser.getConnection().send(new UpdateUserStatsPacket(character));
-                        }
+                        if (character.regenStamina()) connectedUser.getConnection().send(new UpdateUserStatsPacket(character));
                     }
                 }
             } catch (Exception e) {
@@ -152,21 +116,14 @@ public class Bootstrap {
             }
         }, 0, intervals.getRegeneration().getStamina(), TimeUnit.MILLISECONDS);
 
-        // 2a. Hambre
+        // Hambre
         scheduler.scheduleAtFixedRate(() -> {
             try {
                 for (ConnectedUser connectedUser : userService.getConnectedUsers()) {
                     User user = connectedUser.getConnection().getUser();
-
                     if (user instanceof UserCharacter character && !character.isDead()) {
-                        synchronized (character) {
-                            if (character.getHunger() > 0)
-                                character.addToHunger(-1);
-                        }
-
-                        connectedUser.getConnection().send(new UpdateHungerAndThirstPacket(
-                            character.getHunger(), UserCharacter.MAX_HUNGER,
-                            character.getThirstiness(), UserCharacter.MAX_THIRSTINESS));
+                        if (character.tickHunger())
+                            connectedUser.getConnection().send(new UpdateHungerAndThirstPacket(character.getHunger(), UserCharacter.MAX_HUNGER, character.getThirstiness(), UserCharacter.MAX_THIRSTINESS));
                     }
                 }
             } catch (Exception e) {
@@ -174,21 +131,14 @@ public class Bootstrap {
             }
         }, 0, intervals.getSurvival().getHunger(), TimeUnit.MILLISECONDS);
 
-        // 2b. Sed (intervalo propio)
+        // Sed
         scheduler.scheduleAtFixedRate(() -> {
             try {
                 for (ConnectedUser connectedUser : userService.getConnectedUsers()) {
                     User user = connectedUser.getConnection().getUser();
-
                     if (user instanceof UserCharacter character && !character.isDead()) {
-                        synchronized (character) {
-                            if (character.getThirstiness() > 0)
-                                character.addToThirstiness(-1);
-                        }
-
-                        connectedUser.getConnection().send(new UpdateHungerAndThirstPacket(
-                            character.getHunger(), UserCharacter.MAX_HUNGER,
-                            character.getThirstiness(), UserCharacter.MAX_THIRSTINESS));
+                        if (character.tickThirst())
+                            connectedUser.getConnection().send(new UpdateHungerAndThirstPacket(character.getHunger(), UserCharacter.MAX_HUNGER, character.getThirstiness(), UserCharacter.MAX_THIRSTINESS));
                     }
                 }
             } catch (Exception e) {
@@ -196,7 +146,7 @@ public class Bootstrap {
             }
         }, 0, intervals.getSurvival().getThirst(), TimeUnit.MILLISECONDS);
 
-        // 3. IA DE NPCs (Movimiento y ataque de criaturas)
+        // IA de NPCs
         scheduler.scheduleAtFixedRate(() -> {
             try {
                 // TODO: Logica NPCs
@@ -205,7 +155,7 @@ public class Bootstrap {
             }
         }, 0, intervals.getNpc().getAiTick(), TimeUnit.MILLISECONDS);
 
-        // 4. WORLD SAVE (Guardado automatico de personajes)
+        // World save
         int saveIntervalMinutes = intervals.getWorld().getSaveInterval();
         scheduler.scheduleAtFixedRate(() -> {
             try {
@@ -215,7 +165,7 @@ public class Bootstrap {
             }
         }, saveIntervalMinutes, saveIntervalMinutes, TimeUnit.MINUTES);
 
-        // 5. EFECTOS TEMPORALES (Veneno, Paralisis, Invisibilidad)
+        // Efectos temporales (veneno, paralisis, invisibilidad, etc.)
         scheduler.scheduleAtFixedRate(() -> {
             try {
                 // TODO: Logica de limpieza de estados temporales
@@ -226,13 +176,8 @@ public class Bootstrap {
 
     }
 
-    /**
-     * Loads the application context on the given server.
-     *
-     * @param server the server on which to load the application context
-     */
+    /** Loads the application context on the given server. */
     private static void loadApplicationContext(AOServer server) throws DAOException {
-
         Logger.info("Loading application context...");
 
         Logger.info("Loading maps...");

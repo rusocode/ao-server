@@ -116,7 +116,7 @@ mvn -B package -pl server -am
 java -jar server/target/server-1.0-SNAPSHOT-jar-with-dependencies.jar
 ```
 
-El servidor se inicia en `127.0.0.1:7666` por defecto.
+El servidor se inicia en `0.0.0.0:7666` por defecto (escucha en todas las interfaces de red).
 
 ---
 

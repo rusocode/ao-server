@@ -48,10 +48,3 @@ skills-lock.json
 charfiles/*
 !charfiles/.gitkeep
 server/charfiles/*
-
-# Logs y volcados de salida
-logs/
-test_output.txt
-
-# Qodana
-qodana.yaml

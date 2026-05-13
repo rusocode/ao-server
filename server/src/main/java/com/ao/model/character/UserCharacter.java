@@ -52,4 +52,12 @@ public interface UserCharacter extends Character {
 
     void setMeditate(boolean meditating);
 
+    boolean regenHpAndMana();
+
+    boolean regenStamina();
+
+    boolean tickHunger();
+
+    boolean tickThirst();
+
 }

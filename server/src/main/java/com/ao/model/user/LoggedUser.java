@@ -620,6 +620,47 @@ public class LoggedUser extends ConnectedUser implements UserCharacter {
     }
 
     @Override
+    public synchronized boolean regenHpAndMana() {
+        boolean changed = false;
+        if (minHp < maxHp) {
+            addToHitPoints(1);
+            changed = true;
+        }
+        if (minMana < maxMana) {
+            addToMana(1);
+            changed = true;
+        }
+        return changed;
+    }
+
+    @Override
+    public synchronized boolean regenStamina() {
+        if (stamina < maxStamina) {
+            stamina = Math.min(maxStamina, stamina + 5);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public synchronized boolean tickHunger() {
+        if (minHunger > 0) {
+            addToHunger(-1);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public synchronized boolean tickThirst() {
+        if (minThirstiness > 0) {
+            addToThirstiness(-1);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     public boolean isEquipped(Item item) {
         return false;
     }
