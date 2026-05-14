@@ -27,9 +27,7 @@ public class LoggedUser extends ConnectedUser implements UserCharacter {
 
     private Privileges privileges;
 
-    /*
-     * UserFlags
-     */
+    /* UserFlags */
     private boolean poisoned;
     private boolean paralyzed;
     private boolean immobilized;
@@ -40,24 +38,15 @@ public class LoggedUser extends ConnectedUser implements UserCharacter {
     private boolean meditating;
     private boolean sailing;
 
-    /*
-     * AdminFlags
-     */
+    /* AdminFlags */
     private boolean adminHidden;
 
-    /*
-     * UserStats
-     */
-    private int maxMana;
-    private int maxHp;
-    private int minMana;
-    private int minHp;
-    private int minThirstiness;
-    private int maxThirstiness;
-    private int maxHunger;
-    private int minHunger;
-    private int maxStamina;
-    private int minStamina;
+    /* UserStats */
+    private int minStamina, maxStamina;
+    private int minMana, maxMana;
+    private int minHp, maxHp;
+    private int minHunger, maxHunger;
+    private int minThirstiness, maxThirstiness;
     private byte level;
     private String name;
     private String description;
@@ -70,11 +59,11 @@ public class LoggedUser extends ConnectedUser implements UserCharacter {
     private short charIndex;
 
     LoggedUser(ConnectedUser user, Reputation reputation, Race race, Gender gender, Archetype archetype,
-            boolean poisoned, boolean paralyzed,
-            boolean immobilized, boolean invisible, boolean mimetized, boolean dumbed, boolean hidden, int maxMana,
-            int minMana, int maxHp, int minHp, int maxStamina, int minStamina, int maxThirstiness, int minThirstiness,
-            int maxHunger, int minHunger, byte lvl, String name, String description, Position position, int body,
-            int head) {
+               boolean poisoned, boolean paralyzed,
+               boolean immobilized, boolean invisible, boolean mimetized, boolean dumbed, boolean hidden, int maxMana,
+               int minMana, int maxHp, int minHp, int maxStamina, int minStamina, int maxThirstiness, int minThirstiness,
+               int maxHunger, int minHunger, byte lvl, String name, String description, Position position, int body,
+               int head) {
         super(user.getConnection());
         this.reputation = reputation;
         this.race = race;
@@ -165,29 +154,23 @@ public class LoggedUser extends ConnectedUser implements UserCharacter {
     }
 
     @Override
+    public synchronized void addToMaxHitPoints(int points) {
+    }
+
+    @Override
     public synchronized void addToMinHitPoints(int points) {
-        minHp += points; // TODO Check for overflows and underflows
-        if (minHp > maxHp)
-            minHp = maxHp;
     }
 
     @Override
     public synchronized void addToMinHunger(int points) {
         minHunger += points; // TODO Check for overflows and underflows
-        if (minHunger > maxHunger)
-            minHunger = maxHunger;
+        if (minHunger > maxHunger) minHunger = maxHunger;
     }
 
     @Override
     public synchronized void addToMinMana(int points) {
         minMana += points; // TODO Check for overflows and underflows
-        if (minMana > maxMana)
-            minMana = maxMana;
-    }
-
-    @Override
-    public synchronized void addToMaxHitPoints(int points) {
-        maxHp += points; // TODO Check for overflows and underflows
+        if (minMana > maxMana) minMana = maxMana;
     }
 
     @Override
@@ -196,10 +179,20 @@ public class LoggedUser extends ConnectedUser implements UserCharacter {
     }
 
     @Override
+    public void addToMinHp(int points) {
+        minHp += points; // TODO Check for overflows and underflows
+        if (minHp > maxHp) minHp = maxHp;
+    }
+
+    @Override
+    public void addToMaxHp(int points) {
+        maxHp += points;
+    }
+
+    @Override
     public synchronized void addToMinThirstiness(int points) {
         minThirstiness += points; // TODO Check for overflows and underflows
-        if (minThirstiness > maxThirstiness)
-            minThirstiness = maxThirstiness;
+        if (minThirstiness > maxThirstiness) minThirstiness = maxThirstiness;
     }
 
     @Override
@@ -336,13 +329,23 @@ public class LoggedUser extends ConnectedUser implements UserCharacter {
     }
 
     @Override
+    public int getMinHp() {
+        return minHp;
+    }
+
+    @Override
     public int getMaxHitPoints() {
-        return maxHp;
+        return 0;
     }
 
     @Override
     public int getMaxMana() {
         return maxMana;
+    }
+
+    @Override
+    public int getMaxHp() {
+        return maxHp;
     }
 
     @Override
@@ -646,7 +649,7 @@ public class LoggedUser extends ConnectedUser implements UserCharacter {
     public synchronized boolean regenHpAndMana() {
         boolean changed = false;
         if (minHp < maxHp) {
-            addToMinHitPoints(1);
+            addToMinHp(1);
             changed = true;
         }
         if (minMana < maxMana) {

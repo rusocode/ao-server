@@ -35,6 +35,14 @@ public interface Character {
 
     void addToMaxMana(int points);
 
+    int getMinHp();
+
+    void addToMinHp(int points);
+
+    int getMaxHp();
+
+    void addToMaxHp(int points);
+
     int getMinStamina();
 
     void addToMinStamina(int points);

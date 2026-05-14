@@ -96,7 +96,7 @@ public class NpcCharacterImpl implements NpcCharacter {
 
     @Override
     public int getMaxHitPoints() {
-        return this.maxHP;
+        return 0;
     }
 
     @Override
@@ -123,6 +123,27 @@ public class NpcCharacterImpl implements NpcCharacter {
     @Override
     public void addToMaxMana(int points) {
         this.maxMana += points;
+    }
+
+    @Override
+    public int getMinHp() {
+        return minHP;
+    }
+
+    @Override
+    public void addToMinHp(int points) {
+        this.minHP += points;
+        if (this.minHP > this.maxHP) this.minHP = this.maxHP;
+    }
+
+    @Override
+    public int getMaxHp() {
+        return maxHP;
+    }
+
+    @Override
+    public void addToMaxHp(int points) {
+        this.maxHP += points;
     }
 
     @Override
