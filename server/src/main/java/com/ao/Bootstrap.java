@@ -104,7 +104,7 @@ public class Bootstrap {
                     }
                 }
             } catch (Exception e) {
-                Logger.error("HP/Mana regen loop failed, skipping tick", e);
+                Logger.error("HP/Mana regen loop failed, skipping tick: {} — {}", e.getClass().getSimpleName(), e.getMessage(), e);
             }
         }, 0, intervals.getRegeneration().getHp(), TimeUnit.MILLISECONDS);
 
@@ -119,7 +119,7 @@ public class Bootstrap {
                     }
                 }
             } catch (Exception e) {
-                Logger.error("Stamina regen loop failed, skipping tick", e);
+                Logger.error("Stamina regen loop failed, skipping tick: {} — {}", e.getClass().getSimpleName(), e.getMessage(), e);
             }
         }, 0, intervals.getRegeneration().getStamina(), TimeUnit.MILLISECONDS);
 
@@ -137,7 +137,7 @@ public class Bootstrap {
                     }
                 }
             } catch (Exception e) {
-                Logger.error("Hunger loop failed, skipping tick", e);
+                Logger.error("Hunger loop failed, skipping tick: {} — {}", e.getClass().getSimpleName(), e.getMessage(), e);
             }
         }, 0, intervals.getSurvival().getHunger(), TimeUnit.MILLISECONDS);
 
@@ -155,7 +155,7 @@ public class Bootstrap {
                     }
                 }
             } catch (Exception e) {
-                Logger.error("Thirst loop failed, skipping tick", e);
+                Logger.error("Thirst loop failed, skipping tick: {} — {}", e.getClass().getSimpleName(), e.getMessage(), e);
             }
         }, 0, intervals.getSurvival().getThirst(), TimeUnit.MILLISECONDS);
 
@@ -164,7 +164,7 @@ public class Bootstrap {
             try {
                 // TODO: Logica NPCs
             } catch (Exception e) {
-                Logger.error("NPC AI loop failed, skipping tick", e);
+                Logger.error("NPC AI loop failed, skipping tick: {} — {}", e.getClass().getSimpleName(), e.getMessage(), e);
             }
         }, 0, intervals.getNpc().getAiTick(), TimeUnit.MILLISECONDS);
 
@@ -174,7 +174,7 @@ public class Bootstrap {
             try {
                 // TODO: Logica de guardado masivo
             } catch (Exception e) {
-                Logger.error("World save loop failed, skipping tick", e);
+                Logger.error("World save loop failed, skipping tick: {} — {}", e.getClass().getSimpleName(), e.getMessage(), e);
             }
         }, saveIntervalMinutes, saveIntervalMinutes, TimeUnit.MINUTES); // TODO: Por que el delay inicial del world save es igual al periodo? No tiene que ser 0?
 
@@ -183,7 +183,7 @@ public class Bootstrap {
             try {
                 // TODO: Logica de limpieza de estados temporales
             } catch (Exception e) {
-                Logger.error("Temp effects loop failed, skipping tick", e);
+                Logger.error("Temp effects loop failed, skipping tick: {} — {}", e.getClass().getSimpleName(), e.getMessage(), e);
             }
         }, 0, intervals.getStates().getPoison(), TimeUnit.MILLISECONDS);
 
