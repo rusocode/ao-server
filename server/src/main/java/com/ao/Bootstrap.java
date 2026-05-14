@@ -64,8 +64,8 @@ public class Bootstrap {
 
         Logger.info("Initializing AO Server...");
         loadApplicationContext();
-        startTimers(server);
         configureNetworking(server);
+        startTimers(server);
 
         Logger.info("\u001B[1;32mServer initialized in {} ms\u001B[0m", System.currentTimeMillis() - start);
 
