@@ -22,9 +22,10 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.BiConsumer;
 
 /**
- * Bootstraps the application.
+ * Inicializa y arranca la aplicacion.
  */
 
 public class Bootstrap {
@@ -52,9 +53,9 @@ public class Bootstrap {
     }
 
     /**
-     * Bootstraps the application.
+     * Inicializa el servidor cargando el contexto, configurando la red y arrancando los timers.
      *
-     * @return the application
+     * @return el servidor listo para ejecutarse
      */
     private static AOServer bootstrap() throws IOException, DAOException {
 
@@ -72,7 +73,7 @@ public class Bootstrap {
         return server;
     }
 
-    /** Configures networking on the given server. */
+    /** Configura el socket de red del servidor. */
     private static void configureNetworking(AOServer server) throws IOException {
         byte[] addr = {0, 0, 0, 0};
         Logger.info("Initializing server socket configuration...");
@@ -82,9 +83,8 @@ public class Bootstrap {
         server.setBacklog(config.getListeningBacklog());
     }
 
-    /** Starts the game timers on the given server. */
+    /** Inicia los timers del juego en el servidor dado. */
     private static void startTimers(AOServer server) {
-
         Logger.info("Starting up game timers...");
 
         IntervalsConfig intervals = ApplicationContext.getInstance(IntervalsConfig.class);
@@ -97,12 +97,9 @@ public class Bootstrap {
         // Regeneracion de vida y mana
         scheduler.scheduleAtFixedRate(() -> {
             try {
-                for (ConnectedUser connectedUser : userService.getConnectedUsers()) {
-                    User user = connectedUser.getConnection().getUser();
-                    if (user instanceof UserCharacter character && !character.isDead()) {
-                        if (character.regenHpAndMana()) connectedUser.getConnection().send(new UpdateUserStatsPacket(character));
-                    }
-                }
+                forEachAliveCharacter(userService, (connectedUser, character) -> {
+                    if (character.regenHpAndMana()) connectedUser.getConnection().send(new UpdateUserStatsPacket(character));
+                });
             } catch (Exception e) {
                 Logger.error("HP/Mana regen loop failed, skipping tick: {} — {}", e.getClass().getSimpleName(), e.getMessage(), e);
             }
@@ -111,13 +108,9 @@ public class Bootstrap {
         // Regeneracion de stamina
         scheduler.scheduleAtFixedRate(() -> {
             try {
-                for (ConnectedUser connectedUser : userService.getConnectedUsers()) {
-                    User user = connectedUser.getConnection().getUser();
-                    if (user instanceof UserCharacter character && !character.isDead()) {
-                        if (character.regenStamina())
-                            connectedUser.getConnection().send(new UpdateUserStatsPacket(character));
-                    }
-                }
+                forEachAliveCharacter(userService, (connectedUser, character) -> {
+                    if (character.regenStamina()) connectedUser.getConnection().send(new UpdateUserStatsPacket(character));
+                });
             } catch (Exception e) {
                 Logger.error("Stamina regen loop failed, skipping tick: {} — {}", e.getClass().getSimpleName(), e.getMessage(), e);
             }
@@ -126,16 +119,13 @@ public class Bootstrap {
         // Hambre
         scheduler.scheduleAtFixedRate(() -> {
             try {
-                for (ConnectedUser connectedUser : userService.getConnectedUsers()) {
-                    User user = connectedUser.getConnection().getUser();
-                    if (user instanceof UserCharacter character && !character.isDead()) {
-                        if (character.tickHunger())
-                            connectedUser.getConnection()
-                                .send(new UpdateHungerAndThirstPacket(character.getMinHunger(),
-                                    UserCharacter.MAX_HUNGER, character.getMinThirstiness(),
-                                    UserCharacter.MAX_THIRSTINESS));
-                    }
-                }
+                forEachAliveCharacter(userService, (connectedUser, character) -> {
+                    if (character.tickHunger())
+                        connectedUser.getConnection()
+                            .send(new UpdateHungerAndThirstPacket(character.getMinHunger(),
+                                UserCharacter.MAX_HUNGER, character.getMinThirstiness(),
+                                UserCharacter.MAX_THIRSTINESS));
+                });
             } catch (Exception e) {
                 Logger.error("Hunger loop failed, skipping tick: {} — {}", e.getClass().getSimpleName(), e.getMessage(), e);
             }
@@ -144,16 +134,13 @@ public class Bootstrap {
         // Sed
         scheduler.scheduleAtFixedRate(() -> {
             try {
-                for (ConnectedUser connectedUser : userService.getConnectedUsers()) {
-                    User user = connectedUser.getConnection().getUser();
-                    if (user instanceof UserCharacter character && !character.isDead()) {
-                        if (character.tickThirst())
-                            connectedUser.getConnection()
-                                .send(new UpdateHungerAndThirstPacket(character.getMinHunger(),
-                                    UserCharacter.MAX_HUNGER, character.getMinThirstiness(),
-                                    UserCharacter.MAX_THIRSTINESS));
-                    }
-                }
+                forEachAliveCharacter(userService, (connectedUser, character) -> {
+                    if (character.tickThirst())
+                        connectedUser.getConnection()
+                            .send(new UpdateHungerAndThirstPacket(character.getMinHunger(),
+                                UserCharacter.MAX_HUNGER, character.getMinThirstiness(),
+                                UserCharacter.MAX_THIRSTINESS));
+                });
             } catch (Exception e) {
                 Logger.error("Thirst loop failed, skipping tick: {} — {}", e.getClass().getSimpleName(), e.getMessage(), e);
             }
@@ -189,10 +176,16 @@ public class Bootstrap {
 
     }
 
-    /** Loads the application context on the given server. */
-    private static void loadApplicationContext() throws DAOException {
-        Logger.info("Loading application context...");
+    /** Itera sobre los usuarios conectados y aplica la accion dada si son personajes y si estan vivos. */
+    private static void forEachAliveCharacter(UserService userService, BiConsumer<ConnectedUser, UserCharacter> action) {
+        for (ConnectedUser connectedUser : userService.getConnectedUsers()) {
+            User user = connectedUser.getConnection().getUser();
+            if (user instanceof UserCharacter character && !character.isDead()) action.accept(connectedUser, character);
+        }
+    }
 
+    /** Carga los datos del juego necesarios antes de que el servidor acepte conexiones. */
+    private static void loadApplicationContext() throws DAOException {
         Logger.info("Loading maps...");
         MapService mapService = ApplicationContext.getInstance(MapService.class); // Sin DI tendria que hardcodear la
         mapService.loadMaps();
