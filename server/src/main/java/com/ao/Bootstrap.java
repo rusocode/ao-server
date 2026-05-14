@@ -29,6 +29,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class Bootstrap {
 
+    /**
+     * Cantidad de hilos dedicados al pool de timers del juego — uno por cada tarea programada. Si este valor es menor que el
+     * numero de tareas concurrentes, las tareas excedentes esperan en cola y sus ticks se pierden silenciosamente.
+     */
+    private static final int GAME_TIMER_THREAD_COUNT = 7;
+
     public static void main(String[] args) {
 
         AOServer server;
@@ -57,7 +63,7 @@ public class Bootstrap {
         long start = System.currentTimeMillis();
 
         Logger.info("Initializing AO Server...");
-        loadApplicationContext(server);
+        loadApplicationContext();
         startTimers(server);
         configureNetworking(server);
 
@@ -68,11 +74,10 @@ public class Bootstrap {
 
     /** Configures networking on the given server. */
     private static void configureNetworking(AOServer server) throws IOException {
-        byte[] addr = { 0, 0, 0, 0 };
+        byte[] addr = {0, 0, 0, 0};
         Logger.info("Initializing server socket configuration...");
         ServerConfig config = ApplicationContext.getInstance(ServerConfig.class);
-        InetSocketAddress endpoint = new InetSocketAddress(Inet4Address.getByAddress(addr),
-                config.getServerListeningPort());
+        InetSocketAddress endpoint = new InetSocketAddress(Inet4Address.getByAddress(addr), config.getServerListeningPort());
         server.setListeningAddr(endpoint);
         server.setBacklog(config.getListeningBacklog());
     }
@@ -86,8 +91,7 @@ public class Bootstrap {
         UserService userService = ApplicationContext.getInstance(UserService.class);
 
         AtomicInteger threadCounter = new AtomicInteger(0);
-        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(4,
-                r -> new Thread(r, "game-timer-" + threadCounter.getAndIncrement()));
+        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(GAME_TIMER_THREAD_COUNT, t -> new Thread(t, "game-timer-" + threadCounter.getAndIncrement()));
         server.setScheduler(scheduler);
 
         // Regeneracion de vida y mana
@@ -96,8 +100,7 @@ public class Bootstrap {
                 for (ConnectedUser connectedUser : userService.getConnectedUsers()) {
                     User user = connectedUser.getConnection().getUser();
                     if (user instanceof UserCharacter character && !character.isDead()) {
-                        if (character.regenHpAndMana())
-                            connectedUser.getConnection().send(new UpdateUserStatsPacket(character));
+                        if (character.regenHpAndMana()) connectedUser.getConnection().send(new UpdateUserStatsPacket(character));
                     }
                 }
             } catch (Exception e) {
@@ -128,9 +131,9 @@ public class Bootstrap {
                     if (user instanceof UserCharacter character && !character.isDead()) {
                         if (character.tickHunger())
                             connectedUser.getConnection()
-                                    .send(new UpdateHungerAndThirstPacket(character.getMinHunger(),
-                                            UserCharacter.MAX_HUNGER, character.getMinThirstiness(),
-                                            UserCharacter.MAX_THIRSTINESS));
+                                .send(new UpdateHungerAndThirstPacket(character.getMinHunger(),
+                                    UserCharacter.MAX_HUNGER, character.getMinThirstiness(),
+                                    UserCharacter.MAX_THIRSTINESS));
                     }
                 }
             } catch (Exception e) {
@@ -146,9 +149,9 @@ public class Bootstrap {
                     if (user instanceof UserCharacter character && !character.isDead()) {
                         if (character.tickThirst())
                             connectedUser.getConnection()
-                                    .send(new UpdateHungerAndThirstPacket(character.getMinHunger(),
-                                            UserCharacter.MAX_HUNGER, character.getMinThirstiness(),
-                                            UserCharacter.MAX_THIRSTINESS));
+                                .send(new UpdateHungerAndThirstPacket(character.getMinHunger(),
+                                    UserCharacter.MAX_HUNGER, character.getMinThirstiness(),
+                                    UserCharacter.MAX_THIRSTINESS));
                     }
                 }
             } catch (Exception e) {
@@ -173,7 +176,7 @@ public class Bootstrap {
             } catch (Exception e) {
                 Logger.error("World save loop failed, skipping tick", e);
             }
-        }, saveIntervalMinutes, saveIntervalMinutes, TimeUnit.MINUTES);
+        }, saveIntervalMinutes, saveIntervalMinutes, TimeUnit.MINUTES); // TODO: Por que el delay inicial del world save es igual al periodo? No tiene que ser 0?
 
         // Efectos temporales (veneno, paralisis, invisibilidad, etc.)
         scheduler.scheduleAtFixedRate(() -> {
@@ -187,13 +190,11 @@ public class Bootstrap {
     }
 
     /** Loads the application context on the given server. */
-    private static void loadApplicationContext(AOServer server) throws DAOException {
+    private static void loadApplicationContext() throws DAOException {
         Logger.info("Loading application context...");
 
         Logger.info("Loading maps...");
         MapService mapService = ApplicationContext.getInstance(MapService.class); // Sin DI tendria que hardcodear la
-                                                                                  // creacion del objeto -> new
-                                                                                  // MapServiceImpl();
         mapService.loadMaps();
 
         Logger.info("Loading cities...");
